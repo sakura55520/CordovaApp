@@ -528,6 +528,15 @@ export const constantRouterMap = [
     hidden: true,
     meta: {text: '动态表单', returnPath: '/'}
   },
+
+  {
+    name: 'overStationExecution',
+    path: '/overStationExecution',
+    component: () => import('@/views/overStation/index'),
+    hidden: true,
+    meta: {text: '过站操作'},
+    props: true
+  }
 ]
 
 export default new Router({
