@@ -3,10 +3,17 @@
   <div class="dashboard">
     <div class="das-container">
       <!-- 模块 -->
-      <div class="das-list">
+      <div
+        v-for="(groupItem, index) in groupedList"
+        :key="index"
+        class="das-list"
+      >
+        <!-- 模块名称 -->
+        <h3 v-if="groupItem.group">{{ groupItem.group }}</h3>
         <ul class="das-ul">
+          <!-- 单个导航 -->
           <li
-            v-for="(item, index) in workstations"
+            v-for="(item, index) in groupItem.children"
             :key="index"
             class="das-link"
           >
@@ -32,26 +39,31 @@ export default {
     return {
       totalCount: 0,
       timer: null,
-      workstations: [
+      groupedList: [
         {
-          name: "切头尾取样",
-          href: "/overStationExecution?station=headAndTailSampling",
-          icon: "guozhan",
-        },
-        {
-          name: "晶锭检测",
-          href: "/overStationExecution?station=ingotDetection",
-          icon: "guozhan",
-        },
-        {
-          name: "分段指令",
-          href: "/overStationExecution?station=segmentedInstruction",
-          icon: "guozhan",
-        },
-        {
-          name: "切割",
-          href: "/overStationExecution?station=cutting",
-          icon: "guozhan",
+          group: "过站执行",
+          children: [
+            {
+              name: "切头尾取样",
+              href: "/overStationExecution?station=headAndTailSampling",
+              icon: "guozhan",
+            },
+            {
+              name: "晶锭检测",
+              href: "/overStationExecution?station=ingotDetection",
+              icon: "guozhan",
+            },
+            {
+              name: "分段指令",
+              href: "/overStationExecution?station=segmentedInstruction",
+              icon: "guozhan",
+            },
+            {
+              name: "切割",
+              href: "/overStationExecution?station=cutting",
+              icon: "guozhan",
+            },
+          ],
         },
       ],
     };
@@ -60,7 +72,7 @@ export default {
     ...mapState({
       arrMenu: (state) => state.permission.arrMenu,
     }),
-    groupedList() {
+    groupedList_pre() {
       const groupedList = [
         {
           group: "",
