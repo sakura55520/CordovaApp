@@ -31,6 +31,11 @@
         ></component>
       </div>
     </div>
+    <div class="btn">
+      <el-button plain class="cancel-btn">取消</el-button>
+      <el-button type="primary" plain class="save-btn">保存</el-button>
+      <el-button type="primary" class="confirm-btn">出站确认</el-button>
+    </div>
   </div>
 </template>
 
@@ -95,5 +100,21 @@ export default {
 }
 .divider {
   margin: 8px 0px;
+}
+.btn {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  gap: 8px;
+  .cancel-btn {
+    flex: 1;
+  }
+  .save-btn {
+    flex: 1;
+  }
+  .confirm-btn {
+    flex: 2;
+  }
 }
 </style>
