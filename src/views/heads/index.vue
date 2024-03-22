@@ -11,6 +11,7 @@
 
       <div class="divhead">
         {{$route.meta.text}}
+        <span v-if="$route.query.station"> - {{$route.query.station}}</span>
         <!-- <i @click="reload()" class="el-icon-refresh el-icon-refreshs"></i> -->
       </div>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="scroller-flex-wrap">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName">
       <el-tab-pane label="待出站" name="waitOutStation">
         <wait-out-station />
       </el-tab-pane>

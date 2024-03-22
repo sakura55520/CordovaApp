@@ -45,22 +45,22 @@ export default {
           children: [
             {
               name: "切头尾取样",
-              href: "/overStationExecution?station=headAndTailSampling",
+              href: "/overStationExecution?station=切头尾取样",
               icon: "guozhan",
             },
             {
               name: "晶锭检测",
-              href: "/overStationExecution?station=ingotDetection",
+              href: "/overStationExecution?station=晶锭检测",
               icon: "guozhan",
             },
             {
               name: "分段指令",
-              href: "/overStationExecution?station=segmentedInstruction",
+              href: "/overStationExecution?station=分段指令",
               icon: "guozhan",
             },
             {
               name: "切割",
-              href: "/overStationExecution?station=cutting",
+              href: "/overStationExecution?station=切割",
               icon: "guozhan",
             },
           ],
