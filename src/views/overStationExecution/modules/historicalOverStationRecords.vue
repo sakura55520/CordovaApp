@@ -10,7 +10,10 @@
     >
     </el-date-picker>
     <div class="card" v-for="item in list" :key="item.title">
-      <div class="header">{{ item.title }}</div>
+      <div class="header">
+        <div>{{ item.title }}</div>
+        <i class="el-icon-document"></i>
+      </div>
       <el-divider class="divider" />
       <el-table
         :data="[item]"
@@ -30,12 +33,6 @@
         <el-table-column label="上站" prop="preStation" />
         <el-table-column label="下站" prop="nextStation" />
       </el-table>
-      <div class="btn">
-        <el-button type="warning" plain class="back-station"
-          >退站操作</el-button
-        >
-        <el-button type="primary" class="out-station">出站执行</el-button>
-      </div>
     </div>
     <div class="pagination">
       <el-pagination
@@ -103,9 +100,8 @@ export default {
   margin-bottom: 12px;
   .header {
     color: rgb(2, 107, 194);
-  }
-  .divider {
-    margin: 8px 0px;
+    display: flex;
+    justify-content: space-between;
   }
   .btn {
     display: flex;
@@ -118,6 +114,9 @@ export default {
       flex: 2;
     }
   }
+}
+.divider {
+  margin: 8px 0px;
 }
 .pagination {
   display: flex;

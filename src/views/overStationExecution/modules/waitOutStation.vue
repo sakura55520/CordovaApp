@@ -25,7 +25,12 @@
         <el-button type="warning" plain class="back-station"
           >退站操作</el-button
         >
-        <el-button type="primary" class="out-station">出站执行</el-button>
+        <el-button
+          type="primary"
+          class="out-station"
+          @click="handleOutStationExecutionClick"
+          >出站执行</el-button
+        >
       </div>
     </div>
     <div class="pagination">
@@ -65,13 +70,18 @@ export default {
   methods: {
     fetchData() {
       Api.fetchWaitOutStationPage({
-        station: "123",
+        station: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);
       });
+    },
+    handleOutStationExecutionClick() {
+      this.$router.push(
+        "/outStationExecution?station=" + this.$route.query.station
+      );
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -93,9 +103,6 @@ export default {
   .header {
     color: rgb(2, 107, 194);
   }
-  .divider {
-    margin: 8px 0px;
-  }
   .btn {
     display: flex;
     gap: 20px;
@@ -107,6 +114,9 @@ export default {
       flex: 2;
     }
   }
+}
+.divider {
+  margin: 8px 0px;
 }
 .pagination {
   display: flex;
