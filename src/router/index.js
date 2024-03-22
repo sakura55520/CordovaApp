@@ -532,7 +532,7 @@ export const constantRouterMap = [
   {
     name: 'overStationExecution',
     path: '/overStationExecution',
-    component: () => import('@/views/overStation/index'),
+    component: () => import('@/views/overStationExecution/index'),
     hidden: true,
     meta: {text: '过站操作'},
     props: true
