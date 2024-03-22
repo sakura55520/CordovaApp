@@ -93,6 +93,7 @@ export default {
 <style lang="scss" scoped>
 .date-picker {
   margin-bottom: 8px;
+  width: 100%;
 }
 .card {
   padding: 12px;

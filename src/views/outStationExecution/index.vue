@@ -25,13 +25,28 @@
       </div>
       <el-divider class="divider" />
       <h3>出站数据录入</h3>
-      <div class="outStation-form"></div>
+      <div class="outStation-form">
+        <component
+          :is="overStationDataEntryComponentMap[$route.query.station]"
+        ></component>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import HeadAndTailSampling from "./modules/HeadAndTailSampling.vue";
+import IngotDetection from "./modules/IngotDetection.vue";
+import SegmentedInstruction from "./modules/SegmentedInstruction.vue";
+import Cutting from "./modules/Cutting.vue";
+
 export default {
+  components: {
+    HeadAndTailSampling,
+    IngotDetection,
+    SegmentedInstruction,
+    Cutting,
+  },
   data() {
     return {
       batchNumber: "Z0116504581",
@@ -39,6 +54,12 @@ export default {
       furnaceNumber: "A2010504581",
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
+      overStationDataEntryComponentMap: {
+        切头尾取样: HeadAndTailSampling,
+        晶锭检测: IngotDetection,
+        分段指令: SegmentedInstruction,
+        切割: Cutting,
+      },
     };
   },
 };
@@ -56,6 +77,7 @@ export default {
   .info {
     display: flex;
     width: 50%;
+    margin-bottom: 8px;
     .info-label {
       width: 40%;
     }
@@ -67,6 +89,8 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.1);
     min-height: 200px;
     margin-top: 10px;
+    padding: 12px;
+    background-color: white;
   }
 }
 .divider {

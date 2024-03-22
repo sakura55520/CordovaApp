@@ -2,11 +2,9 @@
   <div id="heads">
     <div>
       <div class="divReturn" v-show="IsRouter">
-        <router-link :to="router">
-          <a>
-            <li style="color: #FFF;" class="el-icon-arrow-left"></li>
-          </a>
-        </router-link>
+        <a @click="back">
+          <li style="color: #FFF;" class="el-icon-arrow-left"></li>
+        </a>
       </div>
 
       <div class="divhead">
@@ -58,6 +56,9 @@ export default {
     reload() {
       this.$emit("reload");
     },
+    back() {
+      window.history.go(-1)
+    }
   }
 };
 </script>
