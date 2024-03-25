@@ -44,23 +44,33 @@ export default {
           group: "过站执行",
           children: [
             {
+              name: "装料",
+              href: "/overStationExecution?station=ZL",
+              icon: "guozhan",
+            },
+            {
+              name: "长晶",
+              href: "/overStationExecution?station=ZJ",
+              icon: "guozhan",
+            },
+            {
               name: "切头尾取样",
-              href: "/overStationExecution?station=切头尾取样",
+              href: "/overStationExecution?station=QTWQY",
               icon: "guozhan",
             },
             {
               name: "晶锭检测",
-              href: "/overStationExecution?station=晶锭检测",
+              href: "/overStationExecution?station=JDJC",
               icon: "guozhan",
             },
             {
               name: "分段指令",
-              href: "/overStationExecution?station=分段指令",
+              href: "/overStationExecution?station=FDZL",
               icon: "guozhan",
             },
             {
               name: "切割",
-              href: "/overStationExecution?station=切割",
+              href: "/overStationExecution?station=QG",
               icon: "guozhan",
             },
           ],

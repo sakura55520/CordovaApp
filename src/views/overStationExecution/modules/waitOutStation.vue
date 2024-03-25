@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="card" v-for="item in list" :key="item.title">
-      <div class="header">{{ item.title }}</div>
+    <div class="card" v-for="item in list" :key="item.code">
+      <div class="header">{{ item.code }}</div>
       <el-divider class="divider" />
       <el-table
         :data="[item]"
@@ -13,22 +13,32 @@
       >
         <el-table-column label="产品料号" prop="number" min-width="100" />
         <el-table-column label="产品类型" prop="type" min-width="100" />
-        <el-table-column
-          label="进站时间"
-          prop="inStationTime"
-          min-width="100"
-        />
+        <el-table-column label="进站时间" prop="inTime" min-width="100" />
         <el-table-column label="上站" prop="preStation" />
         <el-table-column label="下站" prop="nextStation" />
       </el-table>
       <div class="btn">
-        <el-button type="warning" plain class="back-station"
+        <el-button
+          v-if="item.wipStorageStatus === 0"
+          type="primary"
+          class="in-station"
+          @click="handleOverStationExecutionClick(item.code)"
+        >
+          进站执行
+        </el-button>
+        <el-button
+          v-if="item.wipStorageStatus === 1"
+          type="warning"
+          plain
+          class="back-station"
+          @click="handleExitStationClick(item.code)"
           >退站操作</el-button
         >
         <el-button
+          v-if="item.wipStorageStatus === 1"
           type="primary"
           class="out-station"
-          @click="handleOutStationExecutionClick"
+          @click="handleOverStationExecutionClick(item.code)"
           >出站执行</el-button
         >
       </div>
@@ -54,23 +64,16 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      list: [
-        {
-          title: "Z0116504581",
-          number: "123456",
-          type: "晶锭123",
-          inStationTime: "2022-08-13 09:10:23",
-          preStation: "单晶送付",
-          nextStation: "晶锭检测",
-        },
-      ],
+      list: [],
     };
   },
-  mounted() {},
+  mounted() {
+    this.fetchData();
+  },
   methods: {
     fetchData() {
       Api.fetchWaitOutStationPage({
-        station: this.$route.query.station,
+        search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
       }).then((res) => {
@@ -78,10 +81,25 @@ export default {
         this.total = parseInt(res.data.total);
       });
     },
-    handleOutStationExecutionClick() {
-      this.$router.push(
-        "/outStationExecution?station=" + this.$route.query.station
-      );
+    handleOverStationExecutionClick(code) {
+      this.$router.push({
+        path: "/overStation",
+        query: { processingOrderCode: code },
+      });
+    },
+    async handleExitStationClick(code) {
+      await this.$confirm(`是否退站`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      let res = await Api.exitStation({
+        processingOrderCode: code,
+      });
+      if (res.code === 0) {
+        this.$message({ type: "success", message: "退站成功" });
+        this.fetchData();
+      }
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -107,6 +125,9 @@ export default {
     display: flex;
     gap: 20px;
     margin-top: 12px;
+    .in-station {
+      flex: 1;
+    }
     .back-station {
       flex: 1;
     }

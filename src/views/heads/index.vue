@@ -3,50 +3,56 @@
     <div>
       <div class="divReturn" v-show="IsRouter">
         <a @click="back">
-          <li style="color: #FFF;" class="el-icon-arrow-left"></li>
+          <li style="color: #fff" class="el-icon-arrow-left"></li>
         </a>
       </div>
 
       <div class="divhead">
-        {{$route.meta.text}}
-        <span v-if="$route.query.station"> - {{$route.query.station}}</span>
+        {{ $route.meta.text }}
+        <span v-if="$route.query.station">
+          - {{ processCodeMap[$route.query.station] }}</span
+        >
         <!-- <i @click="reload()" class="el-icon-refresh el-icon-refreshs"></i> -->
       </div>
 
-      <div
-        v-show="IsUser"
-        class="divuser"
-      >
+      <div v-show="IsUser" class="divuser">
         <a @click="logout">
           <span class="user-name">{{ realName }}</span>
-          <i class="el-icon-switch-button"/>
+          <i class="el-icon-switch-button" />
         </a>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "heads",
   props: ["IsRouter", "router", "IsUser"],
   data() {
     return {
-
-    }
+      processCodeMap: {
+        ZL: "装料",
+        ZJ: "长晶",
+        QTWQY: "切头尾取样",
+        JDJC: "晶锭检测",
+        FDZL: "分段指令",
+        QG: "切割",
+      },
+    };
   },
   computed: {
     ...mapState({
-      realName: state => state.user.realName
-    })
+      realName: (state) => state.user.realName,
+    }),
   },
   methods: {
     logout() {
       this.$confirm("确定要退出吗?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       }).then(() => {
         this.$store.dispatch("LogOut").then(() => {
           location.reload(); // 为了重新实例化vue-router对象 避免bug
@@ -57,9 +63,9 @@ export default {
       this.$emit("reload");
     },
     back() {
-      window.history.go(-1)
-    }
-  }
+      window.history.go(-1);
+    },
+  },
 };
 </script>
 <style>
@@ -131,7 +137,7 @@ export default {
   padding: 0;
 }
 #heads {
-  background: linear-gradient(270deg, #1283F9 0.5%, #0BA4FA 99.38%);
+  background: linear-gradient(270deg, #1283f9 0.5%, #0ba4fa 99.38%);
   border: 1px solid rgb(18, 150, 219);
   color: #fff;
 }

@@ -53,24 +53,17 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      list: [
-        {
-          title: "Z0116504581",
-          number: "123456",
-          type: "晶锭123",
-          inStationTime: "2022-08-13 09:10:23",
-          preStation: "单晶送付",
-          nextStation: "晶锭检测",
-        },
-      ],
+      list: [],
       timeRange: [],
     };
   },
-  mounted() {},
+  mounted() {
+    this.fetchData();
+  },
   methods: {
     fetchData() {
-      Api.fetchHistoricalOverStationRecordsPage({
-        station: "123",
+      Api.fetchWaitOutStationPage({
+        search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
       }).then((res) => {

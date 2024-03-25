@@ -60,10 +60,10 @@ export default {
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
       overStationDataEntryComponentMap: {
-        切头尾取样: HeadAndTailSampling,
-        晶锭检测: IngotDetection,
-        分段指令: SegmentedInstruction,
-        切割: Cutting,
+        QTWQY: HeadAndTailSampling,
+        JDJC: IngotDetection,
+        FDZL: SegmentedInstruction,
+        QG: Cutting,
       },
     };
   },
