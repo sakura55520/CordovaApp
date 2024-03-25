@@ -42,13 +42,24 @@
               prop="qualifiedQuantity"
               class="item"
             >
-              <el-input
-                v-model="formData.qualifiedQuantity"
-                disabled
-              ></el-input>
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.qualifiedQuantity"
+                  disabled
+                ></el-input>
+                <div class="unit">kg</div>
+              </div>
             </el-form-item>
             <el-form-item label="异常数量" prop="abnormalQuantity" class="item">
-              <el-input v-model="formData.abnormalQuantity"></el-input>
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.abnormalQuantity"
+                  disabled
+                ></el-input>
+                <div class="unit">kg</div>
+              </div>
             </el-form-item>
             <el-form-item label="型号" prop="model" class="item">
               <el-input v-model="formData.model"></el-input>
@@ -269,6 +280,24 @@ export default {
   }
   .confirm-btn {
     flex: 2;
+  }
+}
+.base-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  .item {
+    width: 49%;
+    .input {
+      display: flex;
+      gap: 8px;
+      .value {
+        flex: 1;
+      }
+      .unit {
+        width: 30px;
+      }
+    }
   }
 }
 .form {

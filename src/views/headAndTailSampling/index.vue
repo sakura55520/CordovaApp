@@ -32,7 +32,7 @@
           label-width="100px"
           :rules="formRules"
         >
-          <div class="first-form">
+          <div class="base-form">
             <el-form-item label="操作者" prop="operator" class="item">
               <el-input v-model="formData.operator" disabled></el-input>
             </el-form-item>
@@ -53,8 +53,8 @@
               <el-input v-model="formData.scrapQuantity"></el-input>
             </el-form-item>
           </div>
-          <div class="secord-form">
-            <div class="secord-form-title">设备/工艺参数确认</div>
+          <div class="form">
+            <div class="form-title">设备/工艺参数确认</div>
             <el-form-item label="头部重量" prop="headWeight" class="item">
               <div class="input">
                 <el-input
@@ -184,15 +184,25 @@ export default {
     flex: 2;
   }
 }
-.first-form {
+.base-form {
   display: flex;
   flex-wrap: wrap;
   gap: 2%;
   .item {
     width: 49%;
+    .input {
+      display: flex;
+      gap: 8px;
+      .value {
+        flex: 1;
+      }
+      .unit {
+        width: 30px;
+      }
+    }
   }
 }
-.secord-form {
+.form {
   margin-top: 20px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -215,7 +225,7 @@ export default {
       }
     }
   }
-  .secord-form-title {
+  .form-title {
     position: absolute;
     top: -10px;
     left: 20px;
