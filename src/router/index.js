@@ -61,6 +61,42 @@ export const constantRouterMap = [
     hidden: true,
     meta: {text: '出站执行'},
     props: true
+  },
+
+  {
+    name: 'headAndTailSampling',
+    path: '/headAndTailSampling',
+    component: () => import('@/views/headAndTailSampling/index'),
+    hidden: true,
+    meta: {text: '切头尾取样'},
+    props: true
+  },
+
+  {
+    name: 'ingotDetection',
+    path: '/ingotDetection',
+    component: () => import('@/views/ingotDetection/index'),
+    hidden: true,
+    meta: {text: '晶锭检测'},
+    props: true
+  },
+
+  {
+    name: 'segmentedInstruction',
+    path: '/segmentedInstruction',
+    component: () => import('@/views/segmentedInstruction/index'),
+    hidden: true,
+    meta: {text: '分段指令'},
+    props: true
+  },
+
+  {
+    name: 'cutting',
+    path: '/cutting',
+    component: () => import('@/views/cutting/index'),
+    hidden: true,
+    meta: {text: '切割'},
+    props: true
   }
 ]
 
