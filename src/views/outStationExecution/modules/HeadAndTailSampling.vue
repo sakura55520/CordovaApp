@@ -1,11 +1,16 @@
 <template>
-  <el-form :model="formData" label-position="left" label-width="100px">
+  <el-form
+    :model="formData"
+    label-position="left"
+    label-width="100px"
+    :rules="formRules"
+  >
     <div class="first-form">
       <el-form-item label="操作者" prop="operator" class="item">
-        <el-input v-model="formData.operator"></el-input>
+        <el-input v-model="formData.operator" disabled></el-input>
       </el-form-item>
       <el-form-item label="合格数量" prop="qualifiedQuantity" class="item">
-        <el-input v-model="formData.qualifiedQuantity"></el-input>
+        <el-input v-model="formData.qualifiedQuantity" disabled></el-input>
       </el-form-item>
       <el-form-item label="缺陷数量" prop="defectQuantity" class="item">
         <el-input v-model="formData.defectQuantity"></el-input>
@@ -15,16 +20,25 @@
       </el-form-item>
     </div>
     <div class="secord-form">
+      <div class="secord-form-title">设备/工艺参数确认</div>
       <el-form-item label="头部重量" prop="headWeight" class="item">
-        <el-input v-model="formData.headWeight"></el-input>
+        <div class="input">
+          <el-input class="value" v-model="formData.headWeight"></el-input>
+          <div class="unit">kg</div>
+        </div>
       </el-form-item>
       <el-form-item label="尾部重量" prop="tailWeight" class="item">
-        <el-input v-model="formData.tailWeight"></el-input>
+        <div class="input">
+          <el-input class="value" v-model="formData.tailWeight"></el-input>
+          <div class="unit">kg</div>
+        </div>
       </el-form-item>
       <el-form-item label="当前长度" prop="currentLength" class="item">
-        <el-input v-model="formData.defectQuantity"></el-input>
+        <div class="input">
+          <el-input class="value" v-model="formData.currentLength"></el-input>
+          <div class="unit">cm</div>
+        </div>
       </el-form-item>
-      <div class="secord-form-title">设备/工艺参数确认</div>
     </div>
   </el-form>
 </template>
@@ -39,6 +53,29 @@ export default {
         qualifiedQuantity: null,
         defectQuantity: null,
         scrapQuantity: null,
+      },
+      formRules: {
+        operator: [
+          { required: true, message: "操作者不能为空", trigger: "blur" },
+        ],
+        qualifiedQuantity: [
+          { required: true, message: "合格数量不能为空", trigger: "blur" },
+        ],
+        defectQuantity: [
+          { required: true, message: "缺陷数量不能为空", trigger: "blur" },
+        ],
+        scrapQuantity: [
+          { required: true, message: "报废数量不能为空", trigger: "blur" },
+        ],
+        headWeight: [
+          { required: true, message: "头部重量不能为空", trigger: "blur" },
+        ],
+        tailWeight: [
+          { required: true, message: "尾部重量不能为空", trigger: "blur" },
+        ],
+        currentLength: [
+          { required: true, message: "当前长度不能为空", trigger: "blur" },
+        ],
       },
     };
   },
@@ -66,6 +103,16 @@ export default {
   gap: 2%;
   .item {
     width: 49%;
+    .input {
+      display: flex;
+      gap: 8px;
+      .value {
+        flex: 1;
+      }
+      .unit {
+        width: 30px;
+      }
+    }
   }
   .secord-form-title {
     position: absolute;
@@ -73,5 +120,8 @@ export default {
     left: 20px;
     background: white;
   }
+}
+.unit {
+  width: 60px;
 }
 </style>
