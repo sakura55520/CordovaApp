@@ -180,14 +180,6 @@ export default {
     setTimeout(function () {
       _this.getClassName();
     }, 300);
-
-    if (process.env.NODE_ENV === 'development') {
-      // 测试
-      this.loginForm.loginName="renjihua"
-      this.loginForm.password="r123456"
-      this.loginForm.teamGroup='A班'
-      this.loginForm.classNo='白班'
-    }
   },
   mounted() {
     document.getElementById('updateTime').innerText = VERSION
