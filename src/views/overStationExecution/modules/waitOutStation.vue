@@ -5,14 +5,22 @@
       <el-divider class="divider" />
       <el-table
         :data="[item]"
-        key="number"
+        key="dataOrderCode"
         :header-cell-style="{
           background: 'rgba(242, 242, 242)',
           color: '#606266',
         }"
       >
-        <el-table-column label="产品料号" prop="number" min-width="100" />
-        <el-table-column label="产品类型" prop="type" min-width="100" />
+        <el-table-column
+          label="产品料号"
+          prop="dataOrderCode"
+          min-width="100"
+        />
+        <el-table-column label="产品类型" prop="orderType" min-width="100">
+          <template slot-scope="scope">{{
+            JSON.parse(scope.row.data).productCategory
+          }}</template>
+        </el-table-column>
         <el-table-column label="进站时间" prop="inTime" min-width="100" />
         <el-table-column label="上站" prop="preStation" />
         <el-table-column label="下站" prop="nextStation" />
