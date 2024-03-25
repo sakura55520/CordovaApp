@@ -11,6 +11,8 @@ const whiteList = [
 ]
 router.beforeEach(async(to, from, next) => {
   const token = getToken()
+  // console.log('pda sessionStorage', window.sessionStorage)
+  // console.log('pda token', token)
   const realName = store.state.user.realName
   const id = store.state.user.id
   if (token && realName) {

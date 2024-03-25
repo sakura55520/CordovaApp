@@ -14,7 +14,6 @@ import fabric from 'fabric';
 import { hoursFromNow } from '@/utils/tool'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
-import PrintDialog from '@/views/components/printDialog'
 
 // import 'babel-polyfill'
 import '@/icons' // icons
@@ -33,7 +32,6 @@ Vue.config.productionTip = false
 Vue.prototype.$fabric = fabric;
 Vue.prototype.$hoursFromNow = hoursFromNow;
 
-Vue.component('PrintDialog', PrintDialog)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
