@@ -191,12 +191,16 @@
     <div class="btn">
       <el-button plain class="cancel-btn" @click="cancel">取消</el-button>
       <el-button type="primary" plain class="save-btn">保存</el-button>
-      <el-button type="primary" class="confirm-btn">出站确认</el-button>
+      <el-button type="primary" class="confirm-btn" @click="confirm"
+        >出站确认</el-button
+      >
     </div>
   </div>
 </template>
 
 <script>
+import * as Api from "@/api/inStation";
+
 export default {
   data() {
     return {
@@ -251,6 +255,11 @@ export default {
     },
     cancel() {
       window.history.go(-1);
+    },
+    confirm() {
+      Api.inOrOutStation().then((res) => {
+        this.$message.success("出站成功");
+      });
     },
   },
 };
