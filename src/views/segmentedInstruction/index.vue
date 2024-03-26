@@ -54,66 +54,105 @@
                 color: '#606266',
               }"
             >
-              <el-table-column label="样片编号">
+              <el-table-column label="晶锭编号" min-width="150">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.sampleNumber"></el-input>
+                  <el-input v-model="scope.row.code"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="样片标识">
+              <el-table-column label="下发工单" min-width="150">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.sampleId"></el-input>
+                  <el-input v-model="scope.row.order"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="样片位置">
+              <el-table-column label="流程编号" min-width="100">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.samplePosition"></el-input>
+                  <el-input v-model="scope.row.processCode"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="类别">
+              <el-table-column label="流程说明" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.category"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="晶向">
+              <el-table-column label="直径" min-width="100">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.crystalOrientation"></el-input>
+                  <el-input v-model="scope.row.diameter"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="尺寸">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.size"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="结晶比重">
+              <el-table-column label="头部位置" min-width="100">
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.crystalSpecificGravity"
+                    v-model="scope.row.head"
+                    @input="(value) => handleHeadChange(value, scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES">
+              <el-table-column label="尾部位置" min-width="100">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.tail"
+                    @input="(value) => handleTailChange(value, scope.$index)"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="晶锭长度" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.res"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_C">
+              <el-table-column label="计划重量" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.res_c"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_E"></el-table-column>
-              <el-table-column label="1/2RES"></el-table-column>
-              <el-table-column label="1/2 RRG"></el-table-column>
-              <el-table-column label="RRG"></el-table-column>
-              <el-table-column label="尾部电阻率"></el-table-column>
-              <el-table-column label="头尾电阻比"></el-table-column>
-              <el-table-column label="OI_C"></el-table-column>
-              <el-table-column label="CS"></el-table-column>
-              <el-table-column label="OI_E"></el-table-column>
-              <el-table-column label="ORG"></el-table-column>
-              <el-table-column label="少子寿命"></el-table-column>
-              <el-table-column label="测试人员"></el-table-column>
-              <el-table-column label="确认人员"></el-table-column>
+              <el-table-column label="段位" min-width="100"></el-table-column>
+              <el-table-column
+                label="头部电阻率"
+                min-width="120"
+              ></el-table-column>
+              <el-table-column
+                label="尾部电阻率"
+                min-width="120"
+              ></el-table-column>
+              <el-table-column
+                label="头部电阻率实测"
+                min-width="150"
+              ></el-table-column>
+              <el-table-column
+                label="尾部电阻率实测"
+                min-width="150"
+              ></el-table-column>
+              <el-table-column
+                label="头尾电阻比"
+                min-width="120"
+              ></el-table-column>
+              <el-table-column label="79oi头" min-width="100"></el-table-column>
+              <el-table-column label="79oi尾" min-width="100"></el-table-column>
+              <el-table-column label="83oi头" min-width="100"></el-table-column>
+              <el-table-column label="83oi尾" min-width="100"></el-table-column>
+              <el-table-column label="滚圆" min-width="80"></el-table-column>
+              <el-table-column label="参考面" min-width="100"></el-table-column>
+              <el-table-column label="说明" min-width="80"></el-table-column>
+              <el-table-column
+                label="合格状态"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column
+                label="合格长度"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column
+                label="合格重量"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column
+                label="不合格原因"
+                min-width="120"
+              ></el-table-column>
+              <el-table-column
+                label="入库原因"
+                min-width="100"
+              ></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button
@@ -141,15 +180,21 @@
                   <div class="tail">{{ item.tail }}</div>
                 </div>
                 <div class="line"></div>
-                <el-tooltip placement="bottom">
+                <el-tooltip placement="bottom" effect="light">
                   <template #content>
-                    <div class="tooltip">
-                      直径：8 段位：1 晶锭长度：430 计划重量：40.99
-                      头部电阻率：21.4 尾部电阻率：19 头部电阻率实测：21.4
-                      尾部电阻率实测：19 79oi头：34.0000 79oi尾：30.0280
-                      79oi头：17.3060 79oi尾：15.2840 合格状态：合格品
-                      合格长度：430 合格重量：40.99
-                    </div>
+                    <div>直径：8</div>
+                    <div>段位：1</div>
+                    <div>晶锭长度：430</div>
+                    <div>计划重量：40.99</div>
+                    <div>头部电阻率：21.4</div>
+                    <div>尾部电阻率：19</div>
+                    <div>头部电阻率实测：21.4</div>
+                    <div>尾部电阻率实测：19</div>
+                    <div>79oi头：17.3060</div>
+                    <div>79oi尾：15.2840</div>
+                    <div>合格状态：合格品</div>
+                    <div>合格长度：430</div>
+                    <div>合格重量：40.99</div>
                   </template>
                   <div
                     :class="selectedIndex === index ? 'bar-selected' : 'bar'"
@@ -186,11 +231,28 @@ export default {
         segmentedInfo: [
           {
             code: "S0708B019710AI",
+            order: "W2305153",
+            processCode: "IG03",
+            diameter: 10,
             head: 0,
             tail: 430,
           },
-          { code: "S0708B019710IQ", head: 430, tail: 838 },
-          { code: "S0708B019710QF", head: 838, tail: 1268 },
+          {
+            code: "S0708B019710IQ",
+            order: "W2305154",
+            processCode: "IG03",
+            diameter: 10,
+            head: 430,
+            tail: 838,
+          },
+          {
+            code: "S0708B019710QF",
+            order: "W2305155",
+            processCode: "IG03",
+            diameter: 10,
+            head: 838,
+            tail: 1268,
+          },
         ],
       },
       formRules: {
@@ -203,7 +265,14 @@ export default {
   },
   methods: {
     addSegmentedInfo() {
-      this.formData.segmentedInfo.push({ sampleNumber: null });
+      let list = this.formData.segmentedInfo;
+      let head;
+      if (list.length === 0) head = 0;
+      else head = list[list.length - 1].tail;
+      let item = {
+        head,
+      };
+      this.formData.segmentedInfo.push(item);
     },
     deleteSegmentedInfo(index) {
       let list = [...this.formData.segmentedInfo];
@@ -211,8 +280,19 @@ export default {
       this.formData.segmentedInfo = list;
     },
     handleSegmentedBarClick(index) {
-      if (this.selectedIndex === index) this.selectedIndex = null;
-      else this.selectedIndex = index;
+      this.selectedIndex = index;
+    },
+    handleHeadChange(value, index) {
+      if (index !== 0) {
+        this.formData.segmentedInfo[index - 1].tail = value;
+        //更新晶锭编码
+      }
+    },
+    handleTailChange(value, index) {
+      if (index !== this.formData.segmentedInfo.length - 1) {
+        this.formData.segmentedInfo[index + 1].head = value;
+        //更新晶锭编码
+      }
     },
   },
   computed: {
@@ -258,7 +338,10 @@ export default {
 }
 .btn {
   position: absolute;
-  bottom: 20px;
+  bottom: 0px;
+  background-color: rgb(245, 247, 250);
+  padding-bottom: 20px;
+  z-index: 999;
   width: 100%;
   display: flex;
   gap: 8px;

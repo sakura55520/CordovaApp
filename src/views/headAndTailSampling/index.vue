@@ -170,7 +170,10 @@ export default {
 }
 .btn {
   position: absolute;
-  bottom: 20px;
+  bottom: 0px;
+  background-color: rgb(245, 247, 250);
+  padding-bottom: 20px;
+  z-index: 999;
   width: 100%;
   display: flex;
   gap: 8px;

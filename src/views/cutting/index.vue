@@ -69,66 +69,17 @@
                 color: '#606266',
               }"
             >
-              <el-table-column label="样片编号">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.sampleNumber"></el-input>
-                </template>
+              <el-table-column label="晶锭编号" prop="code"> </el-table-column>
+              <el-table-column label="计划长度" prop="planLength">
               </el-table-column>
-              <el-table-column label="样片标识">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.sampleId"></el-input>
-                </template>
+              <el-table-column label="原始长度" prop="originalLength">
               </el-table-column>
-              <el-table-column label="样片位置">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.samplePosition"></el-input>
-                </template>
+              <el-table-column label="崩边长度" prop="flakingLength">
               </el-table-column>
-              <el-table-column label="类别">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.category"></el-input>
-                </template>
+              <el-table-column label="椭圆长度" prop="ellipseLength">
               </el-table-column>
-              <el-table-column label="晶向">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.crystalOrientation"></el-input>
-                </template>
+              <el-table-column label="合格长度" prop="passLength">
               </el-table-column>
-              <el-table-column label="尺寸">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.size"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="结晶比重">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.crystalSpecificGravity"
-                  ></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="RES">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.res"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="RES_C">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.res_c"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="RES_E"></el-table-column>
-              <el-table-column label="1/2RES"></el-table-column>
-              <el-table-column label="1/2 RRG"></el-table-column>
-              <el-table-column label="RRG"></el-table-column>
-              <el-table-column label="尾部电阻率"></el-table-column>
-              <el-table-column label="头尾电阻比"></el-table-column>
-              <el-table-column label="OI_C"></el-table-column>
-              <el-table-column label="CS"></el-table-column>
-              <el-table-column label="OI_E"></el-table-column>
-              <el-table-column label="ORG"></el-table-column>
-              <el-table-column label="少子寿命"></el-table-column>
-              <el-table-column label="测试人员"></el-table-column>
-              <el-table-column label="确认人员"></el-table-column>
             </el-table>
           </div>
         </el-form>
@@ -206,7 +157,10 @@ export default {
 }
 .btn {
   position: absolute;
-  bottom: 20px;
+  bottom: 0px;
+  background-color: rgb(245, 247, 250);
+  padding-bottom: 20px;
+  z-index: 999;
   width: 100%;
   display: flex;
   gap: 8px;

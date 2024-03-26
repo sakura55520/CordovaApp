@@ -95,66 +95,84 @@
                 color: '#606266',
               }"
             >
-              <el-table-column label="样片编号">
+              <el-table-column label="样片编号" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.sampleNumber"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="样片标识">
+              <el-table-column label="样片标识" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.sampleId"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="样片位置">
+              <el-table-column label="样片位置" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.samplePosition"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="类别">
+              <el-table-column label="类别" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.category"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="晶向">
+              <el-table-column label="晶向" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.crystalOrientation"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="尺寸">
+              <el-table-column label="尺寸" min-width="100">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.size"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="结晶比重">
+              <el-table-column label="结晶比重" min-width="100">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.crystalSpecificGravity"
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES">
+              <el-table-column label="RES" min-width="80">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.res"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_C">
+              <el-table-column label="RES_C" min-width="80">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.res_c"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_E"></el-table-column>
-              <el-table-column label="1/2RES"></el-table-column>
-              <el-table-column label="1/2 RRG"></el-table-column>
-              <el-table-column label="RRG"></el-table-column>
-              <el-table-column label="尾部电阻率"></el-table-column>
-              <el-table-column label="头尾电阻比"></el-table-column>
-              <el-table-column label="OI_C"></el-table-column>
-              <el-table-column label="CS"></el-table-column>
-              <el-table-column label="OI_E"></el-table-column>
-              <el-table-column label="ORG"></el-table-column>
-              <el-table-column label="少子寿命"></el-table-column>
-              <el-table-column label="测试人员"></el-table-column>
-              <el-table-column label="确认人员"></el-table-column>
+              <el-table-column label="RES_E" min-width="80"></el-table-column>
+              <el-table-column label="1/2RES" min-width="100"></el-table-column>
+              <el-table-column
+                label="1/2 RRG"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column label="RRG" min-width="80"></el-table-column>
+              <el-table-column
+                label="尾部电阻率"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column
+                label="头尾电阻比"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column label="OI_C" min-width="80"></el-table-column>
+              <el-table-column label="CS" min-width="80"></el-table-column>
+              <el-table-column label="OI_E" min-width="80"></el-table-column>
+              <el-table-column label="ORG" min-width="80"></el-table-column>
+              <el-table-column
+                label="少子寿命"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column
+                label="测试人员"
+                min-width="100"
+              ></el-table-column>
+              <el-table-column
+                label="确认人员"
+                min-width="100"
+              ></el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button
@@ -268,7 +286,10 @@ export default {
 }
 .btn {
   position: absolute;
-  bottom: 20px;
+  bottom: 0px;
+  background-color: rgb(245, 247, 250);
+  padding-bottom: 20px;
+  z-index: 999;
   width: 100%;
   display: flex;
   gap: 8px;
