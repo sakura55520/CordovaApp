@@ -54,6 +54,11 @@ export default {
               icon: "guozhan",
             },
             {
+              name: "单晶送付",
+              href: "/overStationExecution?station=DJSF",
+              icon: "guozhan",
+            },
+            {
               name: "切头尾取样",
               href: "/overStationExecution?station=QTWQY",
               icon: "guozhan",
@@ -71,6 +76,21 @@ export default {
             {
               name: "切割",
               href: "/overStationExecution?station=QG",
+              icon: "guozhan",
+            },
+            {
+              name: "滚圆中转",
+              href: "/overStationExecution?station=GYZZ",
+              icon: "guozhan",
+            },
+            {
+              name: "加参",
+              href: "/overStationExecution?station=JC",
+              icon: "guozhan",
+            },
+            {
+              name: "入库检测",
+              href: "/overStationExecution?station=RKJC",
               icon: "guozhan",
             },
           ],
