@@ -87,7 +87,7 @@
       </div>
     </div>
     <div class="btn">
-      <el-button plain class="cancel-btn">取消</el-button>
+      <el-button plain class="cancel-btn" @click="cancel">取消</el-button>
       <el-button type="primary" plain class="save-btn">保存</el-button>
       <el-button type="primary" class="confirm-btn">出站确认</el-button>
     </div>
@@ -133,6 +133,11 @@ export default {
         ],
       },
     };
+  },
+  methods: {
+    cancel() {
+      window.history.go(-1);
+    },
   },
 };
 </script>
