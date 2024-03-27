@@ -15,6 +15,14 @@
           <div class="info-value">{{ furnaceNumber }}</div>
         </div>
         <div class="info">
+          <div class="info-label">产品料号</div>
+          <div class="info-value">{{ dataOrderCode }}</div>
+        </div>
+        <div class="info">
+          <div class="info-label">产品名称</div>
+          <div class="info-value">{{ productName }}</div>
+        </div>
+        <div class="info">
           <div class="info-label">配方</div>
           <div class="info-value">{{ recipe }}</div>
         </div>
@@ -54,32 +62,26 @@
                 color: '#606266',
               }"
             >
-              <el-table-column label="晶锭编号" min-width="150">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.code"></el-input>
-                </template>
+              <el-table-column label="晶锭编号" min-width="150" align="center">
               </el-table-column>
-              <el-table-column label="下发工单" min-width="150">
+              <el-table-column label="下发工单" min-width="150" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.order"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="流程编号" min-width="100">
+              <el-table-column label="流程编号" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.processCode"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="流程说明" min-width="100">
+              <el-table-column label="流程说明" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.category"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="直径" min-width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.diameter"></el-input>
-                </template>
+              <el-table-column label="直径" min-width="100" align="center">
               </el-table-column>
-              <el-table-column label="头部位置" min-width="100">
+              <el-table-column label="头部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.head"
@@ -87,7 +89,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="尾部位置" min-width="100">
+              <el-table-column label="尾部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.tail"
@@ -95,64 +97,104 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="晶锭长度" min-width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.res"></el-input>
-                </template>
+              <el-table-column label="晶锭长度" min-width="100" align="center">
               </el-table-column>
-              <el-table-column label="计划重量" min-width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.res_c"></el-input>
-                </template>
+              <el-table-column label="计划重量" min-width="100" align="center">
               </el-table-column>
-              <el-table-column label="段位" min-width="100"></el-table-column>
+              <el-table-column
+                label="段位"
+                min-width="100"
+                align="center"
+              ></el-table-column>
               <el-table-column
                 label="头部电阻率"
                 min-width="120"
+                align="center"
               ></el-table-column>
               <el-table-column
                 label="尾部电阻率"
                 min-width="120"
+                align="center"
               ></el-table-column>
               <el-table-column
                 label="头部电阻率实测"
                 min-width="150"
+                align="center"
               ></el-table-column>
               <el-table-column
                 label="尾部电阻率实测"
                 min-width="150"
+                align="center"
               ></el-table-column>
               <el-table-column
                 label="头尾电阻比"
                 min-width="120"
+                align="center"
               ></el-table-column>
-              <el-table-column label="79oi头" min-width="100"></el-table-column>
-              <el-table-column label="79oi尾" min-width="100"></el-table-column>
-              <el-table-column label="83oi头" min-width="100"></el-table-column>
-              <el-table-column label="83oi尾" min-width="100"></el-table-column>
-              <el-table-column label="滚圆" min-width="80"></el-table-column>
-              <el-table-column label="参考面" min-width="100"></el-table-column>
-              <el-table-column label="说明" min-width="80"></el-table-column>
               <el-table-column
-                label="合格状态"
+                label="79oi头"
                 min-width="100"
+                align="center"
               ></el-table-column>
+              <el-table-column
+                label="79oi尾"
+                min-width="100"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="83oi头"
+                min-width="100"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="83oi尾"
+                min-width="100"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="滚圆"
+                min-width="80"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="参考面"
+                min-width="100"
+                align="center"
+              ></el-table-column>
+              <el-table-column
+                label="说明"
+                min-width="80"
+                align="center"
+              ></el-table-column>
+              <el-table-column label="合格状态" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.qualified"> </el-select>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="合格长度"
                 min-width="100"
+                align="center"
               ></el-table-column>
               <el-table-column
                 label="合格重量"
                 min-width="100"
+                align="center"
               ></el-table-column>
               <el-table-column
                 label="不合格原因"
                 min-width="120"
-              ></el-table-column>
-              <el-table-column
-                label="入库原因"
-                min-width="100"
-              ></el-table-column>
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.qualified"></el-select>
+                </template>
+              </el-table-column>
+              <el-table-column label="入库原因" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.qualified"></el-select>
+                </template>
+              </el-table-column>
               <el-table-column label="操作">
                 <template slot-scope="scope">
                   <el-button
@@ -200,7 +242,9 @@
                     :class="selectedIndex === index ? 'bar-selected' : 'bar'"
                     @click="handleSegmentedBarClick(index)"
                   >
-                    {{ item.code }}
+                    <div class="center">
+                      {{ item.code }}
+                    </div>
                   </div>
                 </el-tooltip>
               </div>
@@ -439,11 +483,10 @@ export default {
       height: 60px;
       border: 1px solid #000;
       cursor: pointer;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      z-index: 2;
       &::before,
       &::after {
         content: "";
@@ -462,19 +505,27 @@ export default {
         z-index: 3;
         right: -10px;
       }
+      .center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+      }
     }
     .bar-selected {
       margin-top: 10px;
       width: 100%;
       height: 60px;
-      border: 1px solid #000;
+      border: 1px solid rgb(2, 104, 197);
       background-color: rgb(233, 243, 253);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      z-index: 2;
       &::before,
       &::after {
         content: "";
@@ -492,6 +543,15 @@ export default {
       &::after {
         z-index: 3;
         right: -10px;
+      }
+      .center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgb(233, 243, 253);
+        z-index: 2;
+        width: 100%;
+        height: 100%;
       }
     }
     .tooltip {

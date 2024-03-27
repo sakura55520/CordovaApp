@@ -15,6 +15,14 @@
           <div class="info-value">{{ furnaceNumber }}</div>
         </div>
         <div class="info">
+          <div class="info-label">产品料号</div>
+          <div class="info-value">{{ dataOrderCode }}</div>
+        </div>
+        <div class="info">
+          <div class="info-label">产品名称</div>
+          <div class="info-value">{{ productName }}</div>
+        </div>
+        <div class="info">
           <div class="info-label">配方</div>
           <div class="info-value">{{ recipe }}</div>
         </div>
@@ -45,6 +53,7 @@
                 <el-input
                   class="value"
                   v-model="formData.qualifiedQuantity"
+                  disabled
                 ></el-input>
                 <div class="unit">kg</div>
               </div>
@@ -69,16 +78,56 @@
                 color: '#606266',
               }"
             >
-              <el-table-column label="晶锭编号" prop="code"> </el-table-column>
-              <el-table-column label="计划长度" prop="planLength">
+              <el-table-column
+                label="晶锭编号"
+                prop="code"
+                min-width="100"
+                align="center"
+              >
               </el-table-column>
-              <el-table-column label="原始长度" prop="originalLength">
+              <el-table-column
+                label="计划长度"
+                prop="planLength"
+                min-width="100"
+                align="center"
+              >
               </el-table-column>
-              <el-table-column label="崩边长度" prop="flakingLength">
+              <el-table-column
+                label="原始长度"
+                prop="originalLength"
+                min-width="100"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.order"></el-input>
+                </template>
               </el-table-column>
-              <el-table-column label="椭圆长度" prop="ellipseLength">
+              <el-table-column
+                label="崩边长度"
+                prop="flakingLength"
+                min-width="100"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.order"></el-input>
+                </template>
               </el-table-column>
-              <el-table-column label="合格长度" prop="passLength">
+              <el-table-column
+                label="椭圆长度"
+                prop="ellipseLength"
+                min-width="100"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.order"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="合格长度"
+                prop="passLength"
+                min-width="100"
+                align="center"
+              >
               </el-table-column>
             </el-table>
           </div>

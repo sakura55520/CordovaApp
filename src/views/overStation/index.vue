@@ -150,7 +150,8 @@ export default {
         // 定制化页面
         this.$router.push({path:this.currentSite.operationData,query:{
           ...this.currentSite,
-          processingOrderCode:this.processingOrderCode
+          processingOrderCode:this.processingOrderCode,
+          fromData:JSON.stringify(this.currentSite.fromData)
         }})
       }
     },
@@ -201,7 +202,8 @@ export default {
         // 定制化页面
         this.$router.push({path:this.currentSite.operationData,query:{
           ...this.currentSite,
-          processingOrderCode:this.processingOrderCode
+          processingOrderCode:this.processingOrderCode,
+          fromData:JSON.stringify(this.currentSite.fromData)
         }})
       }
     },

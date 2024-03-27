@@ -15,6 +15,14 @@
           <div class="info-value">{{ furnaceNumber }}</div>
         </div>
         <div class="info">
+          <div class="info-label">产品料号</div>
+          <div class="info-value">{{ dataOrderCode }}</div>
+        </div>
+        <div class="info">
+          <div class="info-label">产品名称</div>
+          <div class="info-value">{{ productName }}</div>
+        </div>
+        <div class="info">
           <div class="info-label">配方</div>
           <div class="info-value">{{ recipe }}</div>
         </div>
@@ -29,7 +37,7 @@
         <el-form
           :model="formData"
           label-position="left"
-          label-width="100px"
+          label-width="120px"
           :rules="formRules"
         >
           <div class="base-form">
@@ -137,6 +145,9 @@ export default {
         ],
       },
     };
+  },
+  mounted() {
+    console.log(JSON.parse(this.$route.query.fromData));
   },
   methods: {
     cancel() {
