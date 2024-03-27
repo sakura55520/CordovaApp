@@ -15,6 +15,14 @@
           <div class="info-value">{{ furnaceNumber }}</div>
         </div>
         <div class="info">
+          <div class="info-label">产品料号</div>
+          <div class="info-value">{{ dataOrderCode }}</div>
+        </div>
+        <div class="info">
+          <div class="info-label">产品名称</div>
+          <div class="info-value">{{ productName }}</div>
+        </div>
+        <div class="info">
           <div class="info-label">配方</div>
           <div class="info-value">{{ recipe }}</div>
         </div>
@@ -27,30 +35,24 @@
       <h3>出站数据录入</h3>
       <div class="outStation-form">
         <el-form
+          ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="100px"
+          label-width="120px"
           :rules="formRules"
         >
           <div class="base-form">
-            <el-form-item label="操作者" prop="operator" class="item">
-              <el-input v-model="formData.operator" disabled></el-input>
+            <el-form-item label="操作者" prop="userCreate" class="item">
+              <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
-            <el-form-item
-              label="合格数量"
-              prop="qualifiedQuantity"
-              class="item"
-            >
-              <el-input
-                v-model="formData.qualifiedQuantity"
-                disabled
-              ></el-input>
+            <el-form-item label="合格数量" prop="goodQty" class="item">
+              <el-input v-model="formData.goodQty" disabled></el-input>
             </el-form-item>
-            <el-form-item label="缺陷数量" prop="defectQuantity" class="item">
-              <el-input v-model="formData.defectQuantity"></el-input>
+            <el-form-item label="缺陷数量" prop="defectQty" class="item">
+              <el-input v-model="formData.defectQty"></el-input>
             </el-form-item>
-            <el-form-item label="报废数量" prop="scrapQuantity" class="item">
-              <el-input v-model="formData.scrapQuantity"></el-input>
+            <el-form-item label="报废数量" prop="scrapQty" class="item">
+              <el-input v-model="formData.scrapQty"></el-input>
             </el-form-item>
           </div>
           <div class="form">
@@ -73,12 +75,9 @@
                 <div class="unit">kg</div>
               </div>
             </el-form-item>
-            <el-form-item label="当前长度" prop="currentLength" class="item">
+            <el-form-item label="当前长度" prop="lengthQty" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.currentLength"
-                ></el-input>
+                <el-input class="value" v-model="formData.lengthQty"></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
@@ -107,23 +106,25 @@ export default {
       furnaceNumber: "A2010504581",
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
+      dataOrderCode: "",
+      productName: "",
       formData: {
-        operator: null,
-        qualifiedQuantity: null,
-        defectQuantity: null,
-        scrapQuantity: null,
+        userCreate: null,
+        goodQty: null,
+        defectQty: null,
+        scrapQty: null,
       },
       formRules: {
-        operator: [
+        userCreate: [
           { required: true, message: "操作者不能为空", trigger: "blur" },
         ],
-        qualifiedQuantity: [
+        goodQty: [
           { required: true, message: "合格数量不能为空", trigger: "blur" },
         ],
-        defectQuantity: [
+        defectQty: [
           { required: true, message: "缺陷数量不能为空", trigger: "blur" },
         ],
-        scrapQuantity: [
+        scrapQty: [
           { required: true, message: "报废数量不能为空", trigger: "blur" },
         ],
         headWeight: [
@@ -132,20 +133,32 @@ export default {
         tailWeight: [
           { required: true, message: "尾部重量不能为空", trigger: "blur" },
         ],
-        currentLength: [
+        lengthQty: [
           { required: true, message: "当前长度不能为空", trigger: "blur" },
         ],
       },
     };
   },
+  mounted() {
+    this.formData = JSON.parse(this.$route.query.fromData);
+  },
   methods: {
     cancel() {
       window.history.go(-1);
     },
-    confirm() {
-      Api.inOrOutStation().then((res) => {
-        this.$message.success("出站成功");
+    async confirm() {
+      const valid = await this.$refs.formRef.validate();
+      if (!valid) return;
+      await Api.inOrOutStation({
+        equipmentCode: "E01",
+        param: {
+          FormData: JSON.stringify(this.formData),
+        },
+        processUuid: this.formData.processUuid,
+        processingOrderCode: this.formData.processOrderCode,
+        wipStorageStatus: 1,
       });
+      this.$message.success("出站成功");
     },
   },
 };

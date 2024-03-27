@@ -15,6 +15,14 @@
           <div class="info-value">{{ furnaceNumber }}</div>
         </div>
         <div class="info">
+          <div class="info-label">产品料号</div>
+          <div class="info-value">{{ dataOrderCode }}</div>
+        </div>
+        <div class="info">
+          <div class="info-label">产品名称</div>
+          <div class="info-value">{{ productName }}</div>
+        </div>
+        <div class="info">
           <div class="info-label">配方</div>
           <div class="info-value">{{ recipe }}</div>
         </div>
@@ -29,7 +37,7 @@
         <el-form
           :model="formData"
           label-position="left"
-          label-width="100px"
+          label-width="120px"
           :rules="formRules"
         >
           <div class="form">
@@ -56,26 +64,31 @@
                 <el-input
                   class="value"
                   v-model="formData.abnormalQuantity"
-                  disabled
                 ></el-input>
                 <div class="unit">kg</div>
               </div>
             </el-form-item>
             <el-form-item label="型号" prop="model" class="item">
-              <el-input v-model="formData.model"></el-input>
+              <el-input v-model="formData.model" disabled></el-input>
             </el-form-item>
             <el-form-item label="尺寸" prop="size" class="item">
-              <el-input v-model="formData.size"></el-input>
+              <el-input v-model="formData.size" disabled></el-input>
             </el-form-item>
             <el-form-item label="晶向" prop="crystalOrientation" class="item">
-              <el-input v-model="formData.crystalOrientation"></el-input>
+              <el-input
+                v-model="formData.crystalOrientation"
+                disabled
+              ></el-input>
             </el-form-item>
             <el-form-item
               label="目标电阻率"
               prop="targetResistivity"
               class="item"
             >
-              <el-input v-model="formData.targetResistivity"></el-input>
+              <el-input
+                v-model="formData.targetResistivity"
+                disabled
+              ></el-input>
             </el-form-item>
           </div>
           <div class="form">
@@ -95,85 +108,151 @@
                 color: '#606266',
               }"
             >
-              <el-table-column label="样片编号" min-width="100">
+              <el-table-column
+                label="样片编号"
+                min-width="100"
+                align="center"
+                prop="sampleNo"
+              >
+              </el-table-column>
+              <el-table-column label="样片标识" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.sampleNumber"></el-input>
+                  <el-select v-model="scope.row.sampleId" placeholder="">
+                    <el-option label="H" value="H"></el-option>
+                    <el-option label="T" value="T"></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="样片标识" min-width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.sampleId"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="样片位置" min-width="100">
+              <el-table-column label="样片位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.samplePosition"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="类别" min-width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.category"></el-input>
-                </template>
+              <el-table-column
+                label="类别"
+                min-width="100"
+                align="center"
+                prop="category"
+              >
               </el-table-column>
-              <el-table-column label="晶向" min-width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.crystalOrientation"></el-input>
-                </template>
+              <el-table-column
+                label="晶向"
+                min-width="100"
+                align="center"
+                prop="crystalOrientation"
+              >
               </el-table-column>
-              <el-table-column label="尺寸" min-width="100">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.size"></el-input>
-                </template>
+              <el-table-column
+                label="尺寸"
+                min-width="100"
+                align="center"
+                prop="size"
+              >
               </el-table-column>
-              <el-table-column label="结晶比重" min-width="100">
+              <el-table-column label="结晶比重" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.crystalSpecificGravity"
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES" min-width="80">
+              <el-table-column label="RES" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.res"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_C" min-width="80">
+              <el-table-column label="RES_C" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.res_c"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_E" min-width="80"></el-table-column>
-              <el-table-column label="1/2RES" min-width="100"></el-table-column>
-              <el-table-column
-                label="1/2 RRG"
-                min-width="100"
+              <el-table-column label="RES_E" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
               ></el-table-column>
-              <el-table-column label="RRG" min-width="80"></el-table-column>
+              <el-table-column label="1/2RES" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="1/2 RRG" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="RRG" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
+              ></el-table-column>
               <el-table-column
                 label="尾部电阻率"
                 min-width="100"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column
                 label="头尾电阻比"
                 min-width="100"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
               ></el-table-column>
-              <el-table-column label="OI_C" min-width="80"></el-table-column>
-              <el-table-column label="CS" min-width="80"></el-table-column>
-              <el-table-column label="OI_E" min-width="80"></el-table-column>
-              <el-table-column label="ORG" min-width="80"></el-table-column>
-              <el-table-column
-                label="少子寿命"
-                min-width="100"
+              <el-table-column label="OI_C" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
               ></el-table-column>
-              <el-table-column
-                label="测试人员"
-                min-width="100"
+              <el-table-column label="CS" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
               ></el-table-column>
-              <el-table-column
-                label="确认人员"
-                min-width="100"
+              <el-table-column label="OI_E" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
               ></el-table-column>
-              <el-table-column label="操作">
+              <el-table-column label="ORG" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="少子寿命" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="测试人员" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="确认人员" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.crystalSpecificGravity"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                   <el-button
                     type="text"
@@ -229,17 +308,13 @@ export default {
         abnormalQuantity: [
           { required: true, message: "异常数量不能为空", trigger: "blur" },
         ],
-        scrapQuantity: [
-          { required: true, message: "报废数量不能为空", trigger: "blur" },
+        model: [{ required: true, message: "型号不能为空", trigger: "blur" }],
+        size: [{ required: true, message: "尺寸不能为空", trigger: "blur" }],
+        crystalOrientation: [
+          { required: true, message: "晶向不能为空", trigger: "blur" },
         ],
-        headWeight: [
-          { required: true, message: "头部重量不能为空", trigger: "blur" },
-        ],
-        tailWeight: [
-          { required: true, message: "尾部重量不能为空", trigger: "blur" },
-        ],
-        currentLength: [
-          { required: true, message: "当前长度不能为空", trigger: "blur" },
+        targetResistivity: [
+          { required: true, message: "目标电阻率不能为空", trigger: "blur" },
         ],
       },
     };

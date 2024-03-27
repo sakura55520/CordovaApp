@@ -35,10 +35,14 @@ export default {
       processCodeMap: {
         ZL: "装料",
         ZJ: "长晶",
+        DJSF: "单晶送付",
         QTWQY: "切头尾取样",
         JDJC: "晶锭检测",
         FDZL: "分段指令",
         QG: "切割",
+        GYZZ: "滚圆中转",
+        JC: "加参",
+        RKJC: "入库检测",
       },
     };
   },
