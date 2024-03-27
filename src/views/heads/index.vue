@@ -37,7 +37,7 @@ export default {
         ZJ: "长晶",
         DJSF: "单晶送付",
         QTWQY: "切头尾取样",
-        JDJC: "晶锭检测",
+        JDJY: "晶锭检验",
         FDZL: "分段指令",
         QG: "切割",
         GYZZ: "滚圆中转",

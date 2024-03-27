@@ -61,7 +61,7 @@ export default {
       processPath: "X0010101",
       overStationDataEntryComponentMap: {
         QTWQY: HeadAndTailSampling,
-        JDJC: IngotDetection,
+        JDJY: IngotDetection,
         FDZL: SegmentedInstruction,
         QG: Cutting,
       },
