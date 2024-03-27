@@ -62,12 +62,6 @@
         </el-button>
       </template>
 
-
-      <el-button
-        :disabled="!isAbnormal"
-        class="submit"
-        type="danger"
-      >标记异常</el-button>
     </div>
 
     <el-dialog title="请选择路线" :visible.sync="routeDialog" width="50%" :before-close="closeRouteDialog">

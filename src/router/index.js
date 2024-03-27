@@ -97,6 +97,13 @@ export const constantRouterMap = [
     hidden: true,
     meta: {text: '切割'},
     props: true
+  },
+
+  {
+    name: 'chargeOperate',
+    path: '/chargeOperate',
+    component: () => import('@/views/chargeOperate'),
+    meta: {text: '装料'},
   }
 ]
 
