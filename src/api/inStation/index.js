@@ -23,3 +23,28 @@ export function inOrOutStation(data) {
     data
   })
 }
+//查找暂存信息
+export function fetchBuffer(params) {
+  return request({
+    url: 'wipStorage/stationBuffer',
+    method: 'get',
+    params
+  })
+}
+//保存暂存信息
+export function upldateBuffer(params, data) {
+  return request({
+    url: 'wipStorage/stationBuffer',
+    method: 'post',
+    params,
+    data
+  })
+}
+//删除暂存信息
+export function deleteBuffer(params) {
+  return request({
+    url: 'wipStorage/stationBuffer',
+    method: 'delete',
+    params
+  })
+}
