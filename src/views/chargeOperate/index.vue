@@ -115,7 +115,7 @@
 <script>
 import CodeScanner from '@/components/CodeScanner'
 import SelectUserinfo from '@/components/select_userinfo'
-import { inOrOutStation } from '@/api/inStation'
+import * as Api from '@/api/inStation'
 import { cloneDeep, floor, last } from 'lodash-es'
 import moment from 'moment'
 
@@ -168,30 +168,35 @@ export default {
     storageLabel() {
       return this.$route.query.wipStorageStatus ? '出站' : '进站'
     },
-    sessionKey() {
-      return `装料详情数据${this.$route.query.processingOrderCode}`
-    },
     feedPercent() {
       const { _arrFeedingAmount, feedingTotal } = this.detailForm
       const amount = (_arrFeedingAmount || []).reduce((acc, cur) => acc + (Number(cur) || 0), 0)
-      return floor(amount / feedingTotal * 100)
+      return floor(amount / feedingTotal * 100) || 0
+    },
+    buffParams() {
+      const { processUuid, processingOrderCode } = this.$route.query
+      return { processUuid, processingOrderCode }
     }
-  },
-  created() {
-
   },
   mounted() {
     this.init()
   },
   methods: {
-    // 页面初始化
-    init() {
-      let storageData = sessionStorage.getItem(this.sessionKey)
-      if (storageData) {
-        this.detailForm = Object.assign({}, cloneDeep(defaultForm), JSON.parse(storageData))
+    async init() {
+      let fromData = {}
+      // 查询保存的数据
+      const res = await Api.fetchBuffer(this.buffParams)
+      if (res.data) {
+        fromData = res.data
       } else {
-        this.detailForm = Object.assign({}, cloneDeep(defaultForm), this.$route.query.fromData || {})
+        try {
+          fromData = JSON.parse(this.$route.query.fromData)
+        } catch (e) {
+          console.log(e)
+        }
       }
+
+      this.detailForm = Object.assign({}, cloneDeep(defaultForm), fromData)
 
       // 加料量
       this.$set(this.detailForm, '_arrFeedingAmount', (this.detailForm.feedingAmount || '').split(','))
@@ -208,17 +213,18 @@ export default {
         feedingAmount
       })
       if (typeName === '保存') {
-        sessionStorage.setItem(this.sessionKey, FormData)
-        this.$message.success('保存成功')
-        this.back()
+        Api.upldateBuffer(this.buffParams, this.detailForm).then(res => {
+          this.$message.success('保存成功!')
+          this.back()
+        })
       } else if (typeName === '提交') {
         this.$refs.detailForm.validate((valid) => {
           if (valid) {
             this.$confirm('确认提交当前操作数据?', '提示', {
               type: 'warning'
             }).then(() => {
-              const {equipmentCode, processUuid, processingOrderCode, wipStorageStatus} = this.$route.query
-              inOrOutStation({
+              const { equipmentCode, processUuid, processingOrderCode, wipStorageStatus } = this.$route.query
+              Api.inOrOutStation({
                 param: {
                   FormData
                 },
@@ -226,9 +232,9 @@ export default {
                 processUuid, // 当前工序唯一标识
                 processingOrderCode, // 工单号
                 wipStorageStatus, // 进出站状态
-              }).then(res => {
-                this.$message.success('提交成功')
-                sessionStorage.removeItem(this.sessionKey)
+              }).then(() => {
+                this.$message.success(`【${this.storageLabel}】操作成功`)
+                Api.deleteBuffer(this.buffParams)
                 this.back()
               })
             })
