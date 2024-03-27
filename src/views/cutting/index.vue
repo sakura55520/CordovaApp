@@ -4,11 +4,11 @@
       <div class="info-container">
         <div class="info">
           <div class="info-label">批次号</div>
-          <div class="info-value">{{ batchNumber }}</div>
+          <div class="info-value">{{ formData.processOrderCode }}</div>
         </div>
         <div class="info">
           <div class="info-label">长晶炉</div>
-          <div class="info-value">{{ grownCrystalFurnace }}</div>
+          <div class="info-value">{{ $route.query.deviceCode }}</div>
         </div>
         <div class="info">
           <div class="info-label">炉次号</div>
@@ -41,29 +41,18 @@
           :rules="formRules"
         >
           <div class="base-form">
-            <el-form-item label="操作者" prop="operator" class="item">
-              <el-input v-model="formData.operator" disabled></el-input>
+            <el-form-item label="操作者" prop="userCreate" class="item">
+              <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
-            <el-form-item
-              label="合格数量"
-              prop="qualifiedQuantity"
-              class="item"
-            >
+            <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.qualifiedQuantity"
-                  disabled
-                ></el-input>
+                <el-input class="value" v-model="formData.goodQty"></el-input>
                 <div class="unit">kg</div>
               </div>
             </el-form-item>
-            <el-form-item label="报废数量" prop="scrapQuantity" class="item">
+            <el-form-item label="报废数量" prop="scrapQty" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.scrapQuantity"
-                ></el-input>
+                <el-input class="value" v-model="formData.scrapQty"></el-input>
                 <div class="unit">kg</div>
               </div>
             </el-form-item>
@@ -135,8 +124,10 @@
       </div>
     </div>
     <div class="btn">
-      <el-button plain class="cancel-btn" @click="cancel">取消</el-button>
-      <el-button type="primary" plain class="save-btn">保存</el-button>
+      <el-button plain class="cancel-btn" @click="back">取消</el-button>
+      <el-button type="primary" plain class="save-btn" @click="save"
+        >保存</el-button
+      >
       <el-button type="primary" class="confirm-btn" @click="confirm"
         >出站确认</el-button
       >
@@ -155,33 +146,85 @@ export default {
       furnaceNumber: "A2010504581",
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
+      dataOrderCode: "",
+      productName: "",
       formData: {
-        operator: null,
-        qualifiedQuantity: null,
-        scrapQuantity: null,
+        userCreate: null,
+        goodQty: null,
+        scrapQty: null,
         segmentedInfo: [],
       },
       formRules: {
-        operator: [
+        userCreate: [
           { required: true, message: "操作者不能为空", trigger: "blur" },
         ],
-        qualifiedQuantity: [
+        goodQty: [
           { required: true, message: "合格数量不能为空", trigger: "blur" },
         ],
-        scrapQuantity: [
+        scrapQty: [
           { required: true, message: "报废数量不能为空", trigger: "blur" },
         ],
       },
     };
   },
-  methods: {
-    cancel() {
-      window.history.go(-1);
+  computed: {
+    buffParams() {
+      const { processUuid, processingOrderCode } = this.$route.query;
+      return { processUuid, processingOrderCode };
     },
-    confirm() {
-      Api.inOrOutStation().then((res) => {
-        this.$message.success("出站成功");
+  },
+  mounted() {
+    this.init();
+  },
+  methods: {
+    async init() {
+      let fromData = {};
+      // 查询保存的数据
+      const res = await Api.fetchBuffer(this.buffParams);
+      if (res.data) {
+        fromData = res.data;
+      } else {
+        try {
+          fromData = JSON.parse(this.$route.query.fromData);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      this.formData = { ...this.formData, ...fromData };
+    },
+    back() {
+      this.$router.push("/overStationExecution?station=QG");
+    },
+    async save() {
+      await Api.upldateBuffer(this.buffParams, this.formData);
+      this.$message.success("保存成功!");
+      this.back();
+    },
+    async confirm() {
+      const valid = await this.$refs.formRef.validate();
+      if (!valid) return;
+      await this.$confirm("确认提交当前操作数据?", "提示", {
+        type: "warning",
       });
+      const {
+        equipmentCode,
+        processUuid,
+        processingOrderCode,
+        wipStorageStatus,
+      } = this.$route.query;
+      await Api.inOrOutStation({
+        equipmentCode,
+        param: {
+          FormData: JSON.stringify(this.formData),
+        },
+        processUuid,
+        processingOrderCode,
+        wipStorageStatus,
+      });
+      this.$message.success("出站成功");
+      Api.deleteBuffer(this.buffParams);
+      this.back();
     },
   },
 };
@@ -189,7 +232,7 @@ export default {
 
 <style lang="scss" scoped>
 .outStationExecution-container {
-  padding: 12px;
+  padding: 12px 12px 100px 12px;
   background-color: rgb(245, 245, 245);
   .info-container {
     background-color: rgb(245, 245, 245);
@@ -219,7 +262,7 @@ export default {
   margin: 8px 0px;
 }
 .btn {
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   background-color: rgb(245, 247, 250);
   padding-bottom: 20px;

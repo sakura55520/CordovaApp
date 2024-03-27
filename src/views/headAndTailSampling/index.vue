@@ -4,11 +4,11 @@
       <div class="info-container">
         <div class="info">
           <div class="info-label">批次号</div>
-          <div class="info-value">{{ batchNumber }}</div>
+          <div class="info-value">{{ formData.processOrderCode }}</div>
         </div>
         <div class="info">
           <div class="info-label">长晶炉</div>
-          <div class="info-value">{{ grownCrystalFurnace }}</div>
+          <div class="info-value">{{ $route.query.deviceCode }}</div>
         </div>
         <div class="info">
           <div class="info-label">炉次号</div>
@@ -46,7 +46,7 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty" disabled></el-input>
+              <el-input v-model="formData.goodQty"></el-input>
             </el-form-item>
             <el-form-item label="缺陷数量" prop="defectQty" class="item">
               <el-input v-model="formData.defectQty"></el-input>
@@ -86,8 +86,10 @@
       </div>
     </div>
     <div class="btn">
-      <el-button plain class="cancel-btn" @click="cancel">取消</el-button>
-      <el-button type="primary" plain class="save-btn">保存</el-button>
+      <el-button plain class="cancel-btn" @click="back">取消</el-button>
+      <el-button type="primary" plain class="save-btn" @click="save"
+        >保存</el-button
+      >
       <el-button type="primary" class="confirm-btn" @click="confirm"
         >出站确认</el-button
       >
@@ -102,7 +104,6 @@ export default {
   data() {
     return {
       batchNumber: "Z0116504581",
-      grownCrystalFurnace: "A21",
       furnaceNumber: "A2010504581",
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
@@ -139,26 +140,64 @@ export default {
       },
     };
   },
+  computed: {
+    buffParams() {
+      const { processUuid, processingOrderCode } = this.$route.query;
+      return { processUuid, processingOrderCode };
+    },
+  },
   mounted() {
-    this.formData = JSON.parse(this.$route.query.fromData);
+    this.init();
   },
   methods: {
-    cancel() {
-      window.history.go(-1);
+    async init() {
+      let fromData = {};
+      // 查询保存的数据
+      const res = await Api.fetchBuffer(this.buffParams);
+      if (res.data) {
+        fromData = res.data;
+      } else {
+        try {
+          fromData = JSON.parse(this.$route.query.fromData);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      this.formData = { ...this.formData, ...fromData };
+    },
+    back() {
+      this.$router.push("/overStationExecution?station=QTWQY");
+    },
+    async save() {
+      await Api.upldateBuffer(this.buffParams, this.formData);
+      this.$message.success("保存成功!");
+      this.back();
     },
     async confirm() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+      await this.$confirm("确认提交当前操作数据?", "提示", {
+        type: "warning",
+      });
+      const {
+        equipmentCode,
+        processUuid,
+        processingOrderCode,
+        wipStorageStatus,
+      } = this.$route.query;
       await Api.inOrOutStation({
-        equipmentCode: "E01",
+        equipmentCode,
         param: {
           FormData: JSON.stringify(this.formData),
         },
-        processUuid: this.formData.processUuid,
-        processingOrderCode: this.formData.processOrderCode,
-        wipStorageStatus: 1,
+        processUuid,
+        processingOrderCode,
+        wipStorageStatus,
       });
       this.$message.success("出站成功");
+      Api.deleteBuffer(this.buffParams);
+      this.back();
     },
   },
 };
@@ -166,7 +205,7 @@ export default {
 
 <style lang="scss" scoped>
 .outStationExecution-container {
-  padding: 12px;
+  padding: 12px 12px 100px 12px;
   background-color: rgb(245, 245, 245);
   .info-container {
     background-color: rgb(245, 245, 245);
@@ -196,7 +235,7 @@ export default {
   margin: 8px 0px;
 }
 .btn {
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   background-color: rgb(245, 247, 250);
   padding-bottom: 20px;
