@@ -117,7 +117,10 @@
               </el-table-column>
               <el-table-column label="样片标识" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.sampleId"></el-input>
+                  <el-select v-model="scope.row.sampleId" placeholder="">
+                    <el-option label="H" value="H"></el-option>
+                    <el-option label="T" value="T"></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
               <el-table-column label="样片位置" min-width="100" align="center">
