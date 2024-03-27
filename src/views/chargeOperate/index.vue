@@ -196,6 +196,9 @@ export default {
       // 加料量
       this.$set(this.detailForm, '_arrFeedingAmount', (this.detailForm.feedingAmount || '').split(','))
     },
+    back() {
+      this.$router.push('/overStationExecution?station=ZL')
+    },
     // 操作
     handle(typeName) {
       const { _arrFeedingAmount, ...form } = this.detailForm
@@ -207,7 +210,7 @@ export default {
       if (typeName === '保存') {
         sessionStorage.setItem(this.sessionKey, FormData)
         this.$message.success('保存成功')
-        // this.$router.push('/process2-1')
+        this.back()
       } else if (typeName === '提交') {
         this.$refs.detailForm.validate((valid) => {
           if (valid) {
@@ -226,7 +229,7 @@ export default {
               }).then(res => {
                 this.$message.success('提交成功')
                 sessionStorage.removeItem(this.sessionKey)
-                // this.$router.push('/process2-1')
+                this.back()
               })
             })
 
