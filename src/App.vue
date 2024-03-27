@@ -9,7 +9,7 @@
       NowServerDate
       @reload="reload()"
     ></Heads>
-    <router-view class="routerView" v-if="isRouterAlive"/>
+    <router-view class="pad-form" v-if="isRouterAlive"/>
   </div>
 </template>
 
@@ -28,7 +28,6 @@ export default {
   created(){
     //设置获取当前时间
     this.$store.dispatch('NowServerDate')
-    this.receiveMessage()
   },
   mounted() {
 
@@ -41,11 +40,6 @@ export default {
       //   this.isRouterAlive = true;
       //   this.$message({ type: "success", message: "刷新成功" });
       // });
-    },
-    receiveMessage() {
-      window.addEventListener('message', (event) => {
-        console.log('pad event', event)
-      }, false)
     },
   }
 };

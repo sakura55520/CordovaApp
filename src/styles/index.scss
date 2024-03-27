@@ -458,3 +458,24 @@ ul, li, ol {
 .col-button + .el-form-item__error {
   left: 50%;
 }
+
+.pad-form {
+  .el-form-item {
+    display: inline-flex;
+    width: calc(50% - 10px);
+    margin-right: 0;
+  }
+  .block-form-item {
+    width: 100%;
+  }
+  .el-form-item__label {
+    float: left;
+  }
+  .el-form-item__content {
+    flex: 1;
+  }
+  .el-input,
+  .el-autocomplete {
+    width: 100%;
+  }
+}
