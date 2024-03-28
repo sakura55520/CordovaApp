@@ -39,7 +39,7 @@
           type="warning"
           plain
           class="back-station"
-          @click="handleExitStationClick(item.code)"
+          @click="handleExitStationClick(item)"
           >退站操作</el-button
         >
         <el-button
@@ -65,6 +65,7 @@
 
 <script>
 import * as Api from "@/api/overStationExecution/overStation.js";
+import { getCurrentWipStorageData } from "@/api/overStation/overStation.js";
 
 export default {
   data() {
@@ -95,14 +96,17 @@ export default {
         query: { processingOrderCode: code },
       });
     },
-    async handleExitStationClick(code) {
+    async handleExitStationClick(row) {
       await this.$confirm(`是否退站`, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       });
+      let wipRes = await getCurrentWipStorageData(row.code);
+
       let res = await Api.exitStation({
-        processingOrderCode: code,
+        processingOrderCode: row.code,
+        processUuid: wipRes.processUuid,
       });
       if (res.code === 0) {
         this.$message({ type: "success", message: "退站成功" });

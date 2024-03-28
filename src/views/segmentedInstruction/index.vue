@@ -35,6 +35,7 @@
       <h3>出站数据录入</h3>
       <div class="outStation-form">
         <el-form
+          ref="formRef"
           :model="formData"
           label-position="left"
           label-width="100px"
@@ -55,7 +56,7 @@
               >新增</el-button
             >
             <el-table
-              :data="formData.segmentedInfo"
+              :data="formData.segmentedInstructionDetailVos"
               class="table"
               :header-cell-style="{
                 background: 'rgba(242, 242, 242)',
@@ -64,7 +65,9 @@
             >
               <el-table-column label="晶锭编号" min-width="150" align="center">
                 <template slot-scope="scope">
-                  <div v-if="scope.row.code">{{ scope.row.code }}</div>
+                  <div v-if="scope.row.segmentNo">
+                    {{ scope.row.segmentNo }}
+                  </div>
                   <div v-else>
                     <el-button
                       type="text"
@@ -76,7 +79,7 @@
               </el-table-column>
               <el-table-column label="下发工单" min-width="150" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.order"></el-input>
+                  <el-input v-model="scope.row.orderCode"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="流程编号" min-width="100" align="center">
@@ -86,15 +89,23 @@
               </el-table-column>
               <el-table-column label="流程说明" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.category"></el-input>
+                  <el-input v-model="scope.row.processName"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="直径" min-width="100" align="center">
+              <el-table-column
+                label="直径"
+                min-width="100"
+                align="center"
+                prop="diameter"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.diameter"></el-input>
+                </template>
               </el-table-column>
               <el-table-column label="头部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.head"
+                    v-model="scope.row.headPosition"
                     @input="(value) => handleHeadChange(value, scope.$index)"
                   ></el-input>
                 </template>
@@ -102,66 +113,85 @@
               <el-table-column label="尾部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.tail"
+                    v-model="scope.row.tailPosition"
                     @input="(value) => handleTailChange(value, scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="晶锭长度" min-width="100" align="center">
+              <el-table-column
+                label="晶锭长度"
+                min-width="100"
+                align="center"
+                prop="length"
+              >
               </el-table-column>
-              <el-table-column label="计划重量" min-width="100" align="center">
+              <el-table-column
+                label="计划重量"
+                min-width="100"
+                align="center"
+                prop="planWeight"
+              >
               </el-table-column>
               <el-table-column
                 label="段位"
                 min-width="100"
                 align="center"
+                prop="segmentNum"
               ></el-table-column>
               <el-table-column
                 label="头部电阻率"
                 min-width="120"
                 align="center"
+                prop="headResistance"
               ></el-table-column>
               <el-table-column
                 label="尾部电阻率"
                 min-width="120"
                 align="center"
+                prop="tailResistance"
               ></el-table-column>
               <el-table-column
                 label="头部电阻率实测"
                 min-width="150"
                 align="center"
+                prop="headResistanceActual"
               ></el-table-column>
               <el-table-column
                 label="尾部电阻率实测"
                 min-width="150"
                 align="center"
+                prop="tailResistanceActual"
               ></el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="头尾电阻比"
                 min-width="120"
                 align="center"
-              ></el-table-column>
+              ></el-table-column> -->
               <el-table-column
                 label="79oi头"
                 min-width="100"
                 align="center"
+                prop="head79oi"
               ></el-table-column>
               <el-table-column
                 label="79oi尾"
                 min-width="100"
                 align="center"
+                prop="tail79oi"
               ></el-table-column>
               <el-table-column
                 label="83oi头"
                 min-width="100"
                 align="center"
+                prop="head83oi"
               ></el-table-column>
               <el-table-column
                 label="83oi尾"
                 min-width="100"
                 align="center"
+                prop="tail83oi"
               ></el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="滚圆"
                 min-width="80"
                 align="center"
@@ -170,17 +200,22 @@
                 label="参考面"
                 min-width="100"
                 align="center"
-              ></el-table-column>
+              ></el-table-column> -->
               <el-table-column
                 label="说明"
                 min-width="80"
                 align="center"
-              ></el-table-column>
-              <el-table-column label="合格状态" min-width="100" align="center">
+                prop="remarks"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.remarks"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="合格状态" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.qualified">
-                    <el-option label="合格" :value="true"></el-option>
-                    <el-option label="不合格" :value="false"></el-option>
+                    <el-option label="合格" :value="0"></el-option>
+                    <el-option label="不合格" :value="1"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -188,24 +223,40 @@
                 label="合格长度"
                 min-width="100"
                 align="center"
-              ></el-table-column>
+                prop="qualifiedLength"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.qualifiedLength"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="合格重量"
                 min-width="100"
                 align="center"
-              ></el-table-column>
+                prop="qualifiedWeight"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.qualifiedWeight"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="不合格原因"
                 min-width="120"
                 align="center"
+                prop="reason"
               >
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.qualified"></el-select>
+                  <el-input v-model="scope.row.reason"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="入库原因" min-width="100" align="center">
+              <el-table-column
+                label="入库原因"
+                min-width="100"
+                align="center"
+                prop="reasonIn"
+              >
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.qualified"></el-select>
+                  <el-input v-model="scope.row.reasonIn"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
@@ -224,39 +275,46 @@
             <div class="form-title">分段示意图</div>
             <div class="chart">
               <div
-                v-for="(item, index) in formData.segmentedInfo"
-                :key="item.code"
+                v-for="(item, index) in formData.segmentedInstructionDetailVos"
+                :key="index"
                 :style="{
-                  width: `${((item.tail - item.head) * 100) / totalLength}%`,
+                  width: `${
+                    ((item.tailPosition - item.headPosition) * 100) /
+                    totalLength
+                  }%`,
                 }"
               >
                 <div class="number">
-                  <div v-if="index === 0" class="head">{{ item.head }}</div>
-                  <div class="tail">{{ item.tail }}</div>
+                  <div v-if="index === 0" class="headPosition">
+                    {{ item.headPosition }}
+                  </div>
+                  <div class="tailPosition">{{ item.tailPosition }}</div>
                 </div>
                 <div class="line"></div>
                 <el-tooltip placement="bottom" effect="light">
                   <template #content>
-                    <div>直径：8</div>
-                    <div>段位：1</div>
-                    <div>晶锭长度：430</div>
-                    <div>计划重量：40.99</div>
-                    <div>头部电阻率：21.4</div>
-                    <div>尾部电阻率：19</div>
-                    <div>头部电阻率实测：21.4</div>
-                    <div>尾部电阻率实测：19</div>
-                    <div>79oi头：17.3060</div>
-                    <div>79oi尾：15.2840</div>
-                    <div>合格状态：合格品</div>
-                    <div>合格长度：430</div>
-                    <div>合格重量：40.99</div>
+                    <div>直径：{{ item.diameter }}</div>
+                    <div>段位：{{ item.segmentNum }}</div>
+                    <div>晶锭长度：{{ item.length }}</div>
+                    <div>计划重量：{{ item.planWeight }}</div>
+                    <div>头部电阻率：{{ item.headResistance }}</div>
+                    <div>尾部电阻率：{{ item.tailResistance }}</div>
+                    <div>头部电阻率实测：{{ item.headResistanceActual }}</div>
+                    <div>尾部电阻率实测：{{ item.tailResistanceActual }}</div>
+                    <div>79oi头：{{ item.head79oi }}</div>
+                    <div>79oi尾：{{ item.tail79oi }}</div>
+                    <div>
+                      合格状态：{{ item.qualified ? "合格" : "不合格" }}
+                    </div>
+                    <div>合格长度：{{ item.qualifiedLength }}</div>
+                    <div>合格重量：{{ item.qualifiedWeight }}</div>
                   </template>
                   <div
                     :class="selectedIndex === index ? 'bar-selected' : 'bar'"
                     @click="handleSegmentedBarClick(index)"
                   >
                     <div class="center">
-                      {{ item.code }}
+                      {{ item.segmentNo }}
                     </div>
                   </div>
                 </el-tooltip>
@@ -293,32 +351,7 @@ export default {
       productName: "",
       formData: {
         userCreate: null,
-        segmentedInfo: [
-          {
-            code: "S0708B019710AI",
-            order: "W2305153",
-            processCode: "IG03",
-            diameter: 10,
-            head: 0,
-            tail: 430,
-          },
-          {
-            code: "S0708B019710IQ",
-            order: "W2305154",
-            processCode: "IG03",
-            diameter: 10,
-            head: 430,
-            tail: 838,
-          },
-          {
-            code: "S0708B019710QF",
-            order: "W2305155",
-            processCode: "IG03",
-            diameter: 10,
-            head: 838,
-            tail: 1268,
-          },
-        ],
+        segmentedInstructionDetailVos: [],
       },
       formRules: {
         userCreate: [
@@ -334,9 +367,9 @@ export default {
       return { processUuid, processingOrderCode };
     },
     totalLength() {
-      let list = this.formData.segmentedInfo;
+      let list = this.formData.segmentedInstructionDetailVos;
       if (list.length === 0) return 0;
-      return list[list.length - 1].tail - list[0].head;
+      return list[list.length - 1].tailPosition - list[0].headPosition;
     },
   },
   mounted() {
@@ -356,40 +389,164 @@ export default {
           console.log(e);
         }
       }
-
+      fromData = {
+        userCreate: "NC系统",
+        gmtCreate: "2024-03-28 08:55:53",
+        userUpdate: "NC系统",
+        gmtUpdate: "2024-03-28 09:10:40",
+        wipStorageId: null,
+        processId: 206,
+        processCode: "FDZL",
+        processName: "分段指令",
+        processUuid: "z20tnran49",
+        processOrderCode: "E3714P0001A",
+        materialCode: "IGMCXN16P",
+        materialName: "IGMCXN16P",
+        materialVersion: "1.0",
+        length: 700,
+        number: 20,
+        diameter: 4,
+        reCutNum: 0,
+        segmentNum: null,
+        sampleNum: null,
+        recycleNum: null,
+        segmentedInstructionDetailVos: [
+          {
+            diameter: 4,
+            head79oi: 0,
+            head83oi: 0,
+            headPosition: 0,
+            headResistance: 0,
+            headResistanceActual: 0,
+            length: 10,
+            orderCode: "",
+            planWeight: 0,
+            processCode: "",
+            processName: "",
+            qualifiedLength: 0,
+            qualifiedWeight: 0,
+            reason: "",
+            reasonIn: "",
+            remarks: "",
+            segmentNo: "",
+            segmentNum: 0,
+            status: 0,
+            tail79oi: 0,
+            tail83oi: 0,
+            tailPosition: 700,
+            tailResistance: 0,
+            tailResistanceActual: 0,
+            transMap: {},
+            type: 0,
+            userCreate: "",
+            userUpdate: "",
+          },
+          {
+            diameter: 4,
+            head79oi: 0,
+            head83oi: 0,
+            headPosition: 700,
+            headResistance: 0,
+            headResistanceActual: 0,
+            length: 10,
+            orderCode: "",
+            planWeight: 0,
+            processCode: "",
+            processName: "",
+            qualifiedLength: 0,
+            qualifiedWeight: 0,
+            reason: "",
+            reasonIn: "",
+            remarks: "",
+            segmentNo: "",
+            segmentNum: 0,
+            status: 0,
+            tail79oi: 0,
+            tail83oi: 0,
+            tailPosition: 1500,
+            tailResistance: 0,
+            tailResistanceActual: 0,
+            transMap: {},
+            type: 0,
+            userCreate: "",
+            userUpdate: "",
+          },
+          {
+            diameter: 4,
+            head79oi: 0,
+            head83oi: 0,
+            headPosition: 1500,
+            headResistance: 0,
+            headResistanceActual: 0,
+            length: 10,
+            orderCode: "",
+            planWeight: 0,
+            processCode: "",
+            processName: "",
+            qualifiedLength: 0,
+            qualifiedWeight: 0,
+            reason: "",
+            reasonIn: "",
+            remarks: "",
+            segmentNo: "",
+            segmentNum: 0,
+            status: 0,
+            tail79oi: 0,
+            tail83oi: 0,
+            tailPosition: 1950,
+            tailResistance: 0,
+            tailResistanceActual: 0,
+            transMap: {},
+            type: 0,
+            userCreate: "",
+            userUpdate: "",
+          },
+        ],
+        transMap: {},
+      };
       this.formData = { ...this.formData, ...fromData };
     },
-    handleCodeClick(row, index) {
-      this.formData.segmentedInfo[index].code = "123";
+    async handleCodeClick(row, index) {
+      let res = await Api.segmentedInstructionGenerateNo(this.formData);
+      res.segmentedInstructionDetailVos.forEach((item, index) => {
+        this.formData.segmentedInstructionDetailVos[index].segmentNo =
+          item.segmentNo;
+      });
     },
     addSegmentedInfo() {
-      let list = this.formData.segmentedInfo;
-      let head;
-      if (list.length === 0) head = 0;
-      else head = list[list.length - 1].tail;
+      let list = this.formData.segmentedInstructionDetailVos;
+      let headPosition;
+      if (list.length === 0) headPosition = 0;
+      else headPosition = list[list.length - 1].tailPosition;
       let item = {
-        head,
+        headPosition,
       };
-      this.formData.segmentedInfo.push(item);
+      this.formData.segmentedInstructionDetailVos.push(item);
     },
     deleteSegmentedInfo(index) {
-      let list = [...this.formData.segmentedInfo];
+      let list = [...this.formData.segmentedInstructionDetailVos];
       list.splice(index, 1);
-      this.formData.segmentedInfo = list;
+      this.formData.segmentedInstructionDetailVos = list;
     },
     handleSegmentedBarClick(index) {
       this.selectedIndex = index;
     },
     handleHeadChange(value, index) {
       if (index !== 0) {
-        this.formData.segmentedInfo[index - 1].tail = value;
-        //更新晶锭编码
+        this.formData.segmentedInstructionDetailVos[index - 1].tailPosition =
+          value;
+      }
+      for (const item of this.formData.segmentedInstructionDetailVos) {
+        item.segmentNo = null;
       }
     },
     handleTailChange(value, index) {
-      if (index !== this.formData.segmentedInfo.length - 1) {
-        this.formData.segmentedInfo[index + 1].head = value;
-        //更新晶锭编码
+      if (index !== this.formData.segmentedInstructionDetailVos.length - 1) {
+        this.formData.segmentedInstructionDetailVos[index + 1].headPosition =
+          value;
+      }
+      for (const item of this.formData.segmentedInstructionDetailVos) {
+        item.segmentNo = null;
       }
     },
     back() {
@@ -532,10 +689,10 @@ export default {
     width: 100%;
     .number {
       height: 20px;
-      .head {
+      .headPosition {
         float: left;
       }
-      .tail {
+      .tailPosition {
         float: right;
       }
     }
