@@ -35,6 +35,7 @@
       <h3>出站数据录入</h3>
       <div class="outStation-form">
         <el-form
+          ref="formRef"
           :model="formData"
           label-position="left"
           label-width="100px"
@@ -60,7 +61,7 @@
           <div class="form">
             <div class="form-title">分段信息</div>
             <el-table
-              :data="formData.segmentedInfo"
+              :data="formData.segments"
               class="table"
               :header-cell-style="{
                 background: 'rgba(242, 242, 242)',
@@ -69,7 +70,7 @@
             >
               <el-table-column
                 label="晶锭编号"
-                prop="code"
+                prop="ingotNumber"
                 min-width="100"
                 align="center"
               >
@@ -83,40 +84,43 @@
               </el-table-column>
               <el-table-column
                 label="原始长度"
-                prop="originalLength"
+                prop="originLength"
                 min-width="100"
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.order"></el-input>
+                  <el-input v-model="scope.row.originLength"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="崩边长度"
-                prop="flakingLength"
+                prop="chippingLength"
                 min-width="100"
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.order"></el-input>
+                  <el-input v-model="scope.row.chippingLength"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="椭圆长度"
-                prop="ellipseLength"
+                prop="ellipticLength"
                 min-width="100"
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.order"></el-input>
+                  <el-input v-model="scope.row.ellipticLength"></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="合格长度"
-                prop="passLength"
+                prop="qualifiedLength"
                 min-width="100"
                 align="center"
               >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.qualifiedLength"></el-input>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -152,7 +156,7 @@ export default {
         userCreate: null,
         goodQty: null,
         scrapQty: null,
-        segmentedInfo: [],
+        segments: [],
       },
       formRules: {
         userCreate: [
@@ -190,7 +194,6 @@ export default {
           console.log(e);
         }
       }
-      console.log(JSON.parse(JSON.stringify(fromData)));
       this.formData = { ...this.formData, ...fromData };
     },
     back() {
