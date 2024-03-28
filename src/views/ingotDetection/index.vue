@@ -453,7 +453,7 @@ export default {
         crystalDensity = (
           (((info.weight - info.tailWeight - info.headWeight) *
             info.lengthQty) /
-            value /
+            (info.lengthQty - value) /
             info.weight) *
           100
         ).toFixed(2);
