@@ -60,6 +60,21 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <el-dialog title="退站" :visible.sync="exitStationDialogVisible">
+      <el-radio-group v-model="selectProcessUuid" style="width: 100%">
+        <el-radio
+          v-for="(item, index) in preStationList"
+          :key="index"
+          class="bodyBox-list-radio"
+          :label="item.processUuid"
+          >{{ item.wipStorageName }}</el-radio
+        >
+      </el-radio-group>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeExitstationDialog">取 消</el-button>
+        <el-button type="primary" @click="handleExitStation">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -74,6 +89,10 @@ export default {
       pageSize: 10,
       total: 0,
       list: [],
+      selectRow: null,
+      selectProcessUuid: null,
+      preStationList: [],
+      exitStationDialogVisible: false,
     };
   },
   mounted() {
@@ -96,22 +115,30 @@ export default {
         query: { processingOrderCode: code },
       });
     },
+    closeExitstationDialog() {
+      this.preStationList = [];
+      this.exitStationDialogVisible = false;
+      this.selectRow = null;
+      this.selectProcessUuid = null;
+    },
     async handleExitStationClick(row) {
-      await this.$confirm(`是否退站`, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      });
-      let wipRes = await getCurrentWipStorageData(row.code);
-
-      let res = await Api.exitStation({
-        processingOrderCode: row.code,
-        processUuid: wipRes.processUuid,
-      });
-      if (res.code === 0) {
-        this.$message({ type: "success", message: "退站成功" });
-        this.fetchData();
+      let res = await getCurrentWipStorageData(row.code);
+      this.preStationList = res.data;
+      this.exitStationDialogVisible = true;
+      this.selectRow = row;
+    },
+    async handleExitStation() {
+      if (!this.selectProcessUuid) {
+        this.$message.warning("请选择站点");
+        return;
       }
+      await Api.exitStation({
+        processingOrderCode: this.selectRow.code,
+        processUuid: this.selectProcessUuid,
+      });
+      this.$message({ type: "success", message: "退站成功" });
+      this.fetchData();
+      this.closeExitstationDialog();
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -152,6 +179,10 @@ export default {
   margin: 8px 0px;
 }
 .pagination {
+  display: flex;
+  justify-content: end;
+}
+.dialog-footer {
   display: flex;
   justify-content: end;
 }
