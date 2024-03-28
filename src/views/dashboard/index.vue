@@ -64,8 +64,8 @@ export default {
               icon: "guozhan",
             },
             {
-              name: "晶锭检测",
-              href: "/overStationExecution?station=JDJC",
+              name: "晶锭检验",
+              href: "/overStationExecution?station=JDJY",
               icon: "guozhan",
             },
             {

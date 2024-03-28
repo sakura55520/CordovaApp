@@ -77,7 +77,7 @@ export const constantRouterMap = [
     path: '/ingotDetection',
     component: () => import('@/views/ingotDetection/index'),
     hidden: true,
-    meta: {text: '晶锭检测'},
+    meta: {text: '晶锭检验'},
     props: true
   },
 

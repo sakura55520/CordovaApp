@@ -61,7 +61,7 @@ export default {
       processPath: "X0010101",
       overStationDataEntryComponentMap: {
         QTWQY: HeadAndTailSampling,
-        JDJC: IngotDetection,
+        JDJY: IngotDetection,
         FDZL: SegmentedInstruction,
         QG: Cutting,
       },
@@ -72,7 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 .outStationExecution-container {
-  padding: 12px;
+  padding: 12px 12px 100px 12px;
   background-color: rgb(245, 245, 245);
   .info-container {
     background-color: rgb(245, 245, 245);
@@ -102,7 +102,7 @@ export default {
   margin: 8px 0px;
 }
 .btn {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   width: 100%;
   display: flex;

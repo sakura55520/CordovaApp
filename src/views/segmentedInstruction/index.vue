@@ -4,11 +4,11 @@
       <div class="info-container">
         <div class="info">
           <div class="info-label">批次号</div>
-          <div class="info-value">{{ batchNumber }}</div>
+          <div class="info-value">{{ formData.processOrderCode }}</div>
         </div>
         <div class="info">
           <div class="info-label">长晶炉</div>
-          <div class="info-value">{{ grownCrystalFurnace }}</div>
+          <div class="info-value">{{ $route.query.deviceCode }}</div>
         </div>
         <div class="info">
           <div class="info-label">炉次号</div>
@@ -41,8 +41,8 @@
           :rules="formRules"
         >
           <div class="base-form">
-            <el-form-item label="操作者" prop="operator" class="item">
-              <el-input v-model="formData.operator" disabled></el-input>
+            <el-form-item label="操作者" prop="userCreate" class="item">
+              <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
           </div>
           <div class="form">
@@ -63,6 +63,16 @@
               }"
             >
               <el-table-column label="晶锭编号" min-width="150" align="center">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.code">{{ scope.row.code }}</div>
+                  <div v-else>
+                    <el-button
+                      type="text"
+                      @click="handleCodeClick(scope.row, scope.$index)"
+                      >获取晶锭编号</el-button
+                    >
+                  </div>
+                </template>
               </el-table-column>
               <el-table-column label="下发工单" min-width="150" align="center">
                 <template slot-scope="scope">
@@ -168,7 +178,10 @@
               ></el-table-column>
               <el-table-column label="合格状态" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.qualified"> </el-select>
+                  <el-select v-model="scope.row.qualified">
+                    <el-option label="合格" :value="true"></el-option>
+                    <el-option label="不合格" :value="false"></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
               <el-table-column
@@ -254,8 +267,10 @@
       </div>
     </div>
     <div class="btn">
-      <el-button plain class="cancel-btn" @click="cancel">取消</el-button>
-      <el-button type="primary" plain class="save-btn">保存</el-button>
+      <el-button plain class="cancel-btn" @click="back">取消</el-button>
+      <el-button type="primary" plain class="save-btn" @click="save"
+        >保存</el-button
+      >
       <el-button type="primary" class="confirm-btn" @click="confirm"
         >出站确认</el-button
       >
@@ -274,8 +289,10 @@ export default {
       furnaceNumber: "A2010504581",
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
+      dataOrderCode: "",
+      productName: "",
       formData: {
-        operator: null,
+        userCreate: null,
         segmentedInfo: [
           {
             code: "S0708B019710AI",
@@ -304,14 +321,47 @@ export default {
         ],
       },
       formRules: {
-        operator: [
+        userCreate: [
           { required: true, message: "操作者不能为空", trigger: "blur" },
         ],
       },
       selectedIndex: null,
     };
   },
+  computed: {
+    buffParams() {
+      const { processUuid, processingOrderCode } = this.$route.query;
+      return { processUuid, processingOrderCode };
+    },
+    totalLength() {
+      let list = this.formData.segmentedInfo;
+      if (list.length === 0) return 0;
+      return list[list.length - 1].tail - list[0].head;
+    },
+  },
+  mounted() {
+    this.init();
+  },
   methods: {
+    async init() {
+      let fromData = {};
+      // 查询保存的数据
+      const res = await Api.fetchBuffer(this.buffParams);
+      if (res.data) {
+        fromData = res.data;
+      } else {
+        try {
+          fromData = JSON.parse(this.$route.query.fromData);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+
+      this.formData = { ...this.formData, ...fromData };
+    },
+    handleCodeClick(row, index) {
+      this.formData.segmentedInfo[index].code = "123";
+    },
     addSegmentedInfo() {
       let list = this.formData.segmentedInfo;
       let head;
@@ -342,20 +392,38 @@ export default {
         //更新晶锭编码
       }
     },
-    cancel() {
-      window.history.go(-1);
+    back() {
+      this.$router.push("/overStationExecution?station=FDZL");
     },
-    confirm() {
-      Api.inOrOutStation().then((res) => {
-        this.$message.success("出站成功");
+    async save() {
+      await Api.upldateBuffer(this.buffParams, this.formData);
+      this.$message.success("保存成功!");
+      this.back();
+    },
+    async confirm() {
+      const valid = await this.$refs.formRef.validate();
+      if (!valid) return;
+      await this.$confirm("确认提交当前操作数据?", "提示", {
+        type: "warning",
       });
-    },
-  },
-  computed: {
-    totalLength() {
-      let list = this.formData.segmentedInfo;
-      if (list.length === 0) return 0;
-      return list[list.length - 1].tail - list[0].head;
+      const {
+        equipmentCode,
+        processUuid,
+        processingOrderCode,
+        wipStorageStatus,
+      } = this.$route.query;
+      await Api.inOrOutStation({
+        equipmentCode,
+        param: {
+          FormData: JSON.stringify(this.formData),
+        },
+        processUuid,
+        processingOrderCode,
+        wipStorageStatus,
+      });
+      this.$message.success("出站成功");
+      Api.deleteBuffer(this.buffParams);
+      this.back();
     },
   },
 };
@@ -363,7 +431,7 @@ export default {
 
 <style lang="scss" scoped>
 .outStationExecution-container {
-  padding: 12px;
+  padding: 12px 12px 100px 12px;
   background-color: rgb(245, 245, 245);
   .info-container {
     background-color: rgb(245, 245, 245);
@@ -393,7 +461,7 @@ export default {
   margin: 8px 0px;
 }
 .btn {
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   background-color: rgb(245, 247, 250);
   padding-bottom: 20px;

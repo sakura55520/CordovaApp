@@ -79,4 +79,8 @@ input:focus {
     position: relative;
     height: 380px;
 }
+
+.invalid_tr {
+  opacity: 0.3;
+}
 </style>
