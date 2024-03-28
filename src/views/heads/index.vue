@@ -48,6 +48,7 @@ export default {
         FDZL: "分段指令",
         GD: "割断",
         GYZZ: "滚圆中转",
+        GY: "滚圆",
         JC: "加参",
         RKJC: "入库检测",
       },

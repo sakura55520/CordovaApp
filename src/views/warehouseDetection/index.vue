@@ -272,7 +272,7 @@ export default {
       this.formData = { ...this.formData, ...fromData };
     },
     back() {
-      this.$router.push("/overStationExecution?station=QTWQY");
+      this.$router.push("/overStationExecution?station=RKJC");
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);

@@ -84,6 +84,11 @@ export default {
               icon: "guozhan",
             },
             {
+              name: "滚圆",
+              href: "/overStationExecution?station=GY",
+              icon: "guozhan",
+            },
+            {
               name: "加参",
               href: "/overStationExecution?station=JC",
               icon: "guozhan",
