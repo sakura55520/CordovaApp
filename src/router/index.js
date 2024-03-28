@@ -64,6 +64,20 @@ export const constantRouterMap = [
   },
 
   {
+    name: 'chargeOperate',
+    path: '/chargeOperate',
+    component: () => import('@/views/chargeOperate'),
+    meta: {text: '装料'},
+  },
+
+  {
+    name: 'crystalDelivery',
+    path: '/crystalDelivery',
+    component: () => import('@/views/crystalDelivery'),
+    meta: {text: '单晶送付'},
+  },
+
+  {
     name: 'headAndTailSampling',
     path: '/headAndTailSampling',
     component: () => import('@/views/headAndTailSampling/index'),
@@ -100,10 +114,17 @@ export const constantRouterMap = [
   },
 
   {
-    name: 'chargeOperate',
-    path: '/chargeOperate',
-    component: () => import('@/views/chargeOperate'),
-    meta: {text: '装料'},
+    name: 'addParameter',
+    path: '/addParameter',
+    component: () => import('@/views/addParameter'),
+    meta: {text: '加参'},
+  },
+
+  {
+    name: 'warehouseDetection',
+    path: '/warehouseDetection',
+    component: () => import('@/views/warehouseDetection'),
+    meta: {text: '入库检测'},
   }
 ]
 

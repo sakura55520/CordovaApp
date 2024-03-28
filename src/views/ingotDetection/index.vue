@@ -445,6 +445,12 @@ export default {
       this.back();
     },
     handleSamplePositionChange(val, index) {
+      let sampleIdentification =
+        this.formData.details[index].sampleIdentification;
+      if (!sampleIdentification) {
+        this.$message.warning("请选择样片标识");
+        return;
+      }
       let info = this.formData;
       let crystalDensity;
       let value = Number(val);
@@ -453,7 +459,7 @@ export default {
         crystalDensity = (
           (((info.weight - info.tailWeight - info.headWeight) *
             info.lengthQty) /
-            (info.lengthQty - value) /
+            (sampleIdentification === "H" ? info.lengthQty - value : value) /
             info.weight) *
           100
         ).toFixed(2);

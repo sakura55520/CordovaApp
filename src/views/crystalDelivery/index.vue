@@ -35,9 +35,10 @@
       <h3>出站数据录入</h3>
       <div class="outStation-form">
         <el-form
+          ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="100px"
+          label-width="150px"
           :rules="formRules"
         >
           <div class="base-form">
@@ -45,80 +46,58 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.goodQty"></el-input>
-                <div class="unit">kg</div>
-              </div>
+              <el-input v-model="formData.goodQty"></el-input>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.scrapQty"></el-input>
-                <div class="unit">kg</div>
-              </div>
+              <el-input v-model="formData.scrapQty"></el-input>
             </el-form-item>
           </div>
           <div class="form">
-            <div class="form-title">分段信息</div>
-            <el-table
-              :data="formData.segmentedInfo"
-              class="table"
-              :header-cell-style="{
-                background: 'rgba(242, 242, 242)',
-                color: '#606266',
-              }"
-            >
-              <el-table-column
-                label="晶锭编号"
-                prop="code"
-                min-width="100"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                label="计划长度"
-                prop="planLength"
-                min-width="100"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                label="原始长度"
-                prop="originalLength"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.order"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="崩边长度"
-                prop="flakingLength"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.order"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="椭圆长度"
-                prop="ellipseLength"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.order"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="合格长度"
-                prop="passLength"
-                min-width="100"
-                align="center"
-              >
-              </el-table-column>
-            </el-table>
+            <div class="form-title">设备/工艺参数确认</div>
+            <el-form-item label="单晶编号一致性" prop="headWeight" class="item">
+              <el-select v-model="formData.codeYizhixing" placeholder="">
+                <el-option label="是" :value="true"></el-option>
+                <el-option label="否" :value="false"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="收尾情况" prop="tailWeight" class="item">
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.tailWeight"
+                ></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="位错反延线标识" prop="headWeight" class="item">
+              <el-select v-model="formData.weicuoYizhixing" placeholder="">
+                <el-option label="是" :value="true"></el-option>
+                <el-option label="否" :value="false"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="位错反延线长度" prop="lengthQty" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <div class="unit">cm</div>
+              </div>
+            </el-form-item>
+            <el-form-item label="拉晶实测直径" prop="lengthQty" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <div class="unit">cm</div>
+              </div>
+            </el-form-item>
+            <el-form-item label="脱开直径" prop="lengthQty" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <div class="unit">cm</div>
+              </div>
+            </el-form-item>
+            <el-form-item label="锅底料重量" prop="lengthQty" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <div class="unit">kg</div>
+              </div>
+            </el-form-item>
           </div>
         </el-form>
       </div>
@@ -142,7 +121,6 @@ export default {
   data() {
     return {
       batchNumber: "Z0116504581",
-      grownCrystalFurnace: "A21",
       furnaceNumber: "A2010504581",
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
@@ -151,8 +129,8 @@ export default {
       formData: {
         userCreate: null,
         goodQty: null,
+        defectQty: null,
         scrapQty: null,
-        segmentedInfo: [],
       },
       formRules: {
         userCreate: [
@@ -161,8 +139,20 @@ export default {
         goodQty: [
           { required: true, message: "合格数量不能为空", trigger: "blur" },
         ],
+        defectQty: [
+          { required: true, message: "缺陷数量不能为空", trigger: "blur" },
+        ],
         scrapQty: [
           { required: true, message: "报废数量不能为空", trigger: "blur" },
+        ],
+        headWeight: [
+          { required: true, message: "头部重量不能为空", trigger: "blur" },
+        ],
+        tailWeight: [
+          { required: true, message: "尾部重量不能为空", trigger: "blur" },
+        ],
+        lengthQty: [
+          { required: true, message: "当前长度不能为空", trigger: "blur" },
         ],
       },
     };
@@ -190,11 +180,11 @@ export default {
           console.log(e);
         }
       }
-      console.log(JSON.parse(JSON.stringify(fromData)));
+
       this.formData = { ...this.formData, ...fromData };
     },
     back() {
-      this.$router.push("/overStationExecution?station=GD");
+      this.$router.push("/overStationExecution?station=QTWQY");
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -326,10 +316,6 @@ export default {
     top: -10px;
     left: 20px;
     background: white;
-  }
-  .add-btn {
-    position: absolute;
-    right: 10px;
   }
 }
 .unit {
