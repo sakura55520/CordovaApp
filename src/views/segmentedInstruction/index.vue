@@ -440,7 +440,12 @@ export default {
           console.log(e);
         }
       }
-      this.formData = { ...this.formData, ...fromData };
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+        length: fromData.length || 700,
+        diameter: fromData.diameter || 4,
+      };
     },
     async handleCodeClick() {
       let res = await Api.segmentedInstructionGenerateNo(this.formData);

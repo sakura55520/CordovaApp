@@ -25,30 +25,37 @@
         <el-table-column label="上站" prop="preStation" />
         <el-table-column label="下站" prop="nextStation" />
       </el-table>
-      <div class="btn">
-        <el-button
-          v-if="item.wipStorageStatus === 0"
-          type="primary"
-          class="in-station"
-          @click="handleOverStationExecutionClick(item.code)"
-        >
-          进站执行
-        </el-button>
-        <el-button
-          v-if="item.wipStorageStatus === 1"
-          type="warning"
-          plain
-          class="back-station"
-          @click="handleExitStationClick(item)"
-          >退站操作</el-button
-        >
-        <el-button
-          v-if="item.wipStorageStatus === 1"
-          type="primary"
-          class="out-station"
-          @click="handleOverStationExecutionClick(item.code)"
-          >出站执行</el-button
-        >
+      <div class="tool">
+        <div v-if="item.status === 2" class="btn">
+          <el-button disabled type="primary" class="in-station">
+            加工完成
+          </el-button>
+        </div>
+        <div v-else class="btn">
+          <el-button
+            v-if="item.wipStorageStatus === 0"
+            type="primary"
+            class="in-station"
+            @click="handleOverStationExecutionClick(item.code)"
+          >
+            进站执行
+          </el-button>
+          <el-button
+            v-if="item.wipStorageStatus === 1"
+            type="warning"
+            plain
+            class="back-station"
+            @click="handleExitStationClick(item)"
+            >退站操作</el-button
+          >
+          <el-button
+            v-if="item.wipStorageStatus === 1"
+            type="primary"
+            class="out-station"
+            @click="handleOverStationExecutionClick(item.code)"
+            >出站执行</el-button
+          >
+        </div>
       </div>
     </div>
     <div class="pagination">
@@ -160,18 +167,22 @@ export default {
   .header {
     color: rgb(2, 107, 194);
   }
-  .btn {
-    display: flex;
-    gap: 20px;
-    margin-top: 12px;
-    .in-station {
-      flex: 1;
-    }
-    .back-station {
-      flex: 1;
-    }
-    .out-station {
-      flex: 2;
+  .tool {
+    width: 100%;
+    .btn {
+      width: 100%;
+      display: flex;
+      gap: 20px;
+      margin-top: 12px;
+      .in-station {
+        flex: 1;
+      }
+      .back-station {
+        flex: 1;
+      }
+      .out-station {
+        flex: 2;
+      }
     }
   }
 }
