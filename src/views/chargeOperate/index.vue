@@ -32,7 +32,7 @@
               <el-input v-model="detailForm.goodQty" disabled/>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty">
-              <el-input v-model="detailForm.scrapQty"/>
+              <el-input v-model="detailForm.scrapQty" type="number"/>
             </el-form-item>
             <el-form-item label="工艺编号" prop="technologyNumber">
               <el-input v-model="detailForm.technologyNumber"/>
@@ -166,7 +166,7 @@ export default {
   },
   computed: {
     storageLabel() {
-      return this.$route.query.wipStorageStatus ? '出站' : '进站'
+      return this.$route.query.wipStorageStatus === '1' ? '出站' : '进站'
     },
     feedPercent() {
       const { _arrFeedingAmount, feedingTotal } = this.detailForm

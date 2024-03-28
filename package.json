@@ -12,6 +12,7 @@
     "hcp:yuntest": "node ./script/deploy.js --mode=公司测试环境"
   },
   "dependencies": {
+    "@riophae/vue-treeselect": "^0.4.0",
     "axios": "^0.18.0",
     "cordova-hot-code-push-cli": "^1.1.1",
     "element-ui": "^2.15.13",

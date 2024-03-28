@@ -22,6 +22,10 @@ import apiBase from '@/api/global/apiBase.js'
 import '@/utils/app'
 import trim from '@/directive/trim' // 去除两边空格
 
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import Treeselect from '@riophae/vue-treeselect'
+Vue.component('Treeselect', Treeselect)
+
 // 全局修改默认配置，点击空白处不能关闭弹窗
 ElementUI.Dialog.props.closeOnClickModal.default = false
 Vue.use(ElementUI)
