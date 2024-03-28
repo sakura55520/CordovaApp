@@ -95,7 +95,7 @@ export const constantRouterMap = [
     path: '/cutting',
     component: () => import('@/views/cutting/index'),
     hidden: true,
-    meta: {text: '切割'},
+    meta: {text: '割断'},
     props: true
   },
 
