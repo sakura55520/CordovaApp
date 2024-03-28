@@ -116,14 +116,15 @@ export const constantRouterMap = [
   {
     name: 'addParameter',
     path: '/addParameter',
-    component: () => import('@/views/addParameter'),
+    component: () => import('@/views/addParameter/index'),
     meta: {text: '加参'},
   },
+
 
   {
     name: 'warehouseDetection',
     path: '/warehouseDetection',
-    component: () => import('@/views/warehouseDetection'),
+    component: () => import('@/views/warehouseDetection/index'),
     meta: {text: '入库检测'},
   }
 ]

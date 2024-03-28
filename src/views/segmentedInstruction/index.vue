@@ -69,9 +69,7 @@
                     {{ scope.row.segmentNo }}
                   </div>
                   <div v-else>
-                    <el-button
-                      type="text"
-                      @click="handleCodeClick(scope.row, scope.$index)"
+                    <el-button type="text" @click="handleCodeClick"
                       >获取晶锭编号</el-button
                     >
                   </div>
@@ -124,6 +122,9 @@
                 align="center"
                 prop="length"
               >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.length"></el-input>
+                </template>
               </el-table-column>
               <el-table-column
                 label="计划重量"
@@ -131,37 +132,70 @@
                 align="center"
                 prop="planWeight"
               >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.planWeight"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="晶段类型"
+                min-width="100"
+                align="center"
+                prop="type"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.type"></el-input>
+                </template>
               </el-table-column>
               <el-table-column
                 label="段位"
                 min-width="100"
                 align="center"
                 prop="segmentNum"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.segmentNum"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="头部电阻率"
                 min-width="120"
                 align="center"
                 prop="headResistance"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.headResistance"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="尾部电阻率"
                 min-width="120"
                 align="center"
                 prop="tailResistance"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.tailResistance"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="头部电阻率实测"
                 min-width="150"
                 align="center"
                 prop="headResistanceActual"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.headResistanceActual"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="尾部电阻率实测"
                 min-width="150"
                 align="center"
                 prop="tailResistanceActual"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.tailResistanceActual"></el-input>
+                </template>
+              </el-table-column>
               <!-- <el-table-column
                 label="头尾电阻比"
                 min-width="120"
@@ -172,25 +206,41 @@
                 min-width="100"
                 align="center"
                 prop="head79oi"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.head79oi"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="79oi尾"
                 min-width="100"
                 align="center"
                 prop="tail79oi"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.tail79oi"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="83oi头"
                 min-width="100"
                 align="center"
                 prop="head83oi"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.head83oi"></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="83oi尾"
                 min-width="100"
                 align="center"
                 prop="tail83oi"
-              ></el-table-column>
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.tail83oi"></el-input>
+                </template>
+              </el-table-column>
               <!-- <el-table-column
                 label="滚圆"
                 min-width="80"
@@ -338,6 +388,7 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import { cloneDeep } from "lodash-es";
 
 export default {
   data() {
@@ -389,129 +440,15 @@ export default {
           console.log(e);
         }
       }
-      fromData = {
-        userCreate: "NC系统",
-        gmtCreate: "2024-03-28 08:55:53",
-        userUpdate: "NC系统",
-        gmtUpdate: "2024-03-28 09:10:40",
-        wipStorageId: null,
-        processId: 206,
-        processCode: "FDZL",
-        processName: "分段指令",
-        processUuid: "z20tnran49",
-        processOrderCode: "E3714P0001A",
-        materialCode: "IGMCXN16P",
-        materialName: "IGMCXN16P",
-        materialVersion: "1.0",
-        length: 700,
-        number: 20,
-        diameter: 4,
-        reCutNum: 0,
-        segmentNum: null,
-        sampleNum: null,
-        recycleNum: null,
-        segmentedInstructionDetailVos: [
-          {
-            diameter: 4,
-            head79oi: 0,
-            head83oi: 0,
-            headPosition: 0,
-            headResistance: 0,
-            headResistanceActual: 0,
-            length: 10,
-            orderCode: "",
-            planWeight: 0,
-            processCode: "",
-            processName: "",
-            qualifiedLength: 0,
-            qualifiedWeight: 0,
-            reason: "",
-            reasonIn: "",
-            remarks: "",
-            segmentNo: "",
-            segmentNum: 0,
-            status: 0,
-            tail79oi: 0,
-            tail83oi: 0,
-            tailPosition: 700,
-            tailResistance: 0,
-            tailResistanceActual: 0,
-            transMap: {},
-            type: 0,
-            userCreate: "",
-            userUpdate: "",
-          },
-          {
-            diameter: 4,
-            head79oi: 0,
-            head83oi: 0,
-            headPosition: 700,
-            headResistance: 0,
-            headResistanceActual: 0,
-            length: 10,
-            orderCode: "",
-            planWeight: 0,
-            processCode: "",
-            processName: "",
-            qualifiedLength: 0,
-            qualifiedWeight: 0,
-            reason: "",
-            reasonIn: "",
-            remarks: "",
-            segmentNo: "",
-            segmentNum: 0,
-            status: 0,
-            tail79oi: 0,
-            tail83oi: 0,
-            tailPosition: 1500,
-            tailResistance: 0,
-            tailResistanceActual: 0,
-            transMap: {},
-            type: 0,
-            userCreate: "",
-            userUpdate: "",
-          },
-          {
-            diameter: 4,
-            head79oi: 0,
-            head83oi: 0,
-            headPosition: 1500,
-            headResistance: 0,
-            headResistanceActual: 0,
-            length: 10,
-            orderCode: "",
-            planWeight: 0,
-            processCode: "",
-            processName: "",
-            qualifiedLength: 0,
-            qualifiedWeight: 0,
-            reason: "",
-            reasonIn: "",
-            remarks: "",
-            segmentNo: "",
-            segmentNum: 0,
-            status: 0,
-            tail79oi: 0,
-            tail83oi: 0,
-            tailPosition: 1950,
-            tailResistance: 0,
-            tailResistanceActual: 0,
-            transMap: {},
-            type: 0,
-            userCreate: "",
-            userUpdate: "",
-          },
-        ],
-        transMap: {},
-      };
       this.formData = { ...this.formData, ...fromData };
     },
-    async handleCodeClick(row, index) {
+    async handleCodeClick() {
       let res = await Api.segmentedInstructionGenerateNo(this.formData);
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
       res.segmentedInstructionDetailVos.forEach((item, index) => {
-        this.formData.segmentedInstructionDetailVos[index].segmentNo =
-          item.segmentNo;
+        list[index].segmentNo = item.segmentNo;
       });
+      this.formData.segmentedInstructionDetailVos = list;
     },
     addSegmentedInfo() {
       let list = this.formData.segmentedInstructionDetailVos;

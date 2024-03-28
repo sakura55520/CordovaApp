@@ -68,23 +68,20 @@
               </div>
             </el-form-item>
             <el-form-item label="型号" prop="model" class="item">
-              <el-input v-model="formData.model" disabled></el-input>
+              <el-input v-model="formData.model"></el-input>
             </el-form-item>
             <el-form-item label="尺寸" prop="size" class="item">
-              <el-input v-model="formData.size" disabled></el-input>
+              <el-input v-model="formData.size"></el-input>
             </el-form-item>
             <el-form-item label="晶向" prop="orientation" class="item">
-              <el-input v-model="formData.orientation" disabled></el-input>
+              <el-input v-model="formData.orientation"></el-input>
             </el-form-item>
             <el-form-item
               label="目标电阻率"
               prop="targetResistivity"
               class="item"
             >
-              <el-input
-                v-model="formData.targetResistivity"
-                disabled
-              ></el-input>
+              <el-input v-model="formData.targetResistivity"></el-input>
             </el-form-item>
           </div>
           <div class="form">
@@ -300,6 +297,7 @@ export default {
         headWeight: null,
         tailWeight: null,
         lengthQty: null,
+        currentLengthQty: null,
         details: [],
       },
       formRules: {
@@ -352,7 +350,7 @@ export default {
           console.log(e);
         }
       }
-
+      
       this.formData = { ...this.formData, ...fromData };
     },
     addDetails() {
@@ -458,8 +456,10 @@ export default {
       else
         crystalDensity = (
           (((info.weight - info.tailWeight - info.headWeight) *
-            info.lengthQty) /
-            (sampleIdentification === "H" ? info.lengthQty - value : value) /
+            info.currentLengthQty) /
+            (sampleIdentification === "H"
+              ? info.currentLengthQty - value
+              : value) /
             info.weight) *
           100
         ).toFixed(2);

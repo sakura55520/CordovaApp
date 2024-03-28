@@ -38,7 +38,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="150px"
+          label-width="120px"
           :rules="formRules"
         >
           <div class="base-form">
@@ -54,99 +54,138 @@
           </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
-            <el-form-item label="计划长度" prop="lengthQty" class="item">
+            <el-form-item label="计划长度" prop="planLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.planLength"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
-            <el-form-item label="原始长度" prop="lengthQty" class="item">
+            <el-form-item label="原始长度" prop="originLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.originLength"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
-            <el-form-item label="崩边长度" prop="lengthQty" class="item">
+            <el-form-item label="崩边长度" prop="chippingLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.chippingLength"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
-            <el-form-item label="椭圆长度" prop="lengthQty" class="item">
+            <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.ellipticLength"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
-            <el-form-item label="合格长度" prop="lengthQty" class="item">
+            <el-form-item label="合格长度" prop="qualifiedLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.qualifiedLength"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
             <el-form-item
               label="滚圆实测主参考面晶向"
-              prop="lengthQty"
+              prop="mainReferenceSurfaceCrystalOrientation"
               class="item"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
-                <div class="unit">cm</div>
+                <el-input
+                  class="value"
+                  v-model="formData.mainReferenceSurfaceCrystalOrientation"
+                ></el-input>
               </div>
             </el-form-item>
             <el-form-item
               label="滚圆实测主参考面长度"
-              prop="lengthQty"
+              prop="mainReferenceSurfaceLength"
               class="item"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.mainReferenceSurfaceLength"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
-            <el-form-item label="滚圆主副测夹角" prop="lengthQty" class="item">
+            <el-form-item
+              label="滚圆主副测夹角"
+              prop="mainAuxiliaryAngle"
+              class="item"
+            >
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
-                <div class="unit">cm</div>
+                <el-input
+                  class="value"
+                  v-model="formData.mainAuxiliaryAngle"
+                ></el-input>
+                <div class="unit">°</div>
               </div>
             </el-form-item>
             <el-form-item
               label="滚圆实测主参考面宽度头"
-              prop="lengthQty"
+              prop="mainReferenceSurfaceWidthHead"
               class="item"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.mainReferenceSurfaceWidthHead"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
             <el-form-item
-              label="滚圆实测主参考面宽度尾 "
-              prop="lengthQty"
+              label="滚圆实测主参考面宽度尾"
+              prop="mainReferenceSurfaceWidthTail"
               class="item"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.mainReferenceSurfaceWidthTail"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
             <el-form-item
-              label="滚圆副测主参考面宽度头  "
-              prop="lengthQty"
+              label="滚圆副测主参考面宽度头"
+              prop="auxiliaryReferenceSurfaceHead"
               class="item"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.auxiliaryReferenceSurfaceHead"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
             <el-form-item
-              label="滚圆副测主参考面宽度尾  "
-              prop="lengthQty"
+              label="滚圆副测主参考面宽度尾"
+              prop="auxiliaryReferenceSurfaceTail"
               class="item"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.auxiliaryReferenceSurfaceTail"
+                ></el-input>
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
@@ -191,20 +230,72 @@ export default {
         goodQty: [
           { required: true, message: "合格数量不能为空", trigger: "blur" },
         ],
-        defectQty: [
-          { required: true, message: "缺陷数量不能为空", trigger: "blur" },
-        ],
         scrapQty: [
           { required: true, message: "报废数量不能为空", trigger: "blur" },
         ],
-        headWeight: [
-          { required: true, message: "头部重量不能为空", trigger: "blur" },
+        planLength: [
+          { required: true, message: "计划长度不能为空", trigger: "blur" },
         ],
-        tailWeight: [
-          { required: true, message: "尾部重量不能为空", trigger: "blur" },
+        originLength: [
+          { required: true, message: "原始长度不能为空", trigger: "blur" },
         ],
-        lengthQty: [
-          { required: true, message: "当前长度不能为空", trigger: "blur" },
+        chippingLength: [
+          { required: true, message: "崩边长度不能为空", trigger: "blur" },
+        ],
+        ellipticLength: [
+          { required: true, message: "椭圆长度不能为空", trigger: "blur" },
+        ],
+        qualifiedLength: [
+          { required: true, message: "合格长度不能为空", trigger: "blur" },
+        ],
+        mainReferenceSurfaceCrystalOrientation: [
+          {
+            required: true,
+            message: "滚圆实测主参考面晶向不能为空",
+            trigger: "blur",
+          },
+        ],
+        mainReferenceSurfaceLength: [
+          {
+            required: true,
+            message: "滚圆实测主参考面长度不能为空",
+            trigger: "blur",
+          },
+        ],
+        mainAuxiliaryAngle: [
+          {
+            required: true,
+            message: "滚圆主副测夹角不能为空",
+            trigger: "blur",
+          },
+        ],
+        mainReferenceSurfaceWidthHead: [
+          {
+            required: true,
+            message: "滚圆实测主参考面宽度头不能为空",
+            trigger: "blur",
+          },
+        ],
+        mainReferenceSurfaceWidthTail: [
+          {
+            required: true,
+            message: "滚圆实测主参考面宽度尾不能为空",
+            trigger: "blur",
+          },
+        ],
+        auxiliaryReferenceSurfaceHead: [
+          {
+            required: true,
+            message: "滚圆副测主参考面宽度头不能为空",
+            trigger: "blur",
+          },
+        ],
+        auxiliaryReferenceSurfaceTail: [
+          {
+            required: true,
+            message: "滚圆副测主参考面宽度尾不能为空",
+            trigger: "blur",
+          },
         ],
       },
     };
@@ -232,7 +323,6 @@ export default {
           console.log(e);
         }
       }
-
       this.formData = { ...this.formData, ...fromData };
     },
     back() {
