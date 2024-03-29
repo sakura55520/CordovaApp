@@ -37,17 +37,16 @@
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.goodQty"></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.goodQty">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="异常数量" prop="abnormalQty" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.abnormalQty"
-                ></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.abnormalQty">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="当前长度" prop="currentLengthQty" class="item">

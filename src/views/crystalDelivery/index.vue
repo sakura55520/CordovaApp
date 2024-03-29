@@ -77,8 +77,9 @@
                 <el-input
                   class="value"
                   v-model="formData.dislocationIdentificationLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                >
+                  <template slot="append">cm</template></el-input
+                >
               </div>
             </el-form-item>
             <el-form-item
@@ -87,11 +88,9 @@
               class="item"
             >
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.measuredDiameter"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.measuredDiameter">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -100,11 +99,9 @@
               class="item"
             >
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.disengageDiameter"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.disengageDiameter">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -113,11 +110,9 @@
               class="item"
             >
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.bottomMaterialWeight"
-                ></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.bottomMaterialWeight">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
           </div>

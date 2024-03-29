@@ -42,26 +42,23 @@
             <div class="form-title">设备/工艺参数确认</div>
             <el-form-item label="头部重量" prop="headWeight" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.headWeight"
-                ></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.headWeight">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="尾部重量" prop="tailWeight" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.tailWeight"
-                ></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.tailWeight">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="当前长度" prop="lengthQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty"></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.lengthQty">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
           </div>

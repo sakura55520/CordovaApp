@@ -30,14 +30,16 @@
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.goodQty"></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.goodQty">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.scrapQty"></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.scrapQty">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
           </div>
