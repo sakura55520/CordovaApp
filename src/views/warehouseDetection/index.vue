@@ -116,13 +116,13 @@
             </el-form-item>
             <el-form-item
               label="滚圆实测主参考面晶向"
-              prop="mainReferenceSurfaceWidthHead"
+              prop="mainReferenceSurfaceCrystalOrientation"
               class="item"
             >
               <div class="input">
                 <el-input
                   class="value"
-                  v-model="formData.mainReferenceSurfaceWidthHead"
+                  v-model="formData.mainReferenceSurfaceCrystalOrientation"
                 ></el-input>
               </div>
             </el-form-item>
@@ -420,7 +420,7 @@ export default {
       this.back();
     },
     handleWhouseSelect({ id, name }) {
-      this.detailForm.lineVarwhouseLocation = name;
+      this.formData.lineVarwhouseLocation = name;
     },
   },
 };
