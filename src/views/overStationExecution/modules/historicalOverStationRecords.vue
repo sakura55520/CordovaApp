@@ -1,16 +1,29 @@
 <template>
   <div>
-    <!-- <el-date-picker
-      class="date-picker"
-      v-model="timeRange"
-      type="datetimerange"
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      value-format="yyyy-MM-DD HH:mm:ss"
-      @change="fetchData"
-    >
-    </el-date-picker> -->
+    <div class="search">
+      <el-date-picker
+        class="date-picker"
+        v-model="startTimeRange"
+        type="datetimerange"
+        range-separator="至"
+        start-placeholder="进站开始时间"
+        end-placeholder="进站结束时间"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        @change="fetchData"
+      >
+      </el-date-picker>
+      <el-date-picker
+        class="date-picker"
+        v-model="endTimeRange"
+        type="datetimerange"
+        range-separator="至"
+        start-placeholder="出站开始时间"
+        end-placeholder="出站结束时间"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        @change="fetchData"
+      >
+      </el-date-picker>
+    </div>
     <div v-if="list.length !== 0">
       <div class="card" v-for="item in list" :key="item.processingOrderCode">
         <div class="header">
@@ -50,6 +63,8 @@
 
 <script>
 import * as Api from "@/api/overStationExecution/overStation.js";
+import { isEmpty } from "lodash-es";
+
 export default {
   data() {
     return {
@@ -57,7 +72,8 @@ export default {
       pageSize: 10,
       total: 0,
       list: [],
-      timeRange: [],
+      startTimeRange: "",
+      endTimeRange: "",
     };
   },
   mounted() {
@@ -69,8 +85,18 @@ export default {
         search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
-        search_GTE_createTime: this.timeRange[0],
-        search_LT_createTime: this.timeRange[1],
+        search_GTE_startTime: !isEmpty(this.startTimeRange)
+          ? this.startTimeRange[0]
+          : null,
+        search_LT_startTime: !isEmpty(this.startTimeRange)
+          ? this.startTimeRange[1]
+          : null,
+        search_GTE_endTime: !isEmpty(this.endTimeRange)
+          ? this.endTimeRange[0]
+          : null,
+        search_LT_endTime: !isEmpty(this.endTimeRange)
+          ? this.endTimeRange[1]
+          : null,
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);
@@ -89,9 +115,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search {
+  display: flex;
+  gap: 10px;
+}
 .date-picker {
   margin-bottom: 8px;
-  width: 100%;
+  flex: 1;
 }
 .card {
   padding: 12px;
