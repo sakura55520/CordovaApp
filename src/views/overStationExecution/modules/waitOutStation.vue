@@ -90,6 +90,7 @@
 <script>
 import * as Api from "@/api/overStationExecution/overStation.js";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation.js";
+import { isEmpty } from "lodash-es";
 
 export default {
   data() {
@@ -135,6 +136,8 @@ export default {
       this.preStationList = res.data;
       this.exitStationDialogVisible = true;
       this.selectRow = row;
+      if (!isEmpty(this.preStationList))
+        this.selectProcessUuid = this.preStationList[0].processUuid;
     },
     async handleExitStation() {
       if (!this.selectProcessUuid) {
