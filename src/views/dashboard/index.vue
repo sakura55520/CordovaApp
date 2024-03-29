@@ -39,272 +39,87 @@ export default {
     return {
       totalCount: 0,
       timer: null,
-      groupedList: [
-        {
-          group: "过站执行",
-          children: [
-            {
-              name: "装料",
-              href: "/overStationExecution?station=ZL",
-              icon: "guozhan",
-            },
-            {
-              name: "长晶",
-              href: "/overStationExecution?station=ZJ",
-              icon: "guozhan",
-            },
-            {
-              name: "单晶送付",
-              href: "/overStationExecution?station=DJSF",
-              icon: "guozhan",
-            },
-            {
-              name: "切头尾取样",
-              href: "/overStationExecution?station=QTWQY",
-              icon: "guozhan",
-            },
-            {
-              name: "晶锭检验",
-              href: "/overStationExecution?station=JDJY",
-              icon: "guozhan",
-            },
-            {
-              name: "分段指令",
-              href: "/overStationExecution?station=FDZL",
-              icon: "guozhan",
-            },
-            {
-              name: "割断",
-              href: "/overStationExecution?station=GD",
-              icon: "guozhan",
-            },
-            {
-              name: "滚圆中转",
-              href: "/overStationExecution?station=GYZZ",
-              icon: "guozhan",
-            },
-            {
-              name: "滚圆",
-              href: "/overStationExecution?station=GY",
-              icon: "guozhan",
-            },
-            {
-              name: "加参",
-              href: "/overStationExecution?station=JC",
-              icon: "guozhan",
-            },
-            {
-              name: "入库检测",
-              href: "/overStationExecution?station=RKJC",
-              icon: "guozhan",
-            },
-          ],
-        },
-      ],
     };
   },
   computed: {
     ...mapState({
       arrMenu: (state) => state.permission.arrMenu,
     }),
-    groupedList_pre() {
+    groupedList() {
       const groupedList = [
         {
-          group: "",
+          group: "单晶车间",
           children: [
-            {
-              name: "过站操作",
-              href: "/overStation",
-              key: null,
-              icon: "guozhan",
-            },
-            {
-              name: "来料检验",
-              href: "/incomingInspection",
-              key: "pda_incomingInspection_menu",
-              icon: "jianyan",
-            },
-          ],
-        },
-        {
-          group: "生产管理",
-          children: [
-            {
-              name: "装炉",
-              href: "/feed",
-              key: "pda_feed_menu",
-              icon: "toulu",
-            },
-            {
-              name: "热场更换",
-              href: "/accessory",
-              key: "pda_accessory_menu",
-              icon: "accessory",
-            },
-          ],
-        },
-        {
-          group: "原料合成",
-          children: [
-            {
-              name: "返工发料",
-              href: "/producIssueStuff",
-              key: "pda_producIssueStuff_menu",
-              icon: "faliao",
-            },
-            {
-              name: "装埚",
-              href: "/filling",
-              key: "pda_filling_menu",
-              icon: "zhuangguo",
-            },
-            {
-              name: "开埚",
-              href: "/boil",
-              key: "pda_boil_menu",
-              icon: "kaiguo",
-            },
-            {
-              name: "氧化",
-              href: "/oxidize",
-              key: "pda_oxidize_menu",
-              icon: "yanghua",
-            },
-            {
-              name: "破碎",
-              href: "/crush",
-              key: "pda_crush_menu",
-              icon: "posui",
-            },
-            {
-              name: "筛分",
-              href: "/screen",
-              key: "pda_screen_menu",
-              icon: "shaifen",
-            },
-            {
-              name: "终检包装",
-              href: "/finalInspectionPackage",
-              key: "pda_finalInspectionPackage_menu",
-              icon: "zhongjian",
-            },
-            {
-              name: "成品入库",
-              href: "/Warehousing",
-              key: "pda_Warehousing_menu",
-              icon: "ruku",
-            },
-          ],
-        },
-        {
-          group: "籽晶粘贴",
-          children: [
-            {
-              name: "生产发料",
-              href: "/pasteProducIssueStuff",
-              key: "pda_pasteProducIssueStuff_menu",
-              icon: "faliao",
-            },
-            {
-              name: "工序1-1",
-              href: "/process1-1",
-              key: "pda_process1-1_menu",
-              icon: "gongxu11",
-            },
-            {
-              name: "工序1-2",
-              href: "/process1-2",
-              key: "pda_process1-2_menu",
-              icon: "gongxu12",
-            },
-            {
-              name: "工序2-1",
-              href: "/process2-1",
-              key: "pda_process2-1_menu",
-              icon: "gongxu21",
-            },
-            {
-              name: "工序2-2",
-              href: "/process2-2",
-              key: "pda_process2-2_menu",
-              icon: "gongxu22",
-            },
-            {
-              name: "工序3-1",
-              href: "/process3-1",
-              key: "pda_process3-1_menu",
-              icon: "gongxu31",
-            },
-            {
-              name: "工序3-2",
-              href: "/process3-2",
-              key: "pda_process3-2_menu",
-              icon: "gongxu32",
-            },
-            {
-              name: "终检包装",
-              href: "/seedFinalInspection",
-              key: "pda_seedFinalInspection_menu",
-              icon: "zhongjian",
-            },
-            {
-              name: "成品入库",
-              href: "/seedWarehousing",
-              key: "pda_seedWarehousing_menu",
-              icon: "ruku",
-            },
-          ],
-        },
-        {
-          group: "装炉长晶",
-          children: [
-            {
-              name: "清洗",
-              href: "/cleanDry",
-              key: "pda_cleanDry_menu",
-              icon: "qingxi",
-            },
-            {
-              name: "烘干",
-              href: "/dry",
-              key: "pda_dry_menu",
-              icon: "honggan",
-            },
             {
               name: "装料",
-              href: "/charge",
-              key: "pda_charge_menu",
-              icon: "zhuangliao",
+              href: "/overStationExecution?station=ZL",
+              icon: "charge",
+              permission: "pda_charge_menu"
             },
             {
-              name: "坩埚组装",
-              href: "/crucibleAssembly",
-              key: "pda_seedcrucibleAssembly_menu",
-              icon: "ganguo",
+              name: "长晶",
+              href: "/overStationExecution?station=ZJ",
+              icon: "growth",
+              permission: "pda_growth_menu"
             },
             {
-              name: "籽晶安装",
-              href: "/seedCrystal",
-              key: "pda_seedCrystal_menu",
-              icon: "zijing",
+              name: "单晶送付",
+              href: "/overStationExecution?station=DJSF",
+              icon: "send",
+              permission: "pda_sendInspect_menu"
+            },
+          ],
+        },
+        {
+          group: "割断滚圆车间",
+          children: [
+            {
+              name: "切头尾取样",
+              href: "/overStationExecution?station=QTWQY",
+              icon: "head",
+              permission: "pda_headAndTailSampling_menu"
             },
             {
-              name: "开炉初检",
-              href: "/KLInitialInspection",
-              key: "pda_KLInitialInspection_menu",
-              icon: "kailu",
+              name: "晶锭检验",
+              href: "/overStationExecution?station=JDJY",
+              icon: "detection",
+              permission: "pda_ingotDetection_menu"
             },
             {
-              name: "终检包装",
-              href: "/finalInspectionPack",
-              key: "pda_finalInspectionPack_menu",
-              icon: "zhongjian",
+              name: "分段指令",
+              href: "/overStationExecution?station=FDZL",
+              icon: "segmented",
+              permission: "pda_segmentedInstruction_menu"
             },
             {
-              name: "成品入库",
-              href: "/CPWarehousing",
-              key: "pda_CPWarehousing_menu",
-              icon: "ruku",
+              name: "割断",
+              href: "/overStationExecution?station=GD",
+              icon: "cutting",
+              permission: "pda_cutting_menu"
+            },
+            {
+              name: "滚圆中转",
+              href: "/overStationExecution?station=GYZZ",
+              icon: "transfer",
+              permission: "pda_roundTransfer_menu"
+            },
+            {
+              name: "滚圆",
+              href: "/overStationExecution?station=GY",
+              icon: "round",
+              permission: "pda_round_menu"
+            },
+            {
+              name: "加参",
+              href: "/overStationExecution?station=JC",
+              icon: "add_parameter",
+              permission: "pda_addParameter_menu"
+            },
+            {
+              name: "入库检测",
+              href: "/overStationExecution?station=RKJC",
+              icon: "warehouse",
+              permission: "pda_warehouseDetection_menu"
             },
           ],
         },
@@ -315,7 +130,7 @@ export default {
           return {
             ...groupItem,
             children: groupItem.children.filter(
-              (item) => !item.key || this.arrMenu.includes(item.key)
+              (item) => !item.permission || this.arrMenu.includes(item.permission)
             ),
           };
         })

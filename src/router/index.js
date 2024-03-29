@@ -71,6 +71,14 @@ export const constantRouterMap = [
   },
 
   {
+    name: 'growthOperate',
+    path: '/growthOperate',
+    component: () => import('@/views/growthOperate'),
+    meta: {text: '长晶'},
+  },
+
+
+  {
     name: 'crystalDelivery',
     path: '/crystalDelivery',
     component: () => import('@/views/crystalDelivery'),
@@ -113,13 +121,27 @@ export const constantRouterMap = [
     props: true
   },
 
+
+  {
+    name: 'roundTransferOperate',
+    path: '/roundTransferOperate',
+    component: () => import('@/views/roundTransferOperate'),
+    meta: {text: '滚圆中转'},
+  },
+
+  {
+    name: 'roundOperate',
+    path: '/roundOperate',
+    component: () => import('@/views/roundOperate'),
+    meta: {text: '滚圆'},
+  },
+
   {
     name: 'addParameter',
     path: '/addParameter',
     component: () => import('@/views/addParameter/index'),
     meta: {text: '加参'},
   },
-
 
   {
     name: 'warehouseDetection',
