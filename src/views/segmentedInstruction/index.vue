@@ -58,7 +58,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="下发工单" min-width="150" align="center">
+              <!-- <el-table-column label="下发工单" min-width="150" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.orderCode"></el-input>
                 </template>
@@ -67,7 +67,7 @@
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.processCode"></el-input>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column label="流程说明" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.processName"></el-input>
@@ -452,6 +452,12 @@ export default {
       else headPosition = list[list.length - 1].tailPosition;
       let item = {
         headPosition,
+        type: 0,
+        segmentNum: 0,
+        headResistance: 0,
+        tailResistance: 0,
+        diameter: this.formData.diameter,
+        planWeight: 0,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -470,6 +476,12 @@ export default {
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
+        if (
+          item.tailPosition ||
+          (item.tailPosition == 0 && item.headPosition) ||
+          item.headPosition == 0
+        )
+          item.length = item.tailPosition - item.headPosition;
       }
     },
     handleTailChange(value, index) {
@@ -479,6 +491,12 @@ export default {
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
+        if (
+          item.tailPosition ||
+          (item.tailPosition == 0 && item.headPosition) ||
+          item.headPosition == 0
+        )
+          item.length = item.tailPosition - item.headPosition;
       }
     },
     back() {
