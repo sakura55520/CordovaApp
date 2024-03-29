@@ -96,7 +96,20 @@ export default {
       routeItem:undefined,//路线绑定项
       currentRoute:{},//当前选中路线
       routeList:[],//路线列表
-      routeDialog:false
+      routeDialog:false,
+      processCodeMap: {
+        装料: "ZL",
+        长晶: "ZJ",
+        单晶送付: "DJSF",
+        切头尾取样: "QTWQY",
+        晶锭检验: "JDJY",
+        分段指令: "FDZL",
+        割断: "GD",
+        滚圆中转: "GYZZ",
+        滚圆: "GY",
+        加参: "JC",
+        入库检测: "RKJC",
+      },
     }
   },
   mounted() {
@@ -160,6 +173,7 @@ export default {
       }
       Api.inStation(data).then(res=>{
         this.$message.success('进站成功')
+        this.$router.push(`/overStationExecution?station=${this.processCodeMap[this.currentSite.wipStorageName]}`)
         this.resetData()
       }).catch((err) => {
         if(err && err.code === 201){

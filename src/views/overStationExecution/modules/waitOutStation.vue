@@ -33,6 +33,13 @@
         </div>
         <div v-else class="btn">
           <el-button
+            type="warning"
+            plain
+            class="back-station"
+            @click="handleExitStationClick(item)"
+            >退站操作</el-button
+          >
+          <el-button
             v-if="item.wipStorageStatus === 0"
             type="primary"
             class="in-station"
@@ -40,14 +47,6 @@
           >
             进站执行
           </el-button>
-          <el-button
-            v-if="item.wipStorageStatus === 1"
-            type="warning"
-            plain
-            class="back-station"
-            @click="handleExitStationClick(item)"
-            >退站操作</el-button
-          >
           <el-button
             v-if="item.wipStorageStatus === 1"
             type="primary"
