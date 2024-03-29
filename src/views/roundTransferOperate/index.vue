@@ -41,6 +41,7 @@
               <SelectLinesideTree
                 v-model="detailForm.lineVarwhouseLocation"
                 @select="handleWhouseSelect"
+                :alwaysOpen="true"
               />
             </el-form-item>
           </div>

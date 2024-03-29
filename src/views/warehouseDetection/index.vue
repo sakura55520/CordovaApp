@@ -221,22 +221,20 @@
                 <div class="unit">cm</div>
               </div>
             </el-form-item>
-            <el-form-item label="线边仓" prop="lineVarwhouse" class="item">
+            <!-- <el-form-item label="线边仓" prop="lineVarwhouse" class="item">
               <el-select v-model="formData.lineVarwhouse" placeholder="">
                 <el-option label="成品线边仓" :value="1"></el-option>
               </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item
-              label="线边仓储位"
+              label="线边仓库位"
               prop="lineVarwhouseLocation"
               class="item"
             >
-              <el-select
+              <SelectLinesideTree
                 v-model="formData.lineVarwhouseLocation"
-                placeholder=""
-              >
-                <el-option label="A1" value="A1"></el-option>
-              </el-select>
+                @select="handleWhouseSelect"
+              />
             </el-form-item>
           </div>
         </el-form>
@@ -256,8 +254,12 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import SelectLinesideTree from "@/components/SelectLinesideTree";
 
 export default {
+  components: {
+    SelectLinesideTree,
+  },
   data() {
     return {
       batchNumber: "Z0116504581",
@@ -358,13 +360,13 @@ export default {
             trigger: "blur",
           },
         ],
-        lineVarwhouse: [
-          {
-            required: true,
-            message: "线边仓不能为空",
-            trigger: "blur",
-          },
-        ],
+        // lineVarwhouse: [
+        //   {
+        //     required: true,
+        //     message: "线边仓不能为空",
+        //     trigger: "blur",
+        //   },
+        // ],
         lineVarwhouseLocation: [
           {
             required: true,
@@ -433,6 +435,9 @@ export default {
       this.$message.success("出站成功");
       Api.deleteBuffer(this.buffParams);
       this.back();
+    },
+    handleWhouseSelect({ id, name }) {
+      this.detailForm.lineVarwhouseLocation = name;
     },
   },
 };

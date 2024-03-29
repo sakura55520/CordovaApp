@@ -7,7 +7,7 @@
     :limit="0"
     :limit-text="limitText"
     :max-height="400"
-    alwaysOpen
+    :alwaysOpen="alwaysOpen"
     disable-branch-nodes
     placeholder="请选择库位"
     no-results-text="暂无数据"
@@ -22,7 +22,7 @@ import { getPermissionWarehouseTree } from '@/api/warehouseStructure'
 
 export default {
   name: 'SelectLinesideTree',
-  props: ['value'],
+  props: ['value', 'alwaysOpen'],
   data() {
     return {
       id: null,
