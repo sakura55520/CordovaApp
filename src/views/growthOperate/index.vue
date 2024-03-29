@@ -24,6 +24,13 @@
             :step-name="stepName"
           />
         </el-tab-pane>
+<!--        <el-tab-pane label="单晶异常">-->
+<!--          <TabItem-->
+<!--            ref="TabItem"-->
+<!--            :step-data="steps[stepName]"-->
+<!--            :step-name="stepName"-->
+<!--          />-->
+<!--        </el-tab-pane>-->
       </el-tabs>
     </div>
 
@@ -62,7 +69,7 @@ export default {
   },
   data() {
     return {
-      stepList: ['拆炉', '抽真空', '捡漏', '煅烧', '化料', '稳温', '引晶', '放肩', '等径', '收尾', '冷却', '煅烧冷却', '吊单晶', '回熔', '吊肩', '补掺'],
+      stepList: ['拆炉', '抽真空', '检漏', '煅烧', '化料', '稳温', '引晶', '放肩', '等径', '收尾', '冷却', '煅烧冷却', '吊单晶', '回熔', '吊肩', '补掺'],
       name2form: {},
       steps: {},
       rules: {},
