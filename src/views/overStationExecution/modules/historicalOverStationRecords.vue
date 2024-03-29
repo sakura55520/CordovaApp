@@ -1,39 +1,41 @@
 <template>
   <div>
-    <el-date-picker
+    <!-- <el-date-picker
       class="date-picker"
       v-model="timeRange"
       type="datetimerange"
       range-separator="至"
       start-placeholder="开始日期"
       end-placeholder="结束日期"
+      value-format="yyyy-MM-DD HH:mm:ss"
+      @change="fetchData"
     >
-    </el-date-picker>
-    <div class="card" v-for="item in list" :key="item.title">
-      <div class="header">
-        <div>{{ item.title }}</div>
-        <i class="el-icon-document"></i>
+    </el-date-picker> -->
+    <div v-if="list.length !== 0">
+      <div class="card" v-for="item in list" :key="item.processingOrderCode">
+        <div class="header">
+          <div>{{ item.processingOrderCode }}</div>
+          <i class="el-icon-document"></i>
+        </div>
+        <el-divider class="divider" />
+        <el-table
+          :data="[item]"
+          key="number"
+          :header-cell-style="{
+            background: 'rgba(242, 242, 242)',
+            color: '#606266',
+          }"
+        >
+          <!-- <el-table-column label="产品料号" prop="number" min-width="100" />
+        <el-table-column label="产品类型" prop="type" min-width="100" /> -->
+          <el-table-column label="数量" prop="number" min-width="80" />
+          <el-table-column label="进站时间" prop="startTime" min-width="100" />
+          <el-table-column label="出站时间" prop="endTime" min-width="100" />
+          <el-table-column label="创建人" prop="createUserName" />
+        </el-table>
       </div>
-      <el-divider class="divider" />
-      <el-table
-        :data="[item]"
-        key="number"
-        :header-cell-style="{
-          background: 'rgba(242, 242, 242)',
-          color: '#606266',
-        }"
-      >
-        <el-table-column label="产品料号" prop="number" min-width="100" />
-        <el-table-column label="产品类型" prop="type" min-width="100" />
-        <el-table-column
-          label="进站时间"
-          prop="inStationTime"
-          min-width="100"
-        />
-        <el-table-column label="上站" prop="preStation" />
-        <el-table-column label="下站" prop="nextStation" />
-      </el-table>
     </div>
+    <el-empty v-else :image-size="100"></el-empty>
     <div class="pagination">
       <el-pagination
         :total="total"
@@ -47,6 +49,7 @@
 </template>
 
 <script>
+import * as Api from "@/api/overStationExecution/overStation.js";
 export default {
   data() {
     return {
@@ -62,10 +65,12 @@ export default {
   },
   methods: {
     fetchData() {
-      Api.fetchWaitOutStationPage({
+      Api.fetchHistoricalOverStationRecords({
         search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
+        search_GTE_createTime: this.timeRange[0],
+        search_LT_createTime: this.timeRange[1],
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);
@@ -93,6 +98,7 @@ export default {
   background-color: rgb(233, 243, 253);
   margin-bottom: 12px;
   .header {
+    font-size: 20px;
     color: rgb(2, 107, 194);
     display: flex;
     justify-content: space-between;

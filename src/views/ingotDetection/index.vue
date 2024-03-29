@@ -169,10 +169,7 @@
                 prop="crystalDensity"
               >
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.crystalDensity"
-                    disabled
-                  ></el-input>
+                  <el-input v-model="scope.row.crystalDensity"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="RES" min-width="80" align="center">
@@ -350,7 +347,7 @@ export default {
           console.log(e);
         }
       }
-      
+
       this.formData = { ...this.formData, ...fromData };
     },
     addDetails() {
