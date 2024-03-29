@@ -104,7 +104,29 @@ export const constantRouterMap = [
     path: '/chargeOperate',
     component: () => import('@/views/chargeOperate'),
     meta: {text: '装料'},
-  }
+  },
+
+  {
+    name: 'growthOperate',
+    path: '/growthOperate',
+    component: () => import('@/views/growthOperate'),
+    meta: {text: '长晶'},
+  },
+
+  {
+    name: 'roundTransferOperate',
+    path: '/roundTransferOperate',
+    component: () => import('@/views/roundTransferOperate'),
+    meta: {text: '滚圆中转'},
+  },
+
+  {
+    name: 'roundOperate',
+    path: '/roundOperate',
+    component: () => import('@/views/roundOperate'),
+    meta: {text: '滚圆'},
+  },
+
 ]
 
 export default new Router({

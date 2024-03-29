@@ -79,7 +79,7 @@ export default {
   left: 0;
   right: 0;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
   font-size: 22px;
   color: #fff;
 }

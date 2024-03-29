@@ -26,7 +26,7 @@ export function inOrOutStation(data) {
 //查找暂存信息
 export function fetchBuffer(params) {
   return request({
-    url: 'wipStorage/stationBuffer',
+    url: '/wipStorage/stationBuffer',
     method: 'get',
     params
   })
@@ -34,7 +34,7 @@ export function fetchBuffer(params) {
 //保存暂存信息
 export function upldateBuffer(params, data) {
   return request({
-    url: 'wipStorage/stationBuffer',
+    url: '/wipStorage/stationBuffer',
     method: 'post',
     params,
     data
@@ -43,8 +43,16 @@ export function upldateBuffer(params, data) {
 //删除暂存信息
 export function deleteBuffer(params) {
   return request({
-    url: 'wipStorage/stationBuffer',
+    url: '/wipStorage/stationBuffer',
     method: 'delete',
     params
+  })
+}
+//长晶 保存暂存信息
+export function updateGrowthBuffer(data) {
+  return request({
+    url: '/wipCrystalGrowthOut/stageSave',
+    method: 'post',
+    data
   })
 }
