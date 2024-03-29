@@ -67,14 +67,26 @@
                 <div class="unit">kg</div>
               </div>
             </el-form-item>
+            <el-form-item label="当前长度" prop="currentLengthQty" class="item">
+              <el-input v-model="formData.currentLengthQty"></el-input>
+            </el-form-item>
+            <el-form-item label="晶体重量" prop="weight" class="item">
+              <el-input v-model="formData.weight"></el-input>
+            </el-form-item>
             <el-form-item label="型号" prop="model" class="item">
               <el-input v-model="formData.model"></el-input>
             </el-form-item>
             <el-form-item label="尺寸" prop="size" class="item">
-              <el-input v-model="formData.size"></el-input>
+              <el-input
+                v-model="formData.size"
+                @input="handleBaseFormChange"
+              ></el-input>
             </el-form-item>
             <el-form-item label="晶向" prop="orientation" class="item">
-              <el-input v-model="formData.orientation"></el-input>
+              <el-input
+                v-model="formData.orientation"
+                @input="handleBaseFormChange"
+              ></el-input>
             </el-form-item>
             <el-form-item
               label="目标电阻率"
@@ -313,6 +325,12 @@ export default {
         abnormalQty: [
           { required: true, message: "异常数量不能为空", trigger: "blur" },
         ],
+        currentLengthQty: [
+          { required: true, message: "当前长度不能为空", trigger: "blur" },
+        ],
+        weight: [
+          { required: true, message: "晶体重量不能为空", trigger: "blur" },
+        ],
         model: [{ required: true, message: "型号不能为空", trigger: "blur" }],
         size: [{ required: true, message: "尺寸不能为空", trigger: "blur" }],
         orientation: [
@@ -358,8 +376,8 @@ export default {
           sampleIdentification: "H",
           samplePosition: 0,
           category: "1",
-          size: 100,
-          orientation: "111",
+          size: this.formData.size,
+          orientation: this.formData.orientation,
           res: 1,
           resC: 1,
           resE: 1,
@@ -380,8 +398,8 @@ export default {
           sampleIdentification: "T",
           samplePosition: 0,
           category: "1",
-          size: 100,
-          orientation: "111",
+          size: this.formData.size,
+          orientation: this.formData.orientation,
           res: 1,
           resC: 1,
           resE: 1,
@@ -470,6 +488,14 @@ export default {
             item.sampleIdentification === ele.sampleIdentification &&
             itemIndex < eleIndex
         ),
+      }));
+      this.formData.details = [...list];
+    },
+    handleBaseFormChange() {
+      let list = this.formData.details.map((item) => ({
+        ...item,
+        size: this.formData.size,
+        orientation: this.formData.orientation,
       }));
       this.formData.details = [...list];
     },

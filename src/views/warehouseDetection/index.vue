@@ -100,16 +100,10 @@
               </div>
             </el-form-item>
             <el-form-item label="头部电阻率" prop="resHead" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.resHead"></el-input>
-                <div class="unit">cm</div>
-              </div>
+              <el-input class="value" v-model="formData.resHead"></el-input>
             </el-form-item>
             <el-form-item label="尾部电阻率" prop="resTail" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.resTail"></el-input>
-                <div class="unit">cm</div>
-              </div>
+              <el-input class="value" v-model="formData.resTail"></el-input>
             </el-form-item>
             <el-form-item
               label="滚圆直径头"
@@ -172,7 +166,7 @@
                   class="value"
                   v-model="formData.mainAuxiliaryAngle"
                 ></el-input>
-                <div class="unit">cm</div>
+                <div class="unit">°</div>
               </div>
             </el-form-item>
             <el-form-item
