@@ -178,7 +178,7 @@ export default {
       gap: 20px;
       margin-top: 12px;
       .in-station {
-        flex: 1;
+        flex: 2;
       }
       .back-station {
         flex: 1;
