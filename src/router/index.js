@@ -64,6 +64,28 @@ export const constantRouterMap = [
   },
 
   {
+    name: 'chargeOperate',
+    path: '/chargeOperate',
+    component: () => import('@/views/chargeOperate'),
+    meta: {text: '装料'},
+  },
+
+  {
+    name: 'growthOperate',
+    path: '/growthOperate',
+    component: () => import('@/views/growthOperate'),
+    meta: {text: '长晶'},
+  },
+
+
+  {
+    name: 'crystalDelivery',
+    path: '/crystalDelivery',
+    component: () => import('@/views/crystalDelivery'),
+    meta: {text: '单晶送付'},
+  },
+
+  {
     name: 'headAndTailSampling',
     path: '/headAndTailSampling',
     component: () => import('@/views/headAndTailSampling/index'),
@@ -95,23 +117,10 @@ export const constantRouterMap = [
     path: '/cutting',
     component: () => import('@/views/cutting/index'),
     hidden: true,
-    meta: {text: '切割'},
+    meta: {text: '割断'},
     props: true
   },
 
-  {
-    name: 'chargeOperate',
-    path: '/chargeOperate',
-    component: () => import('@/views/chargeOperate'),
-    meta: {text: '装料'},
-  },
-
-  {
-    name: 'growthOperate',
-    path: '/growthOperate',
-    component: () => import('@/views/growthOperate'),
-    meta: {text: '长晶'},
-  },
 
   {
     name: 'roundTransferOperate',
@@ -127,6 +136,19 @@ export const constantRouterMap = [
     meta: {text: '滚圆'},
   },
 
+  {
+    name: 'addParameter',
+    path: '/addParameter',
+    component: () => import('@/views/addParameter/index'),
+    meta: {text: '加参'},
+  },
+
+  {
+    name: 'warehouseDetection',
+    path: '/warehouseDetection',
+    component: () => import('@/views/warehouseDetection/index'),
+    meta: {text: '入库检测'},
+  }
 ]
 
 export default new Router({

@@ -74,13 +74,18 @@ export default {
               icon: "guozhan",
             },
             {
-              name: "切割",
-              href: "/overStationExecution?station=QG",
+              name: "割断",
+              href: "/overStationExecution?station=GD",
               icon: "guozhan",
             },
             {
               name: "滚圆中转",
               href: "/overStationExecution?station=GYZZ",
+              icon: "guozhan",
+            },
+            {
+              name: "滚圆",
+              href: "/overStationExecution?station=GY",
               icon: "guozhan",
             },
             {

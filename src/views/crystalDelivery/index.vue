@@ -38,7 +38,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="100px"
+          label-width="140px"
           :rules="formRules"
         >
           <div class="base-form">
@@ -46,83 +46,97 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.goodQty"></el-input>
-                <div class="unit">kg</div>
-              </div>
+              <el-input v-model="formData.goodQty"></el-input>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.scrapQty"></el-input>
-                <div class="unit">kg</div>
-              </div>
+              <el-input v-model="formData.scrapQty"></el-input>
             </el-form-item>
           </div>
           <div class="form">
-            <div class="form-title">分段信息</div>
-            <el-table
-              :data="formData.segments"
-              class="table"
-              :header-cell-style="{
-                background: 'rgba(242, 242, 242)',
-                color: '#606266',
-              }"
+            <div class="form-title">设备/工艺参数确认</div>
+            <el-form-item
+              label="单晶编号一致性"
+              prop="numberConsistence"
+              class="item"
             >
-              <el-table-column
-                label="晶锭编号"
-                prop="ingotNumber"
-                min-width="100"
-                align="center"
+              <el-select v-model="formData.numberConsistence" placeholder="">
+                <el-option label="是" :value="true"></el-option>
+                <el-option label="否" :value="false"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="收尾情况" prop="endSitutation" class="item">
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.endSitutation"
+                ></el-input>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="位错反延线标识"
+              prop="dislocationIdentification"
+              class="item"
+            >
+              <el-select
+                v-model="formData.dislocationIdentification"
+                placeholder=""
               >
-              </el-table-column>
-              <el-table-column
-                label="计划长度"
-                prop="planLength"
-                min-width="100"
-                align="center"
-              >
-              </el-table-column>
-              <el-table-column
-                label="原始长度"
-                prop="originLength"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.originLength"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="崩边长度"
-                prop="chippingLength"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.chippingLength"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="椭圆长度"
-                prop="ellipticLength"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.ellipticLength"></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="合格长度"
-                prop="qualifiedLength"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.qualifiedLength"></el-input>
-                </template>
-              </el-table-column>
-            </el-table>
+                <el-option label="是" :value="true"></el-option>
+                <el-option label="否" :value="false"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="位错反延线长度"
+              prop="dislocationIdentificationLength"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.dislocationIdentificationLength"
+                ></el-input>
+                <div class="unit">cm</div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="拉晶实测直径"
+              prop="measuredDiameter"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.measuredDiameter"
+                ></el-input>
+                <div class="unit">cm</div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="脱开直径"
+              prop="disengageDiameter"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.disengageDiameter"
+                ></el-input>
+                <div class="unit">cm</div>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="锅底料重量"
+              prop="bottomMaterialWeight"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.bottomMaterialWeight"
+                ></el-input>
+                <div class="unit">kg</div>
+              </div>
+            </el-form-item>
           </div>
         </el-form>
       </div>
@@ -146,7 +160,6 @@ export default {
   data() {
     return {
       batchNumber: "Z0116504581",
-      grownCrystalFurnace: "A21",
       furnaceNumber: "A2010504581",
       recipe: "Reczl20240310v1",
       processPath: "X0010101",
@@ -155,8 +168,8 @@ export default {
       formData: {
         userCreate: null,
         goodQty: null,
+        defectQty: null,
         scrapQty: null,
-        segments: [],
       },
       formRules: {
         userCreate: [
@@ -167,6 +180,39 @@ export default {
         ],
         scrapQty: [
           { required: true, message: "报废数量不能为空", trigger: "blur" },
+        ],
+        numberConsistence: [
+          {
+            required: true,
+            message: "单晶编号一致性不能为空",
+            trigger: "blur",
+          },
+        ],
+        endSitutation: [
+          { required: true, message: "收尾情况不能为空", trigger: "blur" },
+        ],
+        dislocationIdentification: [
+          {
+            required: true,
+            message: "位错反延线标识不能为空",
+            trigger: "blur",
+          },
+        ],
+        dislocationIdentificationLength: [
+          {
+            required: true,
+            message: "位错反延线长度不能为空",
+            trigger: "blur",
+          },
+        ],
+        measuredDiameter: [
+          { required: true, message: "拉晶实测直径不能为空", trigger: "blur" },
+        ],
+        disengageDiameter: [
+          { required: true, message: "脱开直径不能为空", trigger: "blur" },
+        ],
+        bottomMaterialWeight: [
+          { required: true, message: "锅底料重量不能为空", trigger: "blur" },
         ],
       },
     };
@@ -194,10 +240,11 @@ export default {
           console.log(e);
         }
       }
+      console.log(JSON.parse(JSON.stringify(fromData)));
       this.formData = { ...this.formData, ...fromData };
     },
     back() {
-      this.$router.push("/overStationExecution?station=GD");
+      this.$router.push("/overStationExecution?station=DJSF");
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -329,10 +376,6 @@ export default {
     top: -10px;
     left: 20px;
     background: white;
-  }
-  .add-btn {
-    position: absolute;
-    right: 10px;
   }
 }
 .unit {

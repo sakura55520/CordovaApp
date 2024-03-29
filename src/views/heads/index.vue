@@ -1,10 +1,17 @@
 <template>
   <div id="heads">
     <div>
-      <div class="divReturn" v-show="IsRouter">
-        <a @click="back">
+      <!-- <div class="divReturn" v-show="IsRouter">
+        <a @click="router">
           <li style="color: #fff" class="el-icon-arrow-left"></li>
         </a>
+      </div> -->
+      <div class="divReturn" v-show="IsRouter">
+        <router-link :to="router">
+          <a>
+            <li style="color: #fff" class="el-icon-arrow-left"></li>
+          </a>
+        </router-link>
       </div>
 
       <div class="divhead">
@@ -39,8 +46,9 @@ export default {
         QTWQY: "切头尾取样",
         JDJY: "晶锭检验",
         FDZL: "分段指令",
-        QG: "切割",
+        GD: "割断",
         GYZZ: "滚圆中转",
+        GY: "滚圆",
         JC: "加参",
         RKJC: "入库检测",
       },

@@ -26,7 +26,7 @@ export function inOrOutStation(data) {
 //查找暂存信息
 export function fetchBuffer(params) {
   return request({
-    url: '/wipStorage/stationBuffer',
+    url: 'wipStorage/stationBuffer',
     method: 'get',
     params
   })
@@ -34,16 +34,24 @@ export function fetchBuffer(params) {
 //保存暂存信息
 export function upldateBuffer(params, data) {
   return request({
-    url: '/wipStorage/stationBuffer',
+    url: 'wipStorage/stationBuffer',
     method: 'post',
     params,
     data
   })
 }
+//获取分段编号
+export function segmentedInstructionGenerateNo(data) {
+  return request({
+    url: "wip/segmentedInstruction/generateNo",
+    method: "post",
+    data,
+  });
+}
 //删除暂存信息
 export function deleteBuffer(params) {
   return request({
-    url: '/wipStorage/stationBuffer',
+    url: 'wipStorage/stationBuffer',
     method: 'delete',
     params
   })
