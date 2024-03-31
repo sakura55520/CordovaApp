@@ -27,13 +27,22 @@
           <div class="form">
             <div class="form-title">单晶信息</div>
             <el-form-item label="检测人员" prop="inspector" class="item">
-              <SelectUserinfo v-model="formData.inspector" />
+              <SelectUserinfo
+                v-model="formData.inspector"
+                :style="{ width: '100%' }"
+              />
             </el-form-item>
             <el-form-item label="测试人员" prop="tester" class="item">
-              <SelectUserinfo v-model="formData.tester" />
+              <SelectUserinfo
+                v-model="formData.tester"
+                :style="{ width: '100%' }"
+              />
             </el-form-item>
             <el-form-item label="确认人员" prop="confirmer" class="item">
-              <SelectUserinfo v-model="formData.confirmer" />
+              <SelectUserinfo
+                v-model="formData.confirmer"
+                :style="{ width: '100%' }"
+              />
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
@@ -50,10 +59,14 @@
               </div>
             </el-form-item>
             <el-form-item label="当前长度" prop="currentLengthQty" class="item">
-              <el-input v-model="formData.currentLengthQty"></el-input>
+              <el-input v-model="formData.currentLengthQty">
+                <template slot="append">cm</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="晶体重量" prop="weight" class="item">
-              <el-input v-model="formData.weight"></el-input>
+              <el-input v-model="formData.weight">
+                <template slot="append">kg</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="型号" prop="model" class="item">
               <el-input v-model="formData.model"></el-input>
@@ -449,6 +462,14 @@ export default {
         return;
       }
       let info = this.formData;
+      if (info.weight) {
+        this.$message.warning("请填写晶体重量");
+        return;
+      }
+      if (info.currentLengthQty) {
+        this.$message.warning("请填写当前长度");
+        return;
+      }
       let crystalDensity;
       let value = Number(val);
       if (!value || value === "NaN") crystalDensity = "";
