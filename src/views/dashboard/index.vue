@@ -37,8 +37,7 @@ export default {
   name: "Dashboard",
   data() {
     return {
-      totalCount: 0,
-      timer: null,
+
     };
   },
   computed: {
@@ -139,16 +138,7 @@ export default {
     },
   },
   methods: {
-    handleMenu(type) {
-      if (type === "过站操作") {
-        this.$router.push("/overStation");
-        return;
-      }
-      if (type === "扫码入口") {
-        this.$router.push({ path: "/overStation", query: { isScanner: true } });
-        return;
-      }
-    },
+
   },
 };
 </script>

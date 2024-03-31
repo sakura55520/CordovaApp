@@ -16,21 +16,29 @@
     </div>
 
     <div v-loading="loading" class="fromCard growth-main">
-      <el-tabs v-if="tabsVisible" tab-position="left">
-        <el-tab-pane v-for="(stepName, index) in stepList" :key="index" :label="stepName">
+      <el-tabs v-if="tabsVisible" tab-position="left" @tab-click="handleSetpClick">
+        <el-tab-pane v-for="(stepName, index) in stepNameList" :key="index" :label="stepName">
           <TabItem
             ref="TabItem"
             :step-data="steps[stepName]"
             :step-name="stepName"
+            :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
-<!--        <el-tab-pane label="单晶异常">-->
-<!--          <TabItem-->
-<!--            ref="TabItem"-->
-<!--            :step-data="steps[stepName]"-->
-<!--            :step-name="stepName"-->
-<!--          />-->
-<!--        </el-tab-pane>-->
+        <el-tab-pane label="单晶异常">
+          <TabError
+            ref="TabError"
+            :steps="steps"
+            :step-name-list="stepNameList"
+            :crystal-growth-err-list="crystalGrowthErrList"
+          />
+        </el-tab-pane>
+        <el-tab-pane label="留档文档">
+          <TabFile
+            ref="TabFile"
+            :step-data="steps['留档文档']"
+          />
+        </el-tab-pane>
       </el-tabs>
     </div>
 
@@ -45,6 +53,8 @@
 <script>
 import * as Api from '@/api/inStation'
 import TabItem from './TabItem'
+import TabError from './TabError'
+import TabFile from './TabFile'
 import { fetchModelForm } from '@/api/modelform'
 import { getSeleteData } from '@/utils/select'
 
@@ -66,10 +76,12 @@ export default {
   name: 'GrowthOperate',
   components: {
     TabItem,
+    TabError,
+    TabFile
   },
   data() {
     return {
-      stepList: ['拆炉', '抽真空', '检漏', '煅烧', '化料', '稳温', '引晶', '放肩', '等径', '收尾', '冷却', '煅烧冷却', '吊单晶', '回熔', '吊肩', '补掺'],
+      stepNameList: ['拆炉', '抽真空', '检漏', '煅烧', '化料', '稳温', '引晶', '放肩', '等径', '收尾', '冷却', '煅烧冷却', '吊单晶', '回熔', '吊肩', '补掺'],
       name2form: {},
       steps: {},
       rules: {},
@@ -138,28 +150,46 @@ export default {
       }
     },
     transform() {
-      return {
-        steps: this.steps
-      }
+      const steps = JSON.parse(JSON.stringify(this.steps))
+      Object.keys(steps).forEach(stepName => {
+        steps[stepName].forEach(({ _errors, ...recordItem }) => {
+          this.updateExtValue(recordItem.exts)
+          this.updateExtValue(recordItem.techs)
+          recordItem.errors = (_errors || []).map(errorMessage => ({ errorMessage }))
+        })
+      })
+      return { steps }
+    },
+    updateExtValue(arr) {
+      if (!Array.isArray(arr)) return
+      arr.forEach(item => {
+        const { extValue } = item
+        if (extValue && (typeof extValue === 'object')) {
+          item.extValue = JSON.stringify(extValue)
+        }
+      })
     },
     fetchFormContent() {
       return fetchModelForm({
         search_LLIKE_name: '长晶-'
       }).then(res => {
         res.data.forEach(form => this.name2form[form.name] = form)
-        this.stepList.forEach(stepName => {
+        this.stepNameList.forEach(stepName => {
           if (!this.steps[stepName]) this.$set(this.steps, stepName, [{
               checks: [],
               techs: [],
-              errors: [],
+              _errors: [],
               exts: [],
               files: [],
             }]
           )
+          this.initErrors(stepName)
           this.initExts(stepName)
           this.initChecks(stepName)
           this.initTechs(stepName)
         })
+
+        if (!this.steps['留档文档']) this.$set(this.steps, '留档文档', [])
       })
     },
     // 点检项
@@ -230,10 +260,6 @@ export default {
 
         const exts = []
         formContent.forEach(formItem => {
-          if (formItem.label === '单晶异常') {
-            formItem.options = this.crystalGrowthErrList
-          }
-            // this.crystalGrowthErrList
           exts.push({
             ...formItem,
             ...defaultTechsItem,
@@ -244,6 +270,29 @@ export default {
         this.$set(this.steps[stepName][recordIdx], 'exts', exts)
       })
     },
+    // 异常
+    initErrors(stepName) {
+      const form = this.name2form[`长晶-${stepName}-其余参数`]
+      if (!form) return
+
+      const formContent = form.content
+      this.steps[stepName].forEach((recordItem, recordIdx) => {
+        const errFormItemIdx = formContent.findIndex(({ label }) => label === '单晶异常')
+        if (errFormItemIdx > -1) {
+          recordItem._showErrors = true
+          formContent.splice(errFormItemIdx, 1)
+        }
+        const _errors = (recordItem.errors || []).map(item => item.errorMessage)
+        this.$set(this.steps[stepName][recordIdx], '_errors', _errors)
+      })
+    },
+    handleSetpClick({ label }) {
+      if (label === '单晶异常') {
+        this.$nextTick(() => {
+          if (this.$refs.TabError && this.$refs.TabError.init) this.$refs.TabError.init()
+        })
+      }
+    }
   }
 }
 </script>
@@ -262,6 +311,8 @@ export default {
       height: 60px;
       padding-left: 26px;
       font-size: 20px;
+      position: sticky;
+      top: 0;
     }
     .el-collapse-item__arrow {
       position: absolute;

@@ -419,21 +419,21 @@ ul, li, ol {
 }
 
 /*卡片新增删除列表*/
-.barrelList{
+.card-list-wrap{
   display: flex;
   flex-direction: column;
   padding: 0 16px 16px 16px;
   border: 1px dashed #DCDFE6;
   margin-bottom: 16px;
   background: #FAFCFF;
-  .barrelListHeadLine{
+  .card-list{
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 12px;
     border-bottom: 1px dashed #A7D0FA;
     padding: 8px 0;
-    .barrelListHeadLine-title .el-tag{
+    .card-list-title .el-tag{
       height: 32px;
       padding: 0 12px;
       border-radius: 8px;
@@ -443,6 +443,11 @@ ul, li, ol {
       line-height: 32px;
     }
   }
+}
+.delete-icon {
+  color: rgb(245, 61, 61);
+  font-size: 28px;
+  cursor: pointer;
 }
 .flex-container {
   display: flex;
@@ -463,7 +468,7 @@ ul, li, ol {
 .pad-form .fromCard {
   .el-form-item {
     display: inline-flex;
-    width: calc(50% - 10px);
+    width: 50%;
     margin-right: 0;
   }
   .block-form-item {
@@ -476,7 +481,8 @@ ul, li, ol {
     flex: 1;
   }
   .el-input,
-  .el-autocomplete {
+  .el-autocomplete,
+  .el-select {
     width: 100%;
   }
 }

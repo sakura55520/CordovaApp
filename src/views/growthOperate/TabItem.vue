@@ -25,6 +25,12 @@
                 @input="handleExtsInput($event, recordIdx, formItemIdx)"
               />
             </el-form-item>
+
+            <el-form-item v-if="recordItem._showErrors" class="block-form-item" label="单晶异常">
+              <el-select v-model="recordItem._errors" multiple clearable>
+                <el-option v-for="item in crystalGrowthErrList" :key="item.id" :value="item.value" :label="item.label"/>
+              </el-select>
+            </el-form-item>
           </div>
         </el-card>
 
@@ -66,22 +72,17 @@
           </div>
         </el-card>
 
-
-
       </el-form>
     </el-collapse-item>
   </el-collapse>
 </template>
 
 <script>
-import SelectUserinfo from '@/components/select_userinfo.vue'
-import { fetchModelForm } from '@/api/modelform'
 import Render from '@/components/renderForm/render.vue'
 
 export default {
   name: 'TabItem',
   components: {
-    SelectUserinfo,
     Render
   },
   props: {
@@ -94,7 +95,8 @@ export default {
     stepName: {
       type: String,
       required: true
-    }
+    },
+    crystalGrowthErrList: Array
   },
   data() {
     return {
@@ -115,8 +117,3 @@ export default {
   }
 }
 </script>
-
-
-<style scoped lang="scss">
-
-</style>
