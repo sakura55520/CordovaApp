@@ -80,7 +80,7 @@ export default {
       detailForm: Object.assign({}, defaultForm), // 表单列表
       rules: {
         scrapQty: [{ required: true, message: '请输入报废数量', trigger: 'change' }],
-        lineWarehouseLocation: [{ required: true, message: '请选择线边仓库位', trigger: 'change' }],
+        lineWarehouseId: [{ required: true, message: '请选择线边仓库位', trigger: 'change' }],
       }
     }
   },
