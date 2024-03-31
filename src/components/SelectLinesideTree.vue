@@ -31,6 +31,7 @@ export default {
   },
   created() {
     this.fetchData()
+    this.id = this.value
   },
   methods: {
     fetchData() {
