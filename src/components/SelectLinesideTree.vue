@@ -31,7 +31,6 @@ export default {
   },
   created() {
     this.fetchData()
-    this.id = this.value
   },
   methods: {
     fetchData() {
@@ -59,6 +58,14 @@ export default {
     handleSelect(raw) {
       this.$emit('select', raw)
     },
-  }
+  },
+  watch: {
+    value: {
+      immediate: true,
+      handler(val) {
+        this.id = val
+      }
+    },
+  },
 }
 </script>

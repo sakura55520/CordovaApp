@@ -198,7 +198,7 @@
                 <el-option label="成品线边仓" :value="1"></el-option>
               </el-select>
             </el-form-item> -->
-            <el-form-item
+            <!-- <el-form-item
               label="线边仓库位"
               prop="lineWarehouseLocation"
               class="item"
@@ -207,7 +207,7 @@
                 v-model="formData.lineWarehouseLocation"
                 @select="handleWhouseSelect"
               />
-            </el-form-item>
+            </el-form-item> -->
           </div>
         </el-form>
       </div>
