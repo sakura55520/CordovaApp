@@ -58,7 +58,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <!-- <el-table-column label="下发工单" min-width="150" align="center">
+              <el-table-column label="下发工单" min-width="150" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.orderCode"></el-input>
                 </template>
@@ -67,7 +67,7 @@
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.processCode"></el-input>
                 </template>
-              </el-table-column> -->
+              </el-table-column>
               <el-table-column label="流程说明" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.processName"></el-input>
@@ -191,7 +191,14 @@
                 prop="head79oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.head79oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.head79oi"
+                    @change="
+                      (value) => handleHead79oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -201,7 +208,14 @@
                 prop="tail79oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.tail79oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.tail79oi"
+                    @change="
+                      (value) => handleTail79oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -211,7 +225,14 @@
                 prop="head83oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.head83oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.head83oi"
+                    @change="
+                      (value) => handleHead83oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -221,7 +242,14 @@
                 prop="tail83oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.tail83oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.tail83oi"
+                    @change="
+                      (value) => handleTail83oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <!-- <el-table-column
@@ -498,6 +526,30 @@ export default {
         )
           item.length = item.tailPosition - item.headPosition;
       }
+    },
+    handleHead79oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].head83oi = (
+          value * 0.85
+        ).toFixed(3);
+    },
+    handleTail79oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].tail83oi = (
+          value * 0.85
+        ).toFixed(3);
+    },
+    handleHead83oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].head79oi = (
+          value / 0.85
+        ).toFixed(3);
+    },
+    handleTail83oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].tail79oi = (
+          value / 0.85
+        ).toFixed(3);
     },
     back() {
       this.$router.push("/overStationExecution?station=FDZL");
