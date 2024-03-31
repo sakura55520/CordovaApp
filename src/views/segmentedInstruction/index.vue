@@ -28,6 +28,12 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
+            <el-form-item label="长度" prop="length" class="item">
+              <el-input v-model="formData.length"></el-input>
+            </el-form-item>
+            <el-form-item label="数量" prop="number" class="item">
+              <el-input v-model="formData.number"></el-input>
+            </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">分段信息</div>
@@ -463,6 +469,8 @@ export default {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "blur" },
         ],
+        length: [{ required: true, message: "长度不能为空", trigger: "blur" }],
+        number: [{ required: true, message: "数量不能为空", trigger: "blur" }],
       },
       selectedIndex: null,
     };
@@ -498,8 +506,6 @@ export default {
       this.formData = {
         ...this.formData,
         ...fromData,
-        length: fromData.length || 700,
-        diameter: fromData.diameter || 4,
       };
     },
     async handleCodeClick() {
