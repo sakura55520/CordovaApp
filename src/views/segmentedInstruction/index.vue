@@ -358,33 +358,70 @@
                     <div class="tailPosition">{{ item.tailPosition }}</div>
                   </div>
                   <div class="line"></div>
-                  <el-tooltip placement="bottom" effect="light">
-                    <template #content>
-                      <div>直径：{{ item.diameter }}</div>
-                      <div>段位：{{ item.segmentNum }}</div>
-                      <div>晶锭长度：{{ item.length }}</div>
-                      <div>计划重量：{{ item.planWeight }}</div>
-                      <div>头部电阻率：{{ item.headResistance }}</div>
-                      <div>尾部电阻率：{{ item.tailResistance }}</div>
-                      <div>头部电阻率实测：{{ item.headResistanceActual }}</div>
-                      <div>尾部电阻率实测：{{ item.tailResistanceActual }}</div>
-                      <div>79oi头：{{ item.head79oi }}</div>
-                      <div>79oi尾：{{ item.tail79oi }}</div>
-                      <div>
-                        合格状态：{{ item.qualified ? "合格" : "不合格" }}
-                      </div>
-                      <div>合格长度：{{ item.qualifiedLength }}</div>
-                      <div>合格重量：{{ item.qualifiedWeight }}</div>
-                    </template>
-                    <div
-                      :class="selectedIndex === index ? 'bar-selected' : 'bar'"
-                      @click="handleSegmentedBarClick(index)"
-                    >
-                      <div class="center">
-                        {{ item.segmentNo }}
+                  <div
+                    :class="selectedIndex === index ? 'bar-selected' : 'bar'"
+                    @click="handleSegmentedBarClick(index)"
+                  >
+                    <div class="center">
+                      {{ item.segmentNo }}
+                    </div>
+                  </div>
+                  <div class="detail">
+                    <div class="item">
+                      <div class="label">直径：</div>
+                      <div class="value">{{ item.diameter }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">段位：</div>
+                      <div class="value">{{ item.segmentNum }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">晶锭长度：</div>
+                      <div class="value">{{ item.length }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">计划重量：</div>
+                      <div class="value">{{ item.planWeight }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">头部电阻率：</div>
+                      <div class="value">{{ item.headResistance }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">尾部电阻率：</div>
+                      <div class="value">{{ item.tailResistance }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">头部电阻率实测：</div>
+                      <div class="value">{{ item.headResistanceActual }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">尾部电阻率实测：</div>
+                      <div class="value">{{ item.tailResistanceActual }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">79oi头：</div>
+                      <div class="value">{{ item.head79oi }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">79oi尾：</div>
+                      <div class="value">{{ item.tail79oi }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">合格状态：</div>
+                      <div class="value">
+                        {{ item.qualified ? "合格" : "不合格" }}
                       </div>
                     </div>
-                  </el-tooltip>
+                    <div class="item">
+                      <div class="label">合格长度：</div>
+                      <div class="value">{{ item.qualifiedLength }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">合格重量：</div>
+                      <div class="value">{{ item.qualifiedWeight }}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -781,8 +818,27 @@ export default {
         height: 100%;
       }
     }
-    .tooltip {
-      max-width: 200px;
+    .detail {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      margin-top: 10px;
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      .item {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+        .label {
+          flex: 1;
+          text-align: right;
+        }
+        .value {
+          flex: 1;
+          text-align: left;
+        }
+      }
     }
   }
   .table {
