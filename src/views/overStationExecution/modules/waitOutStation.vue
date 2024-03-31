@@ -1,62 +1,65 @@
 <template>
   <div>
-    <div class="card" v-for="item in list" :key="item.code">
-      <div class="header">{{ item.code }}</div>
-      <el-divider class="divider" />
-      <el-table
-        :data="[item]"
-        key="dataOrderCode"
-        :header-cell-style="{
-          background: 'rgba(242, 242, 242)',
-          color: '#606266',
-        }"
-      >
-        <el-table-column
-          label="产品料号"
-          prop="dataOrderCode"
-          min-width="100"
-        />
-        <el-table-column label="产品类型" prop="orderType" min-width="100">
-          <template slot-scope="scope">{{
-            JSON.parse(scope.row.data).productCategory
-          }}</template>
-        </el-table-column>
-        <el-table-column label="进站时间" prop="inTime" min-width="100" />
-        <el-table-column label="上站" prop="preStation" />
-        <el-table-column label="下站" prop="nextStation" />
-      </el-table>
-      <div class="tool">
-        <div v-if="item.status === 2" class="btn">
-          <el-button disabled type="primary" class="in-station">
-            加工完成
-          </el-button>
-        </div>
-        <div v-else class="btn">
-          <el-button
-            type="warning"
-            plain
-            class="back-station"
-            @click="handleExitStationClick(item)"
-            >退站操作</el-button
-          >
-          <el-button
-            v-if="item.wipStorageStatus === 0"
-            type="primary"
-            class="in-station"
-            @click="handleOverStationExecutionClick(item.code)"
-          >
-            进站执行
-          </el-button>
-          <el-button
-            v-if="item.wipStorageStatus === 1"
-            type="primary"
-            class="out-station"
-            @click="handleOverStationExecutionClick(item.code)"
-            >出站执行</el-button
-          >
+    <div v-if="list.length !== 0">
+      <div class="card" v-for="item in list" :key="item.code">
+        <div class="header">{{ item.code }}</div>
+        <el-divider class="divider" />
+        <el-table
+          :data="[item]"
+          key="dataOrderCode"
+          :header-cell-style="{
+            background: 'rgba(242, 242, 242)',
+            color: '#606266',
+          }"
+        >
+          <el-table-column
+            label="产品料号"
+            prop="dataOrderCode"
+            min-width="100"
+          />
+          <el-table-column label="产品类型" prop="orderType" min-width="100">
+            <template slot-scope="scope">{{
+              JSON.parse(scope.row.data).productCategory
+            }}</template>
+          </el-table-column>
+          <el-table-column label="数量" prop="number" />
+          <el-table-column label="进站时间" prop="inTime" min-width="100" />
+          <el-table-column label="创建者" prop="createUserName" />
+        </el-table>
+        <div class="tool">
+          <div v-if="item.status === 2" class="btn">
+            <el-button disabled type="primary" class="in-station">
+              加工完成
+            </el-button>
+          </div>
+          <div v-else class="btn">
+            <el-button
+              type="warning"
+              plain
+              class="back-station"
+              @click="handleExitStationClick(item)"
+              >退站操作</el-button
+            >
+            <el-button
+              v-if="item.wipStorageStatus === 0"
+              type="primary"
+              class="in-station"
+              @click="handleOverStationExecutionClick(item.code)"
+            >
+              进站执行
+            </el-button>
+            <el-button
+              v-if="item.wipStorageStatus === 1"
+              type="primary"
+              class="out-station"
+              @click="handleOverStationExecutionClick(item.code)"
+              >出站执行</el-button
+            >
+          </div>
         </div>
       </div>
     </div>
+    <el-empty v-else :image-size="100"></el-empty>
     <div class="pagination">
       <el-pagination
         :total="total"
@@ -87,6 +90,7 @@
 <script>
 import * as Api from "@/api/overStationExecution/overStation.js";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation.js";
+import { isEmpty } from "lodash-es";
 
 export default {
   data() {
@@ -132,6 +136,8 @@ export default {
       this.preStationList = res.data;
       this.exitStationDialogVisible = true;
       this.selectRow = row;
+      if (!isEmpty(this.preStationList))
+        this.selectProcessUuid = this.preStationList[0].processUuid;
     },
     async handleExitStation() {
       if (!this.selectProcessUuid) {
@@ -164,6 +170,7 @@ export default {
   background-color: rgb(233, 243, 253);
   margin-bottom: 12px;
   .header {
+    font-size: 20px;
     color: rgb(2, 107, 194);
   }
   .tool {
@@ -174,7 +181,7 @@ export default {
       gap: 20px;
       margin-top: 12px;
       .in-station {
-        flex: 1;
+        flex: 2;
       }
       .back-station {
         flex: 1;

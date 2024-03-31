@@ -1,34 +1,17 @@
 <template>
   <div class="scroller-flex-wrap">
     <div class="outStationExecution-container">
-      <div class="info-container">
-        <div class="info">
-          <div class="info-label">批次号</div>
-          <div class="info-value">{{ formData.processOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">长晶炉</div>
-          <div class="info-value">{{ $route.query.deviceCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">炉次号</div>
-          <div class="info-value">{{ furnaceNumber }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品料号</div>
-          <div class="info-value">{{ dataOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品名称</div>
-          <div class="info-value">{{ productName }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">配方</div>
-          <div class="info-value">{{ recipe }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">工艺路径</div>
-          <div class="info-value">{{ processPath }}</div>
+      <!-- 顶部信息卡片 -->
+      <div class="topInfoCard">
+        <div class="grid-container">
+          <div class="grid-item">
+            <span class="grid-item-name">批次号：</span>
+            <span class="grid-item-value">{{ formData.processOrderCode }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-item-name">长晶炉：</span>
+            <span class="grid-item-value">{{ $route.query.deviceCode }}</span>
+          </div>
         </div>
       </div>
       <el-divider class="divider" />
@@ -56,47 +39,37 @@
             <div class="form-title">设备/工艺参数确认</div>
             <el-form-item label="计划长度" prop="planLength" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.planLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.planLength">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="原始长度" prop="originLength" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.originLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.originLength">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="崩边长度" prop="chippingLength" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.chippingLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.chippingLength">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.ellipticLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.ellipticLength">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="合格长度" prop="qualifiedLength" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.qualifiedLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.qualifiedLength">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -120,8 +93,9 @@
                 <el-input
                   class="value"
                   v-model="formData.mainReferenceSurfaceLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                >
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -130,11 +104,9 @@
               class="item"
             >
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.mainAuxiliaryAngle"
-                ></el-input>
-                <div class="unit">°</div>
+                <el-input class="value" v-model="formData.mainAuxiliaryAngle">
+                  <template slot="append">°</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -146,8 +118,9 @@
                 <el-input
                   class="value"
                   v-model="formData.mainReferenceSurfaceWidthHead"
-                ></el-input>
-                <div class="unit">cm</div>
+                >
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -159,8 +132,9 @@
                 <el-input
                   class="value"
                   v-model="formData.mainReferenceSurfaceWidthTail"
-                ></el-input>
-                <div class="unit">cm</div>
+                >
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -172,8 +146,9 @@
                 <el-input
                   class="value"
                   v-model="formData.auxiliaryReferenceSurfaceHead"
-                ></el-input>
-                <div class="unit">cm</div>
+                >
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -185,8 +160,9 @@
                 <el-input
                   class="value"
                   v-model="formData.auxiliaryReferenceSurfaceTail"
-                ></el-input>
-                <div class="unit">cm</div>
+                >
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
           </div>

@@ -1,34 +1,17 @@
 <template>
   <div class="scroller-flex-wrap">
     <div class="outStationExecution-container">
-      <div class="info-container">
-        <div class="info">
-          <div class="info-label">批次号</div>
-          <div class="info-value">{{ formData.processOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">长晶炉</div>
-          <div class="info-value">{{ $route.query.deviceCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">炉次号</div>
-          <div class="info-value">{{ furnaceNumber }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品料号</div>
-          <div class="info-value">{{ dataOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品名称</div>
-          <div class="info-value">{{ productName }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">配方</div>
-          <div class="info-value">{{ recipe }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">工艺路径</div>
-          <div class="info-value">{{ processPath }}</div>
+      <!-- 顶部信息卡片 -->
+      <div class="topInfoCard">
+        <div class="grid-container">
+          <div class="grid-item">
+            <span class="grid-item-name">批次号：</span>
+            <span class="grid-item-value">{{ formData.processOrderCode }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-item-name">长晶炉：</span>
+            <span class="grid-item-value">{{ $route.query.deviceCode }}</span>
+          </div>
         </div>
       </div>
       <el-divider class="divider" />
@@ -44,6 +27,14 @@
           <div class="base-form">
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="长度" prop="length" class="item">
+              <el-input v-model="formData.length">
+                <template slot="append">cm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="数量" prop="number" class="item">
+              <el-input v-model="formData.number"></el-input>
             </el-form-item>
           </div>
           <div class="form">
@@ -208,7 +199,14 @@
                 prop="head79oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.head79oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.head79oi"
+                    @change="
+                      (value) => handleHead79oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -218,7 +216,14 @@
                 prop="tail79oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.tail79oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.tail79oi"
+                    @change="
+                      (value) => handleTail79oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -228,7 +233,14 @@
                 prop="head83oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.head83oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.head83oi"
+                    @change="
+                      (value) => handleHead83oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -238,7 +250,14 @@
                 prop="tail83oi"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.tail83oi"></el-input>
+                  <el-input-number
+                    :style="{ width: '80px' }"
+                    :controls="false"
+                    v-model="scope.row.tail83oi"
+                    @change="
+                      (value) => handleTail83oiChange(value, scope.$index)
+                    "
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <!-- <el-table-column
@@ -334,31 +353,19 @@
                   }%`,
                 }"
               >
-                <div class="number">
-                  <div v-if="index === 0" class="headPosition">
-                    {{ item.headPosition }}
-                  </div>
-                  <div class="tailPosition">{{ item.tailPosition }}</div>
-                </div>
-                <div class="line"></div>
-                <el-tooltip placement="bottom" effect="light">
-                  <template #content>
-                    <div>直径：{{ item.diameter }}</div>
-                    <div>段位：{{ item.segmentNum }}</div>
-                    <div>晶锭长度：{{ item.length }}</div>
-                    <div>计划重量：{{ item.planWeight }}</div>
-                    <div>头部电阻率：{{ item.headResistance }}</div>
-                    <div>尾部电阻率：{{ item.tailResistance }}</div>
-                    <div>头部电阻率实测：{{ item.headResistanceActual }}</div>
-                    <div>尾部电阻率实测：{{ item.tailResistanceActual }}</div>
-                    <div>79oi头：{{ item.head79oi }}</div>
-                    <div>79oi尾：{{ item.tail79oi }}</div>
-                    <div>
-                      合格状态：{{ item.qualified ? "合格" : "不合格" }}
+                <div
+                  v-if="
+                    (item.headPosition || item.headPosition === 0) &&
+                    (item.tailPosition || item.tailPosition === 0)
+                  "
+                >
+                  <div class="number">
+                    <div v-if="index === 0" class="headPosition">
+                      {{ item.headPosition }}
                     </div>
-                    <div>合格长度：{{ item.qualifiedLength }}</div>
-                    <div>合格重量：{{ item.qualifiedWeight }}</div>
-                  </template>
+                    <div class="tailPosition">{{ item.tailPosition }}</div>
+                  </div>
+                  <div class="line"></div>
                   <div
                     :class="selectedIndex === index ? 'bar-selected' : 'bar'"
                     @click="handleSegmentedBarClick(index)"
@@ -367,7 +374,63 @@
                       {{ item.segmentNo }}
                     </div>
                   </div>
-                </el-tooltip>
+                  <div class="detail">
+                    <div class="item">
+                      <div class="label">直径：</div>
+                      <div class="value">{{ item.diameter }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">段位：</div>
+                      <div class="value">{{ item.segmentNum }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">晶锭长度：</div>
+                      <div class="value">{{ item.length }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">计划重量：</div>
+                      <div class="value">{{ item.planWeight }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">头部电阻率：</div>
+                      <div class="value">{{ item.headResistance }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">尾部电阻率：</div>
+                      <div class="value">{{ item.tailResistance }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">头部电阻率实测：</div>
+                      <div class="value">{{ item.headResistanceActual }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">尾部电阻率实测：</div>
+                      <div class="value">{{ item.tailResistanceActual }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">79oi头：</div>
+                      <div class="value">{{ item.head79oi }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">79oi尾：</div>
+                      <div class="value">{{ item.tail79oi }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">合格状态：</div>
+                      <div class="value">
+                        {{ item.qualified ? "合格" : "不合格" }}
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div class="label">合格长度：</div>
+                      <div class="value">{{ item.qualifiedLength }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">合格重量：</div>
+                      <div class="value">{{ item.qualifiedWeight }}</div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -408,6 +471,8 @@ export default {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "blur" },
         ],
+        length: [{ required: true, message: "长度不能为空", trigger: "blur" }],
+        number: [{ required: true, message: "数量不能为空", trigger: "blur" }],
       },
       selectedIndex: null,
     };
@@ -443,8 +508,6 @@ export default {
       this.formData = {
         ...this.formData,
         ...fromData,
-        length: fromData.length || 700,
-        diameter: fromData.diameter || 4,
       };
     },
     async handleCodeClick() {
@@ -462,6 +525,12 @@ export default {
       else headPosition = list[list.length - 1].tailPosition;
       let item = {
         headPosition,
+        type: 0,
+        segmentNum: 0,
+        headResistance: 0,
+        tailResistance: 0,
+        diameter: this.formData.diameter,
+        planWeight: 0,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -480,6 +549,12 @@ export default {
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
+        if (
+          item.tailPosition ||
+          (item.tailPosition == 0 && item.headPosition) ||
+          item.headPosition == 0
+        )
+          item.length = item.tailPosition - item.headPosition;
       }
     },
     handleTailChange(value, index) {
@@ -489,7 +564,37 @@ export default {
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
+        if (
+          item.tailPosition ||
+          (item.tailPosition == 0 && item.headPosition) ||
+          item.headPosition == 0
+        )
+          item.length = item.tailPosition - item.headPosition;
       }
+    },
+    handleHead79oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].head83oi = (
+          value * 0.85
+        ).toFixed(3);
+    },
+    handleTail79oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].tail83oi = (
+          value * 0.85
+        ).toFixed(3);
+    },
+    handleHead83oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].head79oi = (
+          value / 0.85
+        ).toFixed(3);
+    },
+    handleTail83oiChange(value, index) {
+      if (value || value === 0)
+        this.formData.segmentedInstructionDetailVos[index].tail79oi = (
+          value / 0.85
+        ).toFixed(3);
     },
     back() {
       this.$router.push("/overStationExecution?station=FDZL");
@@ -721,8 +826,27 @@ export default {
         height: 100%;
       }
     }
-    .tooltip {
-      max-width: 200px;
+    .detail {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      margin-top: 10px;
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      .item {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+        .label {
+          flex: 1;
+          text-align: right;
+        }
+        .value {
+          flex: 1;
+          text-align: left;
+        }
+      }
     }
   }
   .table {

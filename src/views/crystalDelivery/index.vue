@@ -1,34 +1,17 @@
 <template>
   <div class="scroller-flex-wrap">
     <div class="outStationExecution-container">
-      <div class="info-container">
-        <div class="info">
-          <div class="info-label">批次号</div>
-          <div class="info-value">{{ formData.processOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">长晶炉</div>
-          <div class="info-value">{{ $route.query.deviceCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">炉次号</div>
-          <div class="info-value">{{ furnaceNumber }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品料号</div>
-          <div class="info-value">{{ dataOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品名称</div>
-          <div class="info-value">{{ productName }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">配方</div>
-          <div class="info-value">{{ recipe }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">工艺路径</div>
-          <div class="info-value">{{ processPath }}</div>
+      <!-- 顶部信息卡片 -->
+      <div class="topInfoCard">
+        <div class="grid-container">
+          <div class="grid-item">
+            <span class="grid-item-name">批次号：</span>
+            <span class="grid-item-value">{{ formData.processOrderCode }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-item-name">长晶炉：</span>
+            <span class="grid-item-value">{{ $route.query.deviceCode }}</span>
+          </div>
         </div>
       </div>
       <el-divider class="divider" />
@@ -94,8 +77,9 @@
                 <el-input
                   class="value"
                   v-model="formData.dislocationIdentificationLength"
-                ></el-input>
-                <div class="unit">cm</div>
+                >
+                  <template slot="append">cm</template></el-input
+                >
               </div>
             </el-form-item>
             <el-form-item
@@ -104,11 +88,9 @@
               class="item"
             >
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.measuredDiameter"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.measuredDiameter">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -117,11 +99,9 @@
               class="item"
             >
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.disengageDiameter"
-                ></el-input>
-                <div class="unit">cm</div>
+                <el-input class="value" v-model="formData.disengageDiameter">
+                  <template slot="append">cm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item
@@ -130,11 +110,9 @@
               class="item"
             >
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.bottomMaterialWeight"
-                ></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.bottomMaterialWeight">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
           </div>

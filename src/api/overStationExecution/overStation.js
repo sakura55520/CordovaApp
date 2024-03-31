@@ -11,7 +11,7 @@ export function fetchWaitOutStationPage(params) {
 // 历史过站记录
 export function fetchHistoricalOverStationRecords(params) {
   return request({
-    url: "/overStationExecution/historicalOverStationRecordsPage",
+    url: "/wipStorage/listByPage",
     method: "get",
     params,
   });

@@ -44,7 +44,7 @@
 
           <div>
             <el-form-item label="计划长度" prop="planLength">
-              <el-input v-model="detailForm.planLength" type="number" disabled>
+              <el-input v-model="detailForm.planLength" type="number">
                 <template slot="append">cm</template>
               </el-input>
             </el-form-item>
@@ -64,7 +64,7 @@
               </el-input>
             </el-form-item>
             <el-form-item label="合格长度" prop="qualifiedLength">
-              <el-input v-model="detailForm.qualifiedLength" type="number" disabled>
+              <el-input v-model="detailForm.qualifiedLength" type="number">
                 <template slot="append">cm</template>
               </el-input>
             </el-form-item>

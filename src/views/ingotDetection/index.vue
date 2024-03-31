@@ -1,34 +1,17 @@
 <template>
   <div class="scroller-flex-wrap">
     <div class="outStationExecution-container">
-      <div class="info-container">
-        <div class="info">
-          <div class="info-label">批次号</div>
-          <div class="info-value">{{ formData.processOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">长晶炉</div>
-          <div class="info-value">{{ $route.query.deviceCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">炉次号</div>
-          <div class="info-value">{{ furnaceNumber }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品料号</div>
-          <div class="info-value">{{ dataOrderCode }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">产品名称</div>
-          <div class="info-value">{{ productName }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">配方</div>
-          <div class="info-value">{{ recipe }}</div>
-        </div>
-        <div class="info">
-          <div class="info-label">工艺路径</div>
-          <div class="info-value">{{ processPath }}</div>
+      <!-- 顶部信息卡片 -->
+      <div class="topInfoCard">
+        <div class="grid-container">
+          <div class="grid-item">
+            <span class="grid-item-name">批次号：</span>
+            <span class="grid-item-value">{{ formData.processOrderCode }}</span>
+          </div>
+          <div class="grid-item">
+            <span class="grid-item-name">长晶炉：</span>
+            <span class="grid-item-value">{{ $route.query.deviceCode }}</span>
+          </div>
         </div>
       </div>
       <el-divider class="divider" />
@@ -44,37 +27,61 @@
           <div class="form">
             <div class="form-title">单晶信息</div>
             <el-form-item label="检测人员" prop="inspector" class="item">
-              <el-input v-model="formData.inspector"></el-input>
+              <SelectUserinfo
+                v-model="formData.inspector"
+                :style="{ width: '100%' }"
+              />
             </el-form-item>
             <el-form-item label="测试人员" prop="tester" class="item">
-              <el-input v-model="formData.tester"></el-input>
+              <SelectUserinfo
+                v-model="formData.tester"
+                :style="{ width: '100%' }"
+              />
             </el-form-item>
             <el-form-item label="确认人员" prop="confirmer" class="item">
-              <el-input v-model="formData.confirmer"></el-input>
+              <SelectUserinfo
+                v-model="formData.confirmer"
+                :style="{ width: '100%' }"
+              />
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.goodQty"></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.goodQty">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="异常数量" prop="abnormalQty" class="item">
               <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.abnormalQty"
-                ></el-input>
-                <div class="unit">kg</div>
+                <el-input class="value" v-model="formData.abnormalQty">
+                  <template slot="append">kg</template>
+                </el-input>
               </div>
+            </el-form-item>
+            <el-form-item label="当前长度" prop="currentLengthQty" class="item">
+              <el-input v-model="formData.currentLengthQty">
+                <template slot="append">cm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="晶体重量" prop="weight" class="item">
+              <el-input v-model="formData.weight">
+                <template slot="append">kg</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="型号" prop="model" class="item">
               <el-input v-model="formData.model"></el-input>
             </el-form-item>
             <el-form-item label="尺寸" prop="size" class="item">
-              <el-input v-model="formData.size"></el-input>
+              <el-input
+                v-model="formData.size"
+                @input="handleBaseFormChange"
+              ></el-input>
             </el-form-item>
             <el-form-item label="晶向" prop="orientation" class="item">
-              <el-input v-model="formData.orientation"></el-input>
+              <el-input
+                v-model="formData.orientation"
+                @input="handleBaseFormChange"
+              ></el-input>
             </el-form-item>
             <el-form-item
               label="目标电阻率"
@@ -169,10 +176,7 @@
                 prop="crystalDensity"
               >
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.crystalDensity"
-                    disabled
-                  ></el-input>
+                  <el-input v-model="scope.row.crystalDensity"></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="RES" min-width="80" align="center">
@@ -272,8 +276,10 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import SelectUserinfo from "@/components/select_userinfo";
 
 export default {
+  components: { SelectUserinfo },
   data() {
     return {
       batchNumber: "Z0116504581",
@@ -316,6 +322,12 @@ export default {
         abnormalQty: [
           { required: true, message: "异常数量不能为空", trigger: "blur" },
         ],
+        currentLengthQty: [
+          { required: true, message: "当前长度不能为空", trigger: "blur" },
+        ],
+        weight: [
+          { required: true, message: "晶体重量不能为空", trigger: "blur" },
+        ],
         model: [{ required: true, message: "型号不能为空", trigger: "blur" }],
         size: [{ required: true, message: "尺寸不能为空", trigger: "blur" }],
         orientation: [
@@ -350,57 +362,34 @@ export default {
           console.log(e);
         }
       }
-      
+
       this.formData = { ...this.formData, ...fromData };
     },
     addDetails() {
       if (!this.formData.details) this.formData.details = [];
-      this.formData.details.push(
-        {
-          sampleNumber: "YP-0100241",
-          sampleIdentification: "H",
-          samplePosition: 0,
-          category: "1",
-          size: 100,
-          orientation: "111",
-          res: 1,
-          resC: 1,
-          resE: 1,
-          halfRes: 1,
-          halfRrg: 1,
-          rrg: 1,
-          tailResistivity: 10,
-          headTailResistivityRatio: 1,
-          oiC: 1,
-          cs: 1,
-          oiE: 1,
-          org: 1,
-          minorityCarrierLifetime: 1,
-          valid: true,
-        },
-        {
-          sampleNumber: "YP-0100242",
-          sampleIdentification: "T",
-          samplePosition: 0,
-          category: "1",
-          size: 100,
-          orientation: "111",
-          res: 1,
-          resC: 1,
-          resE: 1,
-          halfRes: 1,
-          halfRrg: 1,
-          rrg: 1,
-          tailResistivity: 10,
-          headTailResistivityRatio: 1,
-          oiC: 1,
-          cs: 1,
-          oiE: 1,
-          org: 1,
-          minorityCarrierLifetime: 1,
-          valid: true,
-        }
-      );
+      this.formData.details.push({
+        sampleNumber:
+          "YP-" + (this.formData.details.length + 1 + "").padStart(7, "0"),
+        sampleIdentification: "H",
+        samplePosition: 0,
+        category: "0",
+        size: this.formData.size,
+        orientation: this.formData.orientation,
+        res: 0,
+        resC: 0,
+        resE: 0,
+        halfRes: 0,
+        halfRrg: 0,
+        rrg: 0,
+        tailResistivity: 0,
+        headTailResistivityRatio: 0,
+        oiC: 0,
+        cs: 0,
+        oiE: 0,
+        org: 0,
+        minorityCarrierLifetime: 0,
+        valid: true,
+      });
       this.handleSampleIdentificationChange();
     },
     deleteDetails(index) {
@@ -450,6 +439,14 @@ export default {
         return;
       }
       let info = this.formData;
+      if (info.weight) {
+        this.$message.warning("请填写晶体重量");
+        return;
+      }
+      if (info.currentLengthQty) {
+        this.$message.warning("请填写当前长度");
+        return;
+      }
       let crystalDensity;
       let value = Number(val);
       if (!value || value === "NaN") crystalDensity = "";
@@ -473,6 +470,14 @@ export default {
             item.sampleIdentification === ele.sampleIdentification &&
             itemIndex < eleIndex
         ),
+      }));
+      this.formData.details = [...list];
+    },
+    handleBaseFormChange() {
+      let list = this.formData.details.map((item) => ({
+        ...item,
+        size: this.formData.size,
+        orientation: this.formData.orientation,
       }));
       this.formData.details = [...list];
     },
