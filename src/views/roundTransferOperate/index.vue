@@ -39,7 +39,7 @@
           <div>
             <el-form-item label="线边仓库位" prop="lineWarehouseLocation" style="height: 550px">
               <SelectLinesideTree
-                v-model="detailForm.lineWarehouseLocation"
+                v-model="detailForm.lineWarehouseId"
                 @select="handleWhouseSelect"
                 :alwaysOpen="true"
               />
