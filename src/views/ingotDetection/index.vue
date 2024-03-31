@@ -27,13 +27,13 @@
           <div class="form">
             <div class="form-title">单晶信息</div>
             <el-form-item label="检测人员" prop="inspector" class="item">
-              <el-input v-model="formData.inspector"></el-input>
+              <SelectUserinfo v-model="formData.inspector" />
             </el-form-item>
             <el-form-item label="测试人员" prop="tester" class="item">
-              <el-input v-model="formData.tester"></el-input>
+              <SelectUserinfo v-model="formData.tester" />
             </el-form-item>
             <el-form-item label="确认人员" prop="confirmer" class="item">
-              <el-input v-model="formData.confirmer"></el-input>
+              <SelectUserinfo v-model="formData.confirmer" />
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
@@ -263,8 +263,10 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import SelectUserinfo from "@/components/select_userinfo";
 
 export default {
+  components: { SelectUserinfo },
   data() {
     return {
       batchNumber: "Z0116504581",
