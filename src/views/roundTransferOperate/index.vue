@@ -37,9 +37,9 @@
             </el-form-item>
           </div>
           <div>
-            <el-form-item label="线边仓库位" prop="lineVarwhouseLocation" style="height: 550px">
+            <el-form-item label="线边仓库位" prop="lineWarehouseLocation" style="height: 550px">
               <SelectLinesideTree
-                v-model="detailForm.lineVarwhouseLocation"
+                v-model="detailForm.lineWarehouseLocation"
                 @select="handleWhouseSelect"
                 :alwaysOpen="true"
               />
@@ -65,8 +65,8 @@ import { cloneDeep, floor, last } from 'lodash-es'
 import moment from 'moment'
 
 const defaultForm = {
-  lineVarwhouse: null, // 线边仓
-  lineVarwhouseLocation: null, // 线边仓库位
+  lineWarehouse: null, // 线边仓
+  lineWarehouseLocation: null, // 线边仓库位
 }
 
 export default {
@@ -79,7 +79,7 @@ export default {
       detailForm: Object.assign({}, defaultForm), // 表单列表
       rules: {
         scrapQty: [{ required: true, message: '请输入报废数量', trigger: 'change' }],
-        lineVarwhouseLocation: [{ required: true, message: '请选择线边仓库位', trigger: 'change' }],
+        lineWarehouseLocation: [{ required: true, message: '请选择线边仓库位', trigger: 'change' }],
       }
     }
   },
@@ -150,7 +150,7 @@ export default {
       }
     },
     handleWhouseSelect({ id, name }) {
-      this.detailForm.lineVarwhouseLocation = name
+      this.detailForm.lineWarehouseLocation = name
     }
   }
 }

@@ -193,18 +193,18 @@
                 </el-input>
               </div>
             </el-form-item>
-            <!-- <el-form-item label="线边仓" prop="lineVarwhouse" class="item">
-              <el-select v-model="formData.lineVarwhouse" placeholder="">
+            <!-- <el-form-item label="线边仓" prop="lineWarehouse" class="item">
+              <el-select v-model="formData.lineWarehouse" placeholder="">
                 <el-option label="成品线边仓" :value="1"></el-option>
               </el-select>
             </el-form-item> -->
             <el-form-item
               label="线边仓库位"
-              prop="lineVarwhouseLocation"
+              prop="lineWarehouseLocation"
               class="item"
             >
               <SelectLinesideTree
-                v-model="formData.lineVarwhouseLocation"
+                v-model="formData.lineWarehouseLocation"
                 @select="handleWhouseSelect"
               />
             </el-form-item>
@@ -245,7 +245,7 @@ export default {
         goodQty: null,
         defectQty: null,
         scrapQty: null,
-        lineVarwhouseLocation: null,
+        lineWarehouseLocation: null,
       },
       formRules: {
         userCreate: [
@@ -333,14 +333,14 @@ export default {
             trigger: "blur",
           },
         ],
-        // lineVarwhouse: [
+        // lineWarehouse: [
         //   {
         //     required: true,
         //     message: "线边仓不能为空",
         //     trigger: "blur",
         //   },
         // ],
-        lineVarwhouseLocation: [
+        lineWarehouseLocation: [
           {
             required: true,
             message: "线边仓库位不能为空",
@@ -410,7 +410,7 @@ export default {
       this.back();
     },
     handleWhouseSelect({ id, name }) {
-      this.formData.lineVarwhouseLocation = name;
+      this.formData.lineWarehouseLocation = name;
     },
   },
 };
