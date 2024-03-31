@@ -245,6 +245,7 @@ export default {
         goodQty: null,
         defectQty: null,
         scrapQty: null,
+        lineVarwhouseLocation: null,
       },
       formRules: {
         userCreate: [
@@ -342,7 +343,7 @@ export default {
         lineVarwhouseLocation: [
           {
             required: true,
-            message: "线边仓储位不能为空",
+            message: "线边仓库位不能为空",
             trigger: "blur",
           },
         ],
