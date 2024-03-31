@@ -66,6 +66,7 @@ import moment from 'moment'
 
 const defaultForm = {
   lineWarehouse: null, // 线边仓
+  lineWarehouseId: null, // 线边仓
   lineWarehouseLocation: null, // 线边仓库位
 }
 
@@ -151,6 +152,7 @@ export default {
     },
     handleWhouseSelect({ id, name }) {
       this.detailForm.lineWarehouseLocation = name
+      this.detailForm.lineWarehouseId = id
     }
   }
 }
