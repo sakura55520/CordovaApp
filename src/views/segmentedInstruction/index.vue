@@ -29,7 +29,9 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="长度" prop="length" class="item">
-              <el-input v-model="formData.length"></el-input>
+              <el-input v-model="formData.length">
+                <template slot="append">cm</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="数量" prop="number" class="item">
               <el-input v-model="formData.number"></el-input>
