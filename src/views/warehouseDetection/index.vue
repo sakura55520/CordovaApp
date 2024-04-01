@@ -46,28 +46,44 @@
             </el-form-item>
             <el-form-item label="原始长度" prop="originLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.originLength">
+                <el-input-number
+                  class="value"
+                  v-model="formData.originLength"
+                  @input="handleLengthChange"
+                >
                   <template slot="append">cm</template>
-                </el-input>
+                </el-input-number>
               </div>
             </el-form-item>
             <el-form-item label="崩边长度" prop="chippingLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.chippingLength">
+                <el-input-number
+                  class="value"
+                  v-model="formData.chippingLength"
+                  @input="handleLengthChange"
+                >
                   <template slot="append">cm</template>
-                </el-input>
+                </el-input-number>
               </div>
             </el-form-item>
             <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.ellipticLength">
+                <el-input-number
+                  class="value"
+                  v-model="formData.ellipticLength"
+                  @input="handleLengthChange"
+                >
                   <template slot="append">cm</template>
-                </el-input>
+                </el-input-number>
               </div>
             </el-form-item>
             <el-form-item label="合格长度" prop="qualifiedLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.qualifiedLength">
+                <el-input
+                  class="value"
+                  v-model="formData.qualifiedLength"
+                  disabled
+                >
                   <template slot="append">cm</template>
                 </el-input>
               </div>
@@ -411,6 +427,11 @@ export default {
     },
     handleWhouseSelect({ id, name }) {
       this.formData.lineWarehouseLocation = name;
+    },
+    handleLengthChange() {
+      let { originLength, chippingLength, ellipticLength } = this.formData;
+      this.formData.qualifiedLength =
+        (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
     },
   },
 };

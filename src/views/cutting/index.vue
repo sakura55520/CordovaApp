@@ -74,7 +74,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.originLength"></el-input>
+                  <el-input-number
+                    v-model="scope.row.originLength"
+                    @change="handleLengthChange(scope.$index)"
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -84,7 +87,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.chippingLength"></el-input>
+                  <el-input-number
+                    v-model="scope.row.chippingLength"
+                    @change="handleLengthChange(scope.$index)"
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -94,7 +100,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.ellipticLength"></el-input>
+                  <el-input-number
+                    v-model="scope.row.ellipticLength"
+                    @change="handleLengthChange(scope.$index)"
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -104,7 +113,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.qualifiedLength"></el-input>
+                  <el-input
+                    v-model="scope.row.qualifiedLength"
+                    disabled
+                  ></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -214,6 +226,12 @@ export default {
       Api.deleteBuffer(this.buffParams);
       this.back();
     },
+  },
+  handleLengthChange(index) {
+    let { originLength, chippingLength, ellipticLength } =
+      this.formData.segments[index];
+    this.formData.segments[index].qualifiedLength =
+      (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
   },
 };
 </script>
