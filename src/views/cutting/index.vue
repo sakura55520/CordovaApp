@@ -30,16 +30,21 @@
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.goodQty">
+                <el-input class="value" v-model="formData.goodQty" disabled>
                   <template slot="append">kg</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.scrapQty">
+                <el-input-number
+                  class="value"
+                  v-model="formData.scrapQty"
+                  @change="handleQtyChange"
+                  :style="{ width: '100%' }"
+                >
                   <template slot="append">kg</template>
-                </el-input>
+                </el-input-number>
               </div>
             </el-form-item>
           </div>
@@ -226,12 +231,16 @@ export default {
       Api.deleteBuffer(this.buffParams);
       this.back();
     },
-  },
-  handleLengthChange(index) {
-    let { originLength, chippingLength, ellipticLength } =
-      this.formData.segments[index];
-    this.formData.segments[index].qualifiedLength =
-      (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+    handleLengthChange(index) {
+      let { originLength, chippingLength, ellipticLength } =
+        this.formData.segments[index];
+      this.formData.segments[index].qualifiedLength =
+        (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+    },
+    handleQtyChange() {
+      let { totalQty, scrapQty } = this.formData;
+      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
+    },
   },
 };
 </script>

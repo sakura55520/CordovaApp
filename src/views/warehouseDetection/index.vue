@@ -29,10 +29,14 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty"></el-input>
+              <el-input v-model="formData.goodQty" disabled></el-input>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <el-input v-model="formData.scrapQty"></el-input>
+              <el-input-number
+                v-model="formData.scrapQty"
+                @change="handleQtyChange"
+                :style="{ width: '100%' }"
+              ></el-input-number>
             </el-form-item>
           </div>
           <div class="form">
@@ -432,6 +436,10 @@ export default {
       let { originLength, chippingLength, ellipticLength } = this.formData;
       this.formData.qualifiedLength =
         (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+    },
+    handleQtyChange() {
+      let { totalQty, scrapQty } = this.formData;
+      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
     },
   },
 };
