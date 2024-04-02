@@ -68,7 +68,19 @@
               </el-table-column>
               <el-table-column label="下发工单" min-width="150" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.orderCode"></el-input>
+                  <el-select
+                    v-model="scope.row.orderCode"
+                    @visible-change="
+                      (val) => handleSelectVisibleChange(val, scope.$index)
+                    "
+                  >
+                    <el-option
+                      :label="item.workOrderNo"
+                      :value="item.workOrderNo"
+                      :key="item.workOrderNo"
+                      v-for="item in scope.row.workOrderList"
+                    ></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
               <el-table-column label="流程编号" min-width="100" align="center">
@@ -492,6 +504,21 @@ export default {
     this.init();
   },
   methods: {
+    async handleSelectVisibleChange(visible, index) {
+      if (!visible) return;
+      let item = this.formData.segmentedInstructionDetailVos[index];
+      let { dopAnt, pnType, processOrderCode } = this.formData;
+      let res = await Api.getIssueWorkOrder({
+        dopAnt,
+        pnType,
+        processingOrderCode: processOrderCode,
+        resistanceHead: item.headResistance,
+        resistanceTail: item.tailResistance,
+        waferSize: item.diameter,
+      });
+      this.formData.segmentedInstructionDetailVos[index].workOrderList =
+        res.data;
+    },
     async init() {
       let fromData = {};
       // 查询保存的数据
@@ -575,25 +602,25 @@ export default {
     handleHead79oiChange(value, index) {
       if (value || value === 0)
         this.formData.segmentedInstructionDetailVos[index].head83oi = (
-          value * 0.85
+          value * 0.509
         ).toFixed(3);
     },
     handleTail79oiChange(value, index) {
       if (value || value === 0)
         this.formData.segmentedInstructionDetailVos[index].tail83oi = (
-          value * 0.85
+          value * 0.509
         ).toFixed(3);
     },
     handleHead83oiChange(value, index) {
       if (value || value === 0)
         this.formData.segmentedInstructionDetailVos[index].head79oi = (
-          value / 0.85
+          value / 0.509
         ).toFixed(3);
     },
     handleTail83oiChange(value, index) {
       if (value || value === 0)
         this.formData.segmentedInstructionDetailVos[index].tail79oi = (
-          value / 0.85
+          value / 0.509
         ).toFixed(3);
     },
     back() {
