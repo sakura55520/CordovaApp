@@ -32,7 +32,7 @@
               <el-input v-model="detailForm.goodQty" disabled/>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty">
-              <el-input v-model="detailForm.scrapQty" type="number"/>
+              <el-input v-model="detailForm.scrapQty" type="number" @change="handleScrapQtyChange"/>
             </el-form-item>
             <el-form-item label="工艺编号" prop="technologyNumber">
               <el-input v-model="detailForm.technologyNumber"/>
@@ -169,9 +169,9 @@ export default {
       return this.$route.query.wipStorageStatus === '1' ? '出站' : '进站'
     },
     feedPercent() {
-      const { _arrFeedingAmount, feedingTotal } = this.detailForm
+      const { _arrFeedingAmount, goodQty } = this.detailForm
       const amount = (_arrFeedingAmount || []).reduce((acc, cur) => acc + (Number(cur) || 0), 0)
-      return floor(amount / feedingTotal * 100) || 0
+      return floor(amount / goodQty * 100) || 0
     },
     buffParams() {
       const { processUuid, processingOrderCode } = this.$route.query
@@ -243,6 +243,10 @@ export default {
         })
       }
     },
+    handleScrapQtyChange() {
+      const { feedingTotal, scrapQty } = this.detailForm
+      this.detailForm.goodQty = feedingTotal - scrapQty
+    },
     handleFeedingTimeChange(time) {
       this.detailForm.feedingDuration = moment(this.$store.getters.NowServerDate).diff(time, 'minutes')
     },
@@ -255,7 +259,7 @@ export default {
 
 <style scoped>
 .number-item {
-  width: 150px;
+  width: 150px !important;
   margin: 0 10px 10px 0;
 }
 </style>

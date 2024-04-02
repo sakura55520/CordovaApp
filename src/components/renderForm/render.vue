@@ -18,7 +18,7 @@ const isAttr = makeMap(
   + 'target,title,type,usemap,value,width,wrap'
 )
 
-function vModel(self, dataObject, value, vModel, field) {
+function vModel(self, dataObject, value) {
   dataObject.props.value = value
 
   dataObject.on.input = val => {
@@ -89,7 +89,7 @@ const componentChild = {
 }
 
 export default {
-  props: ['conf','field'],
+  props: ['conf','propValue'],
   render(h) {
     const dataObject = {
       attrs: {},
@@ -98,6 +98,7 @@ export default {
       style: {}
     }
     const confClone = JSON.parse(JSON.stringify(this.conf))
+    delete confClone.id
     const children = []
 
     const childObjs = componentChild[confClone.tag]
@@ -113,7 +114,7 @@ export default {
     Object.keys(confClone).forEach(key => {
       const val = confClone[key]
       if (key === 'vModel') {
-        vModel(this, dataObject, confClone[this.field], confClone.vModel, this.field)
+        vModel(this, dataObject, this.propValue)
       } else if (dataObject[key]) {
         dataObject[key] = val
       } else if (!isAttr(key)) {
@@ -122,6 +123,7 @@ export default {
         dataObject.attrs[key] = val
       }
     })
+
     return h(this.conf.tag, dataObject, children)
   },
 }

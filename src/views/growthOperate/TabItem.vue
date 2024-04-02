@@ -21,8 +21,8 @@
               <Render
                 :key="formItem.renderKey"
                 :conf="formItem"
-                field="extValue"
-                @input="handleExtsInput($event, recordIdx, formItemIdx)"
+                :prop-value="/^field/.test(formItem.vModel) ? formItem.extValue : recordItem[formItem.vModel]"
+                @input="handleExtsInput($event, recordIdx, formItemIdx, formItem.vModel)"
               />
             </el-form-item>
 
@@ -43,12 +43,12 @@
             <div v-for="(formItem, index) in recordItem.checks" :key="index">
               <el-form-item :label="formItem.checkItem" class="check-item" label-width="auto">
                 <el-radio-group v-model="formItem.isError">
-                  <el-radio :label="true">正常</el-radio>
-                  <el-radio :label="false">异常</el-radio>
+                  <el-radio :label="false">正常</el-radio>
+                  <el-radio :label="true">异常</el-radio>
                 </el-radio-group>
               </el-form-item>
 
-              <el-form-item v-if="formItem.isError === false" label="异常备注">
+              <el-form-item v-if="formItem.isError" label="异常备注">
                 <el-input v-model="formItem.errorMessage" type="textarea" placeholder="请输入异常描述及处理建议"/>
               </el-form-item>
             </div>
@@ -65,7 +65,7 @@
               <Render
                 :key="formItem.renderKey"
                 :conf="formItem"
-                field="extValue"
+                :prop-value="formItem.extValue"
                 @input="handleTechsInput($event, recordIdx, formItemIdx)"
                 />
             </el-form-item>
@@ -74,6 +74,8 @@
 
       </el-form>
     </el-collapse-item>
+
+<!--    <el-button v-if="canAddRecord" class="block-btn" type="primary" plain @click="handleIncrease"><i class="el-icon-plus"/>添加{{ stepName }}记录</el-button>-->
   </el-collapse>
 </template>
 
@@ -96,6 +98,10 @@ export default {
       type: String,
       required: true
     },
+    canAddRecord: {
+      type: Boolean,
+      required: true
+    },
     crystalGrowthErrList: Array
   },
   data() {
@@ -108,11 +114,20 @@ export default {
     this.activeCollapse = ['0']
   },
   methods: {
-    handleExtsInput(event, recordIdx, formItemIdx) {
-      this.$set(this.stepData[recordIdx].exts[formItemIdx], 'extValue', event)
+    handleExtsInput(event, recordIdx, formItemIdx, vModel) {
+      if (/^field/.test(vModel)) {
+        this.$set(this.stepData[recordIdx].exts[formItemIdx], 'extValue', event)
+      } else {
+        this.$set(this.stepData[recordIdx], vModel, event)
+      }
     },
     handleTechsInput(event, recordIdx, formItemIdx) {
       this.$set(this.stepData[recordIdx].techs[formItemIdx], 'extValue', event)
+    },
+    handleIncrease() {
+      this.stepData.push({
+
+      })
     }
   }
 }

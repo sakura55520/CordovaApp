@@ -47,13 +47,18 @@ export default {
   },
   methods: {
     init() {
-      this.detailForm._files = this.stepData[0].files.map(({ fileUrl }) => ({
-        big_url: fileUrl,
-        thumb_url: fileUrl,
+      if (!this.steps['留档文档']) {
+        this.$set(this.steps, '留档文档', [{ fiels: [] }])
+      }
+      this.detailForm._files = this.stepData[0].files.map(fileItem => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
       }))
     },
     handleFileChange() {
-      const files = (this.detailForm._files || []).map(({ big_url }) => ({
+      const files = (this.detailForm._files || []).map(({ big_url, thumb_url, ...item }) => ({
+        ...item,
         fileUrl: big_url
       }))
       this.$set(this.stepData[0], 'files', files)
