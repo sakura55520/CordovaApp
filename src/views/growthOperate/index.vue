@@ -6,22 +6,23 @@
       <div class="grid-container">
         <div class="grid-item">
           <span class="grid-item-name">批次号：</span>
-          <span class="grid-item-value">{{ steps.processOrderCode }}</span>
+          <span class="grid-item-value">{{ fromData.processOrderCode }}</span>
         </div>
         <div class="grid-item">
           <span class="grid-item-name">长晶炉：</span>
-          <span class="grid-item-value">{{ $route.query.deviceCode }}</span>
+          <span class="grid-item-value">{{ fromData.deviceCode }}</span>
         </div>
       </div>
     </div>
 
     <div v-loading="loading" class="fromCard growth-main">
       <el-tabs v-if="tabsVisible" tab-position="left" @tab-click="handleSetpClick">
-        <el-tab-pane v-for="(stepName, index) in stepNameList" :key="index" :label="stepName">
+        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :key="index" :label="stepName">
           <TabItem
             ref="TabItem"
             :step-data="steps[stepName]"
             :step-name="stepName"
+            :can-add-record="fnCanAddrecord(stepName)"
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
@@ -29,7 +30,7 @@
           <TabError
             ref="TabError"
             :steps="steps"
-            :step-name-list="stepNameList"
+            :step-name-list="calcStepNameList"
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
@@ -58,18 +59,10 @@ import TabFile from './TabFile'
 import { fetchModelForm } from '@/api/modelform'
 import { getSeleteData } from '@/utils/select'
 
-
-const defaultForm = {}
-
 const defaultCheckItem = {
   checkItem: null, // 点检项
   isError: null, // 是否异常
   errorMessage: null, // 异常说明
-}
-
-const defaultTechsItem = {
-  extKey: null, // label
-  extValue: null,
 }
 
 export default {
@@ -81,8 +74,8 @@ export default {
   },
   data() {
     return {
-      stepNameList: ['拆炉', '抽真空', '检漏', '煅烧', '化料', '稳温', '引晶', '放肩', '等径', '收尾', '冷却', '煅烧冷却', '吊单晶', '回熔', '吊肩', '补掺'],
       name2form: {},
+      fromData: {},
       steps: {},
       rules: {},
       loading: true,
@@ -93,6 +86,75 @@ export default {
   computed: {
     storageLabel() {
       return this.$route.query.wipStorageStatus === '1' ? '出站' : '进站'
+    },
+    stepTabs() {
+      return [
+        {
+          stepName: '拆炉',
+          canAddRecord: true, // 允许添加记录
+        },
+        {
+          stepName: '抽真空',
+          showUserCreate: true, // 显示操作者1
+        },
+        {
+          stepName: '检漏',
+          showUserCreate: true, // 显示操作者1
+        },
+        {
+          stepName: '煅烧',
+          canAddRecord: true, // 允许添加记录
+        },
+        {
+          stepName: '化料'
+        },
+        {
+          stepName: '稳温'
+        },
+        {
+          stepName: '引晶'
+        },
+        {
+          stepName: '放肩'
+        },
+        {
+          stepName: '等径'
+        },
+        {
+          stepName: '收尾'
+        },
+        {
+          stepName: '冷却',
+          canAddRecord: true,
+        },
+        {
+          stepName: '煅烧冷却'
+        },
+        {
+          stepName: '吊单晶',
+          canAddRecord: true,
+        },
+        {
+          stepName: '回熔',
+          canAddRecord: true,
+        },
+        {
+          stepName: '吊肩',
+          canAddRecord: true,
+        },
+        {
+          stepName: '补掺',
+          canAddRecord: true,
+        }
+      ]
+    },
+    calcStepNameList() {
+      const list = []
+      this.stepTabs.forEach(({ stepName, canAddRecord }) => {
+        if (!this.steps[stepName] && !canAddRecord) return
+        list.push(stepName)
+      })
+      return list
     }
   },
   created() {
@@ -110,11 +172,15 @@ export default {
         console.log(e)
       }
 
-      this.steps = Object.assign({}, defaultForm, fromData ? fromData.steps : null)
+      const { steps, ...rest } = fromData
+      this.steps = Object.assign({}, steps)
+      if (!this.steps['留档文档']) {
+        this.$set(this.steps, '留档文档', [{ fiels: [] }])
+      }
+      this.fromData = rest
 
       // 查询动态表单配置
-      await this.fetchFormContent()
-
+      await this.initFormContent()
       this.loading = false
       this.tabsVisible = true
     },
@@ -152,37 +218,64 @@ export default {
     transform() {
       const steps = JSON.parse(JSON.stringify(this.steps))
       Object.keys(steps).forEach(stepName => {
-        steps[stepName].forEach(({ _errors, ...recordItem }) => {
-          this.updateExtValue(recordItem.exts)
-          this.updateExtValue(recordItem.techs)
-          recordItem.errors = (_errors || []).map(errorMessage => ({ errorMessage }))
+        const stepData = steps[stepName]
+        if (!stepData || !stepData.length) return delete steps[stepName]
+        stepData.forEach((recordItem) => {
+          const { exts, techs } = recordItem
+          this.transformExts(exts)
+          this.transformTechs(techs)
+
+          // errors
+          recordItem.errors = (recordItem._errors || []).map(errorMessage => ({ errorMessage }))
+          delete recordItem._errors
         })
       })
-      return { steps }
+      return {
+        ...this.fromData,
+        steps
+      }
     },
-    updateExtValue(arr) {
+    transformExts(arr) {
       if (!Array.isArray(arr)) return
-      arr.forEach(item => {
-        const { extValue } = item
-        if (extValue && (typeof extValue === 'object')) {
-          item.extValue = JSON.stringify(extValue)
+      for (let index = 0; index < arr.length; index++) {
+        const { extValue, vModel } = arr[index]
+        if (['userCreate', 'userOperate2', 'totalQty', 'goodQty', 'scrapQty', 'errors'].includes(vModel)) {
+          arr.splice(index, 1)
+          index--
+          continue
         }
-      })
+        if (extValue && (typeof extValue === 'object')) {
+          arr[index].extValue = JSON.stringify(extValue)
+        }
+        this.deleteNeedlessFields(arr[index])
+      }
     },
-    fetchFormContent() {
+    transformTechs(arr) {
+      if (!Array.isArray(arr)) return
+      for (let index = 0; index < arr.length; index++) {
+        const { extValue } = arr[index]
+        if (extValue && (typeof extValue === 'object')) {
+          arr[index].extValue = JSON.stringify(extValue)
+        }
+        this.deleteNeedlessFields(arr[index])
+      }
+    },
+    deleteNeedlessFields(item) {
+      const needlessFields = ['androidType', 'append', 'changeTag', 'clearable', 'disabled', 'document', 'filterable', 'formId', 'format', 'label', 'labelWidth', 'layout', 'maxlength', 'multiple', 'options', 'placeholder', 'prefix-icon', 'prepend', 'readonly', 'regList', 'renderKey', 'required', 'show-word-limit', 'span', 'style', 'suffix-icon', 'tag', 'tagIcon', 'type', 'vModel', 'value-format']
+      needlessFields.forEach(field => delete item[field])
+    },
+    initFormContent() {
       return fetchModelForm({
         search_LLIKE_name: '长晶-'
       }).then(res => {
-        res.data.forEach(form => this.name2form[form.name] = form)
-        this.stepNameList.forEach(stepName => {
-          if (!this.steps[stepName]) this.$set(this.steps, stepName, [{
-              checks: [],
-              techs: [],
-              _errors: [],
-              exts: [],
-              files: [],
-            }]
-          )
+        res.data.forEach(form => {
+          this.name2form[form.name] = form
+        })
+        this.calcStepNameList.forEach(stepName => {
+          if (!this.steps[stepName]) {
+            this.$set(this.steps, stepName, [])
+            return
+          }
           this.initErrors(stepName)
           this.initExts(stepName)
           this.initChecks(stepName)
@@ -201,8 +294,8 @@ export default {
       this.steps[stepName].forEach((recordItem, recordIdx) => {
         const label2value = {}
         if (Array.isArray(recordItem.checks)) {
-          recordItem.checks.forEach(({ checkItem, isError, errorMessage }) => {
-            label2value[checkItem] = { checkItem, isError, errorMessage }
+          recordItem.checks.forEach(data => {
+            label2value[data.checkItem] = data
           })
         }
 
@@ -227,8 +320,8 @@ export default {
       this.steps[stepName].forEach((recordItem, recordIdx) => {
         const label2value = {}
         if (Array.isArray(recordItem.techs)) {
-          recordItem.techs.forEach(({ extKey, extValue }) => {
-            label2value[extKey] = { extKey, extValue }
+          recordItem.techs.forEach(data => {
+            label2value[data.extKey] = data
           })
         }
 
@@ -236,7 +329,6 @@ export default {
         formContent.forEach(formItem => {
           techs.push({
             ...formItem,
-            ...defaultTechsItem,
             ...label2value[formItem.label],
             extKey: formItem.label
           })
@@ -253,20 +345,24 @@ export default {
       this.steps[stepName].forEach((recordItem, recordIdx) => {
         const label2value = {}
         if (Array.isArray(recordItem.exts)) {
-          recordItem.exts.forEach(({ extKey, extValue }) => {
-            label2value[extKey] = { extKey, extValue }
+          recordItem.exts.forEach(data => {
+            label2value[data.extKey] = data
           })
         }
 
         const exts = []
         formContent.forEach(formItem => {
-          exts.push({
+          const { label } = formItem
+          const techItem = {
             ...formItem,
-            ...defaultTechsItem,
-            ...label2value[formItem.label],
-            extKey: formItem.label
-          })
+            ...label2value[label],
+            extKey: label
+          }
+          exts.push(techItem)
         })
+
+
+
         this.$set(this.steps[stepName][recordIdx], 'exts', exts)
       })
     },
@@ -287,11 +383,23 @@ export default {
       })
     },
     handleSetpClick({ label }) {
-      if (label === '单晶异常') {
-        this.$nextTick(() => {
-          if (this.$refs.TabError && this.$refs.TabError.init) this.$refs.TabError.init()
-        })
+      switch (label) {
+        case '单晶异常':
+          this.$nextTick(() => {
+            if (this.$refs.TabError && this.$refs.TabError.init) this.$refs.TabError.init()
+          })
+          break
+        case '留档文档':
+          this.$nextTick(() => {
+            if (this.$refs.TabFile && this.$refs.TabFile.init) this.$refs.TabFile.init()
+          })
+          break
+        default:
       }
+    },
+    fnCanAddrecord(stepName) {
+      const matched = this.stepTabs.find(item => item.stepName === stepName)
+      return matched ? matched.canAddRecord : false
     }
   }
 }

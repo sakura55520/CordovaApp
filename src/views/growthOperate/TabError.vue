@@ -73,6 +73,7 @@ export default {
       this.detailForm.list = []
       this.stepRecordList = []
       this.stepNameList.forEach(stepName => {
+        if (!this.steps[stepName]) return
         this.steps[stepName].forEach((recordItem, recordIdx) => {
           const { _errors } = recordItem
           const stepAndRecord = stepName + ' - 记录' + (recordIdx + 1)
