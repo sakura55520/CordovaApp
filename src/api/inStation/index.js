@@ -72,3 +72,11 @@ export function check(data) {
     data,
   });
 }
+
+export function getIssueWorkOrder(params) {
+  return request({
+    url: "/workOrder/getIssueWorkOrder",
+    method: "get",
+    params,
+  });
+}
