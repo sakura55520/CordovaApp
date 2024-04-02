@@ -29,10 +29,14 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty"></el-input>
+              <el-input v-model="formData.goodQty" disabled></el-input>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <el-input v-model="formData.scrapQty"></el-input>
+              <el-input-number
+                v-model="formData.scrapQty"
+                @change="handleQtyChange"
+                :style="{ width: '100%' }"
+              ></el-input-number>
             </el-form-item>
           </div>
           <div class="form">
@@ -42,7 +46,11 @@
               prop="numberConsistence"
               class="item"
             >
-              <el-select v-model="formData.numberConsistence" placeholder="">
+              <el-select
+                v-model="formData.numberConsistence"
+                placeholder=""
+                :style="{ width: '100%' }"
+              >
                 <el-option label="是" :value="true"></el-option>
                 <el-option label="否" :value="false"></el-option>
               </el-select>
@@ -63,6 +71,7 @@
               <el-select
                 v-model="formData.dislocationIdentification"
                 placeholder=""
+                :style="{ width: '100%' }"
               >
                 <el-option label="是" :value="true"></el-option>
                 <el-option label="否" :value="false"></el-option>
@@ -124,15 +133,79 @@
       <el-button type="primary" plain class="save-btn" @click="save"
         >保存</el-button
       >
-      <el-button type="primary" class="confirm-btn" @click="confirm"
+      <el-button type="primary" class="confirm-btn" @click="check"
         >出站确认</el-button
       >
     </div>
+    <el-dialog
+      width="80vw"
+      :visible.sync="dialogCheckVisible"
+      title="报工数据核对"
+    >
+      <el-table :data="checkList">
+        <el-table-column
+          label="批次号"
+          min-width="150"
+          prop="processOrderCode"
+        ></el-table-column>
+        <el-table-column
+          label="良品数"
+          min-width="120"
+          prop="goodQty"
+        ></el-table-column>
+        <el-table-column
+          label="锅底料"
+          min-width="120"
+          prop="bottomMaterialWeight"
+        >
+          <template slot-scope="scope">
+            <div :class="scope.row.check ? '' : 'error'">
+              {{ scope.row.bottomMaterialWeight }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="多晶硅投料"
+          min-width="120"
+          prop="polycrystallineSiliconQty"
+        ></el-table-column>
+        <el-table-column
+          label="多晶硅扣料"
+          min-width="120"
+          prop="polycrystallineSiliconActualQty"
+        ></el-table-column>
+        <el-table-column
+          label="石英坩埚投料"
+          min-width="120"
+          prop="crucibleQty"
+        ></el-table-column>
+        <el-table-column
+          label="石英坩埚扣料"
+          min-width="120"
+          prop="crucibleActualQty"
+        ></el-table-column>
+        <el-table-column
+          label="掺杂剂用量投料"
+          min-width="150"
+          prop="dopantQty"
+        ></el-table-column>
+        <el-table-column
+          label="掺杂剂扣料"
+          min-width="120"
+          prop="dopantActualQty"
+        ></el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogCheckVisible = false">取 消</el-button>
+        <el-button type="primary" @click="confirm">提 交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import * as Api from "@/api/inStation";
+import { isEmpty } from "lodash-es";
 
 export default {
   data() {
@@ -193,6 +266,8 @@ export default {
           { required: true, message: "锅底料重量不能为空", trigger: "blur" },
         ],
       },
+      checkList: [],
+      dialogCheckVisible: false,
     };
   },
   computed: {
@@ -224,17 +299,46 @@ export default {
     back() {
       this.$router.push("/overStationExecution?station=DJSF");
     },
+    async check() {
+      const valid = await this.$refs.formRef.validate();
+      if (!valid) return;
+      await this.$confirm("确认提交当前操作数据?", "提示", {
+        type: "warning",
+      });
+      this.dialogCheckVisible = true;
+      let res = await Api.check(this.formData);
+      if (!res.data.check)
+        this.$message.warning("数据核对异常，请重新输入数据");
+      let materials = res.data.materials;
+      let materialInfo = {};
+      if (!isEmpty(materials)) {
+        for (const item of materials) {
+          if (item.materialType === "掺杂剂") {
+            materialInfo["dopantQty"] = item.qty;
+            materialInfo["dopantActualQty"] = item.actualQty;
+          }
+          if (item.materialType === "坩埚") {
+            materialInfo["crucibleQty"] = item.qty;
+            materialInfo["crucibleActualQty"] = item.actualQty;
+          }
+          if (item.materialType === "多晶硅") {
+            materialInfo["polycrystallineSiliconQty"] = item.qty;
+            materialInfo["polycrystallineSiliconActualQty"] = item.actualQty;
+          }
+        }
+      }
+      this.checkList = [{ ...res.data, ...materialInfo }];
+    },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
       this.$message.success("保存成功!");
       this.back();
     },
     async confirm() {
-      const valid = await this.$refs.formRef.validate();
-      if (!valid) return;
-      await this.$confirm("确认提交当前操作数据?", "提示", {
-        type: "warning",
-      });
+      if (!this.checkList[0].check) {
+        this.$message.warning("数据核对异常，请重新输入数据");
+        return;
+      }
       const {
         equipmentCode,
         processUuid,
@@ -250,9 +354,14 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
+      this.dialogCheckVisible = false;
       this.$message.success("出站成功");
       Api.deleteBuffer(this.buffParams);
       this.back();
+    },
+    handleQtyChange() {
+      let { totalQty, scrapQty } = this.formData;
+      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
     },
   },
 };
@@ -358,5 +467,12 @@ export default {
 }
 .unit {
   width: 60px;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: end;
+}
+.error {
+  color: red;
 }
 </style>

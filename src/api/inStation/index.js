@@ -64,3 +64,11 @@ export function updateGrowthBuffer(data) {
     data
   })
 }
+
+export function check(data) {
+  return request({
+    url: "/wipDelivery/check",
+    method: "post",
+    data,
+  });
+}

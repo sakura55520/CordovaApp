@@ -30,16 +30,21 @@
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.goodQty">
+                <el-input class="value" v-model="formData.goodQty" disabled>
                   <template slot="append">kg</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.scrapQty">
+                <el-input-number
+                  class="value"
+                  v-model="formData.scrapQty"
+                  @change="handleQtyChange"
+                  :style="{ width: '100%' }"
+                >
                   <template slot="append">kg</template>
-                </el-input>
+                </el-input-number>
               </div>
             </el-form-item>
           </div>
@@ -74,7 +79,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.originLength"></el-input>
+                  <el-input-number
+                    v-model="scope.row.originLength"
+                    @change="handleLengthChange(scope.$index)"
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -84,7 +92,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.chippingLength"></el-input>
+                  <el-input-number
+                    v-model="scope.row.chippingLength"
+                    @change="handleLengthChange(scope.$index)"
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -94,7 +105,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.ellipticLength"></el-input>
+                  <el-input-number
+                    v-model="scope.row.ellipticLength"
+                    @change="handleLengthChange(scope.$index)"
+                  ></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column
@@ -104,7 +118,10 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.qualifiedLength"></el-input>
+                  <el-input
+                    v-model="scope.row.qualifiedLength"
+                    disabled
+                  ></el-input>
                 </template>
               </el-table-column>
             </el-table>
@@ -213,6 +230,16 @@ export default {
       this.$message.success("出站成功");
       Api.deleteBuffer(this.buffParams);
       this.back();
+    },
+    handleLengthChange(index) {
+      let { originLength, chippingLength, ellipticLength } =
+        this.formData.segments[index];
+      this.formData.segments[index].qualifiedLength =
+        (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+    },
+    handleQtyChange() {
+      let { totalQty, scrapQty } = this.formData;
+      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
     },
   },
 };
