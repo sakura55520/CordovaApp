@@ -372,12 +372,14 @@ export default {
       if (!form) return
 
       const formContent = form.content
+      const errFormItemIdx = formContent.findIndex(({ label }) => label === '单晶异常')
+      let _showErrors = false
+      if (errFormItemIdx > -1) {
+        _showErrors = true
+        formContent.splice(errFormItemIdx, 1)
+      }
       this.steps[stepName].forEach((recordItem, recordIdx) => {
-        const errFormItemIdx = formContent.findIndex(({ label }) => label === '单晶异常')
-        if (errFormItemIdx > -1) {
-          recordItem._showErrors = true
-          formContent.splice(errFormItemIdx, 1)
-        }
+        recordItem._showErrors = _showErrors
         const _errors = (recordItem.errors || []).map(item => item.errorMessage)
         this.$set(this.steps[stepName][recordIdx], '_errors', _errors)
       })
@@ -399,7 +401,7 @@ export default {
     },
     fnCanAddrecord(stepName) {
       const matched = this.stepTabs.find(item => item.stepName === stepName)
-      return matched ? matched.canAddRecord : false
+      return matched ? !!matched.canAddRecord : false
     }
   }
 }
