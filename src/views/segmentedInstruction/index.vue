@@ -501,7 +501,7 @@
         </el-form>
       </div>
     </div>
-    <div class="btn">
+    <div class="btn" v-if="!$route.query.view">
       <el-button plain class="cancel-btn" @click="back">取消</el-button>
       <el-button type="primary" plain class="save-btn" @click="save"
         >保存</el-button

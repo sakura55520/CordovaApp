@@ -117,7 +117,7 @@
     </div>
 
     <!-- 页面操作 -->
-    <div class="pageHandleBox">
+    <div class="pageHandleBox" v-if="!$route.query.view">
       <el-button class="save" @click="handle('保存')">保存</el-button>
       <el-button class="submit" type="primary" @click="handle('提交')"
         >{{ storageLabel }}确认</el-button
