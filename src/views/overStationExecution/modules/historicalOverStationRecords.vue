@@ -10,11 +10,19 @@
         highlight-current-row
         class="admin_table"
       >
-        <el-table-column type="index" width="50"/>
-        <el-table-column label="批次号" prop="processingOrderCode" min-width="140"/>
-        <el-table-column label="设备" prop="equipmentCode"/>
+        <el-table-column type="index" width="50" />
+        <el-table-column
+          label="批次号"
+          prop="processingOrderCode"
+          min-width="140"
+        />
+        <el-table-column label="设备" prop="equipmentCode" />
         <el-table-column label="数量" prop="number" />
-        <el-table-column label="作业站名称" prop="processName" min-width="140" />
+        <el-table-column
+          label="作业站名称"
+          prop="processName"
+          min-width="140"
+        />
         <el-table-column label="进站时间" prop="startTime" width="140" />
         <el-table-column label="进站操作人" prop="inUserName" width="140" />
         <el-table-column label="出站时间" prop="endTime" width="140" />
@@ -26,22 +34,6 @@
         </el-table-column>
       </el-table>
     </div>
-<<<<<<< HEAD
-    <div v-if="list.length !== 0">
-      <div class="card" v-for="item in list" :key="item.processingOrderCode">
-        <div class="header">
-          <div>{{ item.processingOrderCode }}</div>
-          <i
-            class="el-icon-document form-icon"
-            @click="handleDetailView(item)"
-          ></i>
-        </div>
-        <el-divider class="divider" />
-        <el-table
-          :data="[item]"
-          key="number"
-          :header-cell-style="{
-=======
 
     <!--   PAD端展示   -->
     <div v-else>
@@ -80,15 +72,18 @@
             :data="[item]"
             key="number"
             :header-cell-style="{
->>>>>>> 238978731b5e04bcc6131f5e2ba5e0a47b28b451
-            background: 'rgba(242, 242, 242)',
-            color: '#606266',
-          }"
+              background: 'rgba(242, 242, 242)',
+              color: '#606266',
+            }"
           >
             <!-- <el-table-column label="产品料号" prop="number" min-width="100" />
           <el-table-column label="产品类型" prop="type" min-width="100" /> -->
             <el-table-column label="数量" prop="number" min-width="80" />
-            <el-table-column label="进站时间" prop="startTime" min-width="100" />
+            <el-table-column
+              label="进站时间"
+              prop="startTime"
+              min-width="100"
+            />
             <el-table-column label="出站时间" prop="endTime" min-width="100" />
             <el-table-column label="创建人" prop="createUserName" />
           </el-table>
@@ -113,12 +108,12 @@ import * as Api from "@/api/overStationExecution/overStation.js";
 import { isEmpty } from "lodash-es";
 
 export default {
-  name: 'HistoricalOverStationRecords',
+  name: "HistoricalOverStationRecords",
   props: {
     propSearch: {
       required: true,
-      type: Object
-    }
+      type: Object,
+    },
   },
   data() {
     return {
@@ -135,8 +130,8 @@ export default {
   },
   methods: {
     searchRows() {
-      this.currentPage = 1
-      this.fetchData()
+      this.currentPage = 1;
+      this.fetchData();
     },
     fetchData() {
       Api.fetchHistoricalOverStationRecords({
@@ -155,7 +150,7 @@ export default {
         search_LT_endTime: !isEmpty(this.endTimeRange)
           ? this.endTimeRange[1]
           : null,
-        ...this.propSearch
+        ...this.propSearch,
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);
@@ -214,11 +209,7 @@ export default {
   display: flex;
   justify-content: end;
 }
-<<<<<<< HEAD
 .form-icon {
   font-size: 24px;
 }
 </style>
-=======
-</style>
->>>>>>> 238978731b5e04bcc6131f5e2ba5e0a47b28b451
