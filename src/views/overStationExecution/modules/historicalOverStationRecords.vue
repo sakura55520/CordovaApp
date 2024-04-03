@@ -29,7 +29,12 @@
         <el-table-column label="进站操作人" prop="outUserName" width="140" />
         <el-table-column label="操作" width="100" fixed="right">
           <template slot-scope="{ row }">
-            <el-button class="table-rowBtn" type="text">查看</el-button>
+            <el-button
+              class="table-rowBtn"
+              type="text"
+              @click="handleDetailView(row)"
+              >查看</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -233,10 +238,10 @@ export default {
         let resFDZL = await fetchDetail({
           url: "/wip/segmentedInstructionDetail",
           page: 1,
-          rows: 10,
-          search_EQ_wipStorageId: row.id,
+          rows: 100,
+          search_LIKE_segmentNo: row.processingOrderCode,
         });
-        console.log(resFDZL);
+        fromData.segmentedInstructionDetailVos = resFDZL.data.rows;
       }
 
       this.$router.push({
