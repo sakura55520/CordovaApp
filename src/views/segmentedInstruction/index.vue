@@ -66,12 +66,12 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="下发工单" min-width="150" align="center">
+              <el-table-column label="下发工单" min-width="300" align="center">
                 <template slot-scope="scope">
                   <el-select
                     v-model="scope.row.orderCode"
                     @visible-change="
-                      (val) => handleSelectVisibleChange(val, scope.$index)
+                      (val) => handleWorkOrderVisibleChange(val, scope.$index)
                     "
                   >
                     <el-option
@@ -83,14 +83,29 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="流程编号" min-width="100" align="center">
+              <el-table-column label="流程编号" min-width="300" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.processCode"></el-input>
+                  <el-select
+                    v-model="scope.row.processCode"
+                    @visible-change="
+                      (val) => handleProcessCodeVisibleChange(val, scope.$index)
+                    "
+                    @change="
+                      (val) => handleProcessCodeChange(val, scope.$index)
+                    "
+                  >
+                    <el-option
+                      :label="item.processCode"
+                      :value="item.processCode"
+                      :key="item.processCode"
+                      v-for="item in scope.row.processList"
+                    ></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="流程说明" min-width="100" align="center">
+              <el-table-column label="流程说明" min-width="300" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.processName"></el-input>
+                  <el-input v-model="scope.row.processName" disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -139,7 +154,7 @@
                   <el-input v-model="scope.row.planWeight"></el-input>
                 </template>
               </el-table-column>
-              <el-table-column
+              <!-- <el-table-column
                 label="晶段类型"
                 min-width="100"
                 align="center"
@@ -148,7 +163,7 @@
                 <template slot-scope="scope">
                   <el-input v-model="scope.row.type"></el-input>
                 </template>
-              </el-table-column>
+              </el-table-column> -->
               <el-table-column
                 label="段位"
                 min-width="100"
@@ -322,22 +337,36 @@
               </el-table-column>
               <el-table-column
                 label="不合格原因"
-                min-width="120"
+                min-width="150"
                 align="center"
                 prop="reason"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.reason"></el-input>
+                  <el-select v-model="scope.row.reason">
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in wipStorageDisqualificationReasonList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
               <el-table-column
                 label="入库原因"
-                min-width="100"
+                min-width="150"
                 align="center"
                 prop="reasonIn"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.reasonIn"></el-input>
+                  <el-select v-model="scope.row.reasonIn">
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in wipStorageInStorageReasonList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
@@ -354,8 +383,16 @@
           </div>
           <div class="form">
             <div class="form-title">分段示意图</div>
-            <div class="chart">
+            <div
+              class="chart"
+              :style="{
+                width: `${
+                  (totalLength / (Math.ceil(totalLength / 50) * 50)) * 100
+                }%`,
+              }"
+            >
               <div
+                class="chart-box"
                 v-for="(item, index) in formData.segmentedInstructionDetailVos"
                 :key="index"
                 :style="{
@@ -373,11 +410,14 @@
                 >
                   <div class="number">
                     <div v-if="index === 0" class="headPosition">
-                      {{ item.headPosition }}
+                      <div>{{ item.headPosition }}</div>
+                      <div><i class="el-icon-caret-bottom"></i></div>
                     </div>
-                    <div class="tailPosition">{{ item.tailPosition }}</div>
+                    <div class="tailPosition">
+                      <div>{{ item.tailPosition }}</div>
+                      <div><i class="el-icon-caret-bottom"></i></div>
+                    </div>
                   </div>
-                  <div class="line"></div>
                   <div
                     :class="selectedIndex === index ? 'bar-selected' : 'bar'"
                     @click="handleSegmentedBarClick(index)"
@@ -445,6 +485,18 @@
                 </div>
               </div>
             </div>
+            <div class="measurement">
+              <div
+                class="ceil"
+                :key="item"
+                v-for="(item, index) in this.measurements"
+                :style="{ borderLeft: index === 0 ? '1px solid' : 'none' }"
+              >
+                <div>{{ item }}</div>
+                <div class="left-number" v-if="index === 0">0</div>
+                <div class="right-number">{{ (index + 1) * 50 }}</div>
+              </div>
+            </div>
           </div>
         </el-form>
       </div>
@@ -464,6 +516,7 @@
 <script>
 import * as Api from "@/api/inStation";
 import { cloneDeep } from "lodash-es";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   data() {
@@ -487,6 +540,9 @@ export default {
         number: [{ required: true, message: "数量不能为空", trigger: "blur" }],
       },
       selectedIndex: null,
+      wipStorageDisqualificationReasonList: [],
+      wipStorageInStorageReasonList: [],
+      processMap: {},
     };
   },
   computed: {
@@ -497,14 +553,26 @@ export default {
     totalLength() {
       let list = this.formData.segmentedInstructionDetailVos;
       if (list.length === 0) return 0;
-      return list[list.length - 1].tailPosition - list[0].headPosition;
+      return (
+        (list[list.length - 1].tailPosition ||
+          list[list.length - 1].headPosition) - list[0].headPosition
+      );
+    },
+    measurements() {
+      let number = Math.ceil(this.totalLength / 50);
+      let list = [];
+      for (let index = 0; index < number; index++) {
+        let charIndex = index % 20;
+        list.push(String.fromCharCode(65 + charIndex));
+      }
+      return list;
     },
   },
   mounted() {
     this.init();
   },
   methods: {
-    async handleSelectVisibleChange(visible, index) {
+    async handleWorkOrderVisibleChange(visible, index) {
       if (!visible) return;
       let item = this.formData.segmentedInstructionDetailVos[index];
       let { dopAnt, pnType, processOrderCode } = this.formData;
@@ -516,10 +584,38 @@ export default {
         resistanceTail: item.tailResistance,
         waferSize: item.diameter,
       });
-      this.formData.segmentedInstructionDetailVos[index].workOrderList =
-        res.data;
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      list[index].workOrderList = res.data;
+      this.formData.segmentedInstructionDetailVos = list;
+    },
+    async handleProcessCodeVisibleChange(visible, index) {
+      if (!visible) return;
+      let { processOrderCode } = this.formData;
+      let res = await Api.getBranchRoutes({
+        processingOrderCode: processOrderCode,
+      });
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      list[index].processList = res.data;
+      this.formData.segmentedInstructionDetailVos = list;
+      let processMap = {};
+      for (const item of res.data) {
+        processMap[item.processCode] = item.processName;
+      }
+      this.processMap = processMap;
+    },
+    handleProcessCodeChange(val, index) {
+      this.formData.segmentedInstructionDetailVos[index].processName =
+        this.processMap[val];
     },
     async init() {
+      await getSeleteData(
+        "wipStorageDisqualificationReason",
+        this.wipStorageDisqualificationReasonList
+      );
+      await getSeleteData(
+        "wipStorageInStorageReason",
+        this.wipStorageInStorageReasonList
+      );
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -571,32 +667,34 @@ export default {
     },
     handleHeadChange(value, index) {
       if (index !== 0) {
-        this.formData.segmentedInstructionDetailVos[index - 1].tailPosition =
-          value;
+        let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+        list[index - 1].tailPosition = value;
+        this.formData.segmentedInstructionDetailVos = list;
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
         if (
-          item.tailPosition ||
-          (item.tailPosition == 0 && item.headPosition) ||
-          item.headPosition == 0
+          (item.tailPosition || item.tailPosition === 0) &&
+          (item.headPosition || item.headPosition === 0)
         )
           item.length = item.tailPosition - item.headPosition;
+        else item.length = 0;
       }
     },
     handleTailChange(value, index) {
       if (index !== this.formData.segmentedInstructionDetailVos.length - 1) {
-        this.formData.segmentedInstructionDetailVos[index + 1].headPosition =
-          value;
+        let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+        list[index + 1].headPosition = value;
+        this.formData.segmentedInstructionDetailVos = list;
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
         if (
-          item.tailPosition ||
-          (item.tailPosition == 0 && item.headPosition) ||
-          item.headPosition == 0
+          (item.tailPosition || item.tailPosition === 0) &&
+          (item.headPosition || item.headPosition === 0)
         )
           item.length = item.tailPosition - item.headPosition;
+        else item.length = 0;
       }
     },
     handleHead79oiChange(value, index) {
@@ -733,11 +831,37 @@ export default {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   min-height: 100px;
-  padding: 20px 12px 12px;
+  padding: 20px 20px 20px;
   position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 2%;
+  .measurement {
+    position: absolute;
+    top: 80px;
+    width: calc(100% - 40px);
+    display: flex;
+    .ceil {
+      flex: 1;
+      height: 20px;
+      border-right: 1px solid;
+      border-bottom: 1px solid;
+      text-align: center;
+      position: relative;
+      .left-number {
+        position: absolute;
+        left: 0;
+        top: -20px;
+        transform: translateX(-50%);
+      }
+      .right-number {
+        position: absolute;
+        right: 0;
+        top: -20px;
+        transform: translateX(50%);
+      }
+    }
+  }
   .item {
     width: 49%;
     .input {
@@ -759,15 +883,22 @@ export default {
   }
   .chart {
     display: flex;
-    gap: 30px;
-    width: 100%;
+    .chart-box {
+      position: relative;
+    }
     .number {
-      height: 20px;
+      height: 100px;
       .headPosition {
-        float: left;
+        text-align: center;
+        position: absolute;
+        left: 0;
+        transform: translateX(-50%);
       }
       .tailPosition {
-        float: right;
+        text-align: center;
+        position: absolute;
+        right: 0;
+        transform: translateX(50%);
       }
     }
     .line {
@@ -777,8 +908,8 @@ export default {
       border-top: none;
     }
     .bar {
-      margin-top: 10px;
-      width: 100%;
+      margin: 0 auto;
+      width: calc(100% - 25px);
       height: 60px;
       border: 1px solid #000;
       cursor: pointer;
@@ -815,8 +946,8 @@ export default {
       }
     }
     .bar-selected {
-      margin-top: 10px;
-      width: 100%;
+      margin: 0 auto;
+      width: calc(100% - 25px);
       height: 60px;
       border: 1px solid rgb(2, 104, 197);
       background-color: rgb(233, 243, 253);
@@ -854,7 +985,8 @@ export default {
       }
     }
     .detail {
-      width: 100%;
+      margin: 0 auto;
+      width: calc(100% - 30px);
       border: 1px solid rgba(0, 0, 0, 0.3);
       margin-top: 10px;
       text-align: center;

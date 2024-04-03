@@ -80,3 +80,11 @@ export function getIssueWorkOrder(params) {
     params,
   });
 }
+
+export function getBranchRoutes(params) {
+  return request({
+    url: "/wip/segmentedInstruction/getBranchRoutes",
+    method: "get",
+    params,
+  });
+}
