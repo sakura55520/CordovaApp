@@ -47,9 +47,6 @@ export default {
   },
   methods: {
     init() {
-      if (!this.steps['留档文档']) {
-        this.$set(this.steps, '留档文档', [{ fiels: [] }])
-      }
       this.detailForm._files = this.stepData[0].files.map(fileItem => ({
         ...fileItem,
         big_url: fileItem.fileUrl,
