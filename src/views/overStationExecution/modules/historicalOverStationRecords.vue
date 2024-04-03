@@ -241,7 +241,9 @@ export default {
           rows: 100,
           search_LIKE_segmentNo: row.processingOrderCode,
         });
-        fromData.segmentedInstructionDetailVos = resFDZL.data.rows;
+        fromData.segmentedInstructionDetailVos = resFDZL.data.rows.sort(
+          (a, b) => a.headPosition - b.headPosition
+        );
       }
 
       this.$router.push({
