@@ -149,6 +149,7 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
+      this.handleQtyChange();
     },
     back() {
       this.$router.push("/overStationExecution?station=QTWQY");

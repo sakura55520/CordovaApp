@@ -293,8 +293,8 @@ export default {
           console.log(e);
         }
       }
-      console.log(JSON.parse(JSON.stringify(fromData)));
       this.formData = { ...this.formData, ...fromData };
+      this.handleQtyChange();
     },
     back() {
       this.$router.push("/overStationExecution?station=DJSF");
