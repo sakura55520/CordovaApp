@@ -1,62 +1,61 @@
 /*覆盖一些element-ui样式 覆盖css样式可在这里添加*/
-.el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell {
-  background-color: transparent;
-}
-.el-form-item {
-  margin-bottom: 16px;
-}
-.el-input,
-.el-form-item__label {
-  font-size: 16px;
-}
-.el-radio {
-  margin-right: 20px;
-  line-height: 30px;
-}
-.el-tag {
-  padding: 0 16px;
-  font-size: 18px;
-}
-.el-select__tags .el-tag {
-  padding: 0 8px;
-  font-size: 14px;
-}
-#app .el-button {
-  font-size: 20px;
-}
-.el-dropdown-menu__item, .el-menu-item {
-  font-size: 16px;
-}
-.el-input__icon {
-  -webkit-tap-highlight-color: transparent;
-}
-.el-input-number.is-without-controls .el-input__inner {
-  text-align: left;
-}
+.pad-form {
+  .el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell {
+    background-color: transparent;
+  }
+  .el-form-item {
+    margin-bottom: 16px;
+  }
+  .el-input,
+  .el-form-item__label {
+    font-size: 16px;
+  }
+  .el-radio {
+    margin-right: 20px;
+    line-height: 30px;
+  }
+  .el-tag {
+    padding: 0 16px;
+    font-size: 18px;
+  }
+  .el-select__tags .el-tag {
+    padding: 0 8px;
+    font-size: 14px;
+  }
+  .el-dropdown-menu__item, .el-menu-item {
+    font-size: 16px;
+  }
+  .el-input__icon {
+    -webkit-tap-highlight-color: transparent;
+  }
+  .el-input-number.is-without-controls .el-input__inner {
+    text-align: left;
+  }
 
-.el-dialog {
-  border-radius: 8px;
-}
-.el-dialog__header {
-  border-bottom: 1px solid #E4E7ED;
-}
-.el-dialog__footer {
-  padding: 8px 16px;
-}
+  .el-dialog {
+    border-radius: 8px;
+  }
+  .el-dialog__header {
+    border-bottom: 1px solid #E4E7ED;
+  }
+  .el-dialog__footer {
+    padding: 8px 16px;
+  }
 
-.el-table thead {
-  color: #303133;
-  font-size: 16px;
-}
+  .el-table thead {
+    color: #303133;
+    font-size: 16px;
+  }
 
-.el-tabs__header {
-  border-radius: 8px;
-  background: #fff;
-}
-.el-tabs__nav {
-  padding: 4px 0;
-}
-.el-alert .el-alert__description {
-  font-weight: bold;
-  font-size: 14px;
+  .el-tabs__header {
+    border-radius: 8px;
+    background: #fff;
+  }
+  .el-tabs__nav {
+    padding: 4px 0;
+  }
+  .el-alert .el-alert__description {
+    font-weight: bold;
+    font-size: 14px;
+  }
 }

@@ -11,7 +11,7 @@
       <div v-show="siteList && siteList.length" class="bodyBox">
         <div class="bodyBox-title">当前站点</div>
         <div class="bodyBox-list">
-          <el-radio-group v-model="currentItem" style="width: 100%;display: flex;flex-direction: column;justify-content: center;">
+          <el-radio-group v-model="currentItem" class="over-item">
             <el-radio v-for="(item,index) in siteList" :key="index" class="bodyBox-list-radio" :label="item.wipStorageName" border @click.native="handleCloseSite(item,index)">{{item.wipStorageName}}</el-radio>
           </el-radio-group>
         </div>
@@ -284,8 +284,13 @@ export default {
 
 
 <style lang="scss" scoped>
+.over-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .mainBox{
-
   .topBox{
     display: flex;
     gap: 16px;

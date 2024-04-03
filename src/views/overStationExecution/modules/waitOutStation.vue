@@ -1,7 +1,42 @@
 <template>
   <div>
-    <div v-if="list.length !== 0">
-      <div class="card" v-for="item in list" :key="item.code">
+    <!--   PC端展示   -->
+    <div v-if="$store.getters.fromPC">
+      <el-table
+        :data="list"
+        max-height="666"
+        border
+        fit
+        highlight-current-row
+        class="admin_table"
+        style="width: 100%"
+      >
+        <el-table-column type="index" width="50"/>
+        <el-table-column label="批次号" prop="code" min-width="140"/>
+        <el-table-column label="设备" prop="equipmentCode"/>
+        <el-table-column label="产品料号" prop="dataOrderCode" min-width="140"/>
+        <el-table-column label="产品类型" prop="">
+          <template slot-scope="scope">{{
+              JSON.parse(scope.row.data).productCategory
+            }}</template>
+        </el-table-column>
+        <el-table-column label="数量" prop="number" width="100" />
+        <el-table-column label="作业站名称" prop="processName" width="140" />
+        <el-table-column label="进站时间" prop="inTime" width="140" />
+        <el-table-column label="创建者" prop="createUserName" width="140" />
+        <el-table-column label="操作" width="100" fixed="right">
+          <template slot-scope="{ row }">
+            <el-button class="table-rowBtn" type="text" @click="handleExitStationClick(row)">退站</el-button>
+            <el-button v-if="row.wipStorageStatus === 0" class="table-rowBtn" type="text" @click="handleOverStationExecutionClick(row.code)">进站</el-button>
+            <el-button v-if="row.wipStorageStatus === 1" class="table-rowBtn" type="text" @click="handleOverStationExecutionClick(row.code)">出站</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <!--   PAD端展示   -->
+    <div v-else>
+      <div v-if="list.length !== 0" class="card" v-for="item in list" :key="item.code">
         <div class="header">{{ item.code }}</div>
         <el-divider class="divider" />
         <el-table
@@ -58,8 +93,9 @@
           </div>
         </div>
       </div>
+      <el-empty v-else :image-size="100"></el-empty>
     </div>
-    <el-empty v-else :image-size="100"></el-empty>
+
     <div class="pagination">
       <el-pagination
         :total="total"
@@ -93,6 +129,13 @@ import { getCurrentWipStorageData } from "@/api/overStation/overStation.js";
 import { isEmpty } from "lodash-es";
 
 export default {
+  name: 'WaitOutStation',
+  props: {
+    propSearch: {
+      required: true,
+      type: Object
+    }
+  },
   data() {
     return {
       currentPage: 1,
@@ -106,12 +149,17 @@ export default {
     };
   },
   mounted() {
-    this.fetchData();
+    if (!this.$store.getters.fromPC) this.fetchData();
   },
   methods: {
+    searchRows() {
+      this.currentPage = 1
+      this.fetchData()
+    },
     fetchData() {
       Api.fetchWaitOutStationPage({
         search_EQ_processCode: this.$route.query.station,
+        ...this.propSearch,
         rows: this.pageSize,
         page: this.currentPage,
       }).then((res) => {

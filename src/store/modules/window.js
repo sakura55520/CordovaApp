@@ -3,11 +3,15 @@ var moment = require("moment");
 const window = {
   state: {
     NowServerDate: "",
+    fromPC: false,
   },
 
   mutations: {
     NOW_SERVER_DATE: (state, nowServerDate) => {
       state.NowServerDate = nowServerDate
+    },
+    SET_FROM_PC: (state, fromPC) => {
+      state.fromPC = fromPC
     },
   },
   actions: {
@@ -28,6 +32,9 @@ const window = {
           1000
         );
       })
+    },
+    setFromPC({ commit }, fromPC) {
+      commit('SET_FROM_PC', fromPC)
     }
   }
 }

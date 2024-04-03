@@ -1,7 +1,10 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    :class="[$store.getters.fromPC ? 'pc-form' : 'pad-form']"
+  >
     <Heads
-      v-if="!$route.meta.HeadsHide"
+      v-if="!$route.meta.HeadsHide && !$store.getters.fromPC"
       :is-router="!$route.meta.btnReturnHide"
       :router="$route.meta.returnPath || '/dashboard'"
       :IsUser="!$route.meta.UserHide"
@@ -9,12 +12,14 @@
       NowServerDate
       @reload="reload()"
     ></Heads>
-    <router-view class="pad-form" v-if="isRouterAlive"/>
+    <router-view v-if="isRouterAlive"/>
   </div>
 </template>
 
 <script>
 import Heads from "@/views/heads/index";
+import querystring from 'querystring'
+
 export default {
   name: "App",
   components: {
@@ -22,15 +27,12 @@ export default {
   },
   data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
     };
   },
-  created(){
+  created() {
     //设置获取当前时间
     this.$store.dispatch('NowServerDate')
-  },
-  mounted() {
-
   },
   methods: {
     reload() {
@@ -55,11 +57,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-}
-.el-button--primary {
-  /* background-color: #988fd8;
-   border-color: #988fd8; */
-  /* box-shadow: 0px 5px 20px 0 #45c8dc; */
 }
 .clear {
   clear: both;
