@@ -66,12 +66,12 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="下发工单" min-width="150" align="center">
+              <el-table-column label="下发工单" min-width="300" align="center">
                 <template slot-scope="scope">
                   <el-select
                     v-model="scope.row.orderCode"
                     @visible-change="
-                      (val) => handleSelectVisibleChange(val, scope.$index)
+                      (val) => handleWorkOrderVisibleChange(val, scope.$index)
                     "
                   >
                     <el-option
@@ -83,14 +83,29 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="流程编号" min-width="100" align="center">
+              <el-table-column label="流程编号" min-width="300" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.processCode"></el-input>
+                  <el-select
+                    v-model="scope.row.processCode"
+                    @visible-change="
+                      (val) => handleProcessCodeVisibleChange(val, scope.$index)
+                    "
+                    @change="
+                      (val) => handleProcessCodeChange(val, scope.$index)
+                    "
+                  >
+                    <el-option
+                      :label="item.processCode"
+                      :value="item.processCode"
+                      :key="item.processCode"
+                      v-for="item in scope.row.processList"
+                    ></el-option>
+                  </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="流程说明" min-width="100" align="center">
+              <el-table-column label="流程说明" min-width="300" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.processName"></el-input>
+                  <el-input v-model="scope.row.processName" disabled></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -527,6 +542,7 @@ export default {
       selectedIndex: null,
       wipStorageDisqualificationReasonList: [],
       wipStorageInStorageReasonList: [],
+      processMap: {},
     };
   },
   computed: {
@@ -556,7 +572,7 @@ export default {
     this.init();
   },
   methods: {
-    async handleSelectVisibleChange(visible, index) {
+    async handleWorkOrderVisibleChange(visible, index) {
       if (!visible) return;
       let item = this.formData.segmentedInstructionDetailVos[index];
       let { dopAnt, pnType, processOrderCode } = this.formData;
@@ -568,8 +584,28 @@ export default {
         resistanceTail: item.tailResistance,
         waferSize: item.diameter,
       });
-      this.formData.segmentedInstructionDetailVos[index].workOrderList =
-        res.data;
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      list[index].workOrderList = res.data;
+      this.formData.segmentedInstructionDetailVos = list;
+    },
+    async handleProcessCodeVisibleChange(visible, index) {
+      if (!visible) return;
+      let { processOrderCode } = this.formData;
+      let res = await Api.getBranchRoutes({
+        processingOrderCode: processOrderCode,
+      });
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      list[index].processList = res.data;
+      this.formData.segmentedInstructionDetailVos = list;
+      let processMap = {};
+      for (const item of res.data) {
+        processMap[item.processCode] = item.processName;
+      }
+      this.processMap = processMap;
+    },
+    handleProcessCodeChange(val, index) {
+      this.formData.segmentedInstructionDetailVos[index].processName =
+        this.processMap[val];
     },
     async init() {
       await getSeleteData(
