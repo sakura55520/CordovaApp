@@ -65,7 +65,10 @@
         <div class="card" v-for="item in list" :key="item.processingOrderCode">
           <div class="header">
             <div>{{ item.processingOrderCode }}</div>
-            <i class="el-icon-document"></i>
+            <i
+              class="el-icon-document form-icon"
+              @click="handleDetailView(item)"
+            ></i>
           </div>
           <el-divider class="divider" />
           <el-table
@@ -105,6 +108,7 @@
 
 <script>
 import * as Api from "@/api/overStationExecution/overStation.js";
+import { fetchDetail } from "@/api/inStation";
 import { isEmpty } from "lodash-es";
 
 export default {
@@ -123,6 +127,52 @@ export default {
       list: [],
       startTimeRange: "",
       endTimeRange: "",
+      detailUrlMap: {
+        ZL: {
+          path: "/chargeOperate",
+          url: "/wipChargeOut",
+        },
+        ZJ: {
+          path: "/growthOperate",
+          url: "/wipCrystalGrowthOut",
+        },
+        DJSF: {
+          path: "/crystalDelivery",
+          url: "/wipDelivery",
+        },
+        QTWQY: {
+          path: "/headAndTailSampling",
+          url: "/wipCuttingSample",
+        },
+        JDJY: {
+          path: "/ingotDetection",
+          url: "/wipcrystalcheck",
+        },
+        FDZL: {
+          path: "/segmentedInstruction",
+          url: "/wip/segmentedInstruction",
+        },
+        GD: {
+          path: "/cutting",
+          url: "/wipSlicingOut",
+        },
+        GYZZ: {
+          path: "/roundTransferOperate",
+          url: "/wipTransferOut",
+        },
+        GY: {
+          path: "/roundOperate",
+          url: "/wipRollingCircleOut",
+        },
+        JC: {
+          path: "/addParameter",
+          url: "/wipAddReferenceOut",
+        },
+        RKJC: {
+          path: "/warehouseDetection",
+          url: "/wipInboundDetectionOut",
+        },
+      },
     };
   },
   mounted() {
@@ -164,8 +214,40 @@ export default {
       this.currentPage = val;
       this.fetchData();
     },
-    handleDetailView(row) {
-      console.log(JSON.parse(JSON.stringify(row)));
+    async handleDetailView(row) {
+      let url = this.detailUrlMap[this.$route.query.station].url;
+      let res = await fetchDetail({
+        url,
+        page: 1,
+        rows: 10,
+        search_EQ_wipStorageId: row.id,
+      });
+      let list = res.data.rows;
+      if (isEmpty(list)) {
+        this.$message.warning("该条记录无表单数据");
+        return;
+      }
+      let fromData = list[0];
+
+      if (this.$route.query.station === "FDZL") {
+        let resFDZL = await fetchDetail({
+          url: "/wip/segmentedInstructionDetail",
+          page: 1,
+          rows: 10,
+          search_EQ_wipStorageId: row.id,
+        });
+        console.log(resFDZL);
+      }
+
+      this.$router.push({
+        path: this.detailUrlMap[this.$route.query.station].path,
+        query: {
+          ...row,
+          processingOrderCode: row.processingOrderCode,
+          fromData: JSON.stringify(fromData),
+          view: true,
+        },
+      });
     },
   },
 };

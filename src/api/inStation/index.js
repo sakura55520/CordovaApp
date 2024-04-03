@@ -88,3 +88,11 @@ export function getBranchRoutes(params) {
     params,
   });
 }
+
+export function fetchDetail(params) {
+  return request({
+    url: `${params.url}/listByPage`,
+    method: "get",
+    params,
+  });
+}
