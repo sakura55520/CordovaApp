@@ -667,32 +667,34 @@ export default {
     },
     handleHeadChange(value, index) {
       if (index !== 0) {
-        this.formData.segmentedInstructionDetailVos[index - 1].tailPosition =
-          value;
+        let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+        list[index - 1].tailPosition = value;
+        this.formData.segmentedInstructionDetailVos = list;
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
         if (
-          item.tailPosition ||
-          (item.tailPosition == 0 && item.headPosition) ||
-          item.headPosition == 0
+          (item.tailPosition || item.tailPosition === 0) &&
+          (item.headPosition || item.headPosition === 0)
         )
           item.length = item.tailPosition - item.headPosition;
+        else item.length = 0;
       }
     },
     handleTailChange(value, index) {
       if (index !== this.formData.segmentedInstructionDetailVos.length - 1) {
-        this.formData.segmentedInstructionDetailVos[index + 1].headPosition =
-          value;
+        let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+        list[index + 1].headPosition = value;
+        this.formData.segmentedInstructionDetailVos = list;
       }
       for (const item of this.formData.segmentedInstructionDetailVos) {
         item.segmentNo = null;
         if (
-          item.tailPosition ||
-          (item.tailPosition == 0 && item.headPosition) ||
-          item.headPosition == 0
+          (item.tailPosition || item.tailPosition === 0) &&
+          (item.headPosition || item.headPosition === 0)
         )
           item.length = item.tailPosition - item.headPosition;
+        else item.length = 0;
       }
     },
     handleHead79oiChange(value, index) {
