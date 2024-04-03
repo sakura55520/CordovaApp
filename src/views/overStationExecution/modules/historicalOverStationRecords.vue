@@ -28,7 +28,10 @@
       <div class="card" v-for="item in list" :key="item.processingOrderCode">
         <div class="header">
           <div>{{ item.processingOrderCode }}</div>
-          <i class="el-icon-document"></i>
+          <i
+            class="el-icon-document form-icon"
+            @click="handleDetailView(item)"
+          ></i>
         </div>
         <el-divider class="divider" />
         <el-table
@@ -110,6 +113,9 @@ export default {
       this.currentPage = val;
       this.fetchData();
     },
+    handleDetailView(row) {
+      console.log(JSON.parse(JSON.stringify(row)));
+    },
   },
 };
 </script>
@@ -151,5 +157,8 @@ export default {
 .pagination {
   display: flex;
   justify-content: end;
+}
+.form-icon {
+  font-size: 24px;
 }
 </style>
