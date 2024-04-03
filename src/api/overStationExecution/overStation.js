@@ -1,4 +1,5 @@
 import request from "@/utils/req";
+import store from "@/store";
 
 // 待出站列表
 export function fetchWaitOutStationPage(params) {
@@ -23,4 +24,15 @@ export function exitStation(params) {
     method: "get",
     params,
   });
+}
+
+// 获取当前用户有权限的工厂模型树状图
+export function getfactoryModelTree() {
+  return request({
+    url: '/factoryModel/permission/tree',
+    method: 'get',
+    params: {
+      userId: store.getters.userId
+    }
+  })
 }

@@ -1,0 +1,249 @@
+button, input, optgroup, select, textarea {
+  font-family: sans-serif;
+}
+
+.main_body,
+.admin-table-wrap {
+  background: #fff;
+  padding: 8px 12px;
+  border-top: 1px solid #dcdcdc;
+  border-bottom: 1px solid #dcdcdc;
+  overflow-y: scroll;
+}
+
+.tableContain{
+  background: white;
+  padding: 8px 0 20px 8px;
+}
+
+/*顶部搜索栏样式*/
+.search-header-style {
+  padding-top: 6px;
+  padding-left: 16px;
+}
+/*搜索栏修改defult button样式为白底蓝字*/
+.search-header-style .el-button--default {
+  color: #409eff;
+}
+
+.admin_wrapper .el-form-item{
+  margin-bottom:5px !important;
+}
+
+// 表格 表头样式
+.admin_table {
+  .el-table__header-wrapper tr {
+    background-color: #f8f8f8 !important;
+  }
+
+  .el-table__header-wrapper th {
+    background-color: #E2E5EA !important;
+    padding: 0;
+  }
+
+  th.selectionStyle > .cell {
+    margin-left: 10px;
+  }
+
+  th {
+    background-color: #E2E5EA !important;
+
+    > .cell {
+      color: #606266;
+      background-color: #E2E5EA !important;
+      font-size: 14px;
+      line-height: 36px !important;
+      height: 36px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+  }
+
+  .el-table__cell {
+    padding: 0 !important;
+  }
+
+  td .cell.umy-table-beyond {
+    margin-left: 10px;
+  }
+
+  td > .cell {
+    line-height: 34px;
+    font-size: 12px;
+    white-space: nowrap;
+    //padding: 0 !important;
+  }
+
+  .el-table__fixed-right-patch {
+    background: #E2E5EA;;
+  }
+
+  /* 解决element-ui的table表格控件表头与内容列不对齐问题 */
+  .el-table th.gutter {
+    display: table-cell !important;
+  }
+
+  .el-table th.is-leaf {
+    color: #606266;
+    background: #E2E5EA;
+  }
+
+  /* el-table hover 鼠标悬停*/
+  .el-table__body tr.hover-row.el-table__row--striped > td.el-table__cell,
+  .el-table__body tr.hover-row > td.el-table__cell {
+    background-color: #EBEEF5;
+  }
+
+  /* current-row 选中行 背景色*/
+  .el-table__body tr.current-row > td.el-table__cell {
+    background-color: #E1F0FF;
+  }
+
+  /* current-row hover 选中行 边框色*/
+  .el-table--striped .el-table__body tr.el-table__row--striped.current-row td,
+  .el-table__body tr.current-row > td, .el-table__body tr.current-row > td,
+  .el-table__body tr.el-table__row--striped.current-row > td {
+    background-color: rgba(163, 198, 250, 0.35);
+    border-top: 1px solid #A3C6FA;
+    border-bottom: 1px solid #A3C6FA;
+  }
+
+  .el-table--striped .el-table__body tr.el-table__row--striped.current-row td:first-child,
+  .el-table__body tr.current-row > td:first-child, .el-table__body tr.current-row > td:first-child,
+  .el-table__body tr.el-table__row--striped.current-row > td:first-child {
+    border-left: 1px solid #A3C6FA;
+  }
+
+  .el-table--striped .el-table__body tr.el-table__row--striped.current-row td:last-child,
+  .el-table__body tr.current-row > td:last-child, .el-table__body tr.current-row > td:last-child,
+  .el-table__body tr.el-table__row--striped.current-row > td:last-child {
+    border-right: 1px solid #A3C6FA;
+  }
+
+  /* current-row hover 选中行悬停 背景色*/
+  .el-table__body tr.hover-row.current-row > td.el-table__cell {
+    background-color: #D8EBFF;
+
+  }
+
+  /* el-table border color */
+  .el-table--border,
+  .el-table--group,
+  .el-table td.el-table__cell,
+  .el-table th.el-table__cell.is-leaf {
+    border-color: #E2E5EA;
+  }
+
+  .el-table--border::after,
+  .el-table--group::after,
+  .el-table::before,
+  .el-table__fixed-right::before,
+  .el-table__fixed::before {
+    background-color: #E2E5EA;
+  }
+
+  .el-table__fixed-right::before {
+    height: 0;
+  }
+}
+
+// 分页 样式
+.admin_pagination {
+  margin-top: 10px;
+}
+.admin_pagination .number{
+  border:1px solid #ddd;
+  border-left: none;
+  color:#909399;
+}
+.admin_pagination .more{
+  border-right:1px solid #ddd;
+}
+.admin_pagination .number.active{
+  color:#409eff;
+}
+.admin_pagination .btn-prev{
+  border:1px solid #ddd;
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+  padding:0;
+}
+.admin_pagination .btn-next{
+  border:1px solid #ddd;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  padding:0;
+  border-left: none;
+}
+.admin_pagination .btn-next>.el-icon,
+.admin_pagination .btn-prev>.el-icon{
+  color:#909399;
+  &:hover{
+    color:#409eff;
+  }
+}
+
+.inputNumber input[type='number']::-webkit-outer-spin-button,
+.inputNumber input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+  box-shadow: 0 0 0px rgba(0,0,0,0.1);
+}
+/*在firefox下移除input[number]的上下箭头*/
+.inputNumber input[type="number"] {
+  -moz-appearance: textfield;
+  box-shadow: 0 0 0px rgba(0,0,0,0.1);
+}
+
+/*蓝色的标题样式*/
+.title-bar {
+  margin: 14px 0;
+  border-left: 5px solid #409EFF;
+  padding-left: 10px;
+  font-size: 16px;
+  line-height: 1;
+  color: #409EFF;
+  text-align: left;
+}
+
+.table-rowBtn {
+  margin-left: 0 !important;
+  color:#409eff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.table-rowBtn:not(:last-child):after{
+  content: '|';
+  color:  #E1E4EA;
+  margin: 0 8px;
+}
+.table-textBtn:not(:last-child):after {
+  content: '|';
+  color: #E1E4EA;
+  margin: 0 8px;
+}
+
+.table-delBtn:hover  {
+  color: red;
+}
+/*chrome滚动条*/
+::-webkit-scrollbar-track-piece{
+  -webkit-border-radius:0;
+}
+::-webkit-scrollbar{
+  width: 10px;
+  height:10px;
+}
+::-webkit-scrollbar-thumb{
+  height:50px;
+  background-color:#DCDFE6;
+  -webkit-border-radius:4px;
+  outline-offset:-2px;
+  border: 2px solid #DCDFE6;
+}
+::-webkit-scrollbar-thumb:hover{
+  height:50px;
+  background-color:#DCDFE6;
+  -webkit-border-radius:4px;
+}
