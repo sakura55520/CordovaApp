@@ -1,17 +1,10 @@
 <template>
   <div id="heads">
     <div>
-      <!-- <div class="divReturn" v-show="IsRouter">
-        <a @click="router">
+      <div class="divReturn" v-show="IsRouter">
+        <a @click="back">
           <li style="color: #fff" class="el-icon-arrow-left"></li>
         </a>
-      </div> -->
-      <div class="divReturn" v-show="IsRouter">
-        <router-link :to="router">
-          <a>
-            <li style="color: #fff" class="el-icon-arrow-left"></li>
-          </a>
-        </router-link>
       </div>
 
       <div class="divhead">
@@ -19,7 +12,6 @@
         <span v-if="$route.query.station">
           - {{ processCodeMap[$route.query.station] }}</span
         >
-        <!-- <i @click="reload()" class="el-icon-refresh el-icon-refreshs"></i> -->
       </div>
 
       <div v-show="IsUser" class="divuser">
@@ -36,7 +28,7 @@ import { mapState } from "vuex";
 
 export default {
   name: "heads",
-  props: ["IsRouter", "router", "IsUser"],
+  props: ["IsRouter", "IsUser"],
   data() {
     return {
       processCodeMap: {
@@ -71,11 +63,12 @@ export default {
         });
       });
     },
-    reload() {
-      this.$emit("reload");
-    },
     back() {
-      window.history.go(-1);
+      if (this.$route.meta.returnPath) {
+        this.$router.replace(this.$route.meta.returnPath)
+      } else {
+        this.$router.back()
+      }
     },
   },
 };

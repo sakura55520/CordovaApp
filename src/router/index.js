@@ -7,7 +7,6 @@ import Router from 'vue-router'
     HeadsHide: false             默认false, 显示顶部导航栏
     text: '工作中心'              显示在顶部导航栏中的标题名字
     btnReturnHide: false         默认false, 显示后退按钮
-    returnPath: '/'              设置后退路径, 默认'/'
   }
 * */
 
@@ -42,7 +41,6 @@ export const constantRouterMap = [
     component: () => import('@/views/overStation/index'),
     hidden: true,
     meta: {text: '过站操作'},
-    props: true
   },
 
   {
@@ -50,8 +48,10 @@ export const constantRouterMap = [
     path: '/overStationExecution',
     component: () => import('@/views/overStationExecution/index'),
     hidden: true,
-    meta: {text: '过站操作'},
-    props: true
+    meta: {
+      text: '过站操作',
+      returnPath: '/'
+    },
   },
 
   {

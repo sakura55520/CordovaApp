@@ -6,7 +6,6 @@
     <Heads
       v-if="!$route.meta.HeadsHide && !$store.getters.fromPC"
       :is-router="!$route.meta.btnReturnHide"
-      :router="$route.meta.returnPath || '/dashboard'"
       :IsUser="!$route.meta.UserHide"
       z-index="99999"
       NowServerDate

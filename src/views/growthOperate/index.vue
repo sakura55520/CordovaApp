@@ -22,7 +22,7 @@
             ref="TabItem"
             :step-data="steps[stepName]"
             :step-name="stepName"
-            :can-add-record="fnCanAddrecord(stepName)"
+            :can-add-record="!!calcAddRecordMap[stepName]"
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
@@ -95,15 +95,12 @@ export default {
         },
         {
           stepName: '抽真空',
-          showUserCreate: true, // 显示操作者1
         },
         {
           stepName: '检漏',
-          showUserCreate: true, // 显示操作者1
         },
         {
           stepName: '煅烧',
-          canAddRecord: true, // 允许添加记录
         },
         {
           stepName: '化料'
@@ -128,7 +125,8 @@ export default {
           canAddRecord: true,
         },
         {
-          stepName: '煅烧冷却'
+          stepName: '煅烧冷却',
+          canAddRecord: true, // 允许添加记录
         },
         {
           stepName: '吊单晶',
@@ -147,6 +145,11 @@ export default {
           canAddRecord: true,
         }
       ]
+    },
+    calcAddRecordMap() {
+      const map = {}
+      this.stepTabs.forEach(item => map[item.stepName] = item.canAddRecord)
+      return map
     },
     calcStepNameList() {
       const list = []
@@ -221,9 +224,9 @@ export default {
         const stepData = steps[stepName]
         if (!stepData || !stepData.length) return delete steps[stepName]
         stepData.forEach((recordItem) => {
-          const { exts, techs } = recordItem
-          this.transformExts(exts)
-          this.transformTechs(techs)
+          this.transformExts(recordItem.exts)
+          this.transformChecks(recordItem.checks)
+          this.transformTechs(recordItem.techs)
 
           // errors
           recordItem.errors = (recordItem._errors || []).map(errorMessage => ({ errorMessage }))
@@ -250,6 +253,12 @@ export default {
         this.deleteNeedlessFields(arr[index])
       }
     },
+    transformChecks(arr) {
+      if (!Array.isArray(arr)) return
+      for (let index = 0; index < arr.length; index++) {
+        this.deleteNeedlessFields(arr[index])
+      }
+    },
     transformTechs(arr) {
       if (!Array.isArray(arr)) return
       for (let index = 0; index < arr.length; index++) {
@@ -261,7 +270,7 @@ export default {
       }
     },
     deleteNeedlessFields(item) {
-      const needlessFields = ['androidType', 'append', 'changeTag', 'clearable', 'disabled', 'document', 'filterable', 'formId', 'format', 'label', 'labelWidth', 'layout', 'maxlength', 'multiple', 'options', 'placeholder', 'prefix-icon', 'prepend', 'readonly', 'regList', 'renderKey', 'required', 'show-word-limit', 'span', 'style', 'suffix-icon', 'tag', 'tagIcon', 'type', 'vModel', 'value-format']
+      const needlessFields = ['androidType', 'append', 'border', 'changeTag', 'clearable', 'disabled', 'document', 'filterable', 'formId', 'format', 'label', 'labelWidth', 'layout', 'maxlength', 'multiple', 'options', 'optionType', 'placeholder', 'prefix-icon', 'prepend', 'readonly', 'regList', 'renderKey', 'required', 'show-word-limit', 'size', 'span', 'style', 'suffix-icon', 'tag', 'tagIcon', 'type', 'vModel', 'value-format']
       needlessFields.forEach(field => delete item[field])
     },
     initFormContent() {
@@ -273,116 +282,126 @@ export default {
         })
         this.calcStepNameList.forEach(stepName => {
           if (!this.steps[stepName]) {
-            this.$set(this.steps, stepName, [])
-            return
+            return this.$set(this.steps, stepName, [])
           }
-          this.initErrors(stepName)
-          this.initExts(stepName)
-          this.initChecks(stepName)
-          this.initTechs(stepName)
+
+          this.steps[stepName].forEach((recordItem, recordIdx) => {
+            this.initError(stepName, recordIdx)
+            this.initExt(stepName, recordIdx)
+            this.initCheck(stepName, recordIdx)
+            this.initTech(stepName, recordIdx)
+          })
         })
 
         if (!this.steps['留档文档']) this.$set(this.steps, '留档文档', [])
       })
     },
     // 点检项
-    initChecks(stepName) {
+    initCheck(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-点检项`]
       if (!form) return
 
-      const formContent = form.content
-      this.steps[stepName].forEach((recordItem, recordIdx) => {
-        const label2value = {}
-        if (Array.isArray(recordItem.checks)) {
-          recordItem.checks.forEach(data => {
-            label2value[data.checkItem] = data
-          })
-        }
-
-        const checks = []
-        formContent.forEach(({ label }) => {
-          checks.push({
-            ...defaultCheckItem,
-            ...label2value[label],
-            checkItem: label
-          })
+      const stepData = this.steps[stepName]
+      const label2value = {}
+      if (Array.isArray(stepData[recordIdx].checks)) {
+        stepData[recordIdx].checks.forEach(data => {
+          label2value[data.checkItem] = data
         })
-        this.$set(this.steps[stepName][recordIdx], 'checks', checks)
-      })
+      }
+      if (this.calcAddRecordMap[stepName]) {
+        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData.checks) {
+          stepData._defaultStepData.checks = form.content.map(formItem => ({
+            ...formItem,
+            checkItem: formItem.label
+          }))
+        }
+      }
 
+      this.$set(stepData[recordIdx], 'checks', form.content.map(formItem => ({
+        ...formItem,
+        ...label2value[formItem.label],
+        checkItem: formItem.label
+      })))
     },
     // 工艺参数
-    initTechs(stepName) {
+    initTech(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-工艺参数`]
       if (!form) return
 
-      const formContent = form.content
-      this.steps[stepName].forEach((recordItem, recordIdx) => {
-        const label2value = {}
-        if (Array.isArray(recordItem.techs)) {
-          recordItem.techs.forEach(data => {
-            label2value[data.extKey] = data
-          })
-        }
-
-        const techs = []
-        formContent.forEach(formItem => {
-          techs.push({
-            ...formItem,
-            ...label2value[formItem.label],
-            extKey: formItem.label
-          })
+      const stepData = this.steps[stepName]
+      const label2value = {}
+      if (Array.isArray(stepData[recordIdx].techs)) {
+        stepData[recordIdx].techs.forEach(data => {
+          label2value[data.extKey] = data
         })
-        this.$set(this.steps[stepName][recordIdx], 'techs', techs)
-      })
+      }
+      if (this.calcAddRecordMap[stepName]) {
+        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData.techs) {
+          stepData._defaultStepData.techs = form.content.map(formItem => ({
+            ...formItem,
+            extKey: formItem.label
+          }))
+        }
+      }
+
+      this.$set(stepData[recordIdx], 'techs', form.content.map(formItem => ({
+        ...formItem,
+        ...label2value[formItem.label],
+        extKey: formItem.label
+      })))
     },
     // 其余参数
-    initExts(stepName) {
+    initExt(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-其余参数`]
       if (!form) return
 
-      const formContent = form.content
-      this.steps[stepName].forEach((recordItem, recordIdx) => {
-        const label2value = {}
-        if (Array.isArray(recordItem.exts)) {
-          recordItem.exts.forEach(data => {
-            label2value[data.extKey] = data
-          })
-        }
-
-        const exts = []
-        formContent.forEach(formItem => {
-          const { label } = formItem
-          const techItem = {
-            ...formItem,
-            ...label2value[label],
-            extKey: label
-          }
-          exts.push(techItem)
+      const stepData = this.steps[stepName]
+      const label2value = {}
+      if (Array.isArray(stepData[recordIdx].exts)) {
+        stepData[recordIdx].exts.forEach(data => {
+          label2value[data.extKey] = data
         })
+      }
+      if (this.calcAddRecordMap[stepName]) {
+        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData.exts) {
+          stepData._defaultStepData.exts = form.content.map(formItem => ({
+            ...formItem,
+            extKey: formItem.label
+          }))
+        }
+      }
 
-
-
-        this.$set(this.steps[stepName][recordIdx], 'exts', exts)
-      })
+      this.$set(stepData[recordIdx], 'exts', form.content.map(formItem => ({
+        ...formItem,
+        ...label2value[formItem.label],
+        extKey: formItem.label
+      })))
     },
     // 异常
-    initErrors(stepName) {
+    initError(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-其余参数`]
       if (!form) return
 
-      const formContent = form.content
-      const errFormItemIdx = formContent.findIndex(({ label }) => label === '单晶异常')
-      let _showErrors = false
-      if (errFormItemIdx > -1) {
-        _showErrors = true
-        formContent.splice(errFormItemIdx, 1)
+      const stepData = this.steps[stepName]
+      if (this.calcAddRecordMap[stepName]) {
+        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData._errors) {
+          const errFormItemIdx = form.content.findIndex(({label}) => label === '单晶异常')
+          let _showErrors = false
+          if (errFormItemIdx > -1) {
+            _showErrors = true
+            form.content.splice(errFormItemIdx, 1)
+          }
+          stepData._defaultStepData._errors = []
+          stepData._showErrors = stepData._defaultStepData._showErrors = _showErrors
+        }
       }
-      this.steps[stepName].forEach((recordItem, recordIdx) => {
-        recordItem._showErrors = _showErrors
-        const _errors = (recordItem.errors || []).map(item => item.errorMessage)
-        this.$set(this.steps[stepName][recordIdx], '_errors', _errors)
-      })
+
+      this.$set(stepData[recordIdx], '_showErrors', stepData._showErrors)
+      this.$set(stepData[recordIdx], '_errors', (stepData[recordIdx].errors || []).map(item => item.errorMessage))
     },
     handleSetpClick({ label }) {
       switch (label) {
@@ -399,10 +418,6 @@ export default {
         default:
       }
     },
-    fnCanAddrecord(stepName) {
-      const matched = this.stepTabs.find(item => item.stepName === stepName)
-      return matched ? !!matched.canAddRecord : false
-    }
   }
 }
 </script>
@@ -413,16 +428,23 @@ export default {
     .el-tabs {
       overflow: visible;
     }
+    .el-tabs__content {
+      //overflow: visible;
+    }
     .el-tabs__header {
       position: sticky;
       top: 50px;
     }
+    .el-collapse-item > div:first-child {
+      /*border-bottom: 1px solid #EBEEF5;*/
+      /*position: sticky;
+      top: 50px;*/
+    }
     .el-collapse-item__header {
       height: 60px;
+      /*border-bottom: none;*/
       padding-left: 26px;
       font-size: 20px;
-      position: sticky;
-      top: 0;
     }
     .el-collapse-item__arrow {
       position: absolute;
