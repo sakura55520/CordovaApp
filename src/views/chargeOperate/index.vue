@@ -163,7 +163,10 @@ export default {
         chargePipeModel: [{ required: true, message: '请选择加料管型号', trigger: 'change' }],
         chargePipeSerial: [{ required: true, message: '请选择加料管编号', trigger: 'change' }],
         feedingTime: [{ required: true, message: '请选择装料时间', trigger: 'change' }],
-        _arrFeedingAmount: [{ type: 'array', required: true, message: '请输入加料量', trigger: 'change' }],
+        _arrFeedingAmount: [
+          { type: 'array', required: true, message: '请输入加料量', trigger: 'change' }
+        ],
+        feedingDuration: [{ type: 'number', min: 0, required: true, message: '装料时长必须>0', trigger: 'change' }],
       },
       technologyList: [],
     }
@@ -255,13 +258,13 @@ export default {
       this.detailForm.goodQty = feedingTotal - scrapQty
     },
     handleFeedingTimeChange(time) {
+      console.log('time', time)
       this.detailForm.feedingDuration = moment(this.$store.getters.NowServerDate).diff(time, 'minutes')
     },
     refreshFeeding() {
       if (this.feedPercent < 100 && last(this.detailForm._arrFeedingAmount)) this.detailForm._arrFeedingAmount.push('')
     },
     getProcessNo() {
-      console.log('this.$route.query.deviceCode', this.$route.query.deviceCode)
       getProcessNo({
         search_EQ_equipmentCode: this.$route.query.deviceCode,
         page: 1,
