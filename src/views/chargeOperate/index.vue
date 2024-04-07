@@ -35,7 +35,9 @@
               <el-input v-model="detailForm.scrapQty" type="number" @change="handleScrapQtyChange"/>
             </el-form-item>
             <el-form-item label="工艺编号" prop="technologyNumber">
-              <el-input v-model="detailForm.technologyNumber"/>
+              <el-select v-model="detailForm.technologyNumber" filterable>
+                <el-option v-for="(item, index) in technologyList" :key="index" :value="item"/>
+              </el-select>
             </el-form-item>
           </div>
 
@@ -118,6 +120,7 @@ import SelectUserinfo from '@/components/select_userinfo'
 import * as Api from '@/api/inStation'
 import { cloneDeep, floor, last } from 'lodash-es'
 import moment from 'moment'
+import {getProcessNo} from "@/api/tool";
 
 const defaultForm = {
   userConfirm: null, // 确认者
@@ -161,7 +164,8 @@ export default {
         chargePipeSerial: [{ required: true, message: '请选择加料管编号', trigger: 'change' }],
         feedingTime: [{ required: true, message: '请选择装料时间', trigger: 'change' }],
         _arrFeedingAmount: [{ type: 'array', required: true, message: '请输入加料量', trigger: 'change' }],
-      }
+      },
+      technologyList: [],
     }
   },
   computed: {
@@ -200,6 +204,8 @@ export default {
 
       // 加料量
       this.$set(this.detailForm, '_arrFeedingAmount', (this.detailForm.feedingAmount || '').split(','))
+
+      this.getProcessNo()
     },
     back() {
       this.$router.push('/overStationExecution?station=ZL')
@@ -208,12 +214,13 @@ export default {
     handle(typeName) {
       const { _arrFeedingAmount, ...form } = this.detailForm
       let feedingAmount = (_arrFeedingAmount || []).filter(x => x).join(',')
+      form.feedingAmount = feedingAmount
       const FormData = JSON.stringify({
         ...form,
         feedingAmount
       })
       if (typeName === '保存') {
-        Api.upldateBuffer(this.buffParams, this.detailForm).then(res => {
+        Api.upldateBuffer(this.buffParams, form).then(res => {
           this.$message.success('保存成功!')
           this.back()
         })
@@ -252,6 +259,16 @@ export default {
     },
     refreshFeeding() {
       if (this.feedPercent < 100 && last(this.detailForm._arrFeedingAmount)) this.detailForm._arrFeedingAmount.push('')
+    },
+    getProcessNo() {
+      console.log('this.$route.query.deviceCode', this.$route.query.deviceCode)
+      getProcessNo({
+        search_EQ_equipmentCode: this.$route.query.deviceCode,
+        page: 1,
+        rows: 1000
+      }).then(res => {
+        this.technologyList = res.data.rows.map(({ processNo }) => processNo)
+      })
     }
   }
 }

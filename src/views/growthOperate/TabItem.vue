@@ -41,7 +41,7 @@
           </div>
           <div class="growth-section">
             <div v-for="(formItem, index) in recordItem.checks" :key="index">
-              <el-form-item :label="formItem.checkItem" class="check-item" label-width="auto">
+              <el-form-item :label="formItem.checkItem" class="check-item">
                 <el-radio-group v-model="formItem.isError">
                   <el-radio :label="false">正常</el-radio>
                   <el-radio :label="true">异常</el-radio>
@@ -75,7 +75,7 @@
       </el-form>
     </el-collapse-item>
 
-<!--    <el-button v-if="canAddRecord" class="block-btn" type="primary" plain @click="handleIncrease"><i class="el-icon-plus"/>添加{{ stepName }}记录</el-button>-->
+    <el-button v-if="canAddRecord" class="block-btn" type="primary" plain @click="handleIncrease"><i class="el-icon-plus"/>添加{{ stepName }}记录</el-button>
   </el-collapse>
 </template>
 
@@ -125,9 +125,10 @@ export default {
       this.$set(this.stepData[recordIdx].techs[formItemIdx], 'extValue', event)
     },
     handleIncrease() {
-      this.stepData.push({
-
-      })
+      const stepData = JSON.parse(JSON.stringify(this.stepData._defaultStepData))
+      stepData.userCreate = this.$store.getters.realName
+      this.stepData.push(stepData)
+      this.$message.success(`已添加【${this.stepName}记录${this.stepData.length}】! `)
     }
   }
 }
