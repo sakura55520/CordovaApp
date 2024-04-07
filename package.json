@@ -23,6 +23,7 @@
     "moment": "^2.22.2",
     "querystring": "^0.2.1",
     "vue": "^2.5.2",
+    "vue-direction-key": "^1.0.5",
     "vue-router": "^3.0.1",
     "vue-scroller": "^2.2.4",
     "vue-touch-keyboard": "^0.3.1",
