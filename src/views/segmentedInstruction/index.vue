@@ -531,6 +531,8 @@ export default {
       productName: "",
       formData: {
         userCreate: null,
+        length: null,
+        number: null,
         segmentedInstructionDetailVos: [],
       },
       formRules: {

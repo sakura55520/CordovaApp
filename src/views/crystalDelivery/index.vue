@@ -222,6 +222,13 @@ export default {
         goodQty: null,
         defectQty: null,
         scrapQty: null,
+        numberConsistence: null,
+        endSitutation: null,
+        dislocationIdentification: null,
+        dislocationIdentificationLength: null,
+        measuredDiameter: null,
+        disengageDiameter: null,
+        bottomMaterialWeight: null,
       },
       formRules: {
         userCreate: [

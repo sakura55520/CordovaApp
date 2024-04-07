@@ -99,6 +99,9 @@ export default {
         goodQty: null,
         defectQty: null,
         scrapQty: null,
+        headWeight: null,
+        tailWeight: null,
+        lengthQty: null,
       },
       formRules: {
         userCreate: [

@@ -217,8 +217,19 @@ export default {
       formData: {
         userCreate: null,
         goodQty: null,
-        defectQty: null,
         scrapQty: null,
+        planLength: null,
+        originLength: null,
+        chippingLength: null,
+        ellipticLength: null,
+        qualifiedLength: null,
+        mainReferenceSurfaceCrystalOrientation: null,
+        mainReferenceSurfaceLength: null,
+        mainAuxiliaryAngle: null,
+        mainReferenceSurfaceWidthHead: null,
+        mainReferenceSurfaceWidthTail: null,
+        auxiliaryReferenceSurfaceHead: null,
+        auxiliaryReferenceSurfaceTail: null,
       },
       formRules: {
         userCreate: [

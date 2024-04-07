@@ -335,6 +335,7 @@ export default {
         confirmer: null,
         goodQty: null,
         abnormalQty: null,
+        currentLengthQty: null,
         model: null,
         size: null,
         orientation: null,
