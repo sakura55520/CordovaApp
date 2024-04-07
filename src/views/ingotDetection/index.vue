@@ -145,6 +145,7 @@
                     @input="
                       (val) => handleSamplePositionChange(val, scope.$index)
                     "
+                    v-direction="{ x: 0, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -176,34 +177,55 @@
                 prop="crystalDensity"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.crystalDensity"></el-input>
+                  <el-input
+                    v-model="scope.row.crystalDensity"
+                    v-direction="{ x: 1, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="RES" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.res"></el-input>
+                  <el-input
+                    v-model="scope.row.res"
+                    v-direction="{ x: 2, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="RES_C" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.resC"></el-input>
+                  <el-input
+                    v-model="scope.row.resC"
+                    v-direction="{ x: 3, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="RES_E" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.resE"></el-input> </template
+                  <el-input
+                    v-model="scope.row.resE"
+                    v-direction="{ x: 4, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="1/2RES" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.halfRes"></el-input> </template
+                  <el-input
+                    v-model="scope.row.halfRes"
+                    v-direction="{ x: 5, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="1/2 RRG" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.halfRrg"></el-input> </template
+                  <el-input
+                    v-model="scope.row.halfRrg"
+                    v-direction="{ x: 6, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="RRG" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.rrg"></el-input> </template
+                  <el-input
+                    v-model="scope.row.rrg"
+                    v-direction="{ x: 7, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column
                 label="尾部电阻率"
@@ -213,6 +235,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.tailResistivity"
+                    v-direction="{ x: 8, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column
@@ -223,28 +246,42 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.headTailResistivityRatio"
+                    v-direction="{ x: 9, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="OI_C" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.oiC"></el-input> </template
+                  <el-input
+                    v-model="scope.row.oiC"
+                    v-direction="{ x: 10, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="CS" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.cs"></el-input> </template
+                  <el-input
+                    v-model="scope.row.cs"
+                    v-direction="{ x: 11, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.oiE"></el-input> </template
+                  <el-input
+                    v-model="scope.row.oiE"
+                    v-direction="{ x: 12, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="ORG" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.org"></el-input> </template
+                  <el-input
+                    v-model="scope.row.org"
+                    v-direction="{ x: 13, y: scope.$index }"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="少子寿命" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.minorityCarrierLifetime"
+                    v-direction="{ x: 14, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="操作" align="center">
@@ -345,6 +382,9 @@ export default {
       return { processUuid, processingOrderCode };
     },
   },
+  created() {
+    this.initKeyup();
+  },
   mounted() {
     this.init();
   },
@@ -364,6 +404,23 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
+    },
+    initKeyup() {
+      let direction = this.$getDirection();
+      direction.on("keyup", function (e, val) {
+        if (e.keyCode === 39) {
+          direction.next();
+        }
+        if (e.keyCode === 37) {
+          direction.previous();
+        }
+        if (e.keyCode === 38) {
+          direction.previousLine();
+        }
+        if (e.keyCode === 40) {
+          direction.nextLine();
+        }
+      });
     },
     addDetails() {
       if (!this.formData.details) this.formData.details = [];

@@ -15,6 +15,7 @@ import fabric from 'fabric';
 import { hoursFromNow } from '@/utils/tool'
 import moment from 'moment'
 import 'moment/locale/zh-cn'
+import Direction from 'vue-direction-key'
 
 // import 'babel-polyfill'
 import '@/icons' // icons
@@ -36,6 +37,7 @@ ElementUI.Dialog.props.closeOnClickModal.default = false
 Vue.use(ElementUI)
 Vue.use(VueScroller)
 Vue.use(trim)
+Vue.use(Direction)
 
 Vue.config.productionTip = false
 Vue.prototype.$fabric = fabric;
