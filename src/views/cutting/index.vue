@@ -163,13 +163,13 @@ export default {
       },
       formRules: {
         userCreate: [
-          { required: true, message: "操作者不能为空", trigger: "blur" },
+          { required: true, message: "操作者不能为空", trigger: "change" },
         ],
         goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "blur" },
+          { required: true, message: "合格数量不能为空", trigger: "change" },
         ],
         scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "blur" },
+          { required: true, message: "报废数量不能为空", trigger: "change" },
         ],
       },
     };

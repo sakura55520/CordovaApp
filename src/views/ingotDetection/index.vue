@@ -173,7 +173,7 @@
               </el-table-column>
               <el-table-column
                 label="结晶比重"
-                min-width="150"
+                min-width="180"
                 align="center"
                 prop="crystalDensity"
               >
@@ -181,7 +181,9 @@
                   <el-input
                     v-model="scope.row.crystalDensity"
                     v-direction="{ x: 1, y: scope.$index }"
-                  ></el-input>
+                  >
+                    <template slot="append">%</template>
+                  </el-input>
                 </template>
               </el-table-column>
               <el-table-column label="RES" min-width="80" align="center">
@@ -346,33 +348,33 @@ export default {
       },
       formRules: {
         inspector: [
-          { required: true, message: "检测人员不能为空", trigger: "blur" },
+          { required: true, message: "检测人员不能为空", trigger: "change" },
         ],
         tester: [
-          { required: true, message: "测试人员不能为空", trigger: "blur" },
+          { required: true, message: "测试人员不能为空", trigger: "change" },
         ],
         confirmer: [
-          { required: true, message: "确认人员不能为空", trigger: "blur" },
+          { required: true, message: "确认人员不能为空", trigger: "change" },
         ],
         goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "blur" },
+          { required: true, message: "合格数量不能为空", trigger: "change" },
         ],
         abnormalQty: [
-          { required: true, message: "异常数量不能为空", trigger: "blur" },
+          { required: true, message: "异常数量不能为空", trigger: "change" },
         ],
         currentLengthQty: [
-          { required: true, message: "当前长度不能为空", trigger: "blur" },
+          { required: true, message: "当前长度不能为空", trigger: "change" },
         ],
         weight: [
-          { required: true, message: "晶体重量不能为空", trigger: "blur" },
+          { required: true, message: "晶体重量不能为空", trigger: "change" },
         ],
-        model: [{ required: true, message: "型号不能为空", trigger: "blur" }],
-        size: [{ required: true, message: "尺寸不能为空", trigger: "blur" }],
+        model: [{ required: true, message: "型号不能为空", trigger: "change" }],
+        size: [{ required: true, message: "尺寸不能为空", trigger: "change" }],
         orientation: [
-          { required: true, message: "晶向不能为空", trigger: "blur" },
+          { required: true, message: "晶向不能为空", trigger: "change" },
         ],
         targetResistivity: [
-          { required: true, message: "目标电阻率不能为空", trigger: "blur" },
+          { required: true, message: "目标电阻率不能为空", trigger: "change" },
         ],
       },
     };

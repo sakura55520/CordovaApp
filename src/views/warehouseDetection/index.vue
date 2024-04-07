@@ -270,102 +270,102 @@ export default {
       },
       formRules: {
         userCreate: [
-          { required: true, message: "操作者不能为空", trigger: "blur" },
+          { required: true, message: "操作者不能为空", trigger: "change" },
         ],
         goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "blur" },
+          { required: true, message: "合格数量不能为空", trigger: "change" },
         ],
         scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "blur" },
+          { required: true, message: "报废数量不能为空", trigger: "change" },
         ],
         planLength: [
-          { required: true, message: "计划长度不能为空", trigger: "blur" },
+          { required: true, message: "计划长度不能为空", trigger: "change" },
         ],
         originLength: [
-          { required: true, message: "原始长度不能为空", trigger: "blur" },
+          { required: true, message: "原始长度不能为空", trigger: "change" },
         ],
         chippingLength: [
-          { required: true, message: "崩边长度不能为空", trigger: "blur" },
+          { required: true, message: "崩边长度不能为空", trigger: "change" },
         ],
         ellipticLength: [
-          { required: true, message: "椭圆长度不能为空", trigger: "blur" },
+          { required: true, message: "椭圆长度不能为空", trigger: "change" },
         ],
         qualifiedLength: [
-          { required: true, message: "合格长度不能为空", trigger: "blur" },
+          { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
         resHead: [
-          { required: true, message: "头部电阻率不能为空", trigger: "blur" },
+          { required: true, message: "头部电阻率不能为空", trigger: "change" },
         ],
         resTail: [
-          { required: true, message: "尾部电阻率不能为空", trigger: "blur" },
+          { required: true, message: "尾部电阻率不能为空", trigger: "change" },
         ],
         circleDiameterHead: [
-          { required: true, message: "滚圆直径头不能为空", trigger: "blur" },
+          { required: true, message: "滚圆直径头不能为空", trigger: "change" },
         ],
         circleDiameterTail: [
-          { required: true, message: "滚圆直径尾不能为空", trigger: "blur" },
+          { required: true, message: "滚圆直径尾不能为空", trigger: "change" },
         ],
         mainReferenceSurfaceCrystalOrientation: [
           {
             required: true,
             message: "滚圆实测主参考面晶向不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         mainReferenceSurfaceLength: [
           {
             required: true,
             message: "滚圆实测主参考面长度不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         mainAuxiliaryAngle: [
           {
             required: true,
             message: "滚圆主副测夹角不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         mainReferenceSurfaceWidthHead: [
           {
             required: true,
             message: "滚圆实测主参考面宽度头不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         mainReferenceSurfaceWidthTail: [
           {
             required: true,
             message: "滚圆实测主参考面宽度尾不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         auxiliaryReferenceSurfaceHead: [
           {
             required: true,
             message: "滚圆副测主参考面宽度头不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         auxiliaryReferenceSurfaceTail: [
           {
             required: true,
             message: "滚圆副测主参考面宽度尾不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         // lineWarehouse: [
         //   {
         //     required: true,
         //     message: "线边仓不能为空",
-        //     trigger: "blur",
+        //     trigger: "change",
         //   },
         // ],
         lineWarehouseLocation: [
           {
             required: true,
             message: "线边仓库位不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
       },

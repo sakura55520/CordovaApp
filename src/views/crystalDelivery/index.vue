@@ -225,46 +225,50 @@ export default {
       },
       formRules: {
         userCreate: [
-          { required: true, message: "操作者不能为空", trigger: "blur" },
+          { required: true, message: "操作者不能为空", trigger: "change" },
         ],
         goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "blur" },
+          { required: true, message: "合格数量不能为空", trigger: "change" },
         ],
         scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "blur" },
+          { required: true, message: "报废数量不能为空", trigger: "change" },
         ],
         numberConsistence: [
           {
             required: true,
             message: "单晶编号一致性不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         endSitutation: [
-          { required: true, message: "收尾情况不能为空", trigger: "blur" },
+          { required: true, message: "收尾情况不能为空", trigger: "change" },
         ],
         dislocationIdentification: [
           {
             required: true,
             message: "位错反延线标识不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         dislocationIdentificationLength: [
           {
             required: true,
             message: "位错反延线长度不能为空",
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         measuredDiameter: [
-          { required: true, message: "拉晶实测直径不能为空", trigger: "blur" },
+          {
+            required: true,
+            message: "拉晶实测直径不能为空",
+            trigger: "change",
+          },
         ],
         disengageDiameter: [
-          { required: true, message: "脱开直径不能为空", trigger: "blur" },
+          { required: true, message: "脱开直径不能为空", trigger: "change" },
         ],
         bottomMaterialWeight: [
-          { required: true, message: "锅底料重量不能为空", trigger: "blur" },
+          { required: true, message: "锅底料重量不能为空", trigger: "change" },
         ],
       },
       checkList: [],

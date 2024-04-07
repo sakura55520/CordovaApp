@@ -535,10 +535,14 @@ export default {
       },
       formRules: {
         userCreate: [
-          { required: true, message: "操作者不能为空", trigger: "blur" },
+          { required: true, message: "操作者不能为空", trigger: "change" },
         ],
-        length: [{ required: true, message: "长度不能为空", trigger: "blur" }],
-        number: [{ required: true, message: "数量不能为空", trigger: "blur" }],
+        length: [
+          { required: true, message: "长度不能为空", trigger: "change" },
+        ],
+        number: [
+          { required: true, message: "数量不能为空", trigger: "change" },
+        ],
       },
       selectedIndex: null,
       wipStorageDisqualificationReasonList: [],
