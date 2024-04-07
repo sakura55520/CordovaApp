@@ -20,7 +20,7 @@
         <div class="headLine">
           <div class="headLine-title">{{ storageLabel }}数据录入</div>
         </div>
-        <el-form ref="detailForm" :model="detailForm" label-width="120px" :rules="rules" inline>
+        <el-form ref="detailForm" :model="detailForm" label-width="120px" :rules="rules" inline :disabled="$route.query.view">
           <div>
             <el-form-item label="操作者">
               <el-input v-model="detailForm.userCreate" disabled/>

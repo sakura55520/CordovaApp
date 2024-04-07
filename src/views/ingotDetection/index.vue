@@ -23,6 +23,7 @@
           label-position="left"
           label-width="120px"
           :rules="formRules"
+          :disabled="$route.query.view"
         >
           <div class="form">
             <div class="form-title">单晶信息</div>

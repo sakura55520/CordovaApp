@@ -23,6 +23,7 @@
           label-position="left"
           label-width="120px"
           :rules="formRules"
+          :disabled="$route.query.view"
         >
           <div class="base-form">
             <el-form-item label="操作者" prop="userCreate" class="item">

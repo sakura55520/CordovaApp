@@ -26,6 +26,7 @@
           label-width="120px"
           :rules="rules"
           inline
+          :disabled="$route.query.view"
         >
           <div>
             <el-form-item label="操作者">

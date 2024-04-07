@@ -13,6 +13,7 @@
         class="growth-record"
         label-width="140px"
         inline
+        :disabled="$route.query.view"
       >
         <!--   其余参数     -->
         <el-card v-if="Array.isArray(recordItem.exts) && recordItem.exts.length">

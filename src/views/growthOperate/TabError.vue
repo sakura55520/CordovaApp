@@ -5,6 +5,7 @@
     :model="detailForm"
     class="growth-record"
     inline
+    :disabled="$route.query.view"
   >
     <el-card>
       <div class="headLine">
