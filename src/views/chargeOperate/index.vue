@@ -164,7 +164,8 @@ export default {
         chargePipeSerial: [{ required: true, message: '请选择加料管编号', trigger: 'change' }],
         feedingTime: [{ required: true, message: '请选择装料时间', trigger: 'change' }],
         _arrFeedingAmount: [
-          { type: 'array', required: true, message: '请输入加料量', trigger: 'change' }
+          { type: 'array', required: true, message: '请输入加料量', trigger: 'change' },
+          { validator: this.validAmount, trigger: 'change' },
         ],
         feedingDuration: [{ type: 'number', min: 0, required: true, message: '装料时长必须>0', trigger: 'change' }],
       },
@@ -175,10 +176,11 @@ export default {
     storageLabel() {
       return this.$route.query.wipStorageStatus === '1' ? '出站' : '进站'
     },
+    totalAount() {
+      return (this.detailForm._arrFeedingAmount || []).reduce((acc, cur) => acc + (Number(cur) || 0), 0)
+    },
     feedPercent() {
-      const { _arrFeedingAmount, goodQty } = this.detailForm
-      const amount = (_arrFeedingAmount || []).reduce((acc, cur) => acc + (Number(cur) || 0), 0)
-      return floor(amount / goodQty * 100) || 0
+      return floor(this.totalAount / this.detailForm.goodQty * 100) || 0
     },
     buffParams() {
       const { processUuid, processingOrderCode } = this.$route.query
@@ -258,8 +260,11 @@ export default {
       this.detailForm.goodQty = feedingTotal - scrapQty
     },
     handleFeedingTimeChange(time) {
-      console.log('time', time)
       this.detailForm.feedingDuration = moment(this.$store.getters.NowServerDate).diff(time, 'minutes')
+    },
+    validAmount(rule, value, callback) {
+      if (this.totalAount > this.detailForm.goodQty) return callback(new Error(`加料量[${this.totalAount}]必须≤总量[${this.detailForm.goodQty}]`))
+      callback()
     },
     refreshFeeding() {
       if (this.feedPercent < 100 && last(this.detailForm._arrFeedingAmount)) this.detailForm._arrFeedingAmount.push('')
