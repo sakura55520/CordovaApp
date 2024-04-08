@@ -220,7 +220,7 @@ export default {
       this.fetchData();
     },
     async handleDetailView(row) {
-      let url = this.detailUrlMap[this.$route.query.station].url;
+      let url = this.detailUrlMap[row.processCode].url;
       let res = await fetchDetail({
         url,
         page: 1,
@@ -247,7 +247,7 @@ export default {
       }
 
       this.$router.push({
-        path: this.detailUrlMap[this.$route.query.station].path,
+        path: this.detailUrlMap[row.processCode].path,
         query: {
           ...row,
           processingOrderCode: row.processingOrderCode,
