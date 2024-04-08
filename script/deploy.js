@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const env = {
   '公司测试环境': {envMode: 'company_production_test', cordovaUrl: '10.60.120.34:81'},
-  '现场测试环境': {envMode: 'production_test', cordovaUrl: '172.19.100.50:82'},
+  '现场测试环境': {envMode: 'production_test', cordovaUrl: '172.19.100.50:81'},
   '现场正式环境': {envMode: 'production', cordovaUrl: '10.10.16.210:81'}
 }
 
