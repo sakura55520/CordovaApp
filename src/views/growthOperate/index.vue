@@ -341,7 +341,7 @@ export default {
         if (!stepData._defaultStepData.techs) {
           stepData._defaultStepData.techs = form.content.map(formItem => ({
             ...formItem,
-            extKey: formItem.label
+            extKey: formItem.vModel
           }))
         }
       }
@@ -350,13 +350,14 @@ export default {
       const label2value = {}
       if (Array.isArray(stepData[recordIdx].techs)) {
         stepData[recordIdx].techs.forEach(data => {
+          if (!data.extKey) return
           label2value[data.extKey] = data
         })
       }
       this.$set(stepData[recordIdx], 'techs', form.content.map(formItem => ({
         ...formItem,
-        ...label2value[formItem.label],
-        extKey: formItem.label
+        ...(label2value[formItem.vModel] || label2value[formItem.label]),
+        extKey: formItem.vModel
       })))
     },
     // 其余参数
