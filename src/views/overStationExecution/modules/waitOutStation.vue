@@ -14,7 +14,7 @@
         <el-table-column type="index" width="50"/>
         <el-table-column label="批次号" prop="code" min-width="140"/>
         <el-table-column label="设备" prop="equipmentCode"/>
-        <el-table-column label="产品料号" prop="dataOrderCode" min-width="140"/>
+        <el-table-column label="产品料号" prop="materialCode" min-width="140"/>
         <el-table-column label="产品类型" prop="">
           <template slot-scope="scope">{{
               JSON.parse(scope.row.data).productCategory
@@ -49,7 +49,7 @@
         >
           <el-table-column
             label="产品料号"
-            prop="dataOrderCode"
+            prop="materialCode"
             min-width="100"
           />
           <el-table-column label="产品类型" prop="orderType" min-width="100">
