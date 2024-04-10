@@ -310,7 +310,7 @@
               </el-table-column>
               <el-table-column label="合格状态" min-width="120" align="center">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.qualified">
+                  <el-select v-model="scope.row.status">
                     <el-option label="合格" :value="0"></el-option>
                     <el-option label="不合格" :value="1"></el-option>
                   </el-select>
@@ -471,7 +471,7 @@
                     <div class="item">
                       <div class="label">合格状态：</div>
                       <div class="value">
-                        {{ item.qualified ? "合格" : "不合格" }}
+                        {{ item.status ? "合格" : "不合格" }}
                       </div>
                     </div>
                     <div class="item">
@@ -661,6 +661,7 @@ export default {
         tailResistance: 0,
         diameter: this.formData.diameter,
         planWeight: 0,
+        status: 0,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
