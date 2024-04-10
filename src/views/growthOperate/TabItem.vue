@@ -18,7 +18,7 @@
         <!--   其余参数     -->
         <el-card v-if="Array.isArray(recordItem.exts) && recordItem.exts.length">
           <div class="growth-section">
-            <el-form-item v-for="(formItem, formItemIdx) in recordItem.exts" :key="formItemIdx" :label="formItem.extKey">
+            <el-form-item v-for="(formItem, formItemIdx) in recordItem.exts" :key="formItemIdx" :label="formItem.label">
               <Render
                 :key="formItem.renderKey"
                 :conf="formItem"
@@ -42,7 +42,7 @@
           </div>
           <div class="growth-section">
             <div v-for="(formItem, index) in recordItem.checks" :key="index">
-              <el-form-item :label="formItem.checkItem" class="check-item">
+              <el-form-item :label="formItem.label" class="check-item">
                 <el-radio-group v-model="formItem.isError">
                   <el-radio :label="false">正常</el-radio>
                   <el-radio :label="true">异常</el-radio>
@@ -62,7 +62,7 @@
             <div class="headLine-title">设备/工艺参数确认</div>
           </div>
           <div class="growth-section">
-            <el-form-item v-for="(formItem, formItemIdx) in recordItem.techs" :key="formItemIdx" :label="formItem.extKey">
+            <el-form-item v-for="(formItem, formItemIdx) in recordItem.techs" :key="formItemIdx" :label="formItem.label">
               <Render
                 :key="formItem.renderKey"
                 :conf="formItem"

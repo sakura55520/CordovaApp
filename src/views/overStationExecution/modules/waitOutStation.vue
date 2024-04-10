@@ -158,6 +158,8 @@ export default {
     },
     fetchData() {
       Api.fetchWaitOutStationPage({
+        search_EQ_status: 1, // 加工状态 0：待加工；1：加工中；2：加工完成；3：入库完成
+        search_IN_wipStorageStatus: '0,1', // 站点状态 0：待进站；1：已经站；2：已出站
         search_EQ_processCode: this.$route.query.station,
         ...this.propSearch,
         rows: this.pageSize,

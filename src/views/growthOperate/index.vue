@@ -282,19 +282,24 @@ export default {
         })
         this.calcStepNameList.forEach(stepName => {
           if (!this.steps[stepName]) {
-            return this.$set(this.steps, stepName, [])
+            this.$set(this.steps, stepName, [])
+            this.initStepData(stepName)
+            return
           }
 
           this.steps[stepName].forEach((recordItem, recordIdx) => {
-            this.initError(stepName, recordIdx)
-            this.initExt(stepName, recordIdx)
-            this.initCheck(stepName, recordIdx)
-            this.initTech(stepName, recordIdx)
+            this.initStepData(stepName, recordIdx)
           })
         })
 
         if (!this.steps['留档文档']) this.$set(this.steps, '留档文档', [])
       })
+    },
+    initStepData(stepName, recordIdx) {
+      this.initError(stepName, recordIdx)
+      this.initExt(stepName, recordIdx)
+      this.initCheck(stepName, recordIdx)
+      this.initTech(stepName, recordIdx)
     },
     // 点检项
     initCheck(stepName, recordIdx) {
@@ -302,12 +307,6 @@ export default {
       if (!form) return
 
       const stepData = this.steps[stepName]
-      const label2value = {}
-      if (Array.isArray(stepData[recordIdx].checks)) {
-        stepData[recordIdx].checks.forEach(data => {
-          label2value[data.checkItem] = data
-        })
-      }
       if (this.calcAddRecordMap[stepName]) {
         if (!stepData._defaultStepData) stepData._defaultStepData = {}
         if (!stepData._defaultStepData.checks) {
@@ -318,6 +317,13 @@ export default {
         }
       }
 
+      if (typeof recordIdx !== 'number') return
+      const label2value = {}
+      if (Array.isArray(stepData[recordIdx].checks)) {
+        stepData[recordIdx].checks.forEach(data => {
+          label2value[data.checkItem] = data
+        })
+      }
       this.$set(stepData[recordIdx], 'checks', form.content.map(formItem => ({
         ...formItem,
         ...label2value[formItem.label],
@@ -330,26 +336,28 @@ export default {
       if (!form) return
 
       const stepData = this.steps[stepName]
-      const label2value = {}
-      if (Array.isArray(stepData[recordIdx].techs)) {
-        stepData[recordIdx].techs.forEach(data => {
-          label2value[data.extKey] = data
-        })
-      }
       if (this.calcAddRecordMap[stepName]) {
         if (!stepData._defaultStepData) stepData._defaultStepData = {}
         if (!stepData._defaultStepData.techs) {
           stepData._defaultStepData.techs = form.content.map(formItem => ({
             ...formItem,
-            extKey: formItem.label
+            extKey: formItem.vModel
           }))
         }
       }
 
+      if (typeof recordIdx !== 'number') return
+      const label2value = {}
+      if (Array.isArray(stepData[recordIdx].techs)) {
+        stepData[recordIdx].techs.forEach(data => {
+          if (!data.extKey) return
+          label2value[data.extKey] = data
+        })
+      }
       this.$set(stepData[recordIdx], 'techs', form.content.map(formItem => ({
         ...formItem,
-        ...label2value[formItem.label],
-        extKey: formItem.label
+        ...(label2value[formItem.vModel] || label2value[formItem.label]),
+        extKey: formItem.vModel
       })))
     },
     // 其余参数
@@ -358,12 +366,6 @@ export default {
       if (!form) return
 
       const stepData = this.steps[stepName]
-      const label2value = {}
-      if (Array.isArray(stepData[recordIdx].exts)) {
-        stepData[recordIdx].exts.forEach(data => {
-          label2value[data.extKey] = data
-        })
-      }
       if (this.calcAddRecordMap[stepName]) {
         if (!stepData._defaultStepData) stepData._defaultStepData = {}
         if (!stepData._defaultStepData.exts) {
@@ -374,6 +376,13 @@ export default {
         }
       }
 
+      if (typeof recordIdx !== 'number') return
+      const label2value = {}
+      if (Array.isArray(stepData[recordIdx].exts)) {
+        stepData[recordIdx].exts.forEach(data => {
+          label2value[data.extKey] = data
+        })
+      }
       this.$set(stepData[recordIdx], 'exts', form.content.map(formItem => ({
         ...formItem,
         ...label2value[formItem.label],
@@ -400,6 +409,7 @@ export default {
         }
       }
 
+      if (typeof recordIdx !== 'number') return
       this.$set(stepData[recordIdx], '_showErrors', stepData._showErrors)
       this.$set(stepData[recordIdx], '_errors', (stepData[recordIdx].errors || []).map(item => item.errorMessage))
     },
