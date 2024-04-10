@@ -133,8 +133,8 @@ export default {
       loginForm: {
         loginName: '',
         password: '',
-        teamGroup: '',
-        classNo: '',
+        teamGroup: localStorage.getItem('teamGroup'),
+        classNo: localStorage.getItem('classNo'),
         clientType: 'pad'
       },
       loginRules: {
@@ -176,9 +176,8 @@ export default {
   },
   created() {
     this.getClassNo();
-    var _this = this;
-    setTimeout(function () {
-      _this.getClassName();
+    setTimeout(() => {
+      this.getClassName();
     }, 300);
   },
   mounted() {
@@ -204,6 +203,8 @@ export default {
     },
     setSessionStorage() {
       const {loginName, password, classNo, teamGroup} = this.loginForm
+      localStorage.setItem('classNo', classNo)
+      localStorage.setItem('teamGroup', teamGroup)
       sessionStorage.setItem('classNo', classNo)
       sessionStorage.setItem('teamGroup', teamGroup)
       sessionStorage.setItem('loginName', loginName)
