@@ -312,7 +312,7 @@ export default {
         if (!stepData._defaultStepData.checks) {
           stepData._defaultStepData.checks = form.content.map(formItem => ({
             ...formItem,
-            checkItem: formItem.label
+            checkItem: formItem.vModel,
           }))
         }
       }
@@ -321,13 +321,14 @@ export default {
       const label2value = {}
       if (Array.isArray(stepData[recordIdx].checks)) {
         stepData[recordIdx].checks.forEach(data => {
+          if (!data.checkItem) return
           label2value[data.checkItem] = data
         })
       }
       this.$set(stepData[recordIdx], 'checks', form.content.map(formItem => ({
         ...formItem,
-        ...label2value[formItem.label],
-        checkItem: formItem.label
+        ...label2value[formItem.vModel] || label2value[formItem.label],
+        checkItem: formItem.vModel
       })))
     },
     // 工艺参数
