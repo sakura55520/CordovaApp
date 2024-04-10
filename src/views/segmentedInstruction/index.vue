@@ -123,7 +123,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.headPosition"
-                    @input="(value) => handleHeadChange(value, scope.$index)"
+                    @change="(value) => handleHeadChange(value, scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -131,7 +131,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.tailPosition"
-                    @input="(value) => handleTailChange(value, scope.$index)"
+                    @change="(value) => handleTailChange(value, scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -641,6 +641,11 @@ export default {
       };
     },
     async handleCodeClick() {
+      let { length } = this.formData;
+      if (length === undefined || length === null) {
+        this.$message.warning("请输入长度");
+        return;
+      }
       let res = await Api.segmentedInstructionGenerateNo(this.formData);
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
       res.segmentedInstructionDetailVos.forEach((item, index) => {
@@ -674,12 +679,10 @@ export default {
       this.selectedIndex = index;
     },
     handleHeadChange(value, index) {
-      if (index !== 0) {
-        let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
-        list[index - 1].tailPosition = value;
-        this.formData.segmentedInstructionDetailVos = list;
-      }
-      for (const item of this.formData.segmentedInstructionDetailVos) {
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      if (index !== 0) list[index - 1].tailPosition = value;
+
+      for (const item of list) {
         item.segmentNo = null;
         if (
           (item.tailPosition || item.tailPosition === 0) &&
@@ -688,14 +691,15 @@ export default {
           item.length = item.tailPosition - item.headPosition;
         else item.length = 0;
       }
+      this.formData.segmentedInstructionDetailVos = list;
+      this.handleCodeClick();
     },
     handleTailChange(value, index) {
-      if (index !== this.formData.segmentedInstructionDetailVos.length - 1) {
-        let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      if (index !== this.formData.segmentedInstructionDetailVos.length - 1)
         list[index + 1].headPosition = value;
-        this.formData.segmentedInstructionDetailVos = list;
-      }
-      for (const item of this.formData.segmentedInstructionDetailVos) {
+
+      for (const item of list) {
         item.segmentNo = null;
         if (
           (item.tailPosition || item.tailPosition === 0) &&
@@ -704,6 +708,8 @@ export default {
           item.length = item.tailPosition - item.headPosition;
         else item.length = 0;
       }
+      this.formData.segmentedInstructionDetailVos = list;
+      this.handleCodeClick();
     },
     handleHead79oiChange(value, index) {
       if (value || value === 0)
