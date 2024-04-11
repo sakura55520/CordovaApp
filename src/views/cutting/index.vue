@@ -144,6 +144,7 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import { isEmpty } from "lodash-es";
 
 export default {
   data() {
@@ -199,6 +200,13 @@ export default {
       }
       this.formData = { ...this.formData, ...fromData };
       this.handleQtyChange();
+      if (!isEmpty(this.formData.segments)) {
+        this.formData.segments.forEach((element) => {
+          let { originLength, chippingLength, ellipticLength } = element;
+          element.qualifiedLength =
+            (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+        });
+      }
     },
     back() {
       this.$router.push("/overStationExecution?station=GD");
