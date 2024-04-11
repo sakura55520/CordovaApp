@@ -99,7 +99,7 @@
               type="primary"
               class="add-btn"
               @click="addDetails"
-              >新增</el-button
+              >+ 新增</el-button
             >
             <el-table
               :data="formData.details"

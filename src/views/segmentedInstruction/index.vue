@@ -42,10 +42,17 @@
             <div class="form-title">分段信息</div>
             <el-button
               size="small"
+              type="text"
+              class="form-checkInfo"
+              @click="handleViewCheckInfo"
+              >检验数据</el-button
+            >
+            <el-button
+              size="small"
               type="primary"
               class="add-btn"
               @click="addSegmentedInfo"
-              >新增</el-button
+              >+ 新增</el-button
             >
             <el-table
               :data="formData.segmentedInstructionDetailVos"
@@ -504,6 +511,118 @@
         </el-form>
       </div>
     </div>
+    <el-dialog :visible.sync="checkInfoDialog" title="样片检验数据" width="80%">
+      <el-table
+        :data="checkInfo"
+        class="table"
+        :header-cell-style="{
+          background: 'rgba(242, 242, 242)',
+          color: '#606266',
+        }"
+        :row-class-name="tableRowClassName"
+      >
+        <el-table-column
+          label="样片编号"
+          min-width="120"
+          align="center"
+          prop="sampleNumber"
+        />
+        <el-table-column
+          label="样片标识"
+          min-width="100"
+          align="center"
+          prop="sampleIdentification"
+        />
+        <el-table-column
+          label="样片位置"
+          min-width="100"
+          align="center"
+          prop="samplePosition"
+        />
+        <el-table-column
+          label="类别"
+          min-width="100"
+          align="center"
+          prop="category"
+        />
+        <el-table-column
+          label="晶向"
+          min-width="100"
+          align="center"
+          prop="orientation"
+        />
+        <el-table-column
+          label="尺寸"
+          min-width="100"
+          align="center"
+          prop="size"
+        />
+        <el-table-column
+          label="结晶比重"
+          min-width="180"
+          align="center"
+          prop="crystalDensity"
+        />
+        <el-table-column label="RES" min-width="80" align="center" prop="res" />
+        <el-table-column
+          label="RES_C"
+          min-width="80"
+          align="center"
+          prop="resC"
+        />
+        <el-table-column
+          label="RES_E"
+          min-width="80"
+          align="center"
+          prop="resE"
+        />
+        <el-table-column
+          label="1/2RES"
+          min-width="100"
+          align="center"
+          prop="halfRes"
+        />
+        <el-table-column
+          label="1/2 RRG"
+          min-width="100"
+          align="center"
+          prop="halfRrg"
+        />
+        <el-table-column label="RRG" min-width="80" align="center" prop="rrg" />
+        <el-table-column
+          label="尾部电阻率"
+          min-width="100"
+          align="center"
+          prop="tailResistivity"
+        />
+        <el-table-column
+          label="头尾电阻比"
+          min-width="100"
+          align="center"
+          prop="headTailResistivityRatio"
+        />
+        <el-table-column
+          label="OI_C"
+          min-width="80"
+          align="center"
+          prop="oiC"
+        />
+        <el-table-column label="CS" min-width="80" align="center" prop="cs" />
+        <el-table-column
+          label="OI_E"
+          min-width="80"
+          align="center"
+          prop="oiE"
+        />
+        <el-table-column label="ORG" min-width="80" align="center" prop="org" />
+        <el-table-column
+          label="少子寿命"
+          min-width="100"
+          align="center"
+          prop="minorityCarrierLifetime"
+        />
+      </el-table>
+    </el-dialog>
     <div class="btn" v-if="!$route.query.view">
       <el-button plain class="cancel-btn" @click="back">取消</el-button>
       <el-button type="primary" plain class="save-btn" @click="save"
@@ -518,7 +637,7 @@
 
 <script>
 import * as Api from "@/api/inStation";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, isEmpty } from "lodash-es";
 import { getSeleteData } from "@/utils/select";
 
 export default {
@@ -552,6 +671,8 @@ export default {
       wipStorageDisqualificationReasonList: [],
       wipStorageInStorageReasonList: [],
       processMap: {},
+      checkInfo: [],
+      checkInfoDialog: false,
     };
   },
   computed: {
@@ -641,6 +762,16 @@ export default {
         ...this.formData,
         ...fromData,
       };
+      let ingotDetectionRes = await Api.fetchDetail({
+        url: "/wipcrystalcheck",
+        page: 1,
+        rows: 10,
+        search_EQ_wipStorageId: this.formData.wipStorageId,
+      });
+      let list = ingotDetectionRes.data.rows;
+      if (!isEmpty(list)) {
+        this.checkInfo = list[0].details;
+      }
     },
     async handleCodeClick() {
       let { length } = this.formData;
@@ -770,6 +901,14 @@ export default {
       Api.deleteBuffer(this.buffParams);
       this.back();
     },
+    handleViewCheckInfo() {
+      this.checkInfoDialog = true;
+    },
+    tableRowClassName({ row }) {
+      if (!row.valid) {
+        return "invalid_tr";
+      }
+    },
   },
 };
 </script>
@@ -896,6 +1035,13 @@ export default {
     top: -10px;
     left: 20px;
     background: white;
+  }
+  .form-checkInfo {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: white;
+    padding: 0px 6px;
   }
   .chart {
     display: flex;
@@ -1029,7 +1175,7 @@ export default {
   }
   .add-btn {
     position: absolute;
-    right: 10px;
+    right: 20px;
   }
 }
 .unit {
