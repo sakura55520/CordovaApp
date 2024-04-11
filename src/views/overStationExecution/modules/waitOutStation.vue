@@ -23,7 +23,7 @@
         <el-table-column label="数量" prop="number" width="100" />
         <el-table-column label="作业站名称" prop="processName" width="140" />
         <el-table-column label="进站时间" prop="inTime" width="140" />
-        <el-table-column label="创建者" prop="createUserName" width="140" />
+        <el-table-column label="操作者" prop="processUserCreate" width="140" />
         <el-table-column label="操作" width="100" fixed="right">
           <template slot-scope="{ row }">
             <el-button class="table-rowBtn" type="text" @click="handleExitStationClick(row)">退站</el-button>
@@ -59,7 +59,7 @@
           </el-table-column>
           <el-table-column label="数量" prop="number" />
           <el-table-column label="进站时间" prop="inTime" min-width="100" />
-          <el-table-column label="创建者" prop="createUserName" />
+          <el-table-column label="操作者" prop="processUserCreate" />
         </el-table>
         <div class="tool">
           <div v-if="item.status === 2" class="btn">
