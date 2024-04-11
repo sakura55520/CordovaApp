@@ -317,8 +317,10 @@
 <script>
 import * as Api from "@/api/inStation";
 import SelectUserinfo from "@/components/select_userinfo";
+import overStation from "@/mixins/overStation";
 
 export default {
+  mixins: [overStation],
   components: { SelectUserinfo },
   data() {
     return {

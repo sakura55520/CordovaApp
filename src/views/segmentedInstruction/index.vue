@@ -518,8 +518,10 @@
 import * as Api from "@/api/inStation";
 import { cloneDeep } from "lodash-es";
 import { getSeleteData } from "@/utils/select";
+import overStation from "@/mixins/overStation";
 
 export default {
+  mixins: [overStation],
   data() {
     return {
       batchNumber: "Z0116504581",

@@ -133,6 +133,7 @@ import SelectUserinfo from "@/components/select_userinfo";
 import * as Api from "@/api/inStation";
 import { cloneDeep, round } from "lodash-es";
 import moment from "moment";
+import overStation from "@/mixins/overStation";
 
 const defaultForm = {
   goodQty: null, // 合格数量
@@ -152,6 +153,7 @@ const defaultForm = {
 
 export default {
   name: "ChargeOperate",
+  mixins: [overStation],
   components: {
     CodeScanner,
     SelectUserinfo,

@@ -391,12 +391,27 @@ ul, li, ol {
     justify-content: space-between;
   }
 
-  .save {
-    flex: 0 1 280px !important;
+  .save, .cancel {
+    flex: 1;
+    max-width: 140px;
   }
 
-  .submit, .cancle {
-    flex: 1 !important;;
+  .submit {
+    flex: 2 !important;;
+  }
+
+  .list-radio{
+    width: 100%;
+    height: auto;
+    margin: 0 0 20px 0 !important;
+    border-radius: 8px !important;
+    padding: 8px 0;
+    font-size: 20px;
+    line-height: 28px;
+    text-align: center;
+    /deep/ .el-radio__label {
+      font-size: 16px;
+    }
   }
 }
 
@@ -407,11 +422,17 @@ ul, li, ol {
   .scan-input + button {
     display: none;
   }
-  .bodyBox-list-radio {
-    width: 200px !important;
+  .el-radio {
+    margin: 0 30px 10px 0 !important;
   }
   .pageHandleBox {
+    padding-top: 6px;
     text-align: right;
+    background: #fff;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 }
 

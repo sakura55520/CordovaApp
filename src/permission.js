@@ -12,7 +12,7 @@ router.beforeEach(async(to, from, next) => {
   if (search) {
     const { t, from } = querystring.parse(search.substring(1))
     if (t) setToken(t)
-    await store.dispatch('setFromPC', from === 'pc')
+    await store.dispatch('SetFromPC', from === 'pc')
   }
 
   let token = getToken()

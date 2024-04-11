@@ -79,6 +79,7 @@ import SelectLinesideTree from "@/components/SelectLinesideTree";
 import * as Api from "@/api/inStation";
 import { cloneDeep, floor, last } from "lodash-es";
 import moment from "moment";
+import overStation from "@/mixins/overStation";
 
 const defaultForm = {
   lineWarehouse: null, // 线边仓
@@ -88,6 +89,7 @@ const defaultForm = {
 
 export default {
   name: "RoundTransferOperate",
+  mixins: [overStation],
   components: {
     SelectLinesideTree,
   },

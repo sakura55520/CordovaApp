@@ -1,41 +1,6 @@
 <template>
   <div>
-    <!--   PC端展示   -->
-    <div v-if="$store.getters.fromPC">
-      <el-table
-        :data="list"
-        max-height="666"
-        border
-        fit
-        highlight-current-row
-        class="admin_table"
-        style="width: 100%"
-      >
-        <el-table-column type="index" width="50"/>
-        <el-table-column label="批次号" prop="code" min-width="140"/>
-        <el-table-column label="设备" prop="equipmentCode"/>
-        <el-table-column label="产品料号" prop="materialCode" min-width="140"/>
-        <el-table-column label="产品类型" prop="">
-          <template slot-scope="scope">{{
-              JSON.parse(scope.row.data).productCategory
-            }}</template>
-        </el-table-column>
-        <el-table-column label="数量" prop="number" width="100" />
-        <el-table-column label="作业站名称" prop="processName" width="140" />
-        <el-table-column label="进站时间" prop="inTime" width="140" />
-        <el-table-column label="创建者" prop="createUserName" width="140" />
-        <el-table-column label="操作" width="100" fixed="right">
-          <template slot-scope="{ row }">
-            <el-button class="table-rowBtn" type="text" @click="handleExitStationClick(row)">退站</el-button>
-            <el-button v-if="row.wipStorageStatus === 0" class="table-rowBtn" type="text" @click="handleOverStationExecutionClick(row.code)">进站</el-button>
-            <el-button v-if="row.wipStorageStatus === 1" class="table-rowBtn" type="text" @click="handleOverStationExecutionClick(row.code)">出站</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-
-    <!--   PAD端展示   -->
-    <div v-else>
+    <div>
       <div v-if="list.length !== 0" class="card" v-for="item in list" :key="item.code">
         <div class="header">{{ item.code }}</div>
         <el-divider class="divider" />
@@ -105,19 +70,21 @@
         @current-change="handleCurrentChange"
       />
     </div>
+
     <el-dialog title="退站" :visible.sync="exitStationDialogVisible">
       <el-radio-group v-model="selectProcessUuid" style="width: 100%">
         <el-radio
           v-for="(item, index) in preStationList"
           :key="index"
-          class="bodyBox-list-radio"
+          class="list-radio"
+          border
           :label="item.processUuid"
           >{{ item.wipStorageName }}</el-radio
         >
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="closeExitstationDialog">取 消</el-button>
-        <el-button type="primary" @click="handleExitStation">确 定</el-button>
+        <el-button class="submit" @click="closeExitstationDialog">取 消</el-button>
+        <el-button class="submit" type="primary" @click="handleExitStation">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -127,15 +94,11 @@
 import * as Api from "@/api/overStationExecution/overStation.js";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation.js";
 import { isEmpty } from "lodash-es";
+import { inOrOutStation } from "@/api/inStation";
+import { fetchStorage } from "@/utils/overStation";
 
 export default {
   name: 'WaitOutStation',
-  props: {
-    propSearch: {
-      required: true,
-      type: Object
-    }
-  },
   data() {
     return {
       currentPage: 1,
@@ -146,10 +109,12 @@ export default {
       selectProcessUuid: null,
       preStationList: [],
       exitStationDialogVisible: false,
+      siteList: [],
+      currentSite: {},
     };
   },
   mounted() {
-    if (!this.$store.getters.fromPC) this.fetchData();
+    this.fetchData();
   },
   methods: {
     searchRows() {
@@ -161,7 +126,6 @@ export default {
         search_EQ_status: 1, // 加工状态 0：待加工；1：加工中；2：加工完成；3：入库完成
         search_IN_wipStorageStatus: '0,1', // 站点状态 0：待进站；1：已经站；2：已出站
         search_EQ_processCode: this.$route.query.station,
-        ...this.propSearch,
         rows: this.pageSize,
         page: this.currentPage,
       }).then((res) => {
@@ -170,10 +134,63 @@ export default {
       });
     },
     handleOverStationExecutionClick(code) {
-      this.$router.push({
-        path: "/overStation",
-        query: { processingOrderCode: code },
-      });
+      this.processingOrderCode = code
+      fetchStorage(code)
+      this.$store.dispatch('SetStationCallback', this.fetchData)
+    },
+    async getCurrentWipStorageData() {
+      // 在制品查询站点
+      const res = await getCurrentWipStorageData(this.processingOrderCode)
+      this.siteList = res.data || []
+      const { length } = this.siteList
+      if (!length) return this.$message.warning('未查询到过站信息!')
+      if (length === 1) {
+        const { wipStorageStatus, operationType } = this.siteList[0]
+        this.currentSite = this.siteList[0]
+        // operationType 0：直接出站/直接进站，1：自定义表单，2：定制化页面
+
+        // 调用接口
+        switch (operationType) {
+          case 0:
+            break
+          case 1:
+            break
+          case 2:
+            this.$router.push({
+              path: this.currentSite.operationData,
+              query: {
+                ...this.currentSite,
+                processingOrderCode: this.processingOrderCode,
+                fromData: JSON.stringify(this.currentSite.fromData)
+              }
+            })
+            break
+        }
+        if (operationType === 0) {
+          // 直接进站
+
+          // this.$confirm(`是否确定${wipStorageStatus === 0 ? '进站' : '出站'}？`, '提示', {
+          //   confirmButtonText: '确定',
+          //   cancelButtonText: '取消',
+          //   type: 'warning'
+          // }).then(() => {
+          //   this.inOrOutStation()
+          // })
+        }
+      } else {
+
+      }
+    },
+
+    inOrOutStation(flowLineLable) {
+      inOrOutStation({
+        param: {},
+        flowLineLable: this.currentSite.flowLineLable || flowLineLable,
+        equipmentCode: this.currentSite.deviceCode,
+        processUuid: this.currentSite.processUuid,
+        processingOrderCode: this.processingOrderCode,
+        wipStorageStatus: this.currentSite.wipStorageStatus
+      })
     },
     closeExitstationDialog() {
       this.preStationList = [];
@@ -182,7 +199,7 @@ export default {
       this.selectProcessUuid = null;
     },
     async handleExitStationClick(row) {
-      let res = await getCurrentWipStorageData(row.code);
+      const res = await getCurrentWipStorageData(row.code);
       this.preStationList = res.data;
       this.exitStationDialogVisible = true;
       this.selectRow = row;

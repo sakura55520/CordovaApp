@@ -58,6 +58,7 @@ import TabError from './TabError'
 import TabFile from './TabFile'
 import { fetchModelForm } from '@/api/modelform'
 import { getSeleteData } from '@/utils/select'
+import overStation from "@/mixins/overStation";
 
 const defaultCheckItem = {
   checkItem: null, // 点检项
@@ -67,6 +68,7 @@ const defaultCheckItem = {
 
 export default {
   name: 'GrowthOperate',
+  mixins: [overStation],
   components: {
     TabItem,
     TabError,
