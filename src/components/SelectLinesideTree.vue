@@ -12,7 +12,6 @@
     placeholder="请选择库位"
     no-results-text="暂无数据"
     no-options-text="暂无数据"
-    @input="handleInput"
     @select="handleSelect"
   />
 </template>
@@ -25,9 +24,18 @@ export default {
   props: ['value', 'alwaysOpen'],
   data() {
     return {
-      id: null,
       tree: [],
     }
+  },
+  computed: {
+    id: {
+      get() {
+        return this.value
+      },
+      set(id) {
+        this.$emit('input', id)
+      }
+    },
   },
   created() {
     this.fetchData()
@@ -57,14 +65,6 @@ export default {
     },
     handleSelect(raw) {
       this.$emit('select', raw)
-    },
-  },
-  watch: {
-    value: {
-      immediate: true,
-      handler(val) {
-        this.id = val
-      }
     },
   },
 }

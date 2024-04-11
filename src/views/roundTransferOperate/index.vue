@@ -27,6 +27,7 @@
           :rules="rules"
           inline
           :disabled="$route.query.view"
+          style="padding-bottom: 500px;"
         >
           <div>
             <el-form-item label="操作者">
@@ -49,14 +50,13 @@
           </div>
           <div>
             <el-form-item
+              ref="lineWarehouse"
               label="线边仓库位"
-              prop="lineWarehouseLocation"
-              style="height: 550px"
+              prop="lineWarehouseId"
             >
               <SelectLinesideTree
                 v-model="detailForm.lineWarehouseId"
                 @select="handleWhouseSelect"
-                :alwaysOpen="true"
               />
             </el-form-item>
           </div>
@@ -178,6 +178,7 @@ export default {
     handleWhouseSelect({ id, name }) {
       this.detailForm.lineWarehouseLocation = name;
       this.detailForm.lineWarehouseId = id;
+      if (id) this.$refs.lineWarehouse.clearValidate();
     },
     handleQtyChange() {
       let { totalQty, scrapQty } = this.detailForm;
