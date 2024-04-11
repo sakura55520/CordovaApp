@@ -500,11 +500,11 @@ export default {
         return;
       }
       let info = this.formData;
-      if (info.weight) {
+      if (!info.weight) {
         this.$message.warning("请填写晶体重量");
         return;
       }
-      if (info.currentLengthQty) {
+      if (!info.currentLengthQty) {
         this.$message.warning("请填写当前长度");
         return;
       }
