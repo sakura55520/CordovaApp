@@ -74,6 +74,7 @@
                     @visible-change="
                       (val) => handleWorkOrderVisibleChange(val, scope.$index)
                     "
+                    clearable
                   >
                     <el-option
                       :label="item.workOrderNo"
@@ -94,6 +95,7 @@
                     @change="
                       (val) => handleProcessCodeChange(val, scope.$index)
                     "
+                    clearable
                   >
                     <el-option
                       :label="item.processCode"
@@ -343,7 +345,7 @@
                 prop="reason"
               >
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.reason">
+                  <el-select v-model="scope.row.reason" clearable>
                     <el-option
                       :label="item.label"
                       :value="item.value"
@@ -360,7 +362,7 @@
                 prop="reasonIn"
               >
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.reasonIn">
+                  <el-select v-model="scope.row.reasonIn" clearable>
                     <el-option
                       :label="item.label"
                       :value="item.value"
