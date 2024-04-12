@@ -40,7 +40,8 @@
     </div>
 
     <!-- 页面操作 -->
-    <div class="pageHandleBox">
+    <div class="page-handle-box">
+      <el-button class="cancel" @click="back(null, 'confirm')">取消</el-button>
       <el-button class="save" @click="handle('保存')">保存</el-button>
       <el-button class="submit" type="primary" @click="handle('提交')">{{ storageLabel }}确认</el-button>
     </div>
@@ -104,9 +105,6 @@ export default {
 
       this.detailForm = Object.assign({}, defaultForm, fromData)
     },
-    back() {
-      this.$router.push('/overStationExecution?station=ZL')
-    },
     // 操作
     handle(typeName) {
       const { ...form } = this.detailForm
@@ -115,8 +113,9 @@ export default {
       })
       if (typeName === '保存') {
         Api.upldateBuffer(this.buffParams, this.detailForm).then(res => {
-          this.$message.success('保存成功!')
-          this.back()
+          const msg = '保存成功!'
+          this.$message.success(msg)
+          this.back(msg)
         })
       } else if (typeName === '提交') {
         this.$refs.detailForm.validate((valid) => {
@@ -134,9 +133,10 @@ export default {
                 processingOrderCode, // 工单号
                 wipStorageStatus, // 进出站状态
               }).then(() => {
-                this.$message.success(`【${this.storageLabel}】操作成功`)
+                const msg = `【${this.storageLabel}】操作成功`
+                this.$message.success(msg)
                 Api.deleteBuffer(this.buffParams)
-                this.back()
+                this.back(msg)
               })
             })
 

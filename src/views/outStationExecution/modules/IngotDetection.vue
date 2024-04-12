@@ -36,8 +36,7 @@
         type="primary"
         class="add-btn"
         @click="addSampleInfo"
-        >+ 新增</el-button
-      >
+        >+ 新增</el-button>
       <el-table
         :data="formData.sampleInfo"
         class="table"

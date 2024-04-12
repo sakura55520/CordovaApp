@@ -34,16 +34,6 @@ export default {
       processList: [],
     };
   },
-  async created() {
-    if (this.$store.getters.fromPC) {
-      await this.fetchProcessList()
-      if (this.processList && this.processList[0]) {
-        this.searchList.search_EQ_processCode = this.processList[0].code
-      }
-      this.dateTime = initDate(31)
-      this.searchRows()
-    }
-  },
   methods: {
     searchRows() {
       this.$nextTick(() => {

@@ -70,14 +70,11 @@
         </el-form>
       </div>
     </div>
-    <div class="btn" v-if="!$route.query.view">
-      <el-button plain class="cancel-btn" @click="back">取消</el-button>
-      <el-button type="primary" plain class="save-btn" @click="save"
-        >保存</el-button
-      >
-      <el-button type="primary" class="confirm-btn" @click="confirm"
-        >出站确认</el-button
-      >
+    <div class="page-handle-box" v-if="!$route.query.view">
+      <el-button plain class="cancel" @click="back(null, 'confirm')">取消</el-button>
+      <el-button type="primary" plain class="save" @click="save">保存</el-button>
+      <el-button type="primary" class="submit" @click="confirm"
+        >出站确认</el-button>
     </div>
   </div>
 </template>
@@ -157,13 +154,11 @@ export default {
       this.formData = { ...this.formData, ...fromData };
       this.handleQtyChange();
     },
-    back() {
-      this.$router.push("/overStationExecution?station=QTWQY");
-    },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      this.$message.success("保存成功!");
-      this.back();
+      const msg = "保存成功!"
+      this.$message.success(msg);
+      this.back(msg);
     },
     async confirm() {
       const valid = await this.$refs.formRef.validate();
@@ -186,9 +181,10 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      this.$message.success("出站成功");
+      const msg = "出站成功"
+      this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
-      this.back();
+      this.back(msg);
     },
     handleQtyChange() {
       let { totalQty, scrapQty } = this.formData;

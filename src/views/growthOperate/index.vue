@@ -44,7 +44,8 @@
     </div>
 
     <!-- 页面操作 -->
-    <div class="pageHandleBox" v-if="!$route.query.view">
+    <div class="page-handle-box" v-if="!$route.query.view">
+      <el-button class="cancel" @click="back(null, 'confirm')">取消</el-button>
       <el-button class="save" @click="handle('保存')">保存</el-button>
       <el-button class="submit" type="primary" @click="handle('提交')">{{ storageLabel }}确认</el-button>
     </div>
@@ -189,16 +190,14 @@ export default {
       this.loading = false
       this.tabsVisible = true
     },
-    back() {
-      this.$router.push('/overStationExecution?station=ZJ')
-    },
     // 操作
     handle(typeName) {
       const form = this.transform()
       if (typeName === '保存') {
         Api.updateGrowthBuffer(form).then(res => {
-          this.$message.success('保存成功!')
-          this.back()
+          const msg = '保存成功!'
+          this.$message.success(msg)
+          this.back(msg)
         })
       } else if (typeName === '提交') {
         this.$confirm('确认提交当前操作数据?', '提示', {
@@ -214,8 +213,9 @@ export default {
             processingOrderCode, // 工单号
             wipStorageStatus, // 进出站状态
           }).then(() => {
-            this.$message.success(`【${this.storageLabel}】操作成功`)
-            this.back()
+            const msg = `【${this.storageLabel}】操作成功`
+            this.$message.success(msg)
+            this.back(msg)
           })
         })
       }

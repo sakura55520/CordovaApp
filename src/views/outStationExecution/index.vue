@@ -31,10 +31,10 @@
         ></component>
       </div>
     </div>
-    <div class="btn">
-      <el-button plain class="cancel-btn">取消</el-button>
-      <el-button type="primary" plain class="save-btn">保存</el-button>
-      <el-button type="primary" class="confirm-btn">出站确认</el-button>
+    <div class="page-handle-box">
+      <el-button plain class="cancel">取消</el-button>
+      <el-button type="primary" plain class="save">保存</el-button>
+      <el-button type="primary" class="submit">出站确认</el-button>
     </div>
   </div>
 </template>

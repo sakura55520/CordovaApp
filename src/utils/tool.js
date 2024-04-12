@@ -1,8 +1,6 @@
 
 // 只允许输入正数
 export function regPositiveNumber(obj,objName) {
-  console.log(obj,objName,'event,obj,objName');
-
   const reg = /^[0-9]+(\.[0-9]{0,2})?$/;
   const value =  obj[objName]
   if (!reg.test(value)) {
@@ -39,7 +37,6 @@ export function getAfterTimeByMinute(time,minuteVal = 0) {
   let hour = newDate.getHours();
   let minute = newDate.getMinutes();
   let second = newDate.getSeconds();
-  console.log(`${year}-${month}-${day} ${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}:${second < 10 ? '0'+second : second}`);
   return `${year}-${month}-${day} ${hour < 10 ? '0'+hour : hour}:${minute < 10 ? '0'+minute : minute}:${second < 10 ? '0'+second : second}`
 }
 // 计算某个时刻前n分钟前的时间点

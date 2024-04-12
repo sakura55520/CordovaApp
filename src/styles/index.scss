@@ -364,7 +364,7 @@ ul, li, ol {
   }
 
   .dialog-footer,
-  .pageHandleBox {
+  .page-handle-box {
     display: flex;
     z-index: 10;
     gap: 16px;
@@ -376,7 +376,7 @@ ul, li, ol {
     }
   }
 
-  .pageHandleBox {
+  .page-handle-box {
     background-color: #FFF;
     position: fixed;
     left: 0;
@@ -425,7 +425,7 @@ ul, li, ol {
   .el-radio {
     margin: 0 30px 10px 0 !important;
   }
-  .pageHandleBox {
+  .page-handle-box {
     padding-top: 6px;
     text-align: right;
     background: #fff;

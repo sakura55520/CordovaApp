@@ -107,8 +107,8 @@
     </div>
 
     <!-- 页面操作 -->
-    <div class="pageHandleBox" v-if="!$route.query.view">
-      <el-button class="cancel" @click="back">取消</el-button>
+    <div class="page-handle-box" v-if="!$route.query.view">
+      <el-button class="cancel" @click="back(null, 'confirm')">取消</el-button>
       <el-button class="save" type="primary" plain @click="handle('保存')">保存</el-button>
       <el-button class="submit" type="primary" @click="handle('提交')">{{ storageLabel }}确认</el-button>
     </div>
@@ -214,9 +214,6 @@ export default {
 
       this.getProcessNo()
     },
-    back() {
-      this.$router.push('/overStationExecution?station=ZL')
-    },
     // 操作
     handle(typeName) {
       const { _arrFeedingAmount, ...form } = this.detailForm
@@ -230,8 +227,7 @@ export default {
         Api.upldateBuffer(this.buffParams, form).then(res => {
           const msg = '保存成功!'
           this.$message.success(msg)
-          this.postMessage(msg)
-          this.back()
+          this.back(msg)
         })
       } else if (typeName === '提交') {
         this.$refs.detailForm.validate((valid) => {
@@ -252,8 +248,7 @@ export default {
                 const msg = `【${this.storageLabel}】操作成功`
                 this.$message.success(msg)
                 Api.deleteBuffer(this.buffParams)
-                this.postMessage(msg)
-                this.back()
+                this.back(msg)
               })
             })
 

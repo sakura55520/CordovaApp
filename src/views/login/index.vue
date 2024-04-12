@@ -234,7 +234,6 @@ export default {
         // 登录成功后
         await this.$store.dispatch('getCurrentUserInfo')
         this.loading = false
-        console.log('login getCurrentUserInfo success')
         this.$router.push({ path: '/' })
       } catch (err) {
         console.log('login', err)

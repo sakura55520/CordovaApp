@@ -33,7 +33,7 @@
       </el-radio-group>
     </div>
 
-    <div class="pageHandleBox">
+    <div class="page-handle-box">
       <el-button
         v-if="storage"
         :type="calcIsSkip ? 'warning' : 'primary'"

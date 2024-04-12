@@ -29,12 +29,10 @@ export function getConfirmingPersonSelete(options){
     var obj = Object();
     obj.Role= apiBase.ConfirmingPersonUserType
     getUserInfoByUserRole(obj).then(data => {
-      console.log(data)
       for(var i = 0; i< data.msg.length; i++){
           var obj = new Object();
           obj.value = data.msg[i].userId
           obj.label = data.msg[i].name
-          console.log(obj)
           options.push(obj);
       }
     })
