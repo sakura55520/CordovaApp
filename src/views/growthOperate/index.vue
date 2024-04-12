@@ -397,18 +397,20 @@ export default {
       const form = this.name2form[`长晶-${stepName}-其余参数`]
       if (!form) return
 
+      if (stepName === '煅烧') debugger
       const stepData = this.steps[stepName]
+      const errFormItemIdx = form.content.findIndex(({label}) => label === '单晶异常')
+      let _showErrors = false
+      if (errFormItemIdx > -1) {
+        _showErrors = true
+        form.content.splice(errFormItemIdx, 1)
+      }
+      if (_showErrors) stepData._showErrors = _showErrors
       if (this.calcAddRecordMap[stepName]) {
         if (!stepData._defaultStepData) stepData._defaultStepData = {}
         if (!stepData._defaultStepData._errors) {
-          const errFormItemIdx = form.content.findIndex(({label}) => label === '单晶异常')
-          let _showErrors = false
-          if (errFormItemIdx > -1) {
-            _showErrors = true
-            form.content.splice(errFormItemIdx, 1)
-          }
           stepData._defaultStepData._errors = []
-          stepData._showErrors = stepData._defaultStepData._showErrors = _showErrors
+          stepData._defaultStepData._showErrors = _showErrors
         }
       }
 
