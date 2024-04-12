@@ -131,10 +131,15 @@
       </div>
     </div>
     <div class="page-handle-box" v-if="!$route.query.view">
-      <el-button plain class="cancel" @click="back(null, 'confirm')">取消</el-button>
-      <el-button type="primary" plain class="save" @click="save">保存</el-button>
+      <el-button plain class="cancel" @click="back(null, 'confirm')"
+        >取消</el-button
+      >
+      <el-button type="primary" plain class="save" @click="save"
+        >保存</el-button
+      >
       <el-button type="primary" class="submit" @click="confirm"
-        >出站确认</el-button>
+        >出站确认</el-button
+      >
     </div>
   </div>
 </template>
@@ -199,10 +204,17 @@ export default {
       }
       this.formData = { ...this.formData, ...fromData };
       this.handleQtyChange();
+      if (!isEmpty(this.formData.segments)) {
+        this.formData.segments.forEach((element) => {
+          let { originLength, chippingLength, ellipticLength } = element;
+          element.qualifiedLength =
+            (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+        });
+      }
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      const msg = "保存成功!"
+      const msg = "保存成功!";
       this.$message.success(msg);
       this.back(msg);
     },
@@ -227,7 +239,7 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      const msg = "出站成功"
+      const msg = "出站成功";
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
