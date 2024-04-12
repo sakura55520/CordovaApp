@@ -65,6 +65,14 @@ export const constantRouterMap = [
   },
 
   {
+    name: 'accessory',
+    path: '/accessory',
+    component: () => import('@/views/accessory/index'),
+    hidden: true,
+    meta: {text: '辅材更换'}
+  },
+
+  {
     name: 'chargeOperate',
     path: '/chargeOperate',
     component: () => import('@/views/chargeOperate'),

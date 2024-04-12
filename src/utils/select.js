@@ -1,7 +1,6 @@
 import { getDictionaryItem } from '@/api/dictionary.js'
-import { getUserInfoByUserRole } from '@/api/tool.js'
-// import * as apiBase from '@/api/global/apiBase.js'
 import * as select from '@/api/select'
+import { getEnumDict } from '@/api/basic/dictionary'
 
 
 // 获取数据字典配置
@@ -25,18 +24,18 @@ export function getSeleteData(optionsName, options) {
   })
 }
 
-export function getConfirmingPersonSelete(options){
-    var obj = Object();
-    obj.Role= apiBase.ConfirmingPersonUserType
-    getUserInfoByUserRole(obj).then(data => {
-      for(var i = 0; i< data.msg.length; i++){
-          var obj = new Object();
-          obj.value = data.msg[i].userId
-          obj.label = data.msg[i].name
-          options.push(obj);
-      }
-    })
+// 获取枚举值
+// 返回Promise对象
+export function getEnumDatas(enumName, options) {
+  return getEnumDict(enumName).then(data => {
+    options.length = 0;
+    for (var i = 0; i < data.data.length; i++) {
+      const o = data.data[i]
+      options.push(o)
+    }
+  })
 }
+
 //更具工号，获取用户列表
 export function getUserInfoList(options,params, cb){
   options.length = 0;

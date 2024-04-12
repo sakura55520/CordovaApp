@@ -50,6 +50,12 @@ export default {
           group: "单晶车间",
           children: [
             {
+              name: "辅材更换",
+              href: "/accessory",
+              icon: "accessory",
+              permission: "pda_accessory_menu"
+            },
+            {
               name: "装料",
               href: "/overStationExecution?station=ZL",
               icon: "charge",
@@ -68,6 +74,7 @@ export default {
               permission: "pda_sendInspect_menu"
             },
           ],
+
         },
         {
           group: "割断滚圆车间",
