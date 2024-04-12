@@ -207,8 +207,10 @@
 <script>
 import * as Api from "@/api/inStation";
 import { isEmpty } from "lodash-es";
+import overStation from "@/mixins/overStation";
 
 export default {
+  mixins: [overStation],
   data() {
     return {
       batchNumber: "Z0116504581",

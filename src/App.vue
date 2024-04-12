@@ -12,17 +12,26 @@
       @reload="reload()"
     ></Heads>
     <router-view v-if="isRouterAlive"/>
+
+    <!--在过站列表, getCurrentWipStorageData 返回多个站点时, 弹窗展示站点列表-->
+    <ChooseStationDialog/>
+
+    <!--出站时, 选择出站路线-->
+    <ChooseFlowLineDialog/>
   </div>
 </template>
 
 <script>
-import Heads from "@/views/heads/index";
-import querystring from 'querystring'
+import Heads from '@/views/heads/index'
+import ChooseStationDialog from '@/components/ChooseStationDialog'
+import ChooseFlowLineDialog from '@/components/ChooseFlowLineDialog'
 
 export default {
   name: "App",
   components: {
-    Heads
+    Heads,
+    ChooseStationDialog,
+    ChooseFlowLineDialog
   },
   data() {
     return {
@@ -32,6 +41,12 @@ export default {
   created() {
     //设置获取当前时间
     this.$store.dispatch('NowServerDate')
+
+    window.addEventListener('message', ({ data, origin, source }) => {
+      if (origin !== process.env.BASE_PC) return
+      if (data !== 'mes init') return
+      window._pc_window = source
+    })
   },
   methods: {
     reload() {

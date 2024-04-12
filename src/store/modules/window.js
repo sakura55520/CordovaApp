@@ -33,9 +33,9 @@ const window = {
         );
       })
     },
-    setFromPC({ commit }, fromPC) {
+    SetFromPC({ commit }, fromPC) {
       commit('SET_FROM_PC', fromPC)
-    }
+    },
   }
 }
 export default window

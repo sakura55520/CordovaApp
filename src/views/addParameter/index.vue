@@ -204,8 +204,10 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import overStation from "@/mixins/overStation";
 
 export default {
+  mixins: [overStation],
   data() {
     return {
       batchNumber: "Z0116504581",
@@ -339,7 +341,9 @@ export default {
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      this.$message.success("保存成功!");
+      const msg = '保存成功!'
+      this.$message.success(msg)
+      this.postMessage(msg)
       this.back();
     },
     async confirm() {
@@ -363,8 +367,10 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      this.$message.success("出站成功");
+      const msg = '出站成功'
+      this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
+      this.postMessage(msg)
       this.back();
     },
     handleLengthChange() {

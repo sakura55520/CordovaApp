@@ -1,26 +1,23 @@
 import request from '@/utils/req'
-//出站接口
-export function outStation(data) {
-  return request({
-    url: '/wipStorage/outStation',
-    method: 'post',
-    data
-  })
-}
-//进站接口
-export function inStation(data) {
-  return request({
-    url: '/wipStorage/inStation',
-    method: 'post',
-    data
-  })
-}
+import store from '@/store'
+import { resetStationStore } from "@/utils/overStation";
+
 //进出站操作-关联业务
 export function inOrOutStation(data) {
   return request({
     url: '/wipStorage/inOrOutStation',
     method: 'post',
     data
+  }).then(res => {
+    store.state.station.stationCallback && store.state.station.stationCallback()
+    resetStationStore()
+    return res
+  }).catch(err => {
+    if (err && err.code === 201) {
+      store.dispatch('SetStationPostData', data)
+      store.dispatch('SetFlowLineList', err.data)
+    }
+    return Promise.reject(err)
   })
 }
 //查找暂存信息

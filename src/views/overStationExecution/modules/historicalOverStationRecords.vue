@@ -1,47 +1,6 @@
 <template>
   <div>
-    <!--   PC端展示   -->
-    <div v-if="$store.getters.fromPC">
-      <el-table
-        :data="list"
-        max-height="666"
-        border
-        fit
-        highlight-current-row
-        class="admin_table"
-      >
-        <el-table-column type="index" width="50" />
-        <el-table-column
-          label="批次号"
-          prop="processingOrderCode"
-          min-width="140"
-        />
-        <el-table-column label="设备" prop="equipmentCode" />
-        <el-table-column label="数量" prop="number" />
-        <el-table-column
-          label="作业站名称"
-          prop="processName"
-          min-width="140"
-        />
-        <el-table-column label="进站时间" prop="startTime" width="140" />
-        <el-table-column label="进站操作人" prop="inUserName" width="140" />
-        <el-table-column label="出站时间" prop="endTime" width="140" />
-        <el-table-column label="进站操作人" prop="outUserName" width="140" />
-        <el-table-column label="操作" width="100" fixed="right">
-          <template slot-scope="{ row }">
-            <el-button
-              class="table-rowBtn"
-              type="text"
-              @click="handleDetailView(row)"
-              >查看</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-
-    <!--   PAD端展示   -->
-    <div v-else>
+    <div>
       <div class="search">
         <el-date-picker
           class="date-picker"
@@ -118,12 +77,6 @@ import { isEmpty } from "lodash-es";
 
 export default {
   name: "HistoricalOverStationRecords",
-  props: {
-    propSearch: {
-      required: true,
-      type: Object,
-    },
-  },
   data() {
     return {
       currentPage: 1,
@@ -181,7 +134,7 @@ export default {
     };
   },
   mounted() {
-    if (!this.$store.getters.fromPC) this.fetchData();
+    this.fetchData();
   },
   methods: {
     searchRows() {
@@ -205,7 +158,6 @@ export default {
         search_LT_endTime: !isEmpty(this.endTimeRange)
           ? this.endTimeRange[1]
           : null,
-        ...this.propSearch,
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);
@@ -234,7 +186,7 @@ export default {
       }
       let fromData = list[0];
 
-      if (this.$route.query.station === "FDZL") {
+      if (row.processCode === "FDZL") {
         let resFDZL = await fetchDetail({
           url: "/wip/segmentedInstructionDetail",
           page: 1,

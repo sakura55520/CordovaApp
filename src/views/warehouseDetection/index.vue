@@ -248,8 +248,10 @@
 <script>
 import * as Api from "@/api/inStation";
 import SelectLinesideTree from "@/components/SelectLinesideTree";
+import overStation from "@/mixins/overStation";
 
 export default {
+  mixins: [overStation],
   components: {
     SelectLinesideTree,
   },

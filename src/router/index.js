@@ -19,6 +19,7 @@ export const constantRouterMap = [
     hidden: true,
     meta: {text: '工作中心'}
   },
+
   {
     name: 'dashboard',
     path: '/dashboard',

@@ -108,7 +108,8 @@
 
     <!-- 页面操作 -->
     <div class="pageHandleBox" v-if="!$route.query.view">
-      <el-button class="save" @click="handle('保存')">保存</el-button>
+      <el-button class="cancel" @click="back">取消</el-button>
+      <el-button class="save" type="primary" plain @click="handle('保存')">保存</el-button>
       <el-button class="submit" type="primary" @click="handle('提交')">{{ storageLabel }}确认</el-button>
     </div>
   </div>
@@ -120,7 +121,8 @@ import SelectUserinfo from '@/components/select_userinfo'
 import * as Api from '@/api/inStation'
 import { cloneDeep, floor, last } from 'lodash-es'
 import moment from 'moment'
-import {getProcessNo} from "@/api/tool";
+import { getProcessNo } from '@/api/tool'
+import overStation from '@/mixins/overStation'
 
 const defaultForm = {
   userConfirm: null, // 确认者
@@ -141,9 +143,9 @@ const defaultForm = {
   feedingAmount: null, // 加料量
   _arrFeedingAmount: ['']
 }
-
 export default {
   name: 'ChargeOperate',
+  mixins: [overStation],
   components: {
     CodeScanner,
     SelectUserinfo
@@ -226,7 +228,9 @@ export default {
       })
       if (typeName === '保存') {
         Api.upldateBuffer(this.buffParams, form).then(res => {
-          this.$message.success('保存成功!')
+          const msg = '保存成功!'
+          this.$message.success(msg)
+          this.postMessage(msg)
           this.back()
         })
       } else if (typeName === '提交') {
@@ -245,8 +249,10 @@ export default {
                 processingOrderCode, // 工单号
                 wipStorageStatus, // 进出站状态
               }).then(() => {
-                this.$message.success(`【${this.storageLabel}】操作成功`)
+                const msg = `【${this.storageLabel}】操作成功`
+                this.$message.success(msg)
                 Api.deleteBuffer(this.buffParams)
+                this.postMessage(msg)
                 this.back()
               })
             })

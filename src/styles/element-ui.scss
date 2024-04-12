@@ -59,3 +59,35 @@
     font-size: 14px;
   }
 }
+
+/* 查看历史详情时的样式 */
+.detail-form {
+  .el-range-editor.is-disabled,
+  .el-range-editor.is-disabled input,
+  .el-input.is-disabled .el-input__inner,
+  .el-select .el-input.is-disabled .el-input__inner:hover {
+    border-color: transparent;
+    background-color: transparent;
+    color: #606266;
+    cursor: auto;
+  }
+  .el-input__inner {
+    padding: 0 15px;
+    text-align: left;
+  }
+  .el-input.is-disabled .el-input__suffix,
+  .el-input-number.is-disabled .el-input-number__decrease,
+  .el-input-number.is-disabled .el-input-number__increase,
+  .el-checkbox__input,
+    //  .el-button,
+  .el-checkbox.is-disabled:not(.is-checked) {
+    display: none;
+  }
+  .el-checkbox__input.is-disabled + span.el-checkbox__label {
+    color: #606266;
+    cursor: auto;
+  }
+  .el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before {
+    content: ' ';
+  }
+}
