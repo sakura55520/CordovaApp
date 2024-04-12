@@ -136,18 +136,29 @@
               </el-table-column>
               <el-table-column
                 label="样片位置"
-                min-width="100"
+                min-width="120"
                 align="center"
                 prop="samplePosition"
               >
+                <template slot="header">
+                  <div class="form-table-header">样片位置</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.samplePosition"
-                    @input="
-                      (val) => handleSamplePositionChange(val, scope.$index)
-                    "
-                    v-direction="{ x: 0, y: scope.$index }"
-                  ></el-input>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="'details.' + scope.$index + '.samplePosition'"
+                    :rules="formRules.samplePosition"
+                    class="form-input"
+                  >
+                    <el-input
+                      v-model="scope.row.samplePosition"
+                      @input="
+                        (val) => handleSamplePositionChange(val, scope.$index)
+                      "
+                      v-direction="{ x: 0, y: scope.$index }"
+                    ></el-input>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column
@@ -176,14 +187,24 @@
                 min-width="180"
                 align="center"
                 prop="crystalDensity"
-              >
+                ><template slot="header">
+                  <div class="form-table-header">结晶比重</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.crystalDensity"
-                    v-direction="{ x: 1, y: scope.$index }"
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="'details.' + scope.$index + '.crystalDensity'"
+                    :rules="formRules.crystalDensity"
+                    class="form-input"
                   >
-                    <template slot="append">%</template>
-                  </el-input>
+                    <el-input
+                      v-model="scope.row.crystalDensity"
+                      v-direction="{ x: 1, y: scope.$index }"
+                    >
+                      <template slot="append">%</template>
+                    </el-input>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column label="RES" min-width="80" align="center">
@@ -303,10 +324,15 @@
       </div>
     </div>
     <div class="page-handle-box" v-if="!$route.query.view">
-      <el-button plain class="cancel" @click="back(null, 'confirm')">取消</el-button>
-      <el-button type="primary" plain class="save" @click="save">保存</el-button>
+      <el-button plain class="cancel" @click="back(null, 'confirm')"
+        >取消</el-button
+      >
+      <el-button type="primary" plain class="save" @click="save"
+        >保存</el-button
+      >
       <el-button type="primary" class="submit" @click="confirm"
-        >出站确认</el-button>
+        >出站确认</el-button
+      >
     </div>
   </div>
 </template>
@@ -375,6 +401,12 @@ export default {
         ],
         targetResistivity: [
           { required: true, message: "目标电阻率不能为空", trigger: "change" },
+        ],
+        samplePosition: [
+          { required: true, message: "样片位置不能为空", trigger: "change" },
+        ],
+        crystalDensity: [
+          { required: true, message: "结晶比重不能为空", trigger: "change" },
         ],
       },
     };
@@ -460,7 +492,7 @@ export default {
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      const msg = "保存成功!"
+      const msg = "保存成功!";
       this.$message.success(msg);
       this.back(msg);
     },
@@ -485,7 +517,7 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      const msg = "出站成功"
+      const msg = "出站成功";
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
@@ -656,5 +688,12 @@ export default {
 }
 .unit {
   width: 60px;
+}
+.form-input {
+  padding-top: 16px;
+}
+.form-table-header:before {
+  content: "* ";
+  color: red;
 }
 </style>
