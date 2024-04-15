@@ -32,7 +32,7 @@
               <el-input v-model="detailForm.goodQty" disabled/>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty">
-              <el-input v-model="detailForm.scrapQty" type="number" @change="handleScrapQtyChange"/>
+              <el-input v-model="detailForm.scrapQty" type="number"/>
             </el-form-item>
             <el-form-item label="工艺编号" prop="technologyNumber">
               <el-select v-model="detailForm.technologyNumber" filterable>
@@ -255,10 +255,6 @@ export default {
           }
         })
       }
-    },
-    handleScrapQtyChange() {
-      const { feedingTotal, scrapQty } = this.detailForm
-      this.detailForm.goodQty = feedingTotal - scrapQty
     },
     handleFeedingTimeChange(time) {
       this.detailForm.feedingDuration = moment(this.$store.getters.NowServerDate).diff(time, 'minutes')
