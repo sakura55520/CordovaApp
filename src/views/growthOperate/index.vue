@@ -16,8 +16,17 @@
     </div>
 
     <div v-loading="loading" class="fromCard growth-main">
-      <el-tabs v-if="tabsVisible" tab-position="left" @tab-click="handleSetpClick">
-        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :key="index" :label="stepName">
+      <el-tabs
+        v-if="tabsVisible"
+        tab-position="left"
+        @tab-click="handleSetpClick"
+      >
+        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :key="index">
+          <span
+            slot="label"
+            :class="{ 'tabs-label': checkNotFilled(stepName) }"
+            >{{ stepName }}</span
+          >
           <TabItem
             ref="TabItem"
             :step-data="steps[stepName]"
@@ -26,7 +35,8 @@
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
-        <el-tab-pane label="单晶异常">
+        <el-tab-pane>
+          <span slot="label">单晶异常</span>
           <TabError
             ref="TabError"
             :steps="steps"
@@ -34,11 +44,9 @@
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
-        <el-tab-pane label="留档文档">
-          <TabFile
-            ref="TabFile"
-            :step-data="steps['留档文档']"
-          />
+        <el-tab-pane>
+          <span slot="label">留档文档</span>
+          <TabFile ref="TabFile" :step-data="steps['留档文档']" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -47,33 +55,35 @@
     <div class="page-handle-box" v-if="!$route.query.view">
       <el-button class="cancel" @click="back(null, 'confirm')">取消</el-button>
       <el-button class="save" @click="handle('保存')">保存</el-button>
-      <el-button class="submit" type="primary" @click="handle('提交')">{{ storageLabel }}确认</el-button>
+      <el-button class="submit" type="primary" @click="handle('提交')"
+        >{{ storageLabel }}确认</el-button
+      >
     </div>
   </div>
 </template>
 
 <script>
-import * as Api from '@/api/inStation'
-import TabItem from './TabItem'
-import TabError from './TabError'
-import TabFile from './TabFile'
-import { fetchModelForm } from '@/api/modelform'
-import { getSeleteData } from '@/utils/select'
+import * as Api from "@/api/inStation";
+import TabItem from "./TabItem";
+import TabError from "./TabError";
+import TabFile from "./TabFile";
+import { fetchModelForm } from "@/api/modelform";
+import { getSeleteData } from "@/utils/select";
 import overStation from "@/mixins/overStation";
 
 const defaultCheckItem = {
   checkItem: null, // 点检项
   isError: null, // 是否异常
   errorMessage: null, // 异常说明
-}
+};
 
 export default {
-  name: 'GrowthOperate',
+  name: "GrowthOperate",
   mixins: [overStation],
   components: {
     TabItem,
     TabError,
-    TabFile
+    TabFile,
   },
   data() {
     return {
@@ -84,357 +94,468 @@ export default {
       loading: true,
       tabsVisible: false,
       crystalGrowthErrList: [], // 拉晶异常list
-    }
+      originalSteps: {},
+      eapSteps: [
+        "抽真空",
+        "检漏",
+        "化料",
+        "稳温",
+        "引晶",
+        "放肩",
+        "转肩",
+        "等径",
+        "收尾",
+        "煅烧",
+      ],
+    };
   },
   computed: {
     storageLabel() {
-      return this.$route.query.wipStorageStatus === '1' ? '出站' : '进站'
+      return this.$route.query.wipStorageStatus === "1" ? "出站" : "进站";
     },
     stepTabs() {
       return [
         {
-          stepName: '拆炉',
+          stepName: "拆炉",
           canAddRecord: true, // 允许添加记录
         },
         {
-          stepName: '抽真空',
+          stepName: "抽真空",
         },
         {
-          stepName: '检漏',
+          stepName: "检漏",
         },
         {
-          stepName: '煅烧',
+          stepName: "煅烧",
         },
         {
-          stepName: '化料'
+          stepName: "化料",
         },
         {
-          stepName: '稳温'
+          stepName: "稳温",
         },
         {
-          stepName: '引晶'
+          stepName: "引晶",
         },
         {
-          stepName: '放肩'
+          stepName: "放肩",
         },
         {
-          stepName: '等径'
+          stepName: "等径",
         },
         {
-          stepName: '收尾'
+          stepName: "收尾",
         },
         {
-          stepName: '冷却',
+          stepName: "冷却",
           canAddRecord: true,
         },
         {
-          stepName: '煅烧冷却',
+          stepName: "煅烧冷却",
           canAddRecord: true, // 允许添加记录
         },
         {
-          stepName: '吊单晶',
+          stepName: "吊单晶",
           canAddRecord: true,
         },
         {
-          stepName: '回熔',
+          stepName: "回熔",
           canAddRecord: true,
         },
         {
-          stepName: '吊肩',
+          stepName: "吊肩",
           canAddRecord: true,
         },
         {
-          stepName: '补掺',
+          stepName: "补掺",
           canAddRecord: true,
-        }
-      ]
+        },
+      ];
     },
     calcAddRecordMap() {
-      const map = {}
-      this.stepTabs.forEach(item => map[item.stepName] = item.canAddRecord)
-      return map
+      const map = {};
+      this.stepTabs.forEach((item) => (map[item.stepName] = item.canAddRecord));
+      return map;
     },
     calcStepNameList() {
-      const list = []
+      const list = [];
       this.stepTabs.forEach(({ stepName, canAddRecord }) => {
-        if (!this.steps[stepName] && !canAddRecord) return
-        list.push(stepName)
-      })
-      return list
-    }
+        if (!this.steps[stepName] && !canAddRecord) return;
+        list.push(stepName);
+      });
+      return list;
+    },
   },
   created() {
-    this.init()
+    this.init();
   },
   methods: {
     async init() {
       // 拉晶异常list
-      await getSeleteData('crystalGrowthErr', this.crystalGrowthErrList)
+      await getSeleteData("crystalGrowthErr", this.crystalGrowthErrList);
 
-      let fromData = {}
+      let fromData = {};
       try {
-        fromData = JSON.parse(this.$route.query.fromData)
+        fromData = JSON.parse(this.$route.query.fromData);
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
 
-      const { steps, ...rest } = fromData
-      this.steps = Object.assign({}, steps)
-      if (!this.steps['留档文档']) {
-        this.$set(this.steps, '留档文档', [{ fiels: [] }])
+      const { steps, ...rest } = fromData;
+      this.steps = Object.assign({}, steps);
+      this.originalSteps = Object.assign({}, steps);
+      if (!this.steps["留档文档"]) {
+        this.$set(this.steps, "留档文档", [{ fiels: [] }]);
       }
-      this.fromData = rest
+      this.fromData = rest;
 
       // 查询动态表单配置
-      await this.initFormContent()
-      this.loading = false
-      this.tabsVisible = true
+      await this.initFormContent();
+      this.loading = false;
+      this.tabsVisible = true;
+
+      console.log(JSON.parse(JSON.stringify(this.steps)));
     },
     // 操作
-    handle(typeName) {
-      const form = this.transform()
-      if (typeName === '保存') {
-        Api.updateGrowthBuffer(form).then(res => {
-          const msg = '保存成功!'
-          this.$message.success(msg)
-          this.back(msg)
-        })
-      } else if (typeName === '提交') {
-        this.$confirm('确认提交当前操作数据?', '提示', {
-          type: 'warning'
+    async handle(typeName) {
+      const form = this.transform();
+      if (typeName === "保存") {
+        Api.updateGrowthBuffer(form).then((res) => {
+          const msg = "保存成功!";
+          this.$message.success(msg);
+          this.back(msg);
+        });
+      } else if (typeName === "提交") {
+        let allValid = await this.validAll();
+        if (!allValid) return;
+        this.$confirm("确认提交当前操作数据?", "提示", {
+          type: "warning",
         }).then(() => {
-          const { equipmentCode, processUuid, processingOrderCode, wipStorageStatus } = this.$route.query
+          const {
+            equipmentCode,
+            processUuid,
+            processingOrderCode,
+            wipStorageStatus,
+          } = this.$route.query;
           Api.inOrOutStation({
             param: {
-              FormData: JSON.stringify(form)
+              FormData: JSON.stringify(form),
             },
             equipmentCode, // 设备
             processUuid, // 当前工序唯一标识
             processingOrderCode, // 工单号
             wipStorageStatus, // 进出站状态
           }).then(() => {
-            const msg = `【${this.storageLabel}】操作成功`
-            this.$message.success(msg)
-            this.back(msg)
-          })
-        })
+            const msg = `【${this.storageLabel}】操作成功`;
+            this.$message.success(msg);
+            this.back(msg);
+          });
+        });
       }
     },
     transform() {
-      const steps = JSON.parse(JSON.stringify(this.steps))
-      Object.keys(steps).forEach(stepName => {
-        const stepData = steps[stepName]
-        if (!stepData || !stepData.length) return delete steps[stepName]
+      const steps = JSON.parse(JSON.stringify(this.steps));
+      Object.keys(steps).forEach((stepName) => {
+        const stepData = steps[stepName];
+        if (!stepData || !stepData.length) return delete steps[stepName];
         stepData.forEach((recordItem) => {
-          this.transformExts(recordItem.exts)
-          this.transformChecks(recordItem.checks)
-          this.transformTechs(recordItem.techs)
+          this.transformExts(recordItem.exts);
+          this.transformChecks(recordItem.checks);
+          this.transformTechs(recordItem.techs);
 
           // errors
-          recordItem.errors = (recordItem._errors || []).map(errorMessage => ({ errorMessage }))
-          delete recordItem._errors
-        })
-      })
+          recordItem.errors = (recordItem._errors || []).map(
+            (errorMessage) => ({ errorMessage })
+          );
+          delete recordItem._errors;
+        });
+      });
       return {
         ...this.fromData,
-        steps
-      }
+        steps,
+      };
     },
     transformExts(arr) {
-      if (!Array.isArray(arr)) return
+      if (!Array.isArray(arr)) return;
       for (let index = 0; index < arr.length; index++) {
-        const { extValue, vModel } = arr[index]
-        if (['userCreate', 'userOperate2', 'totalQty', 'goodQty', 'scrapQty', 'errors'].includes(vModel)) {
-          arr.splice(index, 1)
-          index--
-          continue
+        const { extValue, vModel } = arr[index];
+        if (
+          [
+            "userCreate",
+            "userOperate2",
+            "totalQty",
+            "goodQty",
+            "scrapQty",
+            "errors",
+          ].includes(vModel)
+        ) {
+          arr.splice(index, 1);
+          index--;
+          continue;
         }
-        if (extValue && (typeof extValue === 'object')) {
-          arr[index].extValue = JSON.stringify(extValue)
+        if (extValue && typeof extValue === "object") {
+          arr[index].extValue = JSON.stringify(extValue);
         }
-        this.deleteNeedlessFields(arr[index])
+        this.deleteNeedlessFields(arr[index]);
       }
     },
     transformChecks(arr) {
-      if (!Array.isArray(arr)) return
+      if (!Array.isArray(arr)) return;
       for (let index = 0; index < arr.length; index++) {
-        this.deleteNeedlessFields(arr[index])
+        this.deleteNeedlessFields(arr[index]);
       }
     },
     transformTechs(arr) {
-      if (!Array.isArray(arr)) return
+      if (!Array.isArray(arr)) return;
       for (let index = 0; index < arr.length; index++) {
-        const { extValue } = arr[index]
-        if (extValue && (typeof extValue === 'object')) {
-          arr[index].extValue = JSON.stringify(extValue)
+        const { extValue } = arr[index];
+        if (extValue && typeof extValue === "object") {
+          arr[index].extValue = JSON.stringify(extValue);
         }
-        this.deleteNeedlessFields(arr[index])
+        this.deleteNeedlessFields(arr[index]);
       }
     },
     deleteNeedlessFields(item) {
-      const needlessFields = ['androidType', 'append', 'border', 'changeTag', 'clearable', 'disabled', 'document', 'filterable', 'formId', 'format', 'label', 'labelWidth', 'layout', 'maxlength', 'multiple', 'options', 'optionType', 'placeholder', 'prefix-icon', 'prepend', 'readonly', 'regList', 'renderKey', 'required', 'show-word-limit', 'size', 'span', 'style', 'suffix-icon', 'tag', 'tagIcon', 'type', 'vModel', 'value-format']
-      needlessFields.forEach(field => delete item[field])
+      const needlessFields = [
+        "androidType",
+        "append",
+        "border",
+        "changeTag",
+        "clearable",
+        "disabled",
+        "document",
+        "filterable",
+        "formId",
+        "format",
+        "label",
+        "labelWidth",
+        "layout",
+        "maxlength",
+        "multiple",
+        "options",
+        "optionType",
+        "placeholder",
+        "prefix-icon",
+        "prepend",
+        "readonly",
+        "regList",
+        "renderKey",
+        "required",
+        "show-word-limit",
+        "size",
+        "span",
+        "style",
+        "suffix-icon",
+        "tag",
+        "tagIcon",
+        "type",
+        "vModel",
+        "value-format",
+      ];
+      needlessFields.forEach((field) => delete item[field]);
     },
     initFormContent() {
       return fetchModelForm({
-        search_LLIKE_name: '长晶-'
-      }).then(res => {
-        res.data.forEach(form => {
-          this.name2form[form.name] = form
-        })
-        this.calcStepNameList.forEach(stepName => {
+        search_LLIKE_name: "长晶-",
+      }).then((res) => {
+        res.data.forEach((form) => {
+          this.name2form[form.name] = form;
+        });
+        this.calcStepNameList.forEach((stepName) => {
           if (!this.steps[stepName]) {
-            this.$set(this.steps, stepName, [])
-            this.initStepData(stepName)
-            return
+            this.$set(this.steps, stepName, []);
+            this.initStepData(stepName);
+            return;
           }
 
           this.steps[stepName].forEach((recordItem, recordIdx) => {
-            this.initStepData(stepName, recordIdx)
-          })
-        })
+            this.initStepData(stepName, recordIdx);
+          });
+        });
 
-        if (!this.steps['留档文档']) this.$set(this.steps, '留档文档', [])
-      })
+        if (!this.steps["留档文档"]) this.$set(this.steps, "留档文档", []);
+      });
     },
     initStepData(stepName, recordIdx) {
-      this.initError(stepName, recordIdx)
-      this.initExt(stepName, recordIdx)
-      this.initCheck(stepName, recordIdx)
-      this.initTech(stepName, recordIdx)
+      this.initError(stepName, recordIdx);
+      this.initExt(stepName, recordIdx);
+      this.initCheck(stepName, recordIdx);
+      this.initTech(stepName, recordIdx);
     },
     // 点检项
     initCheck(stepName, recordIdx) {
-      const form = this.name2form[`长晶-${stepName}-点检项`]
-      if (!form) return
+      const form = this.name2form[`长晶-${stepName}-点检项`];
+      if (!form) return;
 
-      const stepData = this.steps[stepName]
+      const stepData = this.steps[stepName];
       if (this.calcAddRecordMap[stepName]) {
-        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData) stepData._defaultStepData = {};
         if (!stepData._defaultStepData.checks) {
-          stepData._defaultStepData.checks = form.content.map(formItem => ({
+          stepData._defaultStepData.checks = form.content.map((formItem) => ({
             ...formItem,
             checkItem: formItem.vModel,
-          }))
+          }));
         }
       }
 
-      if (typeof recordIdx !== 'number') return
-      const label2value = {}
+      if (typeof recordIdx !== "number") return;
+      const label2value = {};
       if (Array.isArray(stepData[recordIdx].checks)) {
-        stepData[recordIdx].checks.forEach(data => {
-          if (!data.checkItem) return
-          label2value[data.checkItem] = data
-        })
+        stepData[recordIdx].checks.forEach((data) => {
+          if (!data.checkItem) return;
+          label2value[data.checkItem] = data;
+        });
       }
-      this.$set(stepData[recordIdx], 'checks', form.content.map(formItem => ({
-        ...formItem,
-        ...label2value[formItem.vModel] || label2value[formItem.label],
-        checkItem: formItem.vModel
-      })))
+      this.$set(
+        stepData[recordIdx],
+        "checks",
+        form.content.map((formItem) => ({
+          ...formItem,
+          ...(label2value[formItem.vModel] || label2value[formItem.label]),
+          checkItem: formItem.vModel,
+        }))
+      );
     },
     // 工艺参数
     initTech(stepName, recordIdx) {
-      const form = this.name2form[`长晶-${stepName}-工艺参数`]
-      if (!form) return
+      const form = this.name2form[`长晶-${stepName}-工艺参数`];
+      if (!form) return;
 
-      const stepData = this.steps[stepName]
+      const stepData = this.steps[stepName];
       if (this.calcAddRecordMap[stepName]) {
-        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData) stepData._defaultStepData = {};
         if (!stepData._defaultStepData.techs) {
-          stepData._defaultStepData.techs = form.content.map(formItem => ({
+          stepData._defaultStepData.techs = form.content.map((formItem) => ({
             ...formItem,
-            extKey: formItem.vModel
-          }))
+            extKey: formItem.vModel,
+          }));
         }
       }
 
-      if (typeof recordIdx !== 'number') return
-      const label2value = {}
+      if (typeof recordIdx !== "number") return;
+      const label2value = {};
       if (Array.isArray(stepData[recordIdx].techs)) {
-        stepData[recordIdx].techs.forEach(data => {
-          if (!data.extKey) return
-          label2value[data.extKey] = data
-        })
+        stepData[recordIdx].techs.forEach((data) => {
+          if (!data.extKey) return;
+          label2value[data.extKey] = data;
+        });
       }
-      this.$set(stepData[recordIdx], 'techs', form.content.map(formItem => ({
-        ...formItem,
-        ...(label2value[formItem.vModel] || label2value[formItem.label]),
-        extKey: formItem.vModel
-      })))
+      this.$set(
+        stepData[recordIdx],
+        "techs",
+        form.content.map((formItem) => ({
+          ...formItem,
+          ...(label2value[formItem.vModel] || label2value[formItem.label]),
+          extKey: formItem.vModel,
+        }))
+      );
     },
     // 其余参数
     initExt(stepName, recordIdx) {
-      const form = this.name2form[`长晶-${stepName}-其余参数`]
-      if (!form) return
+      const form = this.name2form[`长晶-${stepName}-其余参数`];
+      if (!form) return;
 
-      const stepData = this.steps[stepName]
+      const stepData = this.steps[stepName];
       if (this.calcAddRecordMap[stepName]) {
-        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData) stepData._defaultStepData = {};
         if (!stepData._defaultStepData.exts) {
-          stepData._defaultStepData.exts = form.content.map(formItem => ({
+          stepData._defaultStepData.exts = form.content.map((formItem) => ({
             ...formItem,
-            extKey: formItem.label
-          }))
+            extKey: formItem.label,
+          }));
         }
       }
 
-      if (typeof recordIdx !== 'number') return
-      const label2value = {}
+      if (typeof recordIdx !== "number") return;
+      const label2value = {};
       if (Array.isArray(stepData[recordIdx].exts)) {
-        stepData[recordIdx].exts.forEach(data => {
-          label2value[data.extKey] = data
-        })
+        stepData[recordIdx].exts.forEach((data) => {
+          label2value[data.extKey] = data;
+        });
       }
-      this.$set(stepData[recordIdx], 'exts', form.content.map(formItem => ({
-        ...formItem,
-        ...label2value[formItem.label],
-        extKey: formItem.label
-      })))
+      this.$set(
+        stepData[recordIdx],
+        "exts",
+        form.content.map((formItem) => ({
+          ...formItem,
+          ...label2value[formItem.label],
+          extKey: formItem.label,
+        }))
+      );
     },
     // 异常
     initError(stepName, recordIdx) {
-      const form = this.name2form[`长晶-${stepName}-其余参数`]
-      if (!form) return
+      const form = this.name2form[`长晶-${stepName}-其余参数`];
+      if (!form) return;
 
-      if (stepName === '煅烧') debugger
-      const stepData = this.steps[stepName]
-      const errFormItemIdx = form.content.findIndex(({label}) => label === '单晶异常')
-      let _showErrors = false
+      if (stepName === "煅烧") debugger;
+      const stepData = this.steps[stepName];
+      const errFormItemIdx = form.content.findIndex(
+        ({ label }) => label === "单晶异常"
+      );
+      let _showErrors = false;
       if (errFormItemIdx > -1) {
-        _showErrors = true
-        form.content.splice(errFormItemIdx, 1)
+        _showErrors = true;
+        form.content.splice(errFormItemIdx, 1);
       }
-      if (_showErrors) stepData._showErrors = _showErrors
+      if (_showErrors) stepData._showErrors = _showErrors;
       if (this.calcAddRecordMap[stepName]) {
-        if (!stepData._defaultStepData) stepData._defaultStepData = {}
+        if (!stepData._defaultStepData) stepData._defaultStepData = {};
         if (!stepData._defaultStepData._errors) {
-          stepData._defaultStepData._errors = []
-          stepData._defaultStepData._showErrors = _showErrors
+          stepData._defaultStepData._errors = [];
+          stepData._defaultStepData._showErrors = _showErrors;
         }
       }
 
-      if (typeof recordIdx !== 'number') return
-      this.$set(stepData[recordIdx], '_showErrors', stepData._showErrors)
-      this.$set(stepData[recordIdx], '_errors', (stepData[recordIdx].errors || []).map(item => item.errorMessage))
+      if (typeof recordIdx !== "number") return;
+      this.$set(stepData[recordIdx], "_showErrors", stepData._showErrors);
+      this.$set(
+        stepData[recordIdx],
+        "_errors",
+        (stepData[recordIdx].errors || []).map((item) => item.errorMessage)
+      );
     },
     handleSetpClick({ label }) {
       switch (label) {
-        case '单晶异常':
+        case "单晶异常":
           this.$nextTick(() => {
-            if (this.$refs.TabError && this.$refs.TabError.init) this.$refs.TabError.init()
-          })
-          break
-        case '留档文档':
+            if (this.$refs.TabError && this.$refs.TabError.init)
+              this.$refs.TabError.init();
+          });
+          break;
+        case "留档文档":
           this.$nextTick(() => {
-            if (this.$refs.TabFile && this.$refs.TabFile.init) this.$refs.TabFile.init()
-          })
-          break
+            if (this.$refs.TabFile && this.$refs.TabFile.init)
+              this.$refs.TabFile.init();
+          });
+          break;
         default:
       }
     },
-  }
-}
+    async validAll() {
+      let allValid = true;
+      for (const ref of this.$refs.TabItem) {
+        let valid = await ref.valid();
+        if (!valid) allValid = false;
+      }
+      return allValid;
+    },
+    checkNotFilled(stepName) {
+      if (!this.eapSteps.includes(stepName) || !this.originalSteps[stepName])
+        return false;
+      let notFilled = false;
+      this.steps[stepName].forEach((item) => {
+        item.exts.forEach((ele) => {
+          if (!item[ele.vModel]) notFilled = true;
+        });
+        item.techs.forEach((ele) => {
+          if (!ele.extValue && !ele.disabled) notFilled = true;
+        });
+      });
+      return notFilled;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -464,7 +585,7 @@ export default {
     .el-collapse-item__arrow {
       position: absolute;
       left: 0;
-      color: #409EFF;
+      color: #409eff;
       font-weight: bold;
     }
     .el-tabs__nav {
@@ -497,11 +618,24 @@ export default {
       padding-left: 12px;
     }
     .growth-section {
-
     }
     .el-card + .el-card {
       margin-top: 20px;
     }
   }
+}
+
+.tabs-label {
+  position: relative;
+}
+
+.tabs-label::before {
+  content: " ";
+  border: 3px solid red; /*设置红色*/
+  border-radius: 3px; /*设置圆角*/
+  position: absolute;
+  z-index: 1000;
+  left: -10px;
+  top: 6px;
 }
 </style>
