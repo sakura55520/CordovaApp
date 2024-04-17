@@ -200,7 +200,7 @@ export default {
             (item) => item.extKey === "掺杂剂类型"
           );
           let dosageIndex = this.stepData[recordIdx].techs.findIndex(
-            (item) => item.extKey === "掺杂剂用量"
+            (item) => item.extKey === "补掺量"
           );
           this.$set(
             this.stepData[recordIdx].techs[typeIndex],
