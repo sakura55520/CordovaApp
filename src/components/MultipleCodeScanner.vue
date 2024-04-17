@@ -1,27 +1,25 @@
 <!--
- 组件名: 扫码组件
-  1.使用防抖响应input事件
-  2.回调事件是: 'has-done'
+ 组件名: 多项扫码组件
 -->
 <template>
   <div class="code-sanner">
-    <!--   @change	仅在输入框失去焦点或用户按下回车时触发   -->
-    <el-input
-      v-model.trim="codeText"
+    <el-select
+      ref="multipleCodeSanner"
+      v-model="codes"
+      multiple
       :disabled="disabled"
       :placeholder="placeholder"
-      v-on="$listeners"
-      class="scan-input"
-      @change="emitHasDone"
-      @clear="emitClear"
+      value-key="id"
+      class="scan-select"
+      filterable
     >
-      <i
-        v-show="codeText"
-        slot="suffix"
-        class="el-input__icon el-icon-circle-close"
-        @click="handleClear"
-      />
-    </el-input>
+      <el-option
+        v-for="item in codes"
+        :label="item.materialCode"
+        :key="item.id"
+        :value="item"
+      ></el-option>
+    </el-select>
     <el-button type="primary" size="mini" @click="sweepCode">
       <div style="display: flex">
         <svg-icon icon-class="scan" style="width: 20px; height: 20px" />
@@ -34,14 +32,14 @@
 </template>
 
 <script>
-import { debounce } from "@/utils";
+import * as Api from "@/api/inStation";
 
 export default {
   name: "CodeScanner",
   props: {
     value: {
       required: true,
-      type: String | undefined | null,
+      type: Array | undefined | null,
     },
     placeholder: {
       default: "请扫码",
@@ -55,23 +53,14 @@ export default {
       default: false,
       type: Boolean,
     },
-  },
-  computed: {
-    codeText: {
-      get() {
-        return (this.value || "").trim();
-      },
-      set(val) {
-        this.$emit("input", (val || "").trim());
-      },
+    valueKey: {
+      type: String,
     },
   },
-  created() {
-    this.emitHasDone("ZJ-A-0001");
-    this.debounceInput = debounce(this.emitHasDone, 1000);
-  },
-  beforeDestory() {
-    this.debounceInput = null;
+  data() {
+    return {
+      codes: this.value,
+    };
   },
   methods: {
     sweepCode() {
@@ -114,8 +103,9 @@ export default {
             // alert(typeof resultCode)
             // alert(resultCode)
             if (resultCode === 1) {
-              this.codeText = result;
-              this.emitHasDone(codeText);
+              Api.findByCode(result).then((res) => {
+                this.codes.push(res.data);
+              });
             } else {
               this.$message.info("请重新扫码!");
             }
@@ -130,15 +120,10 @@ export default {
         console.log("请在客户端使用", e);
       }
     },
-    handleClear() {
-      this.codeText = "";
-      this.emitClear();
-    },
-    emitHasDone(val) {
-      this.$emit("has-done", val);
-    },
-    emitClear() {
-      this.$emit("clear");
+  },
+  watch: {
+    codes(val) {
+      this.$emit("input", val); // 实现父子组件间的值传递 this.$emit(事件,值)  （这里的input：v-model是一个语法糖，等于:value+@input）
     },
   },
 };
@@ -148,6 +133,7 @@ export default {
 .code-sanner {
   display: flex;
   gap: 16px;
+  width: 100%;
 }
 .scanClearStyle {
   width: 16px;
