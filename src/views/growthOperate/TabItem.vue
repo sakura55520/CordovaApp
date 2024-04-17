@@ -135,6 +135,7 @@
 <script>
 import Render from "@/components/renderForm/render.vue";
 import { isEmpty } from "lodash-es";
+import * as Api from "@/api/inStation";
 
 export default {
   name: "TabItem",
@@ -181,6 +182,38 @@ export default {
     },
     handleTechsInput(event, recordIdx, formItemIdx) {
       this.$set(this.stepData[recordIdx].techs[formItemIdx], "extValue", event);
+      if (this.stepData[recordIdx].techs[formItemIdx].extKey === "籽晶编号") {
+        Api.getSeed({ uniqueCode: event }).then((res) => {
+          let index = this.stepData[recordIdx].techs.findIndex(
+            (item) => item.extKey === "籽晶寿命"
+          );
+          this.$set(
+            this.stepData[recordIdx].techs[index],
+            "extValue",
+            res.data.usefulLife
+          );
+        });
+      }
+      if (this.stepData[recordIdx].techs[formItemIdx].extKey === "掺杂剂编号") {
+        Api.findByCode({ code: event }).then((res) => {
+          let typeIndex = this.stepData[recordIdx].techs.findIndex(
+            (item) => item.extKey === "掺杂剂类型"
+          );
+          let dosageIndex = this.stepData[recordIdx].techs.findIndex(
+            (item) => item.extKey === "掺杂剂用量"
+          );
+          this.$set(
+            this.stepData[recordIdx].techs[typeIndex],
+            "extValue",
+            res.data.materialTypeName
+          );
+          this.$set(
+            this.stepData[recordIdx].techs[dosageIndex],
+            "extValue",
+            res.data.qty
+          );
+        });
+      }
     },
     handleIncrease() {
       const stepData = JSON.parse(
