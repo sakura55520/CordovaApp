@@ -27,23 +27,12 @@
         >
           <div class="form">
             <div class="form-title">单晶信息</div>
-            <el-form-item label="检测人员" prop="inspector" class="item">
-              <SelectUserinfo
-                v-model="formData.inspector"
-                :style="{ width: '100%' }"
-              />
-            </el-form-item>
-            <el-form-item label="测试人员" prop="tester" class="item">
-              <SelectUserinfo
-                v-model="formData.tester"
-                :style="{ width: '100%' }"
-              />
-            </el-form-item>
-            <el-form-item label="确认人员" prop="confirmer" class="item">
-              <SelectUserinfo
-                v-model="formData.confirmer"
-                :style="{ width: '100%' }"
-              />
+            <el-form-item label="进站数量" prop="goodQty" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.goodQty">
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <div class="input">
@@ -52,21 +41,9 @@
                 </el-input>
               </div>
             </el-form-item>
-            <el-form-item label="异常数量" prop="abnormalQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.abnormalQty">
-                  <template slot="append">kg</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="当前长度" prop="currentLengthQty" class="item">
+            <el-form-item label="接收长度" prop="currentLengthQty" class="item">
               <el-input v-model="formData.currentLengthQty">
-                <template slot="append">cm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="晶体重量" prop="weight" class="item">
-              <el-input v-model="formData.weight">
-                <template slot="append">kg</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="型号" prop="model" class="item">
@@ -112,10 +89,31 @@
             >
               <el-table-column
                 label="样片编号"
-                min-width="120"
+                min-width="180"
                 align="center"
                 prop="sampleNumber"
               >
+              </el-table-column>
+              <el-table-column
+                label="样片类型"
+                min-width="150"
+                align="center"
+                prop="sampleType"
+              >
+                <template slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.sampleType"
+                    placeholder=""
+                    @change="(val) => handleSampleTypeChange(val, scope.$index)"
+                  >
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in sampleTypeList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select>
+                </template>
               </el-table-column>
               <el-table-column
                 label="样片标识"
@@ -127,10 +125,19 @@
                   <el-select
                     v-model="scope.row.sampleIdentification"
                     placeholder=""
-                    @change="handleSampleIdentificationChange(scope.row)"
+                    @change="fetchSampleCode"
                   >
-                    <el-option label="H" value="H"></el-option>
-                    <el-option label="T" value="T"></el-option>
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in sampleIdentificationList"
+                      :key="item.value"
+                      :disabled="
+                        (scope.row.sampleType === 'YP' && item.value === 'M') ||
+                        (scope.row.sampleType === 'CC' &&
+                          (item.value === 'H' || item.value === 'T'))
+                      "
+                    ></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -153,9 +160,6 @@
                   >
                     <el-input
                       v-model="scope.row.samplePosition"
-                      @input="
-                        (val) => handleSamplePositionChange(val, scope.$index)
-                      "
                       v-direction="{ x: 0, y: scope.$index }"
                     ></el-input>
                   </el-form-item>
@@ -207,7 +211,7 @@
                   </el-form-item>
                 </template>
               </el-table-column>
-              <el-table-column label="RES" min-width="80" align="center">
+              <el-table-column label="RES" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.res"
@@ -215,86 +219,74 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_C" min-width="80" align="center">
+              <el-table-column label="RES_C" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.resC"
                     v-direction="{ x: 3, y: scope.$index }"
+                    @input="
+                      () => {
+                        calcHalfRrg();
+                        calcRrg();
+                      }
+                    "
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_E" min-width="80" align="center">
+              <el-table-column label="RES_E" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.resE"
                     v-direction="{ x: 4, y: scope.$index }"
+                    @input="calcRrg"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="1/2RES" min-width="100" align="center">
+              <el-table-column label="1/2RES" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.halfRes"
                     v-direction="{ x: 5, y: scope.$index }"
+                    @input="calcHalfRrg"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="1/2 RRG" min-width="100" align="center">
+              <el-table-column label="1/2 RRG" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.halfRrg"
                     v-direction="{ x: 6, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="RRG" min-width="80" align="center">
+              <el-table-column label="RRG" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.rrg"
                     v-direction="{ x: 7, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column
-                label="尾部电阻率"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.tailResistivity"
-                    v-direction="{ x: 8, y: scope.$index }"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column
-                label="头尾电阻比"
-                min-width="100"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.headTailResistivityRatio"
-                    v-direction="{ x: 9, y: scope.$index }"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column label="OI_C" min-width="80" align="center">
+              <el-table-column label="OI_C" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiC"
                     v-direction="{ x: 10, y: scope.$index }"
+                    @input="calcOrg"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="CS" min-width="80" align="center">
+              <el-table-column label="CS" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.cs"
                     v-direction="{ x: 11, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="OI_E" min-width="80" align="center">
+              <el-table-column label="OI_E" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiE"
                     v-direction="{ x: 12, y: scope.$index }"
+                    @input="calcOrg"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="ORG" min-width="80" align="center">
+              <el-table-column label="ORG" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.org"
@@ -307,6 +299,57 @@
                     v-model="scope.row.minorityCarrierLifetime"
                     v-direction="{ x: 14, y: scope.$index }"
                   ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="测试日期" min-width="250" align="center">
+                <template slot-scope="scope">
+                  <el-date-picker
+                    v-model="scope.row.testTime"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                  /> </template
+              ></el-table-column>
+              <el-table-column label="常规缺陷" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.conventionalDefect"
+                    placeholder=""
+                  >
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in conventionalDefectList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select> </template
+              ></el-table-column>
+              <el-table-column label="OSF密度" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.osfDensity" placeholder="">
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in osfDensityList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select> </template
+              ></el-table-column>
+              <el-table-column label="基磷" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.minorityCarrierLifetime"
+                    v-direction="{ x: 14, y: scope.$index }"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="基硼" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.minorityCarrierLifetime"
+                    v-direction="{ x: 14, y: scope.$index }"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="检测人员" min-width="150" align="center">
+                <template slot-scope="scope">
+                  <SelectUserinfo v-model="scope.row.inspector" /> </template
               ></el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -341,6 +384,9 @@
 import * as Api from "@/api/inStation";
 import SelectUserinfo from "@/components/select_userinfo";
 import overStation from "@/mixins/overStation";
+import { getSeleteData } from "@/utils/select";
+import { mapState } from "vuex";
+import { cloneDeep } from "lodash-es";
 
 export default {
   mixins: [overStation],
@@ -409,6 +455,10 @@ export default {
           { required: true, message: "结晶比重不能为空", trigger: "change" },
         ],
       },
+      sampleTypeList: [],
+      conventionalDefectList: [],
+      osfDensityList: [],
+      sampleIdentificationList: [],
     };
   },
   computed: {
@@ -416,6 +466,12 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
+    newDetails() {
+      return JSON.parse(JSON.stringify(this.formData.details));
+    },
+    ...mapState({
+      realName: (state) => state.user.realName,
+    }),
   },
   created() {
     this.initKeyup();
@@ -439,6 +495,17 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
+      console.log(JSON.parse(JSON.stringify(this.formData)));
+      this.formData.details.forEach((item) => {
+        item.testTime = new Date();
+      });
+      await getSeleteData("sampleType", this.sampleTypeList);
+      await getSeleteData("conventionalDefect", this.conventionalDefectList);
+      await getSeleteData("osfDensity", this.osfDensityList);
+      await getSeleteData(
+        "sampleIdentification",
+        this.sampleIdentificationList
+      );
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -461,8 +528,9 @@ export default {
       if (!this.formData.details) this.formData.details = [];
       this.formData.details.push({
         sampleNumber:
-          "YP-" + (this.formData.details.length + 1 + "").padStart(7, "0"),
-        sampleIdentification: "H",
+          "CC-" + (this.formData.details.length + 1 + "").padStart(7, "0"),
+        sampleType: "CC",
+        sampleIdentification: "M",
         samplePosition: 0,
         category: "0",
         size: this.formData.size,
@@ -481,6 +549,8 @@ export default {
         org: 0,
         minorityCarrierLifetime: 0,
         valid: true,
+        testTime: new Date(),
+        inspector: this.realName,
       });
       this.handleSampleIdentificationChange();
     },
@@ -523,31 +593,17 @@ export default {
       this.back(msg);
     },
     handleSamplePositionChange(val, index) {
-      let sampleIdentification =
-        this.formData.details[index].sampleIdentification;
-      if (!sampleIdentification) {
-        this.$message.warning("请选择样片标识");
-        return;
-      }
-      let info = this.formData;
-      if (!info.weight) {
-        this.$message.warning("请填写晶体重量");
-        return;
-      }
-      if (!info.currentLengthQty) {
-        this.$message.warning("请填写当前长度");
-        return;
-      }
       let crystalDensity;
       let value = Number(val);
-      if (!value || value === "NaN") crystalDensity = "";
+      if (!value || value === "NaN" || !info.weight || !info.lengthQty)
+        crystalDensity = "";
       else
         crystalDensity = (
-          (((info.weight - info.tailWeight - info.headWeight) *
-            info.currentLengthQty) /
-            (sampleIdentification === "H"
-              ? info.currentLengthQty - value
-              : value) /
+          ((((info.goodWeight || 0) -
+            (info.tailWeight || 0) -
+            (info.headWeight || 0)) *
+            info.lengthQty) /
+            value /
             info.weight) *
           100
         ).toFixed(2);
@@ -576,6 +632,63 @@ export default {
       if (!row.valid) {
         return "invalid_tr";
       }
+    },
+    fetchSampleCode() {
+      let list = cloneDeep(this.formData.details);
+      let headIndex = 0;
+      let tailIndex = 0;
+      let centerIndex = 0;
+      list.forEach((item) => {
+        if (!item.sampleType) return;
+        let currentIndex;
+        if (item.sampleType === "YP") {
+          if (!item.sampleIdentification) return;
+          if (item.sampleIdentification === "H") {
+            headIndex++;
+            currentIndex = headIndex;
+          }
+          if (item.sampleIdentification === "T") {
+            tailIndex++;
+            currentIndex = tailIndex;
+          }
+        } else {
+          centerIndex++;
+          currentIndex = centerIndex;
+        }
+
+        Api.getSampleCode({
+          sampleType: item.sampleType,
+          crystalNo: this.formData.processOrderCode,
+          sampleIdentification: item.sampleIdentification,
+          index: currentIndex,
+        }).then((res) => {
+          item.sampleNumber = res.data;
+        });
+      });
+      this.$set(this.formData, "details", list);
+    },
+    handleSampleTypeChange(val, index) {
+      if (val === "CC")
+        this.$set(this.formData.details[index], "sampleIdentification", "M");
+      if (val === "YP")
+        this.$set(this.formData.details[index], "sampleIdentification", "H");
+      this.handleSampleIdentificationChange();
+      this.fetchSampleCode();
+    },
+    calcHalfRrg(index) {
+      let item = this.formData.details[index];
+      data = (item.halfRes - item.resC) / item.resC;
+      this.$set(this.formData.details[index], "halfRrg", data);
+    },
+    calcRrg(index) {
+      let item = this.formData.details[index];
+      data = (item.resE - item.resC) / item.resC;
+      this.$set(this.formData.details[index], "rrg", data);
+    },
+    calcOrg(index) {
+      let item = this.formData.details[index];
+      data = Math.abs(item.oiC - item.oiE);
+      this.$set(this.formData.details[index], "org", data);
     },
   },
 };
