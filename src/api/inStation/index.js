@@ -112,3 +112,10 @@ export function findByCode(params) {
     params,
   });
 }
+
+export function getSampleCode(params) {
+  return request({
+    url: `/wipcrystalcheck/sample-code/${params.sampleType}/${params.crystalNo}/${params.sampleIdentification}/${params.index}`,
+    method: "get",
+  });
+}
