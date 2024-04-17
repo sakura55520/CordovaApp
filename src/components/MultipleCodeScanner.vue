@@ -103,7 +103,7 @@ export default {
             // alert(typeof resultCode)
             // alert(resultCode)
             if (resultCode === 1) {
-              Api.findByCode(result).then((res) => {
+              Api.findByCode({ code: result }).then((res) => {
                 this.codes.push(res.data);
               });
             } else {
