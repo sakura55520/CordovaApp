@@ -27,9 +27,9 @@
         >
           <div class="form">
             <div class="form-title">单晶信息</div>
-            <el-form-item label="进站数量" prop="goodQty" class="item">
+            <el-form-item label="进站数量" prop="pullQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.goodQty">
+                <el-input class="value" v-model="formData.pullQty">
                   <template slot="append">kg</template>
                 </el-input>
               </div>
@@ -413,6 +413,7 @@ export default {
         inspector: null,
         tester: null,
         confirmer: null,
+        pullQty: null,
         goodQty: null,
         abnormalQty: null,
         currentLengthQty: null,
@@ -437,6 +438,9 @@ export default {
         ],
         confirmer: [
           { required: true, message: "确认人员不能为空", trigger: "change" },
+        ],
+        pullQty: [
+          { required: true, message: "进站数量不能为空", trigger: "change" },
         ],
         goodQty: [
           { required: true, message: "合格数量不能为空", trigger: "change" },
