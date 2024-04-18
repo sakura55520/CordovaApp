@@ -67,7 +67,6 @@ export default {
     },
   },
   created() {
-    this.emitHasDone("ZJ-A-0001");
     this.debounceInput = debounce(this.emitHasDone, 1000);
   },
   beforeDestory() {
