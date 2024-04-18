@@ -150,7 +150,7 @@
             </div>
             <el-form-item
               label="多晶硅编号"
-              prop="polysilicons"
+              prop="_polysilicons"
               class="multipleCodeScan-form-item"
               :rules="[
                 {
@@ -163,12 +163,12 @@
               <div class="multipleCodeScan-container">
                 <div
                   class="multipleCodeScan-item"
-                  v-for="(item, index) in detailForm.polysilicons"
+                  v-for="(item, index) in detailForm._polysilicons"
                   :key="index"
                 >
                   <MultipleCodeScanner
                     value-key="id"
-                    v-model="detailForm.polysilicons[index]"
+                    v-model="detailForm._polysilicons[index]"
                   />
                   <el-button
                     type="text"
@@ -193,7 +193,7 @@
             <div class="headLine">掺杂剂用量:{{ totalDopantAmount }}g</div>
             <el-form-item
               label="掺杂剂"
-              prop="dopants"
+              prop="_dopants"
               :rules="[
                 {
                   required: detailForm.crystalOrder == 1,
@@ -205,12 +205,12 @@
               <div class="multipleCodeScan-container">
                 <div
                   class="multipleCodeScan-item"
-                  v-for="(item, index) in detailForm.dopants"
+                  v-for="(item, index) in detailForm._dopants"
                   :key="index"
                 >
                   <MultipleCodeScanner
                     value-key="id"
-                    v-model="detailForm.dopants[index]"
+                    v-model="detailForm._dopants[index]"
                   />
                   <el-button
                     type="text"
@@ -264,8 +264,10 @@ const defaultForm = {
   seedCrystalNumber: null, // 籽晶编号
   seedCrystalLife: null, // 籽晶寿命
   quartzCrucibleSerial: null, // 石英坩埚编号
-  polysilicons: [], // 多晶硅编号
-  dopants: [], // 掺杂剂用量
+  polysilicons: {}, // 多晶硅编号
+  dopants: {}, // 掺杂剂用量
+  _polysilicons: [], // 多晶硅编号
+  _dopants: [], // 掺杂剂用量
   chargePipeType: null, // 加料管类型
   chargePipeModel: null, // 加料管型号
   chargePipeSerial: null, // 加料管编号
@@ -300,10 +302,10 @@ export default {
         seedCrystalNumber: [
           { required: true, message: "请输入籽晶编号", trigger: "change" },
         ],
-        polysilicons: [
+        _polysilicons: [
           { required: true, message: "请输入多晶硅编号", trigger: "change" },
         ],
-        dopants: [
+        _dopants: [
           { required: true, message: "请输入掺杂剂用量", trigger: "change" },
         ],
         chargePipeType: [
@@ -366,8 +368,8 @@ export default {
     },
     totalFeedingAmount() {
       let total = 0;
-      if (isEmpty(this.detailForm.polysilicons)) return 0;
-      this.detailForm.polysilicons.forEach((item) => {
+      if (isEmpty(this.detailForm._polysilicons)) return 0;
+      this.detailForm._polysilicons.forEach((item) => {
         if (!isEmpty(item)) {
           item.forEach((ele) => {
             total += ele.qty;
@@ -378,8 +380,8 @@ export default {
     },
     totalDopantAmount() {
       let total = 0;
-      if (isEmpty(this.detailForm.dopants)) return 0;
-      this.detailForm.dopants.forEach((item) => {
+      if (isEmpty(this.detailForm._dopants)) return 0;
+      this.detailForm._dopants.forEach((item) => {
         if (!isEmpty(item)) {
           item.forEach((ele) => {
             total += ele.qty;
@@ -416,16 +418,38 @@ export default {
         (this.detailForm.feedingAmount || "").split(",")
       );
 
+      let _polysilicons = Object.values(this.defaultForm.polysilicons);
+      let _dopants = Object.values(this.defaultForm.dopants);
+
+      this.$set(this.detailForm, "_polysilicons", _polysilicons);
+      this.$set(this.detailForm, "_dopants", _dopants);
+
       this.getProcessNo();
     },
     // 操作
     handle(typeName) {
-      const { _arrFeedingAmount, ...form } = this.detailForm;
+      const { _arrFeedingAmount, _polysilicons, _dopants, ...form } =
+        this.detailForm;
       let feedingAmount = (_arrFeedingAmount || []).filter((x) => x).join(",");
+
+      let polysilicons = {};
+      _polysilicons.forEach((item, index) => {
+        polysilicons[index + 1] = item;
+      });
+
+      let dopants = {};
+      _dopants.forEach((item, index) => {
+        dopants[index + 1] = item;
+      });
+
       form.feedingAmount = feedingAmount;
+      form.polysilicons = polysilicons;
+      form.dopants = dopants;
       const FormData = JSON.stringify({
         ...form,
         feedingAmount,
+        polysilicons,
+        dopants,
       });
       if (typeName === "保存") {
         Api.upldateBuffer(this.buffParams, form).then((res) => {
@@ -506,16 +530,16 @@ export default {
       this.detailForm.chargePipeModel = feed.extendValue;
     },
     addPolysilicon() {
-      this.detailForm.polysilicons.push([]);
+      this.detailForm._polysilicons.push([]);
     },
     deletePolysilicon(index) {
-      this.detailForm.polysilicons.splice(index, 1);
+      this.detailForm._polysilicons.splice(index, 1);
     },
     addDopant() {
-      this.detailForm.dopants.push([]);
+      this.detailForm._dopants.push([]);
     },
     deleteDopant(index) {
-      this.detailForm.dopants.splice(index, 1);
+      this.detailForm._dopants.splice(index, 1);
     },
   },
 };
