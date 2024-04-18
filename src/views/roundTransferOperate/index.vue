@@ -72,6 +72,7 @@ import * as Api from "@/api/inStation";
 import { cloneDeep, floor, last } from "lodash-es";
 import moment from "moment";
 import overStation from "@/mixins/overStation";
+import { mapState } from "vuex";
 
 const defaultForm = {
   lineWarehouse: null, // 线边仓
@@ -106,6 +107,9 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
+    ...mapState({
+      realName: (state) => state.user.realName,
+    }),
   },
   mounted() {
     this.init();
@@ -126,6 +130,8 @@ export default {
       }
 
       this.detailForm = Object.assign({}, defaultForm, fromData);
+      if (!this.detailForm.userCreate)
+        this.$set(this.detailForm, "userCreate", this.realName);
       this.handleQtyChange();
     },
     // 操作
