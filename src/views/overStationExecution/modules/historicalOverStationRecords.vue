@@ -1,30 +1,59 @@
 <template>
   <div>
     <div>
-      <div class="search">
-        <el-date-picker
-          class="date-picker"
-          v-model="startTimeRange"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="进站开始时间"
-          end-placeholder="进站结束时间"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          @change="fetchData"
-        >
-        </el-date-picker>
-        <el-date-picker
-          class="date-picker"
-          v-model="endTimeRange"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="出站开始时间"
-          end-placeholder="出站结束时间"
-          value-format="yyyy-MM-dd HH:mm:ss"
-          @change="fetchData"
-        >
-        </el-date-picker>
-      </div>
+      <el-form :model="formData">
+        <div class="form-columns">
+          <el-form-item label="">
+            <el-input
+              v-model="formData.search_LIKE_wheel"
+              placeholder="轮次号"
+              @change="fetchData"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-input
+              v-model="formData.search_LIKE_equipmentCode"
+              placeholder="单晶炉设备号"
+              @change="fetchData"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-input
+              v-model="formData.search_LIKE_processingOrderCode"
+              placeholder="工单"
+              @change="fetchData"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="form-columns">
+          <el-form-item label="">
+            <el-date-picker
+              class="date-picker"
+              v-model="formData.startTimeRange"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="进站开始时间"
+              end-placeholder="进站结束时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @change="fetchData"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item label="">
+            <el-date-picker
+              class="date-picker"
+              v-model="formData.endTimeRange"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="出站开始时间"
+              end-placeholder="出站结束时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @change="fetchData"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </div>
+      </el-form>
       <div v-if="list.length !== 0">
         <div class="card" v-for="item in list" :key="item.processingOrderCode">
           <div class="header">
@@ -83,8 +112,13 @@ export default {
       pageSize: 10,
       total: 0,
       list: [],
-      startTimeRange: "",
-      endTimeRange: "",
+      formData: {
+        search_LIKE_wheel: null,
+        search_LIKE_equipmentCode: null,
+        search_LIKE_processingOrderCode: null,
+        startTimeRange: "",
+        endTimeRange: "",
+      },
       detailUrlMap: {
         ZL: {
           path: "/chargeOperate",
@@ -146,17 +180,21 @@ export default {
         search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
-        search_GTE_startTime: !isEmpty(this.startTimeRange)
-          ? this.startTimeRange[0]
+        search_Like_wheel: this.formData.search_LIKE_wheel,
+        search_LIKE_equipmentCode: this.formData.search_LIKE_equipmentCode,
+        search_LIKE_processingOrderCode:
+          this.formData.search_LIKE_processingOrderCode,
+        search_GTE_startTime: !isEmpty(this.formData.startTimeRange)
+          ? this.formData.startTimeRange[0]
           : null,
-        search_LT_startTime: !isEmpty(this.startTimeRange)
-          ? this.startTimeRange[1]
+        search_LT_startTime: !isEmpty(this.formData.startTimeRange)
+          ? this.formData.startTimeRange[1]
           : null,
-        search_GTE_endTime: !isEmpty(this.endTimeRange)
-          ? this.endTimeRange[0]
+        search_GTE_endTime: !isEmpty(this.formData.endTimeRange)
+          ? this.formData.endTimeRange[0]
           : null,
-        search_LT_endTime: !isEmpty(this.endTimeRange)
-          ? this.endTimeRange[1]
+        search_LT_endTime: !isEmpty(this.formData.endTimeRange)
+          ? this.formData.endTimeRange[1]
           : null,
       }).then((res) => {
         this.list = res.data.rows;
@@ -213,13 +251,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.search {
+.form-columns {
   display: flex;
-  gap: 10px;
+  gap: 5px;
+  width: 100%;
+  > div {
+    flex: 1;
+  }
 }
 .date-picker {
-  margin-bottom: 8px;
-  flex: 1;
+  width: 100%;
 }
 .card {
   padding: 12px;
