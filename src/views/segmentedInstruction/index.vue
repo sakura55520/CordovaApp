@@ -612,7 +612,7 @@
                     <div class="item">
                       <div class="label">合格状态：</div>
                       <div class="value">
-                        {{ item.status ? "合格" : "不合格" }}
+                        {{ item.status === 0 ? "合格" : "不合格" }}
                       </div>
                     </div>
                     <div class="item">
@@ -1005,7 +1005,7 @@ export default {
         url: "/wipcrystalcheck",
         page: 1,
         rows: 10,
-        search_EQ_wipStorageId: this.formData.wipStorageId,
+        search_EQ_processOrderCode: this.formData.processOrderCode,
       });
       let list = ingotDetectionRes.data.rows;
       if (!isEmpty(list)) {
