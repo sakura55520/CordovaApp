@@ -363,6 +363,17 @@
               </el-table-column>
             </el-table>
           </div>
+          <div class="form">
+            <div class="form-title">留档文档记录</div>
+            <div class="growth-section">
+              <PhotoNew
+                v-model="formData._files"
+                :componentDisabled="false"
+                :name="'CHECK_DEVICE'"
+                @input="handleFileChange"
+              />
+            </div>
+          </div>
         </el-form>
       </div>
     </div>
@@ -387,10 +398,11 @@ import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
 import { mapState } from "vuex";
 import { cloneDeep } from "lodash-es";
+import PhotoNew from "@/views/components/photoNew";
 
 export default {
   mixins: [overStation],
-  components: { SelectUserinfo },
+  components: { SelectUserinfo, PhotoNew },
   data() {
     return {
       batchNumber: "Z0116504581",
@@ -417,6 +429,7 @@ export default {
         lengthQty: null,
         currentLengthQty: null,
         details: [],
+        _files: [],
       },
       formRules: {
         inspector: [
@@ -506,6 +519,12 @@ export default {
         "sampleIdentification",
         this.sampleIdentificationList
       );
+
+      this.formData._files = (this.formData.files || []).map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -689,6 +708,15 @@ export default {
       let item = this.formData.details[index];
       data = Math.abs(item.oiC - item.oiE);
       this.$set(this.formData.details[index], "org", data);
+    },
+    handleFileChange() {
+      const files = (this.formData._files || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.files = files;
     },
   },
 };
