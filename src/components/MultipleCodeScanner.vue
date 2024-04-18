@@ -139,18 +139,16 @@ export default {
         this.input = null;
       }
     },
-  },
-  watch: {
-    codes(val) {
-      this.$emit("input", val); // 实现父子组件间的值传递 this.$emit(事件,值)  （这里的input：v-model是一个语法糖，等于:value+@input）
-    },
-  },
-  methods: {
     handleConfirm() {
       Api.findByCode({ code: this.input }).then((res) => {
         this.codes.push(res.data);
         this.inputDialog = false;
       });
+    },
+  },
+  watch: {
+    codes(val) {
+      this.$emit("input", val); // 实现父子组件间的值传递 this.$emit(事件,值)  （这里的input：v-model是一个语法糖，等于:value+@input）
     },
   },
 };
