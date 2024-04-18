@@ -56,15 +56,6 @@ export const constantRouterMap = [
   },
 
   {
-    name: 'outStationExecution',
-    path: '/outStationExecution',
-    component: () => import('@/views/outStationExecution/index'),
-    hidden: true,
-    meta: {text: '出站执行'},
-    props: true
-  },
-
-  {
     name: 'accessory',
     path: '/accessory',
     component: () => import('@/views/accessory/index'),
