@@ -21,7 +21,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="120px"
+          label-width="200px"
           :rules="formRules"
           :disabled="$route.query.view"
         >
@@ -192,8 +192,12 @@
     </div>
     <div class="page-handle-box" v-if="!$route.query.view">
       <el-button class="cancel" @click="back(null, 'confirm')">取消</el-button>
-      <el-button type="primary" plain class="save" @click="save">保存</el-button>
-      <el-button type="primary" class="submit" @click="confirm">出站确认</el-button>
+      <el-button type="primary" plain class="save" @click="save"
+        >保存</el-button
+      >
+      <el-button type="primary" class="submit" @click="confirm"
+        >出站确认</el-button
+      >
     </div>
   </div>
 </template>
@@ -334,13 +338,18 @@ export default {
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      const msg = '保存成功!'
-      this.$message.success(msg)
-      this.back(msg)
+      const msg = "保存成功!";
+      this.$message.success(msg);
+      this.back(msg);
     },
     async confirm() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+      let { originLength, planLength } = this.formData;
+      if (originLength - planLength > 5) {
+        this.$message.warning("原始长度与计划长度的差值不能超过5mm");
+        return;
+      }
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
@@ -359,10 +368,10 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      const msg = '出站成功'
+      const msg = "出站成功";
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
-      this.back(msg)
+      this.back(msg);
     },
     handleLengthChange() {
       let { originLength, chippingLength, ellipticLength } = this.formData;
