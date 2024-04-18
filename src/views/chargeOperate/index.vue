@@ -74,7 +74,13 @@
                 },
               ]"
             >
-              <CodeScanner v-model="detailForm.quartzCrucibleSerial" />
+              <CodeScanner
+                v-model="detailForm.quartzCrucibleSerial"
+                @has-done="handleQuartzCrucibleSerialCodeScan"
+              />
+            </el-form-item>
+            <el-form-item label="石英坩埚用量" prop="quartzCrucibleDosage">
+              <el-input v-model="detailForm.quartzCrucibleQty" disabled />
             </el-form-item>
             <el-form-item
               label="加料管编号"
@@ -276,6 +282,8 @@ const defaultForm = {
   feedingDuration: null, // 装料时长(min)
   feedingAmount: null, // 加料量
   _arrFeedingAmount: [""],
+  quartzCrucible: null,
+  quartzCrucibleQty: null,
 };
 export default {
   name: "ChargeOperate",
@@ -518,6 +526,12 @@ export default {
     async handleSeedCrystalNumberCodeScan(val) {
       let res = await Api.getSeed({ uniqueCode: val });
       this.detailForm.seedCrystalLife = res.data.usefulLife;
+    },
+    async handleQuartzCrucibleSerialCodeScan(val) {
+      Api.findByCode({ code: val }).then((res) => {
+        this.detailForm.quartzCrucible = res.data;
+        this.detailForm.quartzCrucibleQty = res.data.qty;
+      });
     },
     async handleChargePipeSerialCodeScan(val) {
       let feedContainer = [];
