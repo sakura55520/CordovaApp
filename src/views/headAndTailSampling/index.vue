@@ -29,11 +29,11 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
+            <el-form-item label="进站数量" prop="totalQty" class="item">
+              <el-input v-model="formData.totalQty" disabled></el-input>
+            </el-form-item>
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <el-input v-model="formData.goodQty" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="缺陷数量" prop="defectQty" class="item">
-              <el-input v-model="formData.defectQty"></el-input>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty" class="item">
               <el-input-number
@@ -62,19 +62,35 @@
             <el-form-item label="当前长度" prop="lengthQty" class="item">
               <div class="input">
                 <el-input class="value" v-model="formData.lengthQty">
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
+          </div>
+          <div class="form">
+            <div class="form-title">留档文档记录</div>
+            <div class="growth-section">
+              <PhotoNew
+                v-model="formData._files"
+                :componentDisabled="false"
+                :name="'CHECK_DEVICE'"
+                @input="handleFileChange"
+              />
+            </div>
           </div>
         </el-form>
       </div>
     </div>
     <div class="page-handle-box" v-if="!$route.query.view">
-      <el-button plain class="cancel" @click="back(null, 'confirm')">取消</el-button>
-      <el-button type="primary" plain class="save" @click="save">保存</el-button>
+      <el-button plain class="cancel" @click="back(null, 'confirm')"
+        >取消</el-button
+      >
+      <el-button type="primary" plain class="save" @click="save"
+        >保存</el-button
+      >
       <el-button type="primary" class="submit" @click="confirm"
-        >出站确认</el-button>
+        >出站确认</el-button
+      >
     </div>
   </div>
 </template>
@@ -82,9 +98,13 @@
 <script>
 import * as Api from "@/api/inStation";
 import overStation from "@/mixins/overStation";
+import PhotoNew from "@/views/components/photoNew";
 
 export default {
   mixins: [overStation],
+  components: {
+    PhotoNew,
+  },
   data() {
     return {
       batchNumber: "Z0116504581",
@@ -95,16 +115,21 @@ export default {
       productName: "",
       formData: {
         userCreate: null,
+        totalQty: null,
         goodQty: null,
         defectQty: null,
         scrapQty: null,
         headWeight: null,
         tailWeight: null,
         lengthQty: null,
+        _files: [],
       },
       formRules: {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "change" },
+        ],
+        totalQty: [
+          { required: true, message: "进站数量不能为空", trigger: "change" },
         ],
         goodQty: [
           { required: true, message: "合格数量不能为空", trigger: "change" },
@@ -153,10 +178,16 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
       this.handleQtyChange();
+
+      this.formData._files = (this.formData.photo || []).map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      const msg = "保存成功!"
+      const msg = "保存成功!";
       this.$message.success(msg);
       this.back(msg);
     },
@@ -181,7 +212,7 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      const msg = "出站成功"
+      const msg = "出站成功";
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
@@ -189,6 +220,15 @@ export default {
     handleQtyChange() {
       let { totalQty, scrapQty } = this.formData;
       this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
+    },
+    handleFileChange() {
+      const photo = (this.formData._files || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.photo = photo;
     },
   },
 };
