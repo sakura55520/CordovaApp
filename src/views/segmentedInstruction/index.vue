@@ -26,27 +26,169 @@
           :disabled="$route.query.view"
         >
           <div class="base-form">
-            <el-form-item label="操作者" prop="userCreate" class="item">
-              <el-input v-model="formData.userCreate" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="长度" prop="length" class="item">
-              <el-input v-model="formData.length">
-                <template slot="append">cm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="数量" prop="number" class="item">
-              <el-input v-model="formData.number"></el-input>
-            </el-form-item>
+            <el-table
+              :data="checkInfo"
+              class="table"
+              :header-cell-style="{
+                background: 'rgba(242, 242, 242)',
+                color: '#606266',
+              }"
+              :row-class-name="tableRowClassName"
+            >
+              <el-table-column
+                label="样片编号"
+                min-width="120"
+                align="center"
+                prop="sampleNumber"
+              />
+              <el-table-column
+                label="样片类型"
+                min-width="120"
+                align="center"
+                prop="sampleType"
+              />
+              <el-table-column
+                label="样片标识"
+                min-width="100"
+                align="center"
+                prop="sampleIdentification"
+              />
+              <el-table-column
+                label="样片位置"
+                min-width="100"
+                align="center"
+                prop="samplePosition"
+              />
+              <el-table-column
+                label="类别"
+                min-width="100"
+                align="center"
+                prop="category"
+              />
+              <el-table-column
+                label="晶向"
+                min-width="100"
+                align="center"
+                prop="orientation"
+              />
+              <el-table-column
+                label="尺寸"
+                min-width="100"
+                align="center"
+                prop="size"
+              />
+              <el-table-column
+                label="结晶比重"
+                min-width="180"
+                align="center"
+                prop="crystalDensity"
+              />
+              <el-table-column
+                label="RES"
+                min-width="80"
+                align="center"
+                prop="res"
+              />
+              <el-table-column
+                label="RES_C"
+                min-width="80"
+                align="center"
+                prop="resC"
+              />
+              <el-table-column
+                label="RES_E"
+                min-width="80"
+                align="center"
+                prop="resE"
+              />
+              <el-table-column
+                label="1/2RES"
+                min-width="100"
+                align="center"
+                prop="halfRes"
+              />
+              <el-table-column
+                label="1/2 RRG"
+                min-width="100"
+                align="center"
+                prop="halfRrg"
+              />
+              <el-table-column
+                label="RRG"
+                min-width="80"
+                align="center"
+                prop="rrg"
+              />
+              <el-table-column
+                label="OI_C"
+                min-width="80"
+                align="center"
+                prop="oiC"
+              />
+              <el-table-column
+                label="CS"
+                min-width="80"
+                align="center"
+                prop="cs"
+              />
+              <el-table-column
+                label="OI_E"
+                min-width="80"
+                align="center"
+                prop="oiE"
+              />
+              <el-table-column
+                label="ORG"
+                min-width="80"
+                align="center"
+                prop="org"
+              />
+              <el-table-column
+                label="少子寿命"
+                min-width="100"
+                align="center"
+                prop="minorityCarrierLifetime"
+              />
+              <el-table-column
+                label="测试日期"
+                min-width="200"
+                align="center"
+                prop="testTime"
+              />
+              <el-table-column
+                label="常规缺陷"
+                min-width="120"
+                align="center"
+                prop="minorityCarrierLifetime"
+              />
+              <el-table-column
+                label="OSF密度"
+                min-width="120"
+                align="center"
+                prop="minorityCarrierLifetime"
+              />
+              <el-table-column
+                label="基磷"
+                min-width="120"
+                align="center"
+                prop="minorityCarrierLifetime"
+              />
+              <el-table-column
+                label="基硼"
+                min-width="120"
+                align="center"
+                prop="minorityCarrierLifetime"
+              />
+              <el-table-column
+                label="检测人员"
+                min-width="120"
+                align="center"
+                prop="inspector"
+              />
+            </el-table>
           </div>
           <div class="form">
             <div class="form-title">分段信息</div>
-            <el-button
-              size="small"
-              type="text"
-              class="form-checkInfo"
-              @click="handleViewCheckInfo"
-              >检验数据</el-button
-            >
             <el-button
               size="small"
               type="primary"
@@ -76,20 +218,10 @@
               </el-table-column>
               <el-table-column label="下发工单" min-width="300" align="center">
                 <template slot-scope="scope">
-                  <el-select
+                  <el-input
                     v-model="scope.row.orderCode"
-                    @visible-change="
-                      (val) => handleWorkOrderVisibleChange(val, scope.$index)
-                    "
-                    clearable
-                  >
-                    <el-option
-                      :label="item.workOrderNo"
-                      :value="item.workOrderNo"
-                      :key="item.workOrderNo"
-                      v-for="item in scope.row.workOrderList"
-                    ></el-option>
-                  </el-select>
+                    @focus="handleWorkOrderFocus(scope.$index)"
+                  />
                 </template>
               </el-table-column>
               <el-table-column label="流程编号" min-width="300" align="center">
@@ -508,127 +640,208 @@
               </div>
             </div>
           </div>
+          <div class="form">
+            <div class="form-title">留档文档记录</div>
+            <div class="growth-section">
+              <PhotoNew
+                v-model="formData._files"
+                :componentDisabled="false"
+                :name="'CHECK_DEVICE'"
+                @input="handleFileChange"
+              />
+            </div>
+          </div>
         </el-form>
       </div>
     </div>
-    <el-dialog :visible.sync="checkInfoDialog" title="样片检验数据" width="80%">
+    <div class="page-handle-box" v-if="!$route.query.view">
+      <el-button plain class="cancel" @click="back(null, 'confirm')"
+        >取消</el-button
+      >
+      <el-button type="primary" plain class="save" @click="save"
+        >保存</el-button
+      >
+      <el-button type="primary" class="submit" @click="confirm"
+        >出站确认</el-button
+      >
+    </div>
+    <el-dialog :visible.sync="workOrderDialog" title="工单列表" width="80%">
       <el-table
-        :data="checkInfo"
-        class="table"
+        :data="workOrderList"
         :header-cell-style="{
           background: 'rgba(242, 242, 242)',
           color: '#606266',
         }"
-        :row-class-name="tableRowClassName"
+        @row-click="rowClick"
       >
+        <el-table-column label="选择" width="80" fixed>
+          <template slot-scope="scope">
+            <el-radio v-model="selectedWorkOrder" :label="scope.row.workOrderNo"
+              ><i />
+            </el-radio>
+          </template>
+        </el-table-column>
         <el-table-column
-          label="样片编号"
+          label="工单编号"
           min-width="120"
           align="center"
-          prop="sampleNumber"
+          prop="workOrderNo"
         />
         <el-table-column
-          label="样片标识"
-          min-width="100"
-          align="center"
-          prop="sampleIdentification"
+          key="factoryNo"
+          prop="factoryNo"
+          label="工厂编号"
+          width="140"
         />
         <el-table-column
-          label="样片位置"
-          min-width="100"
-          align="center"
-          prop="samplePosition"
+          :formatter="formatErpType"
+          key="erpWorkOrderType"
+          prop="erpWorkOrderType"
+          label="工单类型"
+          width="120"
         />
         <el-table-column
-          label="类别"
-          min-width="100"
-          align="center"
-          prop="category"
+          key="workOrderTypeName"
+          prop="transMap.workOrderTypeName"
+          label="工单生产类型"
+          width="120"
         />
         <el-table-column
-          label="晶向"
-          min-width="100"
-          align="center"
-          prop="orientation"
+          key="customerOrderNo"
+          prop="customerOrderNo"
+          label="订单编号"
+          width="120"
         />
         <el-table-column
-          label="尺寸"
-          min-width="100"
-          align="center"
-          prop="size"
+          key="customerNo"
+          prop="customerNo"
+          label="客户编号"
+          width="120"
         />
         <el-table-column
-          label="结晶比重"
-          min-width="180"
-          align="center"
-          prop="crystalDensity"
-        />
-        <el-table-column label="RES" min-width="80" align="center" prop="res" />
-        <el-table-column
-          label="RES_C"
-          min-width="80"
-          align="center"
-          prop="resC"
+          key="productName"
+          prop="productName"
+          label="产品名称"
+          width="200"
         />
         <el-table-column
-          label="RES_E"
-          min-width="80"
-          align="center"
-          prop="resE"
+          key="productNo"
+          prop="productNo"
+          label="产品编号"
+          width="120"
         />
         <el-table-column
-          label="1/2RES"
-          min-width="100"
-          align="center"
-          prop="halfRes"
+          key="productVersion"
+          prop="productVersion"
+          label="产品版本"
+          width="90"
+        />
+        <el-table-column key="qty" prop="qty" label="工单数量" width="90" />
+        <el-table-column
+          key="offlineQty"
+          prop="offlineQty"
+          label="已下线数量"
+          width="110"
         />
         <el-table-column
-          label="1/2 RRG"
-          min-width="100"
-          align="center"
-          prop="halfRrg"
-        />
-        <el-table-column label="RRG" min-width="80" align="center" prop="rrg" />
-        <el-table-column
-          label="尾部电阻率"
-          min-width="100"
-          align="center"
-          prop="tailResistivity"
+          key="onlineQty"
+          prop="onlineQty"
+          label="在线数量"
+          width="90"
         />
         <el-table-column
-          label="头尾电阻比"
-          min-width="100"
-          align="center"
-          prop="headTailResistivityRatio"
+          key="qualifiedQty"
+          prop="qualifiedQty"
+          label="合格数量"
+          width="90"
         />
         <el-table-column
-          label="OI_C"
-          min-width="80"
-          align="center"
-          prop="oiC"
+          key="matchingQty"
+          prop="matchingQty"
+          label="标准匹配合格数量"
+          width="160"
         />
-        <el-table-column label="CS" min-width="80" align="center" prop="cs" />
+        <el-table-column key="unit" prop="unit" label="工单单位" width="90" />
         <el-table-column
-          label="OI_E"
-          min-width="80"
-          align="center"
-          prop="oiE"
+          key="planFinishDate"
+          prop="planFinishDate"
+          label="预计完工时间"
+          width="140"
         />
-        <el-table-column label="ORG" min-width="80" align="center" prop="org" />
         <el-table-column
-          label="少子寿命"
-          min-width="100"
-          align="center"
-          prop="minorityCarrierLifetime"
+          key="description"
+          prop="description"
+          label="工单说明"
+          min-width="200"
         />
+        <el-table-column
+          key="gmtCreate"
+          prop="gmtCreate"
+          label="创建时间"
+          width="140"
+        />
+        <el-table-column
+          key="userCreate"
+          prop="userCreate"
+          label="创建人"
+          width="140"
+        />
+        <el-table-column
+          key="gmtUpdate"
+          prop="gmtUpdate"
+          label="修改时间"
+          width="140"
+        />
+        <el-table-column
+          key="userUpdate"
+          prop="userUpdate"
+          label="修改人"
+          width="140"
+        />
+        <el-table-column
+          key="status"
+          prop="status"
+          label="工单状态"
+          width="90"
+          fixed="right"
+        >
+          <template slot-scope="{ row }">
+            <span v-if="row.status"
+              ><i class="icon-dot" style="background-color: #67c23a"></i
+              >开启</span
+            >
+            <span v-else
+              ><i class="icon-dot" style="background-color: #909399"></i
+              >关闭</span
+            >
+          </template>
+        </el-table-column>
+        <el-table-column
+          key="scheduleStatus"
+          prop="scheduleStatus"
+          label="排产状态"
+          width="90"
+          fixed="right"
+        >
+          <template slot-scope="{ row }">
+            <template v-if="!row.status">
+              <span v-if="row.scheduleStatus"
+                ><i class="icon-dot" style="background-color: #67c23a"></i
+                >可排产</span
+              >
+              <span v-else
+                ><i class="icon-dot" style="background-color: #909399"></i
+                >不可排产</span
+              >
+            </template>
+          </template>
+        </el-table-column>
       </el-table>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleCancel">取 消</el-button>
+        <el-button type="primary" @click="handleConfirm">确 定</el-button>
+      </span>
     </el-dialog>
-    <div class="page-handle-box" v-if="!$route.query.view">
-      <el-button plain class="cancel" @click="back(null, 'confirm')">取消</el-button>
-      <el-button type="primary" plain class="save" @click="save">保存</el-button>
-      <el-button type="primary" class="submit" @click="confirm"
-        >出站确认</el-button>
-    </div>
   </div>
 </template>
 
@@ -637,9 +850,13 @@ import * as Api from "@/api/inStation";
 import { cloneDeep, isEmpty } from "lodash-es";
 import { getSeleteData } from "@/utils/select";
 import overStation from "@/mixins/overStation";
+import PhotoNew from "@/views/components/photoNew";
 
 export default {
   mixins: [overStation],
+  components: {
+    PhotoNew,
+  },
   data() {
     return {
       batchNumber: "Z0116504581",
@@ -654,6 +871,7 @@ export default {
         length: null,
         number: null,
         segmentedInstructionDetailVos: [],
+        _files: [],
       },
       formRules: {
         userCreate: [
@@ -671,7 +889,11 @@ export default {
       wipStorageInStorageReasonList: [],
       processMap: {},
       checkInfo: [],
-      checkInfoDialog: false,
+      workOrderList: [],
+      selectedSegmentWorkOrderIndex: null,
+      workOrderDialog: false,
+      selectedWorkOrder: null,
+      erpWorkOrderTypeList: [], // ERP工单类型 list
     };
   },
   computed: {
@@ -699,10 +921,17 @@ export default {
   },
   mounted() {
     this.init();
+    getSeleteData("erpWorkOrderType", this.erpWorkOrderTypeList); // ERP工单类型 list
   },
   methods: {
-    async handleWorkOrderVisibleChange(visible, index) {
-      if (!visible) return;
+    rowClick(row) {
+      this.selectedWorkOrder = row.workOrderNo;
+    },
+    async handleWorkOrderFocus(index) {
+      this.selectedSegmentWorkOrderIndex = index;
+      this.workOrderDialog = true;
+      this.selectedWorkOrder = null;
+
       let item = this.formData.segmentedInstructionDetailVos[index];
       let { dopAnt, pnType, processOrderCode } = this.formData;
       let res = await Api.getIssueWorkOrder({
@@ -713,9 +942,20 @@ export default {
         resistanceTail: item.tailResistance,
         waferSize: item.diameter,
       });
-      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
-      list[index].workOrderList = res.data;
-      this.formData.segmentedInstructionDetailVos = list;
+      this.workOrderList = res.data;
+    },
+    handleCancel() {
+      this.workOrderDialog = false;
+    },
+    handleConfirm() {
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[
+          this.selectedSegmentWorkOrderIndex
+        ],
+        "orderCode",
+        this.selectedWorkOrder
+      );
+      this.workOrderDialog = false;
     },
     async handleProcessCodeVisibleChange(visible, index) {
       if (!visible) return;
@@ -771,6 +1011,12 @@ export default {
       if (!isEmpty(list)) {
         this.checkInfo = list[0].details;
       }
+
+      this.formData._files = (this.formData.files || []).map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
     },
     async handleCodeClick() {
       let { length } = this.formData;
@@ -869,7 +1115,7 @@ export default {
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      const msg = "保存成功!"
+      const msg = "保存成功!";
       this.$message.success(msg);
       this.back(msg);
     },
@@ -894,18 +1140,30 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      const msg = "出站成功"
+      const msg = "出站成功";
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
-    },
-    handleViewCheckInfo() {
-      this.checkInfoDialog = true;
     },
     tableRowClassName({ row }) {
       if (!row.valid) {
         return "invalid_tr";
       }
+    },
+    handleFileChange() {
+      const files = (this.formData._files || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.files = files;
+    },
+    formatErpType(row, column, cellValue) {
+      const matched = this.erpWorkOrderTypeList.find(
+        (item) => item.value === cellValue
+      );
+      return matched ? matched.name : "";
     },
   },
 };
@@ -1178,5 +1436,16 @@ export default {
 }
 .unit {
   width: 60px;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: end;
+}
+.icon-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 8px;
 }
 </style>
