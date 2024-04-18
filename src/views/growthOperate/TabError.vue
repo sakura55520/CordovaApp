@@ -69,6 +69,9 @@ export default {
       return selected
     }
   },
+  created() {
+    this.init();
+  },
   methods: {
     init() {
       this.detailForm.list = []

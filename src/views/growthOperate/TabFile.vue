@@ -46,6 +46,9 @@ export default {
       },
     }
   },
+  created() {
+    this.init();
+  },
   methods: {
     init() {
       this.detailForm._files = this.stepData[0].files.map(fileItem => ({
