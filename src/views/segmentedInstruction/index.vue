@@ -153,31 +153,31 @@
                 label="测试日期"
                 min-width="200"
                 align="center"
-                prop="testTime"
+                prop="checkDate"
               />
               <el-table-column
                 label="常规缺陷"
                 min-width="120"
                 align="center"
-                prop="minorityCarrierLifetime"
+                prop="flaw"
               />
               <el-table-column
                 label="OSF密度"
                 min-width="120"
                 align="center"
-                prop="minorityCarrierLifetime"
+                prop="osf"
               />
               <el-table-column
                 label="基磷"
                 min-width="120"
                 align="center"
-                prop="minorityCarrierLifetime"
+                prop="phosphorus"
               />
               <el-table-column
                 label="基硼"
                 min-width="120"
                 align="center"
-                prop="minorityCarrierLifetime"
+                prop="boron"
               />
               <el-table-column
                 label="检测人员"

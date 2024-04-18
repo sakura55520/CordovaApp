@@ -267,7 +267,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiC"
-                    v-direction="{ x: 10, y: scope.$index }"
+                    v-direction="{ x: 8, y: scope.$index }"
                     @input="calcOrg"
                   ></el-input> </template
               ></el-table-column>
@@ -275,14 +275,14 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.cs"
-                    v-direction="{ x: 11, y: scope.$index }"
+                    v-direction="{ x: 9, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="OI_E" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiE"
-                    v-direction="{ x: 12, y: scope.$index }"
+                    v-direction="{ x: 10, y: scope.$index }"
                     @input="calcOrg"
                   ></el-input> </template
               ></el-table-column>
@@ -290,30 +290,27 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.org"
-                    v-direction="{ x: 13, y: scope.$index }"
+                    v-direction="{ x: 11, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="少子寿命" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.minorityCarrierLifetime"
-                    v-direction="{ x: 14, y: scope.$index }"
+                    v-direction="{ x: 12, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="测试日期" min-width="250" align="center">
                 <template slot-scope="scope">
                   <el-date-picker
-                    v-model="scope.row.testTime"
+                    v-model="scope.row.checkDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
                   /> </template
               ></el-table-column>
               <el-table-column label="常规缺陷" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.conventionalDefect"
-                    placeholder=""
-                  >
+                  <el-select v-model="scope.row.flaw" placeholder="">
                     <el-option
                       :label="item.label"
                       :value="item.value"
@@ -324,7 +321,7 @@
               ></el-table-column>
               <el-table-column label="OSF密度" min-width="100" align="center">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.osfDensity" placeholder="">
+                  <el-select v-model="scope.row.osf" placeholder="">
                     <el-option
                       :label="item.label"
                       :value="item.value"
@@ -336,14 +333,14 @@
               <el-table-column label="基磷" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.minorityCarrierLifetime"
-                    v-direction="{ x: 14, y: scope.$index }"
+                    v-model="scope.row.phosphorus"
+                    v-direction="{ x: 13, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="基硼" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.minorityCarrierLifetime"
+                    v-model="scope.row.boron"
                     v-direction="{ x: 14, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
@@ -510,7 +507,7 @@ export default {
       this.formData = { ...this.formData, ...fromData };
       console.log(JSON.parse(JSON.stringify(this.formData)));
       this.formData.details.forEach((item) => {
-        item.testTime = new Date();
+        item.checkDate = new Date();
       });
       await getSeleteData("sampleType", this.sampleTypeList);
       await getSeleteData("conventionalDefect", this.conventionalDefectList);
@@ -568,7 +565,7 @@ export default {
         org: 0,
         minorityCarrierLifetime: 0,
         valid: true,
-        testTime: new Date(),
+        checkDate: new Date(),
         inspector: this.realName,
       });
       this.handleSampleIdentificationChange();
