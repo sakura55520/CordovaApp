@@ -28,6 +28,15 @@
         </div>
       </div>
     </el-button>
+    <el-dialog :visible.sync="inputDialog" title="请输入编码" width="60%">
+      <el-input v-model="input" placeholder="请输入编码"></el-input>
+      <div slot="footer" class="dialog-footer">
+        <el-button class="submit" @click="inputDialog = false">取 消</el-button>
+        <el-button class="submit" type="primary" @click="handleConfirm"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -60,70 +69,88 @@ export default {
   data() {
     return {
       codes: this.value,
+      inputDialog: false,
+      input: null,
     };
   },
   methods: {
     sweepCode() {
-      try {
-        cordova.plugins.gizscanqrcode.scan(
-          {
-            baseColor: "#4e8dec", // (边框、按钮、导航栏等背景颜色，优先级最低，单独设置可覆盖)
+      let isApp = /Android|webOS|iPhone|iPod|BlackBerry/i.test(
+        navigator.userAgent
+      );
+      if (isApp) {
+        try {
+          cordova.plugins.gizscanqrcode.scan(
+            {
+              baseColor: "#4e8dec", // (边框、按钮、导航栏等背景颜色，优先级最低，单独设置可覆盖)
 
-            // bar
-            title: "扫码", // (标题文字)
-            barColor: "4e8dec", // (导航栏颜色)
-            statusBarColor: "white", // (状态栏字体颜色 white为白，不填为默认)
+              // bar
+              title: "扫码", // (标题文字)
+              barColor: "4e8dec", // (导航栏颜色)
+              statusBarColor: "white", // (状态栏字体颜色 white为白，不填为默认)
 
-            // describe string
-            describe: "扫二维码/条码", // (提示用户文字，支持 \n 换行，多行文字需注意小屏幕设备适配问题)
-            describeFontSize: "15", // (字体大小)
-            describeLineSpacing: "8", // (行间距)
-            describeColor: "ffffff", // (文字颜色)
+              // describe string
+              describe: "扫二维码/条码", // (提示用户文字，支持 \n 换行，多行文字需注意小屏幕设备适配问题)
+              describeFontSize: "15", // (字体大小)
+              describeLineSpacing: "8", // (行间距)
+              describeColor: "ffffff", // (文字颜色)
 
-            // scan border
-            borderColor: "4e8dec", // (扫描框颜色)
-            borderScale: "0.6", // (边框大小，0.1 ~ 1)
+              // scan border
+              borderColor: "4e8dec", // (扫描框颜色)
+              borderScale: "0.6", // (边框大小，0.1 ~ 1)
 
-            // choose photo button
-            choosePhotoEnable: "true", // (支持相册选取, 默认false)
-            choosePhotoBtnTitle: "相册", // (选取按钮文字)
-            choosePhotoBtnColor: "4e8dec", // (选取按钮颜色)
+              // choose photo button
+              choosePhotoEnable: "true", // (支持相册选取, 默认false)
+              choosePhotoBtnTitle: "相册", // (选取按钮文字)
+              choosePhotoBtnColor: "4e8dec", // (选取按钮颜色)
 
-            // flashlight
-            flashlightEnable: "false", // (支持手电筒, 默认false)
-          },
-          (res) => {
-            /*
+              // flashlight
+              flashlightEnable: "false", // (支持手电筒, 默认false)
+            },
+            (res) => {
+              /*
               * callback:
               {"resultCode": "Int",//(0: unknown; 1: success; 2: error; 3: cancel)
                "result": "String" //( QR code(success); reason(error); cancel(cancel) )
               }
               * */
-            const { resultCode, result } = JSON.parse(res);
-            // alert(typeof resultCode)
-            // alert(resultCode)
-            if (resultCode === 1) {
-              Api.findByCode({ code: result }).then((res) => {
-                this.codes.push(res.data);
-              });
-            } else {
-              this.$message.info("请重新扫码!");
+              const { resultCode, result } = JSON.parse(res);
+              // alert(typeof resultCode)
+              // alert(resultCode)
+              if (resultCode === 1) {
+                Api.findByCode({ code: result }).then((res) => {
+                  this.codes.push(res.data);
+                });
+              } else {
+                this.$message.info("请重新扫码!");
+              }
+            },
+            (error) => {
+              console.log(error); // 原因
+              this.$message.info("请在客户端使用扫码功能");
+              // alert(JSON.stringify(error))
             }
-          },
-          (error) => {
-            console.log(error); // 原因
-            this.$message.info("请在客户端使用扫码功能");
-            // alert(JSON.stringify(error))
-          }
-        );
-      } catch (e) {
-        console.log("请在客户端使用", e);
+          );
+        } catch (e) {
+          console.log("请在客户端使用", e);
+        }
+      } else {
+        this.inputDialog = true;
+        this.input = null;
       }
     },
   },
   watch: {
     codes(val) {
       this.$emit("input", val); // 实现父子组件间的值传递 this.$emit(事件,值)  （这里的input：v-model是一个语法糖，等于:value+@input）
+    },
+  },
+  mounted: {
+    handleConfirm() {
+      Api.findByCode({ code: this.input }).then((res) => {
+        this.codes.push(res.data);
+        this.inputDialog = false;
+      });
     },
   },
 };
@@ -162,5 +189,9 @@ export default {
   justify-content: start;
   width: 50px;
   background-color: #fff;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: end;
 }
 </style>
