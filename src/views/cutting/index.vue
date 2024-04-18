@@ -36,18 +36,6 @@
                 </el-input>
               </div>
             </el-form-item>
-            <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <div class="input">
-                <el-input-number
-                  class="value"
-                  v-model="formData.scrapQty"
-                  @change="handleQtyChange"
-                  :style="{ width: '100%' }"
-                >
-                  <template slot="append">kg</template>
-                </el-input-number>
-              </div>
-            </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">分段信息</div>
@@ -69,14 +57,14 @@
               <el-table-column
                 label="计划长度"
                 prop="planLength"
-                min-width="100"
+                min-width="120"
                 align="center"
               >
               </el-table-column>
               <el-table-column
                 label="原始长度"
                 prop="originLength"
-                min-width="100"
+                min-width="120"
                 align="center"
               >
                 <template slot-scope="scope">
@@ -89,7 +77,7 @@
               <el-table-column
                 label="崩边长度"
                 prop="chippingLength"
-                min-width="100"
+                min-width="120"
                 align="center"
               >
                 <template slot-scope="scope">
@@ -102,7 +90,7 @@
               <el-table-column
                 label="椭圆长度"
                 prop="ellipticLength"
-                min-width="100"
+                min-width="120"
                 align="center"
               >
                 <template slot-scope="scope">
@@ -115,7 +103,7 @@
               <el-table-column
                 label="合格长度"
                 prop="qualifiedLength"
-                min-width="100"
+                min-width="120"
                 align="center"
               >
                 <template slot-scope="scope">
@@ -221,6 +209,14 @@ export default {
     async confirm() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+      for (const item of this.formData.segments) {
+        let { originLength, planLength } = item;
+        if (originLength - planLength > 5) {
+          this.$message.warning("原始长度与计划长度的差值不能超过5mm");
+          return;
+        }
+      }
+      let { originLength, planLength } = this.formData;
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
