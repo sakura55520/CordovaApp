@@ -44,6 +44,7 @@ export function getUserInfoList(options,params, cb){
       var obj = new Object();
       obj.value = data.data[i].realName
       obj.id = data.data[i].id
+      obj.workNo = data.data[i].workNo
 
       options.push(obj);
     }
