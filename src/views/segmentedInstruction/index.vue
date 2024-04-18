@@ -977,11 +977,11 @@ export default {
         this.processMap[val];
     },
     async init() {
-      await getSeleteData(
+      getSeleteData(
         "wipStorageDisqualificationReason",
         this.wipStorageDisqualificationReasonList
       );
-      await getSeleteData(
+      getSeleteData(
         "wipStorageInStorageReason",
         this.wipStorageInStorageReasonList
       );
