@@ -32,13 +32,6 @@
             <el-form-item label="合格数量" prop="goodQty" class="item">
               <el-input v-model="formData.goodQty" disabled></el-input>
             </el-form-item>
-            <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <el-input-number
-                v-model="formData.scrapQty"
-                @change="handleQtyChange"
-                :style="{ width: '100%' }"
-              ></el-input-number>
-            </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
@@ -88,7 +81,7 @@
                   class="value"
                   v-model="formData.dislocationIdentificationLength"
                 >
-                  <template slot="append">cm</template></el-input
+                  <template slot="append">mm</template></el-input
                 >
               </div>
             </el-form-item>
@@ -99,7 +92,7 @@
             >
               <div class="input">
                 <el-input class="value" v-model="formData.measuredDiameter">
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -110,18 +103,35 @@
             >
               <div class="input">
                 <el-input class="value" v-model="formData.disengageDiameter">
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item
-              label="锅底料重量"
-              prop="bottomMaterialWeight"
+              label="埚底料净重"
+              prop="bottomMaterialGrossWeight"
               class="item"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.bottomMaterialWeight">
-                  <template slot="append">kg</template>
+                <el-input
+                  class="value"
+                  v-model="formData.bottomMaterialGrossWeight"
+                >
+                  <template slot="append">g</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="埚底料毛重"
+              prop="bottomMaterialNetWeight"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.bottomMaterialNetWeight"
+                >
+                  <template slot="append">g</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -130,9 +140,15 @@
       </div>
     </div>
     <div class="page-handle-box" v-if="!$route.query.view">
-      <el-button plain class="cancel" @click="back(null, 'confirm')">取消</el-button>
-      <el-button type="primary" plain class="save" @click="save">保存</el-button>
-      <el-button type="primary" class="submit" @click="check">出站确认</el-button>
+      <el-button plain class="cancel" @click="back(null, 'confirm')"
+        >取消</el-button
+      >
+      <el-button type="primary" plain class="save" @click="save"
+        >保存</el-button
+      >
+      <el-button type="primary" class="submit" @click="handleCheck"
+        >出站确认</el-button
+      >
     </div>
     <el-dialog
       width="80vw"
@@ -143,53 +159,64 @@
         <el-table-column
           label="批次号"
           min-width="150"
-          prop="processOrderCode"
+          prop="batch"
+        ></el-table-column>
+        <el-table-column
+          label="轮次号"
+          min-width="100"
+          prop="wheel"
         ></el-table-column>
         <el-table-column
           label="良品数"
-          min-width="120"
+          min-width="150"
           prop="goodQty"
         ></el-table-column>
-        <el-table-column
-          label="锅底料"
-          min-width="120"
-          prop="bottomMaterialWeight"
-        >
+        <el-table-column label="埚底料" min-width="120" prop="bottomQty">
           <template slot-scope="scope">
             <div :class="scope.row.check ? '' : 'error'">
-              {{ scope.row.bottomMaterialWeight }}
+              {{ scope.row.bottomQty }}
             </div>
           </template>
         </el-table-column>
         <el-table-column
           label="多晶硅投料"
-          min-width="120"
-          prop="polycrystallineSiliconQty"
+          min-width="150"
+          prop="polysiliconQty"
         ></el-table-column>
         <el-table-column
           label="多晶硅扣料"
-          min-width="120"
-          prop="polycrystallineSiliconActualQty"
+          min-width="150"
+          prop="polysiliconDeductionQty"
+        ></el-table-column>
+        <el-table-column
+          label="多晶硅扣料计算"
+          min-width="250"
+          prop="polysiliconDeductionCalc"
         ></el-table-column>
         <el-table-column
           label="石英坩埚投料"
-          min-width="120"
-          prop="crucibleQty"
+          min-width="150"
+          prop="quartzCrucibleQty"
         ></el-table-column>
         <el-table-column
           label="石英坩埚扣料"
-          min-width="120"
-          prop="crucibleActualQty"
+          min-width="150"
+          prop="quartzCrucibleDeductionQty"
         ></el-table-column>
         <el-table-column
           label="掺杂剂用量投料"
           min-width="150"
-          prop="dopantQty"
+          prop="dopsantQty"
         ></el-table-column>
         <el-table-column
           label="掺杂剂扣料"
-          min-width="120"
-          prop="dopantActualQty"
+          min-width="150"
+          prop="dopsantDeductionQty"
+        ></el-table-column>
+        <el-table-column
+          label="掺杂剂扣料计算"
+          min-width="250"
+          prop="dopsantDeductionCalc"
         ></el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
@@ -204,6 +231,7 @@
 import * as Api from "@/api/inStation";
 import { isEmpty } from "lodash-es";
 import overStation from "@/mixins/overStation";
+import { mapState } from "vuex";
 
 export default {
   mixins: [overStation],
@@ -226,7 +254,8 @@ export default {
         dislocationIdentificationLength: null,
         measuredDiameter: null,
         disengageDiameter: null,
-        bottomMaterialWeight: null,
+        bottomMaterialGrossWeight: null,
+        bottomMaterialNetWeight: null,
       },
       formRules: {
         userCreate: [
@@ -272,12 +301,16 @@ export default {
         disengageDiameter: [
           { required: true, message: "脱开直径不能为空", trigger: "change" },
         ],
-        bottomMaterialWeight: [
-          { required: true, message: "锅底料重量不能为空", trigger: "change" },
+        bottomMaterialGrossWeight: [
+          { required: true, message: "埚底料净重不能为空", trigger: "change" },
+        ],
+        bottomMaterialNetWeight: [
+          { required: true, message: "埚底料毛重不能为空", trigger: "change" },
         ],
       },
       checkList: [],
       dialogCheckVisible: false,
+      check: null,
     };
   },
   computed: {
@@ -285,6 +318,9 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
+    ...mapState({
+      realName: (state) => state.user.realName,
+    }),
   },
   mounted() {
     this.init();
@@ -303,47 +339,39 @@ export default {
           console.log(e);
         }
       }
-      this.formData = { ...this.formData, ...fromData };
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+        userCreate: fromData.userCreate || this.realName,
+      };
       this.handleQtyChange();
     },
-    async check() {
+    async handleCheck() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
-      this.dialogCheckVisible = true;
-      let res = await Api.check(this.formData);
-      if (!res.data.check)
-        this.$message.warning("数据核对异常，请重新输入数据");
-      let materials = res.data.materials;
-      let materialInfo = {};
-      if (!isEmpty(materials)) {
-        for (const item of materials) {
-          if (item.materialType === "掺杂剂") {
-            materialInfo["dopantQty"] = item.qty;
-            materialInfo["dopantActualQty"] = item.actualQty;
-          }
-          if (item.materialType === "坩埚") {
-            materialInfo["crucibleQty"] = item.qty;
-            materialInfo["crucibleActualQty"] = item.actualQty;
-          }
-          if (item.materialType === "多晶硅") {
-            materialInfo["polycrystallineSiliconQty"] = item.qty;
-            materialInfo["polycrystallineSiliconActualQty"] = item.actualQty;
-          }
-        }
+
+      if (this.formData.end) {
+        this.dialogCheckVisible = true;
+        let res = await Api.check(this.formData);
+        this.check = res.data.check;
+        if (!res.data.check)
+          this.$message.warning("数据核对异常，请重新输入数据");
+        this.checkList = res.data.materials;
+      } else {
+        this.confirm();
       }
-      this.checkList = [{ ...res.data, ...materialInfo }];
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
-      const msg = "保存成功!"
+      const msg = "保存成功!";
       this.$message.success(msg);
       this.back(msg);
     },
     async confirm() {
-      if (!this.checkList[0].check) {
+      if (this.formData.end && !this.check) {
         this.$message.warning("数据核对异常，请重新输入数据");
         return;
       }
@@ -363,7 +391,7 @@ export default {
         wipStorageStatus,
       });
       this.dialogCheckVisible = false;
-      const msg = "出站成功"
+      const msg = "出站成功";
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
