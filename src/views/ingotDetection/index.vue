@@ -98,11 +98,11 @@
                 label="样片类型"
                 min-width="150"
                 align="center"
-                prop="sampleType"
+                prop="type"
               >
                 <template slot-scope="scope">
                   <el-select
-                    v-model="scope.row.sampleType"
+                    v-model="scope.row.type"
                     placeholder=""
                     @change="(val) => handleSampleTypeChange(val, scope.$index)"
                   >
@@ -133,8 +133,8 @@
                       v-for="item in sampleIdentificationList"
                       :key="item.value"
                       :disabled="
-                        (scope.row.sampleType === 'YP' && item.value === 'M') ||
-                        (scope.row.sampleType === 'CC' &&
+                        (scope.row.type === 'YP' && item.value === 'M') ||
+                        (scope.row.type === 'CC' &&
                           (item.value === 'H' || item.value === 'T'))
                       "
                     ></el-option>
@@ -544,7 +544,7 @@ export default {
       this.formData.details.push({
         sampleNumber:
           "CC-" + (this.formData.details.length + 1 + "").padStart(7, "0"),
-        sampleType: "CC",
+        type: "CC",
         sampleIdentification: "M",
         samplePosition: 0,
         category: "0",
@@ -655,9 +655,9 @@ export default {
       let tailIndex = 0;
       let centerIndex = 0;
       list.forEach((item) => {
-        if (!item.sampleType) return;
+        if (!item.type) return;
         let currentIndex;
-        if (item.sampleType === "YP") {
+        if (item.type === "YP") {
           if (!item.sampleIdentification) return;
           if (item.sampleIdentification === "H") {
             headIndex++;
@@ -673,7 +673,7 @@ export default {
         }
 
         Api.getSampleCode({
-          sampleType: item.sampleType,
+          sampleType: item.type,
           crystalNo: this.formData.processOrderCode,
           sampleIdentification: item.sampleIdentification,
           index: currentIndex,
