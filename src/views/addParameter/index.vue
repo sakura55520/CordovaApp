@@ -45,41 +45,41 @@
             <el-form-item label="计划长度" prop="planLength" class="item">
               <div class="input">
                 <el-input class="value" v-model="formData.planLength">
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
             <el-form-item label="原始长度" prop="originLength" class="item">
               <div class="input">
-                <el-input-number
+                <el-input
                   class="value"
                   v-model="formData.originLength"
                   @input="handleLengthChange"
                 >
-                  <template slot="append">cm</template>
-                </el-input-number>
+                  <template slot="append">mm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="崩边长度" prop="chippingLength" class="item">
               <div class="input">
-                <el-input-number
+                <el-input
                   class="value"
                   v-model="formData.chippingLength"
                   @input="handleLengthChange"
                 >
-                  <template slot="append">cm</template>
-                </el-input-number>
+                  <template slot="append">mm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
               <div class="input">
-                <el-input-number
+                <el-input
                   class="value"
                   v-model="formData.ellipticLength"
                   @input="handleLengthChange"
                 >
-                  <template slot="append">cm</template>
-                </el-input-number>
+                  <template slot="append">mm</template>
+                </el-input>
               </div>
             </el-form-item>
             <el-form-item label="合格长度" prop="qualifiedLength" class="item">
@@ -89,7 +89,7 @@
                   v-model="formData.qualifiedLength"
                   disabled
                 >
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -115,7 +115,7 @@
                   class="value"
                   v-model="formData.mainReferenceSurfaceLength"
                 >
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -140,7 +140,7 @@
                   class="value"
                   v-model="formData.mainReferenceSurfaceWidthHead"
                 >
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -154,7 +154,7 @@
                   class="value"
                   v-model="formData.mainReferenceSurfaceWidthTail"
                 >
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -168,7 +168,7 @@
                   class="value"
                   v-model="formData.auxiliaryReferenceSurfaceHead"
                 >
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -182,7 +182,7 @@
                   class="value"
                   v-model="formData.auxiliaryReferenceSurfaceTail"
                 >
-                  <template slot="append">cm</template>
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>

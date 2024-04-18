@@ -38,13 +38,13 @@
               </el-input>
             </el-form-item>
             <el-form-item label="报废数量" prop="scrapQty">
-              <el-input-number
+              <el-input
                 v-model="detailForm.scrapQty"
                 @change="handleQtyChange"
                 :style="{ width: '100%' }"
               >
                 <template slot="append">kg</template>
-              </el-input-number>
+              </el-input>
             </el-form-item>
           </div>
 
@@ -55,7 +55,7 @@
           <div>
             <el-form-item label="计划长度" prop="planLength">
               <el-input v-model="detailForm.planLength" type="number">
-                <template slot="append">cm</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="原始长度" prop="originLength">
@@ -64,7 +64,7 @@
                 type="number"
                 @change="calcQualifLength"
               >
-                <template slot="append">cm</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="崩边长度" prop="chippingLength">
@@ -73,7 +73,7 @@
                 type="number"
                 @change="calcQualifLength"
               >
-                <template slot="append">cm</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="椭圆长度" prop="ellipticLength">
@@ -82,35 +82,43 @@
                 type="number"
                 @change="calcQualifLength"
               >
-                <template slot="append">cm</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="合格长度" prop="qualifiedLength">
               <el-input v-model="detailForm.qualifiedLength" type="number">
-                <template slot="append">cm</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="滚圆实测直径头" prop="circleDiameterHead">
               <el-input v-model="detailForm.circleDiameterHead" type="number">
-                <template slot="append">cm</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="滚圆实测直径尾" prop="circleDiameterTail">
               <el-input v-model="detailForm.circleDiameterTail" type="number">
-                <template slot="append">cm</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item label="A点晶向" prop="crystallinePhaseA">
-              <el-input v-model="detailForm.crystallinePhaseA" />
+              <el-input v-model="detailForm.crystallinePhaseA">
+                <template slot="append">°</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="B点晶向" prop="crystallinePhaseB">
-              <el-input v-model="detailForm.crystallinePhaseB" />
+              <el-input v-model="detailForm.crystallinePhaseB">
+                <template slot="append">°</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="C点晶向" prop="crystallinePhaseC">
-              <el-input v-model="detailForm.crystallinePhaseC" />
+              <el-input v-model="detailForm.crystallinePhaseC">
+                <template slot="append">°</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="D点晶向" prop="crystallinePhaseD">
-              <el-input v-model="detailForm.crystallinePhaseD" />
+              <el-input v-model="detailForm.crystallinePhaseD">
+                <template slot="append">°</template>
+              </el-input>
             </el-form-item>
           </div>
         </el-form>
