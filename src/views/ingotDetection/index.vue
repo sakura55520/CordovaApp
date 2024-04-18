@@ -41,8 +41,8 @@
                 </el-input>
               </div>
             </el-form-item>
-            <el-form-item label="接收长度" prop="currentLengthQty" class="item">
-              <el-input v-model="formData.currentLengthQty">
+            <el-form-item label="接收长度" prop="lengthQty" class="item">
+              <el-input v-model="formData.lengthQty">
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
@@ -416,7 +416,6 @@ export default {
         pullQty: null,
         goodQty: null,
         abnormalQty: null,
-        currentLengthQty: null,
         model: null,
         size: null,
         orientation: null,
@@ -425,7 +424,6 @@ export default {
         headWeight: null,
         tailWeight: null,
         lengthQty: null,
-        currentLengthQty: null,
         details: [],
         _files: [],
       },
@@ -448,7 +446,7 @@ export default {
         abnormalQty: [
           { required: true, message: "异常数量不能为空", trigger: "change" },
         ],
-        currentLengthQty: [
+        lengthQty: [
           { required: true, message: "当前长度不能为空", trigger: "change" },
         ],
         weight: [
@@ -510,7 +508,7 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
       console.log(JSON.parse(JSON.stringify(this.formData)));
-      this.formData.details.forEach((item) => {
+      (this.formData.details || []).forEach((item) => {
         item.checkDate = new Date();
       });
       await getSeleteData("sampleType", this.sampleTypeList);
