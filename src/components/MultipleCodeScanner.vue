@@ -145,7 +145,7 @@ export default {
       this.$emit("input", val); // 实现父子组件间的值传递 this.$emit(事件,值)  （这里的input：v-model是一个语法糖，等于:value+@input）
     },
   },
-  mounted: {
+  methods: {
     handleConfirm() {
       Api.findByCode({ code: this.input }).then((res) => {
         this.codes.push(res.data);
