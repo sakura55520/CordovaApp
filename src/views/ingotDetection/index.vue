@@ -125,7 +125,7 @@
                   <el-select
                     v-model="scope.row.sampleIdentification"
                     placeholder=""
-                    @change="fetchSampleCode"
+                    @change="handleSampleIdentificationChange"
                   >
                     <el-option
                       :label="item.label"
@@ -634,6 +634,7 @@ export default {
         ),
       }));
       this.formData.details = [...list];
+      this.fetchSampleCode();
     },
     handleBaseFormChange() {
       let list = this.formData.details.map((item) => ({
@@ -688,7 +689,6 @@ export default {
       if (val === "YP")
         this.$set(this.formData.details[index], "sampleIdentification", "H");
       this.handleSampleIdentificationChange();
-      this.fetchSampleCode();
     },
     calcHalfRrg(index) {
       let item = this.formData.details[index];
