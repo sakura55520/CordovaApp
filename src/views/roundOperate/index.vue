@@ -23,7 +23,7 @@
         <el-form
           ref="detailForm"
           :model="detailForm"
-          label-width="136px"
+          label-width="150px"
           :rules="rules"
           inline
           :disabled="$route.query.view"
@@ -122,7 +122,8 @@
       <el-button class="cancel" @click="back(null, 'confirm')">取消</el-button>
       <el-button class="save" @click="handle('保存')">保存</el-button>
       <el-button class="submit" type="primary" @click="handle('提交')"
-        >{{ storageLabel }}确认</el-button>
+        >{{ storageLabel }}确认</el-button
+      >
     </div>
   </div>
 </template>
@@ -247,7 +248,7 @@ export default {
       });
       if (typeName === "保存") {
         Api.upldateBuffer(this.buffParams, this.detailForm).then((res) => {
-          const msg = "保存成功!"
+          const msg = "保存成功!";
           this.$message.success(msg);
           this.back(msg);
         });
@@ -272,7 +273,7 @@ export default {
                 processingOrderCode, // 工单号
                 wipStorageStatus, // 进出站状态
               }).then(() => {
-                const msg = `【${this.storageLabel}】操作成功`
+                const msg = `【${this.storageLabel}】操作成功`;
                 this.$message.success(msg);
                 Api.deleteBuffer(this.buffParams);
                 this.back(msg);
