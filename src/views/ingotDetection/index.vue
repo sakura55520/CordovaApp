@@ -511,13 +511,10 @@ export default {
       (this.formData.details || []).forEach((item) => {
         item.checkDate = new Date();
       });
-      await getSeleteData("sampleType", this.sampleTypeList);
-      await getSeleteData("conventionalDefect", this.conventionalDefectList);
-      await getSeleteData("osfDensity", this.osfDensityList);
-      await getSeleteData(
-        "sampleIdentification",
-        this.sampleIdentificationList
-      );
+      getSeleteData("sampleType", this.sampleTypeList);
+      getSeleteData("conventionalDefect", this.conventionalDefectList);
+      getSeleteData("osfDensity", this.osfDensityList);
+      getSeleteData("sampleIdentification", this.sampleIdentificationList);
 
       this.formData._files = (this.formData.photo || []).map((fileItem) => ({
         ...fileItem,
