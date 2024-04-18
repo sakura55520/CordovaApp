@@ -144,7 +144,7 @@
             </el-form-item>
           </div>
           <div>
-            <div class="headLine">
+            <div class="progress">
               加料量:{{ totalFeedingAmount }}kg
               <el-progress :percentage="feedPercent" />
             </div>
@@ -410,17 +410,14 @@ export default {
       }
 
       this.detailForm = Object.assign({}, cloneDeep(defaultForm), fromData);
-      console.log(JSON.parse(JSON.stringify(this.detailForm)));
       // 加料量
       this.$set(
         this.detailForm,
         "_arrFeedingAmount",
         (this.detailForm.feedingAmount || "").split(",")
       );
-
-      let _polysilicons = Object.values(this.defaultForm.polysilicons);
-      let _dopants = Object.values(this.defaultForm.dopants);
-
+      let _polysilicons = Object.values(this.detailForm.polysilicons);
+      let _dopants = Object.values(this.detailForm.dopants);
       this.$set(this.detailForm, "_polysilicons", _polysilicons);
       this.$set(this.detailForm, "_dopants", _dopants);
 
@@ -564,5 +561,8 @@ export default {
 }
 .add-btn {
   width: 120px;
+}
+.progress {
+  padding: 16px;
 }
 </style>
