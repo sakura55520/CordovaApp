@@ -1012,7 +1012,7 @@ export default {
         this.checkInfo = list[0].details;
       }
 
-      this.formData._files = (this.formData.files || []).map((fileItem) => ({
+      this.formData._files = (this.formData.photo || []).map((fileItem) => ({
         ...fileItem,
         big_url: fileItem.fileUrl,
         thumb_url: fileItem.fileUrl,
@@ -1151,13 +1151,13 @@ export default {
       }
     },
     handleFileChange() {
-      const files = (this.formData._files || []).map(
+      const photo = (this.formData._files || []).map(
         ({ big_url, thumb_url, ...item }) => ({
           ...item,
           fileUrl: big_url,
         })
       );
-      this.formData.files = files;
+      this.formData.photo = photo;
     },
     formatErpType(row, column, cellValue) {
       const matched = this.erpWorkOrderTypeList.find(
