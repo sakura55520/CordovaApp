@@ -80,7 +80,9 @@
               />
             </el-form-item>
             <el-form-item label="石英坩埚用量" prop="quartzCrucibleDosage">
-              <el-input v-model="detailForm.quartzCrucibleQty" disabled />
+              <el-input v-model="detailForm.quartzCrucibleQty" disabled>
+                <template slot="append">g</template>
+              </el-input>
             </el-form-item>
             <el-form-item
               label="加料管编号"
