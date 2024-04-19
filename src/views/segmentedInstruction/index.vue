@@ -257,7 +257,10 @@
                 prop="diameter"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.diameter"></el-input>
+                  <el-input
+                    v-model="scope.row.diameter"
+                    v-direction="{ x: 0, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="头部位置" min-width="100" align="center">
@@ -265,6 +268,7 @@
                   <el-input
                     v-model="scope.row.headPosition"
                     @change="(value) => handleHeadChange(value, scope.$index)"
+                    v-direction="{ x: 1, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -273,6 +277,7 @@
                   <el-input
                     v-model="scope.row.tailPosition"
                     @change="(value) => handleTailChange(value, scope.$index)"
+                    v-direction="{ x: 2, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -283,7 +288,10 @@
                 prop="length"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.length"></el-input>
+                  <el-input
+                    v-model="scope.row.length"
+                    v-direction="{ x: 3, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -293,7 +301,10 @@
                 prop="planWeight"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.planWeight"></el-input>
+                  <el-input
+                    v-model="scope.row.planWeight"
+                    v-direction="{ x: 4, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <!-- <el-table-column
@@ -313,7 +324,10 @@
                 prop="segmentNum"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.segmentNum"></el-input>
+                  <el-input
+                    v-model="scope.row.segmentNum"
+                    v-direction="{ x: 5, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -323,7 +337,10 @@
                 prop="headResistance"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.headResistance"></el-input>
+                  <el-input
+                    v-model="scope.row.headResistance"
+                    v-direction="{ x: 6, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -333,7 +350,10 @@
                 prop="tailResistance"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.tailResistance"></el-input>
+                  <el-input
+                    v-model="scope.row.tailResistance"
+                    v-direction="{ x: 7, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -343,7 +363,10 @@
                 prop="headResistanceActual"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.headResistanceActual"></el-input>
+                  <el-input
+                    v-model="scope.row.headResistanceActual"
+                    v-direction="{ x: 8, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -353,7 +376,10 @@
                 prop="tailResistanceActual"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.tailResistanceActual"></el-input>
+                  <el-input
+                    v-model="scope.row.tailResistanceActual"
+                    v-direction="{ x: 9, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <!-- <el-table-column
@@ -368,14 +394,13 @@
                 prop="head79oi"
               >
                 <template slot-scope="scope">
-                  <el-input-number
-                    :style="{ width: '80px' }"
-                    :controls="false"
+                  <el-input
                     v-model="scope.row.head79oi"
                     @change="
                       (value) => handleHead79oiChange(value, scope.$index)
                     "
-                  ></el-input-number>
+                    v-direction="{ x: 10, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -385,14 +410,13 @@
                 prop="tail79oi"
               >
                 <template slot-scope="scope">
-                  <el-input-number
-                    :style="{ width: '80px' }"
-                    :controls="false"
+                  <el-input
                     v-model="scope.row.tail79oi"
                     @change="
                       (value) => handleTail79oiChange(value, scope.$index)
                     "
-                  ></el-input-number>
+                    v-direction="{ x: 11, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -402,14 +426,13 @@
                 prop="head83oi"
               >
                 <template slot-scope="scope">
-                  <el-input-number
-                    :style="{ width: '80px' }"
-                    :controls="false"
+                  <el-input
                     v-model="scope.row.head83oi"
                     @change="
                       (value) => handleHead83oiChange(value, scope.$index)
                     "
-                  ></el-input-number>
+                    v-direction="{ x: 12, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -419,14 +442,13 @@
                 prop="tail83oi"
               >
                 <template slot-scope="scope">
-                  <el-input-number
-                    :style="{ width: '80px' }"
-                    :controls="false"
+                  <el-input
                     v-model="scope.row.tail83oi"
                     @change="
                       (value) => handleTail83oiChange(value, scope.$index)
                     "
-                  ></el-input-number>
+                    v-direction="{ x: 13, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <!-- <el-table-column
@@ -446,7 +468,10 @@
                 prop="remarks"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.remarks"></el-input>
+                  <el-input
+                    v-model="scope.row.remarks"
+                    v-direction="{ x: 14, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column label="合格状态" min-width="120" align="center">
@@ -464,7 +489,10 @@
                 prop="qualifiedLength"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.qualifiedLength"></el-input>
+                  <el-input
+                    v-model="scope.row.qualifiedLength"
+                    v-direction="{ x: 15, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -474,7 +502,10 @@
                 prop="qualifiedWeight"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.qualifiedWeight"></el-input>
+                  <el-input
+                    v-model="scope.row.qualifiedWeight"
+                    v-direction="{ x: 16, y: scope.$index }"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -919,11 +950,31 @@ export default {
       return list;
     },
   },
+  created() {
+    this.initKeyup();
+  },
   mounted() {
     this.init();
     getSeleteData("erpWorkOrderType", this.erpWorkOrderTypeList); // ERP工单类型 list
   },
   methods: {
+    initKeyup() {
+      let direction = this.$getDirection();
+      direction.on("keyup", function (e, val) {
+        if (e.keyCode === 39) {
+          direction.next();
+        }
+        if (e.keyCode === 37) {
+          direction.previous();
+        }
+        if (e.keyCode === 38) {
+          direction.previousLine();
+        }
+        if (e.keyCode === 40) {
+          direction.nextLine();
+        }
+      });
+    },
     rowClick(row) {
       this.selectedWorkOrder = row.workOrderNo;
     },
@@ -1021,7 +1072,17 @@ export default {
     async handleCodeClick() {
       let { length } = this.formData;
       if (length === undefined || length === null) {
-        this.$message.warning("请输入长度");
+        this.$message.warning("长度为空");
+        return;
+      }
+
+      let totalLength = (
+        this.formData.segmentedInstructionDetailVos || []
+      ).reduce((acc, cur) => acc + cur.length, 0);
+      if (totalLength !== length) {
+        this.$message.warning(
+          `晶锭总长度需要和单晶长度一致,晶锭总长度:${totalLength}mm,单晶长度:${length}mm`
+        );
         return;
       }
       let res = await Api.segmentedInstructionGenerateNo(this.formData);
