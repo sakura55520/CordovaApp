@@ -166,6 +166,7 @@
                   message: '请输入多晶硅编号',
                   trigger: 'change',
                 },
+                { validator: this.validPolysiliconsAmount, trigger: 'change' },
               ]"
             >
               <div class="multipleCodeScan-container">
@@ -199,7 +200,10 @@
             </el-form-item>
           </div>
           <div>
-            <div class="headLine">掺杂剂用量:{{ totalDopantAmount }}g</div>
+            <div class="progress">
+              掺杂剂用量:{{ totalDopantAmount }}g
+              <el-progress :percentage="dopantPercent" />
+            </div>
             <el-form-item
               label="掺杂剂"
               prop="_dopants"
@@ -209,6 +213,7 @@
                   message: '请输入掺杂剂用量',
                   trigger: 'change',
                 },
+                { validator: this.validTotalDopantAmount, trigger: 'change' },
               ]"
             >
               <div class="multipleCodeScan-container">
@@ -390,6 +395,12 @@ export default {
       });
       return total;
     },
+    dopantPercent() {
+      if (!this.totalDopantAmount || !this.detailForm.dopantDosage) return 0;
+      return floor(
+        (this.totalDopantAmount / this.detailForm.dopantDosage) * 100
+      );
+    },
     totalDopantAmount() {
       let total = 0;
       if (isEmpty(this.detailForm._dopants)) return 0;
@@ -507,6 +518,25 @@ export default {
         return callback(
           new Error(
             `加料量[${this.totalAount}]必须≤总量[${this.detailForm.goodQty}]`
+          )
+        );
+      callback();
+    },
+    validPolysiliconsAmount(rule, value, callback) {
+      if (this.totalFeedingAmount > this.detailForm.goodQty)
+        return callback(
+          new Error(
+            `加料量[${this.totalFeedingAmount}]必须≤总量[${this.detailForm.goodQty}]`
+          )
+        );
+      callback();
+    },
+    validTotalDopantAmount(rule, value, callback) {
+      let dopantDosage = this.detailForm.dopantDosage || 0;
+      if (this.totalDopantAmount > dopantDosage)
+        return callback(
+          new Error(
+            `掺杂精用量[${this.totalDopantAmount}]必须≤总量[${dopantDosage}]`
           )
         );
       callback();
