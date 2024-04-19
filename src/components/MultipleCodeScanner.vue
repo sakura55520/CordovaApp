@@ -65,6 +65,10 @@ export default {
     valueKey: {
       type: String,
     },
+    type: {
+      required: true,
+      type: String,
+    },
   },
   data() {
     return {
@@ -119,7 +123,14 @@ export default {
               // alert(resultCode)
               if (resultCode === 1) {
                 Api.findByCode({ code: result }).then((res) => {
-                  this.codes.push(res.data);
+                  if (res.data && res.data.materialTypeName === this.type) {
+                    this.codes.push(res.data);
+                    this.inputDialog = false;
+                  } else {
+                    this.$message.warning(
+                      `该物料编号的物料类型不是${this.type}`
+                    );
+                  }
                 });
               } else {
                 this.$message.info("请重新扫码!");
@@ -141,8 +152,12 @@ export default {
     },
     handleConfirm() {
       Api.findByCode({ code: this.input }).then((res) => {
-        this.codes.push(res.data);
-        this.inputDialog = false;
+        if (res.data && res.data.materialTypeName === this.type) {
+          this.codes.push(res.data);
+          this.inputDialog = false;
+        } else {
+          this.$message.warning(`该物料编号的物料类型不是${this.type}`);
+        }
       });
     },
   },

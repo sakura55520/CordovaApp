@@ -177,6 +177,7 @@
                   <MultipleCodeScanner
                     value-key="id"
                     v-model="detailForm._polysilicons[index]"
+                    type="多晶硅"
                   />
                   <el-button
                     type="text"
@@ -219,6 +220,7 @@
                   <MultipleCodeScanner
                     value-key="id"
                     v-model="detailForm._dopants[index]"
+                    type="掺杂剂"
                   />
                   <el-button
                     type="text"
@@ -531,8 +533,12 @@ export default {
     },
     async handleQuartzCrucibleSerialCodeScan(val) {
       Api.findByCode({ code: val }).then((res) => {
-        this.detailForm.quartzCrucible = res.data;
-        this.detailForm.quartzCrucibleQty = res.data.qty;
+        if (res.data && res.data.materialTypeName === "石英坩埚") {
+          this.detailForm.quartzCrucible = res.data;
+          this.detailForm.quartzCrucibleQty = res.data.qty;
+        } else {
+          this.$message.warning("该物料编号的物料类型不是石英坩埚");
+        }
       });
     },
     async handleChargePipeSerialCodeScan(val) {
