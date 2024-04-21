@@ -32,10 +32,10 @@
             <el-form-item label="操作者">
               <el-input v-model="detailForm.userCreate" disabled />
             </el-form-item>
-            <el-form-item label="确认者" prop="userConfirm">
+            <el-form-item label="掺杂剂确认者" prop="userConfirm">
               <SelectUserinfo v-model="detailForm.userConfirm" />
             </el-form-item>
-            <el-form-item label="目标重量" prop="goodQty">
+            <el-form-item label="连尾重量" prop="goodQty">
               <el-input v-model="detailForm.goodQty" disabled />
             </el-form-item>
             <el-form-item label="工艺编号" prop="technologyNumber">
@@ -81,7 +81,7 @@
             </el-form-item>
             <el-form-item label="石英坩埚用量" prop="quartzCrucibleDosage">
               <el-input v-model="detailForm.quartzCrucibleQty" disabled>
-                <template slot="append">g</template>
+                <template slot="append">只</template>
               </el-input>
             </el-form-item>
             <el-form-item
@@ -265,7 +265,7 @@ import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
 
 const defaultForm = {
-  userConfirm: null, // 确认者
+  userConfirm: null, // 掺杂剂确认者
   goodQty: null, // 合格数量
   scrapQty: null, // 报废数量
   technologyNumber: null, // 工艺编号
@@ -301,7 +301,7 @@ export default {
       detailForm: Object.assign({}, cloneDeep(defaultForm)), // 表单列表
       rules: {
         userConfirm: [
-          { required: true, message: "请输入确认者", trigger: "change" },
+          { required: true, message: "请输入掺杂剂确认者", trigger: "change" },
         ],
         scrapQty: [
           { required: true, message: "请输入报废数量", trigger: "change" },
