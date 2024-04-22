@@ -534,29 +534,29 @@ export default {
       ).diff(time, "minutes");
     },
     validAmount(rule, value, callback) {
-      if (this.totalAount > this.detailForm.goodQty)
+      if (this.totalAount !== this.detailForm.goodQty)
         return callback(
           new Error(
-            `加料量[${this.totalAount}]必须≤总量[${this.detailForm.goodQty}]`
+            `加料量[${this.totalAount}]必须等于总量[${this.detailForm.goodQty}]`
           )
         );
       callback();
     },
     validPolysiliconsAmount(rule, value, callback) {
-      if (this.totalFeedingAmount > this.detailForm.goodQty)
+      if (this.totalFeedingAmount !== this.detailForm.goodQty)
         return callback(
           new Error(
-            `加料量[${this.totalFeedingAmount}]必须≤总量[${this.detailForm.goodQty}]`
+            `加料量[${this.totalFeedingAmount}]必须等于总量[${this.detailForm.goodQty}]`
           )
         );
       callback();
     },
     validTotalDopantAmount(rule, value, callback) {
       let dopantDosage = this.detailForm.dopantDosage || 0;
-      if (this.totalDopantAmount > dopantDosage)
+      if (this.totalDopantAmount !== dopantDosage)
         return callback(
           new Error(
-            `掺杂精用量[${this.totalDopantAmount}]必须≤总量[${dopantDosage}]`
+            `掺杂精用量[${this.totalDopantAmount}]必须等于总量[${dopantDosage}]`
           )
         );
       callback();
