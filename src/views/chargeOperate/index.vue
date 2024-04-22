@@ -63,6 +63,9 @@
             <el-form-item label="籽晶寿命" prop="seedCrystalLife">
               <el-input v-model="detailForm.seedCrystalLife" />
             </el-form-item>
+            <el-form-item label="籽晶额定寿命" prop="seedCrystalTotalLife">
+              <el-input v-model="detailForm.seedCrystalTotalLife" />
+            </el-form-item>
             <el-form-item
               label="石英坩埚编号"
               prop="quartzCrucibleSerial"
@@ -270,7 +273,8 @@ const defaultForm = {
   scrapQty: null, // 报废数量
   technologyNumber: null, // 工艺编号
   seedCrystalNumber: null, // 籽晶编号
-  seedCrystalLife: null, // 籽晶寿命
+  seedCrystalLife: null, // 籽晶已用寿命
+  seedCrystalTotalLife: null, // 籽晶总寿命
   quartzCrucibleSerial: null, // 石英坩埚编号
   polysilicons: {}, // 多晶硅编号
   dopants: {}, // 掺杂剂用量
@@ -528,6 +532,7 @@ export default {
     async handleSeedCrystalNumberCodeScan(val) {
       let res = await Api.getSeed({ uniqueCode: val });
       this.detailForm.seedCrystalLife = res.data.usefulLife;
+      this.detailForm.seedCrystalTotalLife = res.data.ratedLife;
     },
     async handleQuartzCrucibleSerialCodeScan(val) {
       Api.findByCode({ code: val }).then((res) => {
