@@ -151,10 +151,6 @@ export default {
           canAddRecord: true,
         },
         {
-          stepName: "煅烧冷却",
-          canAddRecord: true, // 允许添加记录
-        },
-        {
           stepName: "吊单晶",
           canAddRecord: true,
         },
