@@ -58,31 +58,11 @@
               <CodeScanner
                 v-model="detailForm.seedCrystalNumber"
                 @has-done="handleSeedCrystalNumberCodeScan"
+                @clear="handleSeedCrystalNumberClear"
               />
             </el-form-item>
             <el-form-item label="已用寿命/额定寿命" prop="seedCrystalLife">
               <el-input v-model="seedCrystalLifeAndTotalLife" disabled />
-            </el-form-item>
-            <el-form-item
-              label="石英坩埚编号"
-              prop="quartzCrucibleSerial"
-              :rules="[
-                {
-                  required: detailForm.crystalOrder == 1,
-                  message: '请输入石英坩埚编号',
-                  trigger: 'change',
-                },
-              ]"
-            >
-              <CodeScanner
-                v-model="detailForm.quartzCrucibleSerial"
-                @has-done="handleQuartzCrucibleSerialCodeScan"
-              />
-            </el-form-item>
-            <el-form-item label="石英坩埚用量" prop="quartzCrucibleDosage">
-              <el-input v-model="detailForm.quartzCrucibleQty" disabled>
-                <template slot="append">只</template>
-              </el-input>
             </el-form-item>
             <el-form-item
               label="加料管编号"
@@ -98,6 +78,7 @@
               <CodeScanner
                 v-model="detailForm.chargePipeSerial"
                 @has-done="handleChargePipeSerialCodeScan"
+                @clear="handleChargePipeSerialClear"
               />
             </el-form-item>
             <el-form-item
@@ -153,6 +134,31 @@
           </div>
           <div>
             <div class="progress">
+              石英坩埚用量:{{ detailForm.quartzCrucibleQty || 0 }}只
+              <el-progress :percentage="quartzCruciblePercent" />
+            </div>
+            <el-form-item
+              label="石英坩埚编号"
+              prop="quartzCrucibleSerial"
+              class="codeScan-form-item"
+              :rules="[
+                {
+                  required: detailForm.crystalOrder == 1,
+                  message: '请输入石英坩埚编号',
+                  trigger: 'change',
+                },
+              ]"
+            >
+              <CodeScanner
+                class="codeScan-input"
+                v-model="detailForm.quartzCrucibleSerial"
+                @has-done="handleQuartzCrucibleSerialCodeScan"
+                @clear="handleQuartzCrucibleSerialClear"
+              />
+            </el-form-item>
+          </div>
+          <div>
+            <div class="progress">
               加料量:{{ totalFeedingAmount }}kg
               <el-progress :percentage="feedPercent" />
             </div>
@@ -179,6 +185,7 @@
                     value-key="id"
                     v-model="detailForm._polysilicons[index]"
                     type="多晶硅"
+                    unit="kg"
                   />
                   <el-button
                     type="text"
@@ -205,8 +212,9 @@
               <el-progress :percentage="dopantPercent" />
             </div>
             <el-form-item
-              label="掺杂剂"
+              label="掺杂剂编号"
               prop="_dopants"
+              class="multipleCodeScan-form-item"
               :rules="[
                 {
                   required: detailForm.crystalOrder == 1,
@@ -226,6 +234,7 @@
                     value-key="id"
                     v-model="detailForm._dopants[index]"
                     type="掺杂剂"
+                    unit="g"
                   />
                   <el-button
                     type="text"
@@ -414,6 +423,9 @@ export default {
       });
       return total;
     },
+    quartzCruciblePercent() {
+      return this.detailForm.quartzCrucibleQty ? 100 : 0;
+    },
     seedCrystalLifeAndTotalLife() {
       return (
         (this.detailForm.seedCrystalLife || 0) +
@@ -570,6 +582,10 @@ export default {
       this.detailForm.seedCrystalLife = res.data.usefulLife;
       this.detailForm.seedCrystalTotalLife = res.data.ratedLife;
     },
+    handleSeedCrystalNumberClear() {
+      this.detailForm.seedCrystalLife = null;
+      this.detailForm.seedCrystalTotalLife = null;
+    },
     async handleQuartzCrucibleSerialCodeScan(val) {
       Api.findByCode({ code: val }).then((res) => {
         if (res.data && res.data.materialTypeName === "石英坩埚") {
@@ -580,12 +596,20 @@ export default {
         }
       });
     },
+    handleQuartzCrucibleSerialClear() {
+      this.detailForm.quartzCrucible = null;
+      this.detailForm.quartzCrucibleQty = null;
+    },
     async handleChargePipeSerialCodeScan(val) {
       let feedContainer = [];
       await getSeleteData("feedContainer", feedContainer);
       let feed = feedContainer.find((item) => item.name === val);
       this.detailForm.chargePipeType = feed.value;
       this.detailForm.chargePipeModel = feed.extendValue;
+    },
+    handleChargePipeSerialClear() {
+      this.detailForm.chargePipeType = null;
+      this.detailForm.chargePipeModel = null;
     },
     addPolysilicon() {
       this.detailForm._polysilicons.push([]);
@@ -618,12 +642,20 @@ export default {
   }
 }
 .multipleCodeScan-form-item {
-  width: 100%;
+  width: 100% !important;
+  padding-right: 10px;
+}
+.codeScan-form-item {
+  width: 100% !important;
+  padding-right: 40px;
 }
 .add-btn {
   width: 120px;
 }
 .progress {
   padding: 16px;
+}
+.codeScan-input {
+  width: 100% !important;
 }
 </style>

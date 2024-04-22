@@ -15,7 +15,7 @@
     >
       <el-option
         v-for="item in codes"
-        :label="item.materialCode"
+        :label="`${item.materialTypeName}：${item.materialCode}(${item.qty}${unit})`"
         :key="item.id"
         :value="item"
       ></el-option>
@@ -69,6 +69,7 @@ export default {
       required: true,
       type: String,
     },
+    unit: Number,
   },
   data() {
     return {
