@@ -23,7 +23,7 @@
         <el-form
           ref="detailForm"
           :model="detailForm"
-          label-width="120px"
+          label-width="150px"
           :rules="rules"
           inline
           :disabled="$route.query.view"
@@ -60,11 +60,8 @@
                 @has-done="handleSeedCrystalNumberCodeScan"
               />
             </el-form-item>
-            <el-form-item label="籽晶寿命" prop="seedCrystalLife">
-              <el-input v-model="detailForm.seedCrystalLife" />
-            </el-form-item>
-            <el-form-item label="籽晶额定寿命" prop="seedCrystalTotalLife">
-              <el-input v-model="detailForm.seedCrystalTotalLife" />
+            <el-form-item label="已用寿命/额定寿命" prop="seedCrystalLife">
+              <el-input v-model="seedCrystalLifeAndTotalLife" disabled />
             </el-form-item>
             <el-form-item
               label="石英坩埚编号"
@@ -416,6 +413,13 @@ export default {
         }
       });
       return total;
+    },
+    seedCrystalLifeAndTotalLife() {
+      return (
+        (this.detailForm.seedCrystalLife || 0) +
+        "/" +
+        (this.detailForm.seedCrystalTotalLife || 0)
+      );
     },
   },
   mounted() {
