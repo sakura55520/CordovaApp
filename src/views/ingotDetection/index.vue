@@ -166,7 +166,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="类别"
+                label="型号"
                 min-width="100"
                 align="center"
                 prop="category"
