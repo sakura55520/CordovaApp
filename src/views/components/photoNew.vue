@@ -46,7 +46,8 @@
 
 <script>
 import * as api from '@/api/photo'
-import {getToken} from "@/utils/auth";
+import { getToken } from '@/utils/auth'
+import url from 'url'
 
 export default {
   props: ['value', 'name'],
@@ -111,11 +112,10 @@ export default {
       });
     },
     handleSuccess(res) {
-      // console.log('res', res)
       const imageBaseUrl = process.env.BASE_API_FILEPREVIEW
       this.imageList.push({
-        thumb_url: imageBaseUrl + res.data.thumburl,
-        big_url: imageBaseUrl + res.data.bigurl
+        thumb_url: url.resolve(imageBaseUrl, res.data.thumburl.replace(/^\//, '')),
+        big_url: url.resolve(imageBaseUrl, res.data.bigurl.replace(/^\//, ''))
       })
       this.$emit('input', this.imageList)
     },
