@@ -128,29 +128,8 @@
               </div>
             </el-form-item>
             <el-form-item
-              label="埚底料净重"
-              prop="bottomMaterialGrossWeight"
-              class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '埚底料净重不能为空',
-                  trigger: 'change',
-                },
-              ]"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.bottomMaterialGrossWeight"
-                >
-                  <template slot="append">kg</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
               label="埚底料毛重"
-              prop="bottomMaterialNetWeight"
+              prop="bottomMaterialGrossWeight"
               class="item"
               :rules="[
                 {
@@ -163,8 +142,30 @@
               <div class="input">
                 <el-input
                   class="value"
-                  v-model="formData.bottomMaterialNetWeight"
                   disabled
+                  v-model="formData.bottomMaterialGrossWeight"
+                >
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="埚底料净重"
+              prop="bottomMaterialNetWeight"
+              class="item"
+              :rules="[
+                {
+                  required: true,
+                  message: '埚底料净重不能为空',
+                  trigger: 'change',
+                },
+              ]"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.bottomMaterialNetWeight"
+                  placeholder="埚底料称量重量"
                 >
                   <template slot="append">kg</template>
                 </el-input>
