@@ -70,6 +70,7 @@ export default {
       type: String,
     },
     unit: Number,
+    materialCodes: Array,
   },
   data() {
     return {
@@ -124,22 +125,32 @@ export default {
               // alert(resultCode)
               if (resultCode === 1) {
                 Api.findByCode({ code: result }).then((res) => {
-                  if (res.data && res.data.materialTypeName === this.type) {
-                    if (
-                      this.codes.some((item) => item.code === res.data.code)
-                    ) {
-                      this.$message.warning(
-                        `物料的唯一码[${res.data.code}]重复`
-                      );
-                    } else {
-                      this.codes.push(res.data);
-                      this.inputDialog = false;
-                    }
-                  } else {
-                    this.$message.warning(
-                      `该物料编号的物料类型不是${this.type}`
-                    );
+                  if (!res.data) {
+                    this.$message.warning(`物料不存在`);
+                    return;
                   }
+                  if (res.data.materialTypeName !== this.type) {
+                    this.$message.warning(`物料类型不是${this.type}`);
+                    return;
+                  }
+                  if (this.codes.some((item) => item.code === res.data.code)) {
+                    this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
+                    return;
+                  }
+                  if (
+                    this.materialCodes.every(
+                      (item) => item !== res.data.materialCode
+                    )
+                  ) {
+                    this.$message.warning(
+                      `该物料不是当前批次所需的物料，该料号：${
+                        res.data.materialCode
+                      }，所需料号：${this.materialCodes.join("、")}`
+                    );
+                    return;
+                  }
+                  this.codes.push(res.data);
+                  this.inputDialog = false;
                 });
               } else {
                 this.$message.info("请重新扫码!");
@@ -161,16 +172,30 @@ export default {
     },
     handleConfirm() {
       Api.findByCode({ code: this.input }).then((res) => {
-        if (res.data && res.data.materialTypeName === this.type) {
-          if (this.codes.some((item) => item.code === res.data.code)) {
-            this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
-          } else {
-            this.codes.push(res.data);
-            this.inputDialog = false;
-          }
-        } else {
-          this.$message.warning(`该物料编号的物料类型不是${this.type}`);
+        if (!res.data) {
+          this.$message.warning(`物料不存在`);
+          return;
         }
+        if (res.data.materialTypeName !== this.type) {
+          this.$message.warning(`物料类型不是${this.type}`);
+          return;
+        }
+        if (this.codes.some((item) => item.code === res.data.code)) {
+          this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
+          return;
+        }
+        if (
+          this.materialCodes.every((item) => item !== res.data.materialCode)
+        ) {
+          this.$message.warning(
+            `该物料不是当前批次所需的物料，该料号：${
+              res.data.materialCode
+            }，所需料号：${this.materialCodes.join("、")}`
+          );
+          return;
+        }
+        this.codes.push(res.data);
+        this.inputDialog = false;
       });
     },
   },
