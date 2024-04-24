@@ -144,12 +144,6 @@
                   prop="minorityCarrierLifetime"
                 />
                 <el-table-column
-                  label="测试日期"
-                  min-width="200"
-                  align="center"
-                  prop="checkDate"
-                />
-                <el-table-column
                   label="常规缺陷"
                   min-width="120"
                   align="center"
@@ -178,6 +172,12 @@
                   min-width="120"
                   align="center"
                   prop="inspector"
+                />
+                <el-table-column
+                  label="检测日期"
+                  min-width="200"
+                  align="center"
+                  prop="checkDate"
                 />
               </el-table>
             </div>

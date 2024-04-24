@@ -300,14 +300,6 @@
                     v-direction="{ x: 12, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="测试日期" min-width="250" align="center">
-                <template slot-scope="scope">
-                  <el-date-picker
-                    v-model="scope.row.checkDate"
-                    type="datetime"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                  /> </template
-              ></el-table-column>
               <el-table-column label="常规缺陷" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.flaw" placeholder="">
@@ -346,7 +338,20 @@
               ></el-table-column>
               <el-table-column label="检测人员" min-width="150" align="center">
                 <template slot-scope="scope">
-                  <SelectUserinfo v-model="scope.row.inspector" /> </template
+                  <SelectUserinfo
+                    v-model="scope.row.inspector"
+                    @handleSelect="
+                      (val) => handleInspectorSelect(val, scope.$index)
+                    "
+                  /> </template
+              ></el-table-column>
+              <el-table-column label="检测日期" min-width="250" align="center">
+                <template slot-scope="scope">
+                  <el-date-picker
+                    v-model="scope.row.checkDate"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                  /> </template
               ></el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -508,9 +513,6 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
       console.log(JSON.parse(JSON.stringify(this.formData)));
-      (this.formData.details || []).forEach((item) => {
-        item.checkDate = new Date();
-      });
       getSeleteData("sampleType", this.sampleTypeList);
       getSeleteData("conventionalDefect", this.conventionalDefectList);
       getSeleteData("osfDensity", this.osfDensityList);
@@ -564,8 +566,8 @@ export default {
         org: 0,
         minorityCarrierLifetime: 0,
         valid: true,
-        checkDate: new Date(),
-        inspector: this.realName,
+        inspector: undefined,
+        checkDate: undefined,
       });
       this.handleSampleIdentificationChange();
     },
@@ -713,6 +715,9 @@ export default {
         })
       );
       this.formData.photo = photo;
+    },
+    handleInspectorSelect(val, index) {
+      this.$set(this.formData.details[index], "checkDate", new Date());
     },
   },
 };
