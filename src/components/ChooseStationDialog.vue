@@ -6,6 +6,16 @@
     :title="'【' + processingOrderCode + '】请选择站点'"
     width="60%"
   >
+    <el-form ref="dataForm" :model="temp" :rules="rules" class="cs-form">
+      <el-form-item v-show="storage && storage.isNeedsDevice" label="设备" prop="deviceCode">
+        <CodeScanner
+          ref="CodeScanner"
+          v-model="temp.deviceCode"
+          placeholder="请扫描或输入设备"
+        />
+      </el-form-item>
+    </el-form>
+
     <el-radio-group v-model="wipStorageName" style="width: 100%;">
       <el-radio
         v-for="(item,index) in stationList"
@@ -36,6 +46,10 @@
 import {mapState} from 'vuex'
 import {calcIsSkip, calcStationOperator, handleInOrOutStation} from '@/utils/overStation'
 
+const defaultForm = {
+  deviceCode: null
+}
+
 export default {
   name: 'ChooseStationDialog',
   data() {
@@ -43,6 +57,7 @@ export default {
       wipStorageName: null,//工序绑定项
       storage: null,//当前选中工序数据
       isAbnormal: false,//是否标记异常
+      temp: Object.assign({}, defaultForm)
     }
   },
   computed: {
@@ -66,6 +81,11 @@ export default {
     calcIsSkip() {
       return calcIsSkip(this.storage.skipStatus)
     },
+    rules() {
+      return {
+        deviceCode: [{ required: this.storage && this.storage.isNeedsDevice, message: '请输入设备', trigger: 'change' }]
+      }
+    }
   },
   watch: {
     dialogVisible: {
@@ -79,9 +99,27 @@ export default {
     init() {
       this.wipStorageName = null
       this.storage = null
+      this.temp = Object.assign({}, defaultForm)
+      if (this.stationList.length === 1) {
+        const first = this.stationList[0]
+        this.wipStorageName = first.wipStorageName
+        this.handleClickSite(first, 0)
+      }
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     handleInOrOutStation() {
-      handleInOrOutStation(this.storage, this.processingOrderCode)
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const { deviceCode } = this.temp
+          handleInOrOutStation({
+            ...this.storage,
+            equipmentCode: deviceCode,
+            deviceCode,
+          }, this.processingOrderCode)
+        }
+      })
     },
     // 当选中工序时
     handleClickSite(row, index) {
@@ -89,11 +127,14 @@ export default {
         ...row,
         index
       }
+      if (row.deviceCode) this.temp.deviceCode = row.deviceCode
     },
   }
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+.cs-form {
+  margin-bottom: 26px;
+}
 </style>

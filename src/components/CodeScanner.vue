@@ -25,7 +25,7 @@
     <el-button type="primary" size="mini" @click="sweepCode">
       <div style="display: flex">
         <svg-icon icon-class="scan" style="width: 20px; height: 20px" />
-        <div style="font-size: 20px; line-height: 22px; margin: 0 5px">
+        <div style="font-size: 20px; line-height: 22px;">
           {{ label }}
         </div>
       </div>
@@ -48,7 +48,7 @@ export default {
       type: String,
     },
     label: {
-      default: "扫码",
+      default: "",
       type: String,
     },
     disabled: {
