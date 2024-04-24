@@ -125,8 +125,16 @@ export default {
               if (resultCode === 1) {
                 Api.findByCode({ code: result }).then((res) => {
                   if (res.data && res.data.materialTypeName === this.type) {
-                    this.codes.push(res.data);
-                    this.inputDialog = false;
+                    if (
+                      this.codes.some((item) => item.code === res.data.code)
+                    ) {
+                      this.$message.warning(
+                        `物料的唯一码[${res.data.code}]重复`
+                      );
+                    } else {
+                      this.codes.push(res.data);
+                      this.inputDialog = false;
+                    }
                   } else {
                     this.$message.warning(
                       `该物料编号的物料类型不是${this.type}`
@@ -154,8 +162,12 @@ export default {
     handleConfirm() {
       Api.findByCode({ code: this.input }).then((res) => {
         if (res.data && res.data.materialTypeName === this.type) {
-          this.codes.push(res.data);
-          this.inputDialog = false;
+          if (this.codes.some((item) => item.code === res.data.code)) {
+            this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
+          } else {
+            this.codes.push(res.data);
+            this.inputDialog = false;
+          }
         } else {
           this.$message.warning(`该物料编号的物料类型不是${this.type}`);
         }
