@@ -144,7 +144,7 @@
                   class="value"
                   v-model="formData.bottomMaterialGrossWeight"
                 >
-                  <template slot="append">g</template>
+                  <template slot="append">kg</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -166,7 +166,7 @@
                   v-model="formData.bottomMaterialNetWeight"
                   disabled
                 >
-                  <template slot="append">g</template>
+                  <template slot="append">kg</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -267,6 +267,7 @@ import * as Api from "@/api/inStation";
 import { isEmpty } from "lodash-es";
 import overStation from "@/mixins/overStation";
 import { mapState } from "vuex";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -353,6 +354,7 @@ export default {
       checkList: [],
       dialogCheckVisible: false,
       check: null,
+      bottomMaterialDifference: null,
     };
   },
   computed: {
@@ -386,10 +388,30 @@ export default {
         ...fromData,
         userCreate: fromData.userCreate || this.realName,
       };
+
+      let bottomMaterialDifferences = [];
+      await getSeleteData(
+        "bottomMaterialDifference",
+        bottomMaterialDifferences
+      );
+      this.bottomMaterialDifference = bottomMaterialDifferences.find(
+        (item) => item.name === "default"
+      ).value;
     },
     async handleCheck() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+      let { bottomMaterialGrossWeight, bottomMaterialNetWeight } =
+        this.formData;
+      if (
+        Math.abs(bottomMaterialGrossWeight - bottomMaterialNetWeight) >
+        this.bottomMaterialDifference
+      ) {
+        this.$message.warning(
+          `埚底料毛重和净重的差值不能超过：${this.bottomMaterialDifference}kg`
+        );
+        return;
+      }
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
