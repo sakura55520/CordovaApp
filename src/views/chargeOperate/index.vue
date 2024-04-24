@@ -299,8 +299,6 @@ const defaultForm = {
   feedingTime: null, // 装料时间
   crystalPullingError: null, // 拉晶异常
   feedingDuration: null, // 装料时长(min)
-  feedingAmount: null, // 加料量
-  _arrFeedingAmount: [""],
   quartzCrucible: null,
   quartzCrucibleQty: null,
 };
@@ -347,15 +345,6 @@ export default {
         feedingTime: [
           { required: true, message: "请选择装料时间", trigger: "change" },
         ],
-        _arrFeedingAmount: [
-          {
-            type: "array",
-            required: true,
-            message: "请输入加料量",
-            trigger: "change",
-          },
-          { validator: this.validAmount, trigger: "change" },
-        ],
         feedingDuration: [
           {
             type: "number",
@@ -377,12 +366,6 @@ export default {
   computed: {
     storageLabel() {
       return this.$route.query.wipStorageStatus === "1" ? "出站" : "进站";
-    },
-    totalAount() {
-      return (this.detailForm._arrFeedingAmount || []).reduce(
-        (acc, cur) => acc + (Number(cur) || 0),
-        0
-      );
     },
     feedPercent() {
       return (
@@ -406,9 +389,10 @@ export default {
       return total;
     },
     dopantPercent() {
-      if (!this.totalDopantAmount || !this.detailForm.dopantDosage) return 0;
+      if (!this.totalDopantAmount || !this.detailForm.feedingDopantTotal)
+        return 0;
       return floor(
-        (this.totalDopantAmount / this.detailForm.dopantDosage) * 100
+        (this.totalDopantAmount / this.detailForm.feedingDopantTotal) * 100
       );
     },
     totalDopantAmount() {
@@ -453,12 +437,6 @@ export default {
       }
 
       this.detailForm = Object.assign({}, cloneDeep(defaultForm), fromData);
-      // 加料量
-      this.$set(
-        this.detailForm,
-        "_arrFeedingAmount",
-        (this.detailForm.feedingAmount || "").split(",")
-      );
       let _polysilicons = Object.values(this.detailForm.polysilicons);
       let _dopants = Object.values(this.detailForm.dopants);
       this.$set(this.detailForm, "_polysilicons", _polysilicons);
@@ -468,9 +446,7 @@ export default {
     },
     // 操作
     handle(typeName) {
-      const { _arrFeedingAmount, _polysilicons, _dopants, ...form } =
-        this.detailForm;
-      let feedingAmount = (_arrFeedingAmount || []).filter((x) => x).join(",");
+      const { _polysilicons, _dopants, ...form } = this.detailForm;
 
       let polysilicons = {};
       _polysilicons.forEach((item, index) => {
@@ -482,12 +458,10 @@ export default {
         dopants[index + 1] = item;
       });
 
-      form.feedingAmount = feedingAmount;
       form.polysilicons = polysilicons;
       form.dopants = dopants;
       const FormData = JSON.stringify({
         ...form,
-        feedingAmount,
         polysilicons,
         dopants,
       });
@@ -533,15 +507,6 @@ export default {
         this.$store.getters.NowServerDate
       ).diff(time, "minutes");
     },
-    validAmount(rule, value, callback) {
-      if (this.totalAount !== this.detailForm.goodQty)
-        return callback(
-          new Error(
-            `加料量[${this.totalAount}]必须等于总量[${this.detailForm.goodQty}]`
-          )
-        );
-      callback();
-    },
     validPolysiliconsAmount(rule, value, callback) {
       if (this.totalFeedingAmount !== this.detailForm.goodQty)
         return callback(
@@ -552,21 +517,14 @@ export default {
       callback();
     },
     validTotalDopantAmount(rule, value, callback) {
-      let dopantDosage = this.detailForm.dopantDosage || 0;
-      if (this.totalDopantAmount !== dopantDosage)
+      let feedingDopantTotal = this.detailForm.feedingDopantTotal || 0;
+      if (this.totalDopantAmount !== feedingDopantTotal)
         return callback(
           new Error(
-            `掺杂精用量[${this.totalDopantAmount}]必须等于总量[${dopantDosage}]`
+            `掺杂精用量[${this.totalDopantAmount}]必须等于总量[${feedingDopantTotal}]`
           )
         );
       callback();
-    },
-    addFeeding() {
-      this.detailForm._arrFeedingAmount.push("");
-    },
-    refreshFeeding() {
-      if (this.feedPercent < 100 && last(this.detailForm._arrFeedingAmount))
-        this.detailForm._arrFeedingAmount.push("");
     },
     getProcessNo() {
       getProcessNo({
