@@ -273,12 +273,6 @@ export default {
   mixins: [overStation],
   data() {
     return {
-      batchNumber: "Z0116504581",
-      furnaceNumber: "A2010504581",
-      recipe: "Reczl20240310v1",
-      processPath: "X0010101",
-      dataOrderCode: "",
-      productName: "",
       formData: {
         userCreate: null,
         feedbackQty: null,
