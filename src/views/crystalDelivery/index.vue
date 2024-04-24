@@ -133,7 +133,7 @@
               class="item"
               :rules="[
                 {
-                  required: formData.end,
+                  required: true,
                   message: '埚底料净重不能为空',
                   trigger: 'change',
                 },
@@ -154,7 +154,7 @@
               class="item"
               :rules="[
                 {
-                  required: formData.end,
+                  required: true,
                   message: '埚底料毛重不能为空',
                   trigger: 'change',
                 },
@@ -294,6 +294,7 @@ export default {
         disengageDiameter: null,
         bottomMaterialGrossWeight: null,
         bottomMaterialNetWeight: null,
+        ingotWeight: null,
       },
       formRules: {
         userCreate: [
