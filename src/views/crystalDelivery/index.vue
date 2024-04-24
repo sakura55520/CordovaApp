@@ -21,7 +21,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="140px"
+          label-width="160px"
           :rules="formRules"
           :disabled="$route.query.view"
         >
@@ -29,8 +29,13 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
-            <el-form-item label="合格数量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty" disabled></el-input>
+            <el-form-item label="反馈重量" prop="goodQty" class="item">
+              <el-input v-model="formData.goodQty" disabled>
+                <template slot="append">kg</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="收尾情况" prop="endSitutation" class="item">
+              <el-input v-model="formData.endSitutation" disabled></el-input>
             </el-form-item>
           </div>
           <div class="form">
@@ -48,14 +53,6 @@
                 <el-option label="是" :value="true"></el-option>
                 <el-option label="否" :value="false"></el-option>
               </el-select>
-            </el-form-item>
-            <el-form-item label="收尾情况" prop="endSitutation" class="item">
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.endSitutation"
-                ></el-input>
-              </div>
             </el-form-item>
             <el-form-item
               label="位错反延线标识"
@@ -86,17 +83,6 @@
               </div>
             </el-form-item>
             <el-form-item
-              label="拉晶实测直径"
-              prop="measuredDiameter"
-              class="item"
-            >
-              <div class="input">
-                <el-input class="value" v-model="formData.measuredDiameter">
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
               label="脱开直径"
               prop="disengageDiameter"
               class="item"
@@ -108,9 +94,74 @@
               </div>
             </el-form-item>
             <el-form-item
+              label="拉晶实测直径(头)"
+              prop="measuredDiameter.head"
+              class="item"
+              :rules="[
+                {
+                  required: true,
+                  message: '拉晶实测直径(头)不能为空',
+                  trigger: 'change',
+                },
+              ]"
+            >
+              <el-input class="value" v-model="formData.measuredDiameter.head">
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item
+              label="拉晶实测直径(中)"
+              prop="measuredDiameter.center"
+              class="item"
+              :rules="[
+                {
+                  required: true,
+                  message: '拉晶实测直径(中)不能为空',
+                  trigger: 'change',
+                },
+              ]"
+            >
+              <el-input
+                class="value"
+                v-model="formData.measuredDiameter.center"
+              >
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item
+              label="拉晶实测直径(尾)"
+              prop="measuredDiameter.tail"
+              class="item"
+              :rules="[
+                {
+                  required: true,
+                  message: '拉晶实测直径(尾)不能为空',
+                  trigger: 'change',
+                },
+              ]"
+            >
+              <el-input class="value" v-model="formData.measuredDiameter.tail">
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="晶锭称重" prop="ingotWeight" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.ingotWeight">
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item
               label="埚底料净重"
               prop="bottomMaterialGrossWeight"
               class="item"
+              :rules="[
+                {
+                  required: formData.end,
+                  message: '埚底料净重不能为空',
+                  trigger: 'change',
+                },
+              ]"
             >
               <div class="input">
                 <el-input
@@ -125,11 +176,19 @@
               label="埚底料毛重"
               prop="bottomMaterialNetWeight"
               class="item"
+              :rules="[
+                {
+                  required: formData.end,
+                  message: '埚底料毛重不能为空',
+                  trigger: 'change',
+                },
+              ]"
             >
               <div class="input">
                 <el-input
                   class="value"
                   v-model="formData.bottomMaterialNetWeight"
+                  disabled
                 >
                   <template slot="append">g</template>
                 </el-input>
@@ -252,7 +311,11 @@ export default {
         endSitutation: null,
         dislocationIdentification: null,
         dislocationIdentificationLength: null,
-        measuredDiameter: null,
+        measuredDiameter: {
+          head: null,
+          center: null,
+          tail: null,
+        },
         disengageDiameter: null,
         bottomMaterialGrossWeight: null,
         bottomMaterialNetWeight: null,
@@ -262,7 +325,10 @@ export default {
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
         goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "change" },
+          { required: true, message: "反馈数量不能为空", trigger: "change" },
+        ],
+        endSitutation: [
+          { required: true, message: "收尾情况不能为空", trigger: "change" },
         ],
         scrapQty: [
           { required: true, message: "报废数量不能为空", trigger: "change" },
@@ -274,9 +340,6 @@ export default {
             trigger: "change",
           },
         ],
-        endSitutation: [
-          { required: true, message: "收尾情况不能为空", trigger: "change" },
-        ],
         dislocationIdentification: [
           {
             required: true,
@@ -284,28 +347,12 @@ export default {
             trigger: "change",
           },
         ],
-        dislocationIdentificationLength: [
-          {
-            required: true,
-            message: "位错反延线长度不能为空",
-            trigger: "change",
-          },
-        ],
-        measuredDiameter: [
-          {
-            required: true,
-            message: "拉晶实测直径不能为空",
-            trigger: "change",
-          },
-        ],
         disengageDiameter: [
-          { required: true, message: "脱开直径不能为空", trigger: "change" },
-        ],
-        bottomMaterialGrossWeight: [
-          { required: true, message: "埚底料净重不能为空", trigger: "change" },
-        ],
-        bottomMaterialNetWeight: [
-          { required: true, message: "埚底料毛重不能为空", trigger: "change" },
+          {
+            required: true,
+            message: "脱开直径不能为空",
+            trigger: "change",
+          },
         ],
       },
       checkList: [],
@@ -510,6 +557,11 @@ export default {
   justify-content: end;
 }
 .error {
+  color: red;
+}
+
+.required:before {
+  content: "* ";
   color: red;
 }
 </style>
