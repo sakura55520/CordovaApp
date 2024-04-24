@@ -6,5 +6,4 @@ module.exports = {
   BASE_API_FILEHOST: '"http://172.19.100.50:90/MES_SERVER"',
   BASE_API_FILEPREVIEW:'"http://47.99.105.168:8888/"',
   BASE_PC: '"http://172.19.100.50:82"',
-  MQ_PASS: '"admin"'
 }

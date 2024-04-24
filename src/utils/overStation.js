@@ -10,10 +10,9 @@ export function fetchStorage(processingOrderCode) {
     if (!res.data || !res.data.length) return Message.warning('未查询到过站信息!')
 
     const list = res.data
-    if (list.length === 1) {
+    if (list.length === 1 && !list[0].isNeedsDevice) {
       handleInOrOutStation(list[0], processingOrderCode)
     } else {
-      // length > 1时
       store.dispatch('SetProcessingOrderCode', processingOrderCode)
       store.dispatch('SetStationList', list)
     }
