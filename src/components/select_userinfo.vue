@@ -37,6 +37,7 @@ export default {
       if (val === "") {
         this.$emit("input", null);
         this.$emit("update:userId", null);
+        this.$emit("handleSelect", null);
       }
     },
   },
@@ -55,6 +56,7 @@ export default {
     handleSelect(item) {
       this.$emit("input", item.value);
       this.$emit("update:userId", item.id);
+      this.$emit("handleSelect", item);
     },
     handleFocus($event) {
       this.$emit("focus", $event);
@@ -66,6 +68,7 @@ export default {
       ) {
         this.$emit("input", this.options_UserData[0].value);
         this.$emit("update:userId", this.options_UserData[0].id);
+        this.$emit("handleSelect", this.options_UserData[0]);
       }
     },
   },

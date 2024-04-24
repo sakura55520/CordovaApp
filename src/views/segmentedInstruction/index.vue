@@ -17,6 +17,172 @@
       <el-divider class="divider" />
       <h3>出站数据录入</h3>
       <div class="outStation-form">
+        <el-collapse v-model="activeName" class="collapse">
+          <el-collapse-item title="样片检验数据" name="checkInfo">
+            <div class="base-form">
+              <el-table
+                :data="checkInfo"
+                class="table"
+                :header-cell-style="{
+                  background: 'rgba(242, 242, 242)',
+                  color: '#606266',
+                }"
+                :row-class-name="tableRowClassName"
+              >
+                <el-table-column
+                  label="样片编号"
+                  min-width="120"
+                  align="center"
+                  prop="sampleNumber"
+                />
+                <el-table-column
+                  label="样片类型"
+                  min-width="120"
+                  align="center"
+                  prop="sampleType"
+                />
+                <el-table-column
+                  label="样片标识"
+                  min-width="100"
+                  align="center"
+                  prop="sampleIdentification"
+                />
+                <el-table-column
+                  label="样片位置"
+                  min-width="100"
+                  align="center"
+                  prop="samplePosition"
+                />
+                <el-table-column
+                  label="类别"
+                  min-width="100"
+                  align="center"
+                  prop="category"
+                />
+                <el-table-column
+                  label="晶向"
+                  min-width="100"
+                  align="center"
+                  prop="orientation"
+                />
+                <el-table-column
+                  label="尺寸"
+                  min-width="100"
+                  align="center"
+                  prop="size"
+                />
+                <el-table-column
+                  label="结晶比重"
+                  min-width="180"
+                  align="center"
+                  prop="crystalDensity"
+                />
+                <el-table-column
+                  label="RES"
+                  min-width="80"
+                  align="center"
+                  prop="res"
+                />
+                <el-table-column
+                  label="RES_C"
+                  min-width="80"
+                  align="center"
+                  prop="resC"
+                />
+                <el-table-column
+                  label="RES_E"
+                  min-width="80"
+                  align="center"
+                  prop="resE"
+                />
+                <el-table-column
+                  label="1/2RES"
+                  min-width="100"
+                  align="center"
+                  prop="halfRes"
+                />
+                <el-table-column
+                  label="1/2 RRG"
+                  min-width="100"
+                  align="center"
+                  prop="halfRrg"
+                />
+                <el-table-column
+                  label="RRG"
+                  min-width="80"
+                  align="center"
+                  prop="rrg"
+                />
+                <el-table-column
+                  label="OI_C"
+                  min-width="80"
+                  align="center"
+                  prop="oiC"
+                />
+                <el-table-column
+                  label="CS"
+                  min-width="80"
+                  align="center"
+                  prop="cs"
+                />
+                <el-table-column
+                  label="OI_E"
+                  min-width="80"
+                  align="center"
+                  prop="oiE"
+                />
+                <el-table-column
+                  label="ORG"
+                  min-width="80"
+                  align="center"
+                  prop="org"
+                />
+                <el-table-column
+                  label="少子寿命"
+                  min-width="100"
+                  align="center"
+                  prop="minorityCarrierLifetime"
+                />
+                <el-table-column
+                  label="常规缺陷"
+                  min-width="120"
+                  align="center"
+                  prop="flaw"
+                />
+                <el-table-column
+                  label="OSF密度"
+                  min-width="120"
+                  align="center"
+                  prop="osf"
+                />
+                <el-table-column
+                  label="基磷"
+                  min-width="120"
+                  align="center"
+                  prop="phosphorus"
+                />
+                <el-table-column
+                  label="基硼"
+                  min-width="120"
+                  align="center"
+                  prop="boron"
+                />
+                <el-table-column
+                  label="检测人员"
+                  min-width="120"
+                  align="center"
+                  prop="inspector"
+                />
+                <el-table-column
+                  label="检测日期"
+                  min-width="200"
+                  align="center"
+                  prop="checkDate"
+                />
+              </el-table>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
         <el-form
           ref="formRef"
           :model="formData"
@@ -25,168 +191,6 @@
           :rules="formRules"
           :disabled="$route.query.view"
         >
-          <div class="base-form">
-            <el-table
-              :data="checkInfo"
-              class="table"
-              :header-cell-style="{
-                background: 'rgba(242, 242, 242)',
-                color: '#606266',
-              }"
-              :row-class-name="tableRowClassName"
-            >
-              <el-table-column
-                label="样片编号"
-                min-width="120"
-                align="center"
-                prop="sampleNumber"
-              />
-              <el-table-column
-                label="样片类型"
-                min-width="120"
-                align="center"
-                prop="sampleType"
-              />
-              <el-table-column
-                label="样片标识"
-                min-width="100"
-                align="center"
-                prop="sampleIdentification"
-              />
-              <el-table-column
-                label="样片位置"
-                min-width="100"
-                align="center"
-                prop="samplePosition"
-              />
-              <el-table-column
-                label="类别"
-                min-width="100"
-                align="center"
-                prop="category"
-              />
-              <el-table-column
-                label="晶向"
-                min-width="100"
-                align="center"
-                prop="orientation"
-              />
-              <el-table-column
-                label="尺寸"
-                min-width="100"
-                align="center"
-                prop="size"
-              />
-              <el-table-column
-                label="结晶比重"
-                min-width="180"
-                align="center"
-                prop="crystalDensity"
-              />
-              <el-table-column
-                label="RES"
-                min-width="80"
-                align="center"
-                prop="res"
-              />
-              <el-table-column
-                label="RES_C"
-                min-width="80"
-                align="center"
-                prop="resC"
-              />
-              <el-table-column
-                label="RES_E"
-                min-width="80"
-                align="center"
-                prop="resE"
-              />
-              <el-table-column
-                label="1/2RES"
-                min-width="100"
-                align="center"
-                prop="halfRes"
-              />
-              <el-table-column
-                label="1/2 RRG"
-                min-width="100"
-                align="center"
-                prop="halfRrg"
-              />
-              <el-table-column
-                label="RRG"
-                min-width="80"
-                align="center"
-                prop="rrg"
-              />
-              <el-table-column
-                label="OI_C"
-                min-width="80"
-                align="center"
-                prop="oiC"
-              />
-              <el-table-column
-                label="CS"
-                min-width="80"
-                align="center"
-                prop="cs"
-              />
-              <el-table-column
-                label="OI_E"
-                min-width="80"
-                align="center"
-                prop="oiE"
-              />
-              <el-table-column
-                label="ORG"
-                min-width="80"
-                align="center"
-                prop="org"
-              />
-              <el-table-column
-                label="少子寿命"
-                min-width="100"
-                align="center"
-                prop="minorityCarrierLifetime"
-              />
-              <el-table-column
-                label="测试日期"
-                min-width="200"
-                align="center"
-                prop="checkDate"
-              />
-              <el-table-column
-                label="常规缺陷"
-                min-width="120"
-                align="center"
-                prop="flaw"
-              />
-              <el-table-column
-                label="OSF密度"
-                min-width="120"
-                align="center"
-                prop="osf"
-              />
-              <el-table-column
-                label="基磷"
-                min-width="120"
-                align="center"
-                prop="phosphorus"
-              />
-              <el-table-column
-                label="基硼"
-                min-width="120"
-                align="center"
-                prop="boron"
-              />
-              <el-table-column
-                label="检测人员"
-                min-width="120"
-                align="center"
-                prop="inspector"
-              />
-            </el-table>
-          </div>
           <div class="form">
             <div class="form-title">分段信息</div>
             <el-button
@@ -463,7 +467,7 @@
               ></el-table-column> -->
               <el-table-column
                 label="说明"
-                min-width="80"
+                min-width="250"
                 align="center"
                 prop="remarks"
               >
@@ -925,6 +929,7 @@ export default {
       workOrderDialog: false,
       selectedWorkOrder: null,
       erpWorkOrderTypeList: [], // ERP工单类型 list
+      activeName: "checkInfo",
     };
   },
   computed: {
@@ -1508,5 +1513,11 @@ export default {
   height: 6px;
   border-radius: 50%;
   margin-right: 8px;
+}
+.collapse {
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0 10px;
+  border-radius: 5px;
 }
 </style>
