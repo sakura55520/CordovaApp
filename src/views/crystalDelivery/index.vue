@@ -29,8 +29,8 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
-            <el-form-item label="反馈重量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty" disabled>
+            <el-form-item label="反馈重量" prop="feedbackQty" class="item">
+              <el-input v-model="formData.feedbackQty" disabled>
                 <template slot="append">kg</template>
               </el-input>
             </el-form-item>
@@ -95,52 +95,28 @@
             </el-form-item>
             <el-form-item
               label="拉晶实测直径(头)"
-              prop="measuredDiameter.head"
+              prop="measuredDiameterHead"
               class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '拉晶实测直径(头)不能为空',
-                  trigger: 'change',
-                },
-              ]"
             >
-              <el-input class="value" v-model="formData.measuredDiameter.head">
+              <el-input class="value" v-model="formData.measuredDiameterHead">
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item
               label="拉晶实测直径(中)"
-              prop="measuredDiameter.center"
+              prop="measuredDiameterMiddle"
               class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '拉晶实测直径(中)不能为空',
-                  trigger: 'change',
-                },
-              ]"
             >
-              <el-input
-                class="value"
-                v-model="formData.measuredDiameter.center"
-              >
+              <el-input class="value" v-model="formData.measuredDiameterMiddle">
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item
               label="拉晶实测直径(尾)"
-              prop="measuredDiameter.tail"
+              prop="measuredDiameterTail"
               class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '拉晶实测直径(尾)不能为空',
-                  trigger: 'change',
-                },
-              ]"
             >
-              <el-input class="value" v-model="formData.measuredDiameter.tail">
+              <el-input class="value" v-model="formData.measuredDiameterTail">
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
@@ -304,18 +280,16 @@ export default {
       productName: "",
       formData: {
         userCreate: null,
-        goodQty: null,
+        feedbackQty: null,
         defectQty: null,
         scrapQty: null,
         numberConsistence: null,
         endSitutation: null,
         dislocationIdentification: null,
         dislocationIdentificationLength: null,
-        measuredDiameter: {
-          head: null,
-          center: null,
-          tail: null,
-        },
+        measuredDiameterHead: null,
+        measuredDiameterMiddle: null,
+        measuredDiameterTail: null,
         disengageDiameter: null,
         bottomMaterialGrossWeight: null,
         bottomMaterialNetWeight: null,
@@ -324,7 +298,7 @@ export default {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
-        goodQty: [
+        feedbackQty: [
           { required: true, message: "反馈数量不能为空", trigger: "change" },
         ],
         endSitutation: [
@@ -351,6 +325,27 @@ export default {
           {
             required: true,
             message: "脱开直径不能为空",
+            trigger: "change",
+          },
+        ],
+        measuredDiameterHead: [
+          {
+            required: true,
+            message: "拉晶实测直径(头)不能为空",
+            trigger: "change",
+          },
+        ],
+        measuredDiameterMiddle: [
+          {
+            required: true,
+            message: "拉晶实测直径(中)不能为空",
+            trigger: "change",
+          },
+        ],
+        measuredDiameterTail: [
+          {
+            required: true,
+            message: "拉晶实测直径(尾)不能为空",
             trigger: "change",
           },
         ],
@@ -391,7 +386,6 @@ export default {
         ...fromData,
         userCreate: fromData.userCreate || this.realName,
       };
-      this.handleQtyChange();
     },
     async handleCheck() {
       const valid = await this.$refs.formRef.validate();
@@ -442,10 +436,6 @@ export default {
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
-    },
-    handleQtyChange() {
-      let { totalQty, scrapQty } = this.formData;
-      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
     },
   },
 };
