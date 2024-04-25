@@ -186,6 +186,7 @@
                     v-model="detailForm._polysilicons[index]"
                     type="多晶硅"
                     unit="kg"
+                    :materialCodes="detailForm.polysiliconMaterialCodes"
                   />
                   <el-button
                     type="text"
@@ -235,6 +236,7 @@
                     v-model="detailForm._dopants[index]"
                     type="掺杂剂"
                     unit="g"
+                    :materialCodes="detailForm.dopantMaterialCodes"
                   />
                   <el-button
                     type="text"
@@ -301,6 +303,9 @@ const defaultForm = {
   feedingDuration: null, // 装料时长(min)
   quartzCrucible: null,
   quartzCrucibleQty: null,
+  polysiliconMaterialCodes: [],
+  dopantMaterialCodes: [],
+  quartzCrucibleMaterialCodes: [],
 };
 export default {
   name: "ChargeOperate",
@@ -443,6 +448,8 @@ export default {
       this.$set(this.detailForm, "_dopants", _dopants);
 
       this.getProcessNo();
+
+      console.log(JSON.parse(JSON.stringify(this.detailForm)));
     },
     // 操作
     handle(typeName) {
@@ -546,12 +553,30 @@ export default {
     },
     async handleQuartzCrucibleSerialCodeScan(val) {
       Api.findByCode({ code: val }).then((res) => {
-        if (res.data && res.data.materialTypeName === "石英坩埚") {
-          this.detailForm.quartzCrucible = res.data;
-          this.detailForm.quartzCrucibleQty = res.data.qty;
-        } else {
-          this.$message.warning("该物料编号的物料类型不是石英坩埚");
+        if (!res.data) {
+          this.$message.warning(`物料不存在`);
+          return;
         }
+        if (res.data.materialTypeName !== "石英坩埚") {
+          this.$message.warning("物料类型不是石英坩埚");
+          return;
+        }
+        if (
+          this.detailForm.quartzCrucibleMaterialCodes.every(
+            (item) => item !== res.data.materialCode
+          )
+        ) {
+          this.$message.warning(
+            `该物料不是当前批次所需的物料，该料号：${
+              res.data.materialCode
+            }，所需料号：${this.detailForm.quartzCrucibleMaterialCodes.join(
+              "、"
+            )}`
+          );
+          return;
+        }
+        this.detailForm.quartzCrucible = res.data;
+        this.detailForm.quartzCrucibleQty = res.data.qty;
       });
     },
     handleQuartzCrucibleSerialClear() {

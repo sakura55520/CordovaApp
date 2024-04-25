@@ -29,8 +29,8 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
-            <el-form-item label="反馈重量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty" disabled>
+            <el-form-item label="反馈重量" prop="feedbackQty" class="item">
+              <el-input v-model="formData.feedbackQty" disabled>
                 <template slot="append">kg</template>
               </el-input>
             </el-form-item>
@@ -95,52 +95,28 @@
             </el-form-item>
             <el-form-item
               label="拉晶实测直径(头)"
-              prop="measuredDiameter.head"
+              prop="measuredDiameterHead"
               class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '拉晶实测直径(头)不能为空',
-                  trigger: 'change',
-                },
-              ]"
             >
-              <el-input class="value" v-model="formData.measuredDiameter.head">
+              <el-input class="value" v-model="formData.measuredDiameterHead">
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item
               label="拉晶实测直径(中)"
-              prop="measuredDiameter.center"
+              prop="measuredDiameterMiddle"
               class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '拉晶实测直径(中)不能为空',
-                  trigger: 'change',
-                },
-              ]"
             >
-              <el-input
-                class="value"
-                v-model="formData.measuredDiameter.center"
-              >
+              <el-input class="value" v-model="formData.measuredDiameterMiddle">
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
             <el-form-item
               label="拉晶实测直径(尾)"
-              prop="measuredDiameter.tail"
+              prop="measuredDiameterTail"
               class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '拉晶实测直径(尾)不能为空',
-                  trigger: 'change',
-                },
-              ]"
             >
-              <el-input class="value" v-model="formData.measuredDiameter.tail">
+              <el-input class="value" v-model="formData.measuredDiameterTail">
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
@@ -152,33 +128,12 @@
               </div>
             </el-form-item>
             <el-form-item
-              label="埚底料净重"
+              label="埚底料毛重"
               prop="bottomMaterialGrossWeight"
               class="item"
               :rules="[
                 {
-                  required: formData.end,
-                  message: '埚底料净重不能为空',
-                  trigger: 'change',
-                },
-              ]"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.bottomMaterialGrossWeight"
-                >
-                  <template slot="append">g</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="埚底料毛重"
-              prop="bottomMaterialNetWeight"
-              class="item"
-              :rules="[
-                {
-                  required: formData.end,
+                  required: true,
                   message: '埚底料毛重不能为空',
                   trigger: 'change',
                 },
@@ -187,10 +142,32 @@
               <div class="input">
                 <el-input
                   class="value"
-                  v-model="formData.bottomMaterialNetWeight"
                   disabled
+                  v-model="formData.bottomMaterialGrossWeight"
                 >
-                  <template slot="append">g</template>
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="埚底料净重"
+              prop="bottomMaterialNetWeight"
+              class="item"
+              :rules="[
+                {
+                  required: true,
+                  message: '埚底料净重不能为空',
+                  trigger: 'change',
+                },
+              ]"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.bottomMaterialNetWeight"
+                  placeholder="埚底料称量重量"
+                >
+                  <template slot="append">kg</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -291,40 +268,34 @@ import * as Api from "@/api/inStation";
 import { isEmpty } from "lodash-es";
 import overStation from "@/mixins/overStation";
 import { mapState } from "vuex";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   mixins: [overStation],
   data() {
     return {
-      batchNumber: "Z0116504581",
-      furnaceNumber: "A2010504581",
-      recipe: "Reczl20240310v1",
-      processPath: "X0010101",
-      dataOrderCode: "",
-      productName: "",
       formData: {
         userCreate: null,
-        goodQty: null,
+        feedbackQty: null,
         defectQty: null,
         scrapQty: null,
         numberConsistence: null,
         endSitutation: null,
         dislocationIdentification: null,
         dislocationIdentificationLength: null,
-        measuredDiameter: {
-          head: null,
-          center: null,
-          tail: null,
-        },
+        measuredDiameterHead: null,
+        measuredDiameterMiddle: null,
+        measuredDiameterTail: null,
         disengageDiameter: null,
         bottomMaterialGrossWeight: null,
         bottomMaterialNetWeight: null,
+        ingotWeight: null,
       },
       formRules: {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
-        goodQty: [
+        feedbackQty: [
           { required: true, message: "反馈数量不能为空", trigger: "change" },
         ],
         endSitutation: [
@@ -354,10 +325,32 @@ export default {
             trigger: "change",
           },
         ],
+        measuredDiameterHead: [
+          {
+            required: true,
+            message: "拉晶实测直径(头)不能为空",
+            trigger: "change",
+          },
+        ],
+        measuredDiameterMiddle: [
+          {
+            required: true,
+            message: "拉晶实测直径(中)不能为空",
+            trigger: "change",
+          },
+        ],
+        measuredDiameterTail: [
+          {
+            required: true,
+            message: "拉晶实测直径(尾)不能为空",
+            trigger: "change",
+          },
+        ],
       },
       checkList: [],
       dialogCheckVisible: false,
       check: null,
+      bottomMaterialDifference: null,
     };
   },
   computed: {
@@ -391,11 +384,30 @@ export default {
         ...fromData,
         userCreate: fromData.userCreate || this.realName,
       };
-      this.handleQtyChange();
+
+      let bottomMaterialDifferences = [];
+      await getSeleteData(
+        "bottomMaterialDifference",
+        bottomMaterialDifferences
+      );
+      this.bottomMaterialDifference = bottomMaterialDifferences.find(
+        (item) => item.name === "default"
+      ).value;
     },
     async handleCheck() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+      let { bottomMaterialGrossWeight, bottomMaterialNetWeight } =
+        this.formData;
+      if (
+        Math.abs(bottomMaterialGrossWeight - bottomMaterialNetWeight) >
+        this.bottomMaterialDifference
+      ) {
+        this.$message.warning(
+          `埚底料毛重和净重的差值不能超过：${this.bottomMaterialDifference}kg`
+        );
+        return;
+      }
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
@@ -442,10 +454,6 @@ export default {
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
-    },
-    handleQtyChange() {
-      let { totalQty, scrapQty } = this.formData;
-      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
     },
   },
 };
