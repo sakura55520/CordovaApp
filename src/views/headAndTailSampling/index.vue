@@ -21,7 +21,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="120px"
+          label-width="140px"
           :rules="formRules"
           :disabled="$route.query.view"
         >
@@ -30,17 +30,22 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="进站数量" prop="totalQty" class="item">
-              <el-input v-model="formData.totalQty" disabled></el-input>
+              <el-input v-model="formData.totalQty" disabled>
+                <template slot="append">kg</template>
+              </el-input>
             </el-form-item>
-            <el-form-item label="合格数量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <el-input-number
-                v-model="formData.scrapQty"
-                @change="handleQtyChange"
+            <el-form-item
+              label="位错反延线长度"
+              prop="dislocationIdentificationLength"
+              class="item"
+            >
+              <el-input
+                v-model="formData.dislocationIdentificationLength"
                 :style="{ width: '100%' }"
-              ></el-input-number>
+                disabled
+              >
+                <template slot="append">mm</template>
+              </el-input>
             </el-form-item>
           </div>
           <div class="form">
@@ -59,13 +64,164 @@
                 </el-input>
               </div>
             </el-form-item>
-            <el-form-item label="当前长度" prop="lengthQty" class="item">
+            <el-form-item label="晶体实测长度" prop="lengthQty" class="item">
               <div class="input">
                 <el-input class="value" v-model="formData.lengthQty">
                   <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
+            <el-form-item
+              label="头部回收料编码"
+              prop="headReclaimedMaterialsCode"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.headReclaimedMaterialsCode"
+                  disabled
+                />
+                <el-button
+                  type="primary"
+                  class="print-btn"
+                  @click="handlePrint(formData.tailReclaimedMaterialsCode)"
+                  >打印回收料条码</el-button
+                >
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="尾部回收料编码"
+              prop="tailReclaimedMaterialsCode"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.tailReclaimedMaterialsCode"
+                  disabled
+                />
+                <el-button
+                  type="primary"
+                  class="print-btn"
+                  @click="handlePrint(formData.tailReclaimedMaterialsCode)"
+                  >打印回收料条码</el-button
+                >
+              </div>
+            </el-form-item>
+          </div>
+          <div class="form">
+            <div class="form-title">样片信息</div>
+            <el-button
+              size="small"
+              type="primary"
+              class="add-btn"
+              @click="addSamples"
+              >+ 新增样片</el-button
+            >
+            <el-table
+              :data="formData.wipCuttingSampleInfos"
+              class="table"
+              :header-cell-style="{
+                background: 'rgba(242, 242, 242)',
+                color: '#606266',
+              }"
+              :row-class-name="tableRowClassName"
+            >
+              <el-table-column
+                label="样片类型"
+                min-width="150"
+                align="center"
+                prop="type"
+              >
+                <template slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.type"
+                    placeholder=""
+                    @change="(val) => handleSampleTypeChange(val, scope.$index)"
+                  >
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in sampleTypeList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="样片标识"
+                min-width="100"
+                align="center"
+                prop="sampleIdentification"
+              >
+                <template slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.sampleIdentification"
+                    placeholder=""
+                    @change="handleSampleIdentificationChange"
+                  >
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in sampleIdentificationList"
+                      :key="item.value"
+                      :disabled="
+                        (scope.row.type === 'YP' && item.value === 'M') ||
+                        (scope.row.type === 'YH' && item.value === 'M') ||
+                        (scope.row.type === 'YP-M' &&
+                          (item.value === 'H' || item.value === 'T'))
+                      "
+                    ></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="样片位置"
+                min-width="120"
+                align="center"
+                prop="samplePosition"
+              >
+                <template slot="header">
+                  <div class="form-table-header">样片位置</div>
+                </template>
+                <template slot-scope="scope">
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'wipCuttingSampleInfos.' +
+                      scope.$index +
+                      '.samplePosition'
+                    "
+                    :rules="formRules.samplePosition"
+                    class="form-input"
+                  >
+                    <el-input
+                      v-model="scope.row.samplePosition"
+                      @change="handleSamplePositionChange"
+                    ></el-input>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="样片编号"
+                min-width="180"
+                align="center"
+                prop="sampleNumber"
+              >
+              </el-table-column>
+              <el-table-column label="操作" align="center">
+                <template slot-scope="scope">
+                  <el-button
+                    type="text"
+                    style="color: red"
+                    class="el-icon-delete"
+                    @click="deleteSamples(scope.$index)"
+                  />
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
           <div class="form">
             <div class="form-title">留档文档记录</div>
@@ -92,6 +248,12 @@
         >出站确认</el-button
       >
     </div>
+    <!--弹窗: 打印组件-->
+    <PrintDialog
+      :visible.sync="printVisible"
+      :print-data="printData"
+      document-mould="回收料条码打印"
+    />
   </div>
 </template>
 
@@ -99,11 +261,15 @@
 import * as Api from "@/api/inStation";
 import overStation from "@/mixins/overStation";
 import PhotoNew from "@/views/components/photoNew";
+import { getSeleteData } from "@/utils/select";
+import { isEmpty, cloneDeep } from "lodash-es";
+import PrintDialog from "@/components/PrintDialog/index.vue";
 
 export default {
   mixins: [overStation],
   components: {
     PhotoNew,
+    PrintDialog,
   },
   data() {
     return {
@@ -116,13 +282,13 @@ export default {
       formData: {
         userCreate: null,
         totalQty: null,
-        goodQty: null,
         defectQty: null,
-        scrapQty: null,
+        dislocationIdentificationLength: null,
         headWeight: null,
         tailWeight: null,
         lengthQty: null,
         _files: [],
+        wipCuttingSampleInfos: [],
       },
       formRules: {
         userCreate: [
@@ -131,14 +297,15 @@ export default {
         totalQty: [
           { required: true, message: "进站数量不能为空", trigger: "change" },
         ],
-        goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "change" },
-        ],
         defectQty: [
           { required: true, message: "缺陷数量不能为空", trigger: "change" },
         ],
-        scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "change" },
+        dislocationIdentificationLength: [
+          {
+            required: true,
+            message: "位错反延线长度不能为空",
+            trigger: "change",
+          },
         ],
         headWeight: [
           { required: true, message: "头部重量不能为空", trigger: "change" },
@@ -149,7 +316,14 @@ export default {
         lengthQty: [
           { required: true, message: "当前长度不能为空", trigger: "change" },
         ],
+        samplePosition: [
+          { required: true, message: "样片位置不能为空", trigger: "change" },
+        ],
       },
+      sampleTypeList: [],
+      sampleIdentificationList: [],
+      printVisible: false,
+      printData: {},
     };
   },
   computed: {
@@ -171,19 +345,50 @@ export default {
       } else {
         try {
           fromData = JSON.parse(this.$route.query.fromData);
+          if (isEmpty(fromData.wipCuttingSampleInfos)) {
+            fromData.wipCuttingSampleInfos = [
+              {
+                type: "YP",
+                sampleIdentification: "H",
+                samplePosition: 0,
+                valid: true,
+                sampleNumber: undefined,
+              },
+              {
+                type: "YP",
+                sampleIdentification: "T",
+                samplePosition: fromData.lengthQty,
+                valid: true,
+                sampleNumber: undefined,
+              },
+            ];
+            if (fromData.lengthQty >= 700) {
+              fromData.wipCuttingSampleInfos.push({
+                type: "YP-M",
+                sampleIdentification: "M",
+                samplePosition: fromData.lengthQty - 300,
+                valid: true,
+                sampleNumber: undefined,
+              });
+            }
+          }
         } catch (e) {
           console.log(e);
         }
       }
 
       this.formData = { ...this.formData, ...fromData };
-      this.handleQtyChange();
 
       this.formData._files = (this.formData.photo || []).map((fileItem) => ({
         ...fileItem,
         big_url: fileItem.fileUrl,
         thumb_url: fileItem.fileUrl,
       }));
+
+      getSeleteData("sampleType", this.sampleTypeList);
+      getSeleteData("sampleIdentification", this.sampleIdentificationList);
+
+      this.fetchSampleCode();
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -217,10 +422,6 @@ export default {
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
     },
-    handleQtyChange() {
-      let { totalQty, scrapQty } = this.formData;
-      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
-    },
     handleFileChange() {
       const photo = (this.formData._files || []).map(
         ({ big_url, thumb_url, ...item }) => ({
@@ -229,6 +430,115 @@ export default {
         })
       );
       this.formData.photo = photo;
+    },
+    addSamples() {
+      if (!this.formData.wipCuttingSampleInfos)
+        this.formData.wipCuttingSampleInfos = [];
+      this.formData.wipCuttingSampleInfos.push({
+        type: "YH",
+        sampleIdentification: "H",
+        samplePosition: 0,
+        valid: true,
+        sampleNumber: undefined,
+      });
+      this.handleSampleIdentificationChange();
+    },
+    deleteSamples(index) {
+      let list = [...this.formData.wipCuttingSampleInfos];
+      list.splice(index, 1);
+      this.formData.wipCuttingSampleInfos = list;
+      this.handleSampleIdentificationChange();
+    },
+    fetchSampleCode() {
+      let list = cloneDeep(this.formData.wipCuttingSampleInfos);
+      let ypHIndex = 0;
+      let ypTIndex = 0;
+      let ypMIndex = 0;
+      let yhHIndex = 0;
+      let yhTIndex = 0;
+      list.forEach((item) => {
+        if (!item.type) return;
+        let currentIndex;
+        if (item.type === "YP" && item.sampleIdentification === "H") {
+          ypHIndex++;
+          currentIndex = ypHIndex;
+        }
+        if (item.type === "YP" && item.sampleIdentification === "T") {
+          ypTIndex++;
+          currentIndex = ypTIndex;
+        }
+        if (item.type === "YP-M" && item.sampleIdentification === "M") {
+          ypMIndex++;
+          currentIndex = ypMIndex;
+        }
+        if (item.type === "YH" && item.sampleIdentification === "H") {
+          yhHIndex++;
+          currentIndex = yhHIndex;
+        }
+        if (item.type === "YH" && item.sampleIdentification === "T") {
+          yhTIndex++;
+          currentIndex = yhTIndex;
+        }
+
+        Api.getSampleCode({
+          sampleType: item.type.split("-")[0],
+          crystalNo: this.formData.processOrderCode,
+          sampleIdentification: item.sampleIdentification,
+          index: currentIndex,
+        }).then((res) => {
+          item.sampleNumber = res.data;
+        });
+      });
+      this.$set(this.formData, "wipCuttingSampleInfos", list);
+    },
+    handleSampleTypeChange(val, index) {
+      if (val === "YH")
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "sampleIdentification",
+          "H"
+        );
+      if (val === "YP")
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "sampleIdentification",
+          "H"
+        );
+      if (val === "YP-M")
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "sampleIdentification",
+          "M"
+        );
+      this.handleSampleIdentificationChange();
+    },
+    handleSampleIdentificationChange() {
+      this.handleSamplePositionChange();
+      this.fetchSampleCode();
+    },
+    handleSamplePositionChange() {
+      let list = this.formData.wipCuttingSampleInfos.map((item, itemIndex) => ({
+        ...item,
+        valid: !this.formData.wipCuttingSampleInfos.some(
+          (ele, eleIndex) =>
+            item.type === ele.type &&
+            item.sampleIdentification === ele.sampleIdentification &&
+            item.samplePosition == ele.samplePosition &&
+            itemIndex < eleIndex
+        ),
+      }));
+      this.$set(this.formData, "wipCuttingSampleInfos", list);
+    },
+    tableRowClassName({ row }) {
+      if (!row.valid) {
+        return "invalid_tr";
+      }
+    },
+    handlePrint(code) {
+      this.printData = {
+        code,
+      };
+      this.printVisible = true;
     },
   },
 };
@@ -334,5 +644,22 @@ export default {
 }
 .unit {
   width: 60px;
+}
+.print-btn {
+  padding: 9px 20px;
+}
+.table {
+  margin-top: 50px;
+}
+.add-btn {
+  position: absolute;
+  left: 12px;
+}
+.form-input {
+  padding-top: 16px;
+}
+.form-table-header:before {
+  content: "* ";
+  color: red;
 }
 </style>
