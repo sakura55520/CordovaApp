@@ -348,7 +348,7 @@ export default {
             ];
             if (fromData.lengthQty >= 700) {
               fromData.wipCuttingSampleInfos.push({
-                type: "YP",
+                type: "YP-M",
                 sampleIdentification: "M",
                 samplePosition: fromData.lengthQty - 300,
                 valid: true,
@@ -507,7 +507,7 @@ export default {
           (ele, eleIndex) =>
             item.type === ele.type &&
             item.sampleIdentification === ele.sampleIdentification &&
-            item.samplePosition === ele.samplePosition &&
+            item.samplePosition == ele.samplePosition &&
             itemIndex < eleIndex
         ),
       }));
