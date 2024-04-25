@@ -5,6 +5,7 @@ export function getUserInfoList(params){
     return req({
     url: '/user/listAll',
     method: 'get',
-    params
+    params,
+    myHideLoading: true
   })
 }

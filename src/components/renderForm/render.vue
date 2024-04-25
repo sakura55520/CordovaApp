@@ -1,5 +1,6 @@
 <script>
 import { makeMap } from '@/utils/index'
+import {getSeleteData} from "@/utils/select";
 
 // 参考https://github.com/vuejs/vue/blob/v2.6.10/src/platforms/web/server/util.js
 const isAttr = makeMap(
@@ -89,7 +90,12 @@ const componentChild = {
 }
 
 export default {
-  props: ['conf','propValue'],
+  props: ['conf', 'propValue'],
+  data() {
+    return {
+      dictList: []
+    }
+  },
   render(h) {
     const dataObject = {
       attrs: {},
@@ -99,17 +105,6 @@ export default {
     }
     const confClone = JSON.parse(JSON.stringify(this.conf))
     delete confClone.id
-    const children = []
-
-    const childObjs = componentChild[confClone.tag]
-    if (childObjs) {
-      Object.keys(childObjs).forEach(key => {
-        const childFunc = childObjs[key]
-        if (confClone[key]) {
-          children.push(childFunc(h, confClone, key))
-        }
-      })
-    }
 
     Object.keys(confClone).forEach(key => {
       const val = confClone[key]
@@ -123,6 +118,26 @@ export default {
         dataObject.attrs[key] = val
       }
     })
+
+    // 数据字典
+    if (confClone.dictCode) {
+      dataObject.on['visible-change'] = (visible) => {
+        if (!visible) return
+        getSeleteData(confClone.dictCode, this.dictList)
+      }
+      confClone.options = this.dictList
+    }
+
+    const children = []
+    const childObjs = componentChild[confClone.tag]
+    if (childObjs) {
+      Object.keys(childObjs).forEach(key => {
+        const childFunc = childObjs[key]
+        if (confClone[key]) {
+          children.push(childFunc(h, confClone, key))
+        }
+      })
+    }
 
     return h(this.conf.tag, dataObject, children)
   },
