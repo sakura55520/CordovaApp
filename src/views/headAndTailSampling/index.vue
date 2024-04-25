@@ -82,7 +82,10 @@
                   v-model="formData.headReclaimedMaterialsCode"
                   disabled
                 />
-                <el-button type="primary" class="print-btn"
+                <el-button
+                  type="primary"
+                  class="print-btn"
+                  @click="handlePrint(formData.tailReclaimedMaterialsCode)"
                   >打印回收料条码</el-button
                 >
               </div>
@@ -98,7 +101,10 @@
                   v-model="formData.tailReclaimedMaterialsCode"
                   disabled
                 />
-                <el-button type="primary" class="print-btn"
+                <el-button
+                  type="primary"
+                  class="print-btn"
+                  @click="handlePrint(formData.tailReclaimedMaterialsCode)"
                   >打印回收料条码</el-button
                 >
               </div>
@@ -242,6 +248,12 @@
         >出站确认</el-button
       >
     </div>
+    <!--弹窗: 打印组件-->
+    <PrintDialog
+      :visible.sync="printVisible"
+      :print-data="printData"
+      document-mould="回收料条码打印"
+    />
   </div>
 </template>
 
@@ -251,11 +263,13 @@ import overStation from "@/mixins/overStation";
 import PhotoNew from "@/views/components/photoNew";
 import { getSeleteData } from "@/utils/select";
 import { isEmpty, cloneDeep } from "lodash-es";
+import PrintDialog from "@/components/PrintDialog/index.vue";
 
 export default {
   mixins: [overStation],
   components: {
     PhotoNew,
+    PrintDialog,
   },
   data() {
     return {
@@ -308,6 +322,8 @@ export default {
       },
       sampleTypeList: [],
       sampleIdentificationList: [],
+      printVisible: false,
+      printData: {},
     };
   },
   computed: {
@@ -517,6 +533,12 @@ export default {
       if (!row.valid) {
         return "invalid_tr";
       }
+    },
+    handlePrint(code) {
+      this.printData = {
+        code,
+      };
+      this.printVisible = true;
     },
   },
 };
