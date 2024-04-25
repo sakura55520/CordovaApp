@@ -435,6 +435,9 @@ ul, li, ol {
     right: 0;
     bottom: 0;
   }
+  .el-form-item {
+    display: inline-flex;
+  }
 }
 
 .scan-wrap {
@@ -535,12 +538,6 @@ ul, li, ol {
   .block-form-item {
     width: 100%;
   }
-  .el-form-item__label {
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    line-height: 1;
-  }
   .el-form-item__content {
     flex: 2;
   }
@@ -550,3 +547,12 @@ ul, li, ol {
     width: 100%;
   }
 }
+.el-form--inline {
+  .el-form-item__label {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    line-height: 1;
+  }
+}
+
