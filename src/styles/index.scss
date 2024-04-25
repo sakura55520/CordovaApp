@@ -435,6 +435,9 @@ ul, li, ol {
     right: 0;
     bottom: 0;
   }
+  .el-form-item {
+    display: inline-flex;
+  }
 }
 
 .scan-wrap {
@@ -457,6 +460,12 @@ ul, li, ol {
     font-family: Roboto;
     background: #F53D3D;
   }
+}
+.tip {
+  padding-left: 20px;
+  font-size: 14px;
+  line-height:34px;
+  color: #409EFF;
 }
 .error-tip,
 .residence-time {
@@ -509,6 +518,16 @@ ul, li, ol {
 .col-button + .el-form-item__error {
   left: 50%;
 }
+.form-disabled {
+  .el-button {
+    display: none;
+  }
+}
+.pre-label {
+  .el-form-item__label {
+    white-space: pre;
+  }
+}
 
 .pad-form .fromCard {
   .el-form-item {
@@ -519,11 +538,8 @@ ul, li, ol {
   .block-form-item {
     width: 100%;
   }
-  .el-form-item__label {
-    float: left;
-  }
   .el-form-item__content {
-    flex: 1;
+    flex: 2;
   }
   .el-input,
   .el-autocomplete,
@@ -531,3 +547,12 @@ ul, li, ol {
     width: 100%;
   }
 }
+.el-form--inline {
+  .el-form-item__label {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    line-height: 1;
+  }
+}
+

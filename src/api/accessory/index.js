@@ -74,3 +74,11 @@ export function upComputer(id) {
   })
 }
 
+// 查询辅料
+export function fetchAccessory(params) {
+  return request({
+    url: '/accessory/listAll',
+    method: 'get',
+    params
+  })
+}

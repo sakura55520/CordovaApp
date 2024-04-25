@@ -49,7 +49,8 @@
               class="block-form-item"
               label="单晶异常"
             >
-              <el-select v-model="recordItem._errors" multiple clearable>
+              <el-select v-model="recordItem._errors" multiple filterable allow-create default-first-option clearable placeholder="填写或选择">
+                <span class="tip">填写后按下回车键即可添加</span>
                 <el-option
                   v-for="item in crystalGrowthErrList"
                   :key="item.id"
@@ -69,7 +70,7 @@
             <div class="headLine-title">点检项确认</div>
           </div>
           <div class="growth-section">
-            <div v-for="(formItem, index) in recordItem.checks" :key="index">
+            <div v-for="(formItem, formItemIdx) in recordItem.checks" :key="formItemIdx">
               <el-form-item :label="formItem.label" class="check-item">
                 <el-radio-group v-model="formItem.isError">
                   <el-radio :label="false">正常</el-radio>
@@ -77,7 +78,18 @@
                 </el-radio-group>
               </el-form-item>
 
-              <el-form-item v-if="formItem.isError" label="异常备注">
+              <el-form-item
+                v-if="formItem.isError"
+                label="异常备注"
+                :rules="[
+                  {
+                    required: true,
+                    message: '异常备注不能为空',
+                    trigger: 'blur',
+                  },
+                ]"
+                :prop="'checks.' + formItemIdx + '.errorMessage'"
+              >
                 <el-input
                   v-model="formItem.errorMessage"
                   type="textarea"
@@ -96,26 +108,29 @@
             <div class="headLine-title">设备/工艺参数确认</div>
           </div>
           <div class="growth-section">
-            <el-form-item
-              v-for="(formItem, formItemIdx) in recordItem.techs"
-              :key="formItemIdx"
-              :label="formItem.label"
-              :rules="[
+            <template v-for="(formItem, formItemIdx) in recordItem.techs">
+              <component
+                :is="calcComponentName(formItem.noFormItem)"
+                :key="formItemIdx"
+                :label="formItem.label"
+                :rules="[
                 {
                   required: formItem.required,
                   message: formItem.label + '不能为空',
                   trigger: 'change',
                 },
               ]"
-              :prop="'techs.' + formItemIdx + '.extValue'"
-            >
-              <Render
-                :key="formItem.renderKey"
-                :conf="formItem"
-                :prop-value="formItem.extValue"
-                @input="handleTechsInput($event, recordIdx, formItemIdx)"
-              />
-            </el-form-item>
+                :prop="'techs.' + formItemIdx + '.extValue'"
+              >
+                <Render
+                  :key="formItem.renderKey"
+                  :conf="formItem"
+                  :prop-value="formItem.extValue"
+                  @input="handleTechsInput($event, recordIdx, formItemIdx)"
+                />
+              </component>
+            </template>
+
           </div>
         </el-card>
       </el-form>
@@ -181,7 +196,10 @@ export default {
       }
     },
     handleTechsInput(event, recordIdx, formItemIdx) {
+      console.log(event, recordIdx, formItemIdx)
       this.$set(this.stepData[recordIdx].techs[formItemIdx], "extValue", event);
+
+      // 补掺-籽晶编号
       if (this.stepData[recordIdx].techs[formItemIdx].extKey === "籽晶编号") {
         Api.getSeed({ uniqueCode: event }).then((res) => {
           let index = this.stepData[recordIdx].techs.findIndex(
@@ -194,6 +212,8 @@ export default {
           );
         });
       }
+
+      // 补掺-掺杂剂编号
       if (this.stepData[recordIdx].techs[formItemIdx].extKey === "掺杂剂编号") {
         Api.findByCode({ code: event }).then((res) => {
           let typeIndex = this.stepData[recordIdx].techs.findIndex(
@@ -226,6 +246,10 @@ export default {
       );
     },
     async valid() {
+      if (this.stepName === "冷却" && isEmpty(this.stepData)) {
+        this.$message.warning(this.stepName + "记录不能为空")
+        return false
+      }
       if (isEmpty(this.$refs.recordItem)) return true;
       let allValid = true;
       try {
@@ -238,6 +262,9 @@ export default {
       }
       return allValid;
     },
+    calcComponentName(noFormItem) {
+      return noFormItem ? 'div' : 'elFormItem'
+    }
   },
 };
 </script>

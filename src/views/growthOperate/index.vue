@@ -1,6 +1,9 @@
 <!--长晶-->
 <template>
-  <div class="detailBox">
+  <div
+    :class="{'form-disabled': $route.query.view}"
+    class="detailBox"
+  >
     <!-- 顶部信息卡片 -->
     <div class="topInfoCard">
       <div class="grid-container">
@@ -18,10 +21,11 @@
     <div v-loading="loading" class="fromCard growth-main">
       <el-tabs
         v-if="tabsVisible"
+        v-model="currentStepName"
         tab-position="left"
         @tab-click="handleSetpClick"
       >
-        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :key="index">
+        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :name="stepName" :key="index">
           <span
             slot="label"
             :class="{ 'tabs-label': checkNotFilled(stepName) }"
@@ -35,7 +39,7 @@
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="单晶异常">
           <span slot="label">单晶异常</span>
           <TabError
             ref="TabError"
@@ -44,7 +48,7 @@
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
-        <el-tab-pane>
+        <el-tab-pane name="留档文档">
           <span slot="label">留档文档</span>
           <TabFile ref="TabFile" :step-data="steps['留档文档']" />
         </el-tab-pane>
@@ -87,6 +91,7 @@ export default {
   },
   data() {
     return {
+      currentStepName: '',
       name2form: {},
       fromData: {},
       steps: {},
@@ -105,7 +110,7 @@ export default {
         "转肩",
         "等径",
         "收尾",
-        "煅烧",
+        "升温",
       ],
     };
   },
@@ -126,7 +131,8 @@ export default {
           stepName: "检漏",
         },
         {
-          stepName: "煅烧",
+          stepName: "升温",
+          canAddRecord: true, // 允许添加记录
         },
         {
           stepName: "化料",
@@ -209,8 +215,7 @@ export default {
       await this.initFormContent();
       this.loading = false;
       this.tabsVisible = true;
-
-      console.log(JSON.parse(JSON.stringify(this.steps)));
+      this.currentStepName = this.calcStepNameList[0]
     },
     // 操作
     async handle(typeName) {
@@ -301,9 +306,22 @@ export default {
         this.deleteNeedlessFields(arr[index]);
       }
     },
+    transformAccessoryLife(arr, index) {
+      const formItem = arr[index]
+      const { extValue, tag, disabled } = formItem
+      if (tag === 'SelectAccessoryLife') {
+        const { objScan, objCode, objLife } = extValue
+        if (disabled) {
+          arr.splice(index, 1, objCode, objLife)
+        } else {
+          arr.splice(index, 1, objScan, objCode, objLife)
+        }
+      }
+    },
     transformTechs(arr) {
       if (!Array.isArray(arr)) return;
       for (let index = 0; index < arr.length; index++) {
+        this.transformAccessoryLife(arr, index)
         const { extValue } = arr[index];
         if (extValue && typeof extValue === "object") {
           arr[index].extValue = JSON.stringify(extValue);
@@ -313,13 +331,18 @@ export default {
     },
     deleteNeedlessFields(item) {
       const needlessFields = [
+        "_ext",
         "androidType",
         "append",
         "border",
         "changeTag",
         "clearable",
+        "defaultValue",
         "disabled",
+        "dictCode",
         "document",
+        "fieldLife",
+        "fieldScan",
         "filterable",
         "formId",
         "format",
@@ -412,6 +435,18 @@ export default {
         }))
       );
     },
+    // 辅料寿命
+    initAccessoryLife (formItem, extValue, label2value) {
+      const {fieldScan, fieldLife, label, tag} = formItem
+      if (tag === 'SelectAccessoryLife') {
+        extValue = {
+          objCode: label2value[label], // 编号
+          objScan: label2value[fieldScan], // 编号(扫码)
+          objLife: label2value[fieldLife] // 已使用寿命/额定寿命
+        }
+      }
+      return extValue;
+    },
     // 工艺参数
     initTech(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-工艺参数`];
@@ -439,11 +474,16 @@ export default {
       this.$set(
         stepData[recordIdx],
         "techs",
-        form.content.map((formItem) => ({
-          ...formItem,
-          ...(label2value[formItem.vModel] || label2value[formItem.label]),
-          extKey: formItem.vModel,
-        }))
+        form.content.map((formItem) => {
+          let { extValue, label, vModel } = formItem
+          extValue = this.initAccessoryLife(formItem, extValue, label2value)
+          return {
+            ...formItem,
+            ...(label2value[vModel] || label2value[label]),
+            extValue,
+            extKey: vModel,
+          }
+        })
       );
     },
     // 其余参数
@@ -484,7 +524,6 @@ export default {
       const form = this.name2form[`长晶-${stepName}-其余参数`];
       if (!form) return;
 
-      if (stepName === "煅烧") debugger;
       const stepData = this.steps[stepName];
       const errFormItemIdx = form.content.findIndex(
         ({ label }) => label === "单晶异常"
@@ -511,8 +550,8 @@ export default {
         (stepData[recordIdx].errors || []).map((item) => item.errorMessage)
       );
     },
-    handleSetpClick({ label }) {
-      switch (label) {
+    handleSetpClick({ name }) {
+      switch (name) {
         case "单晶异常":
           this.$nextTick(() => {
             if (this.$refs.TabError && this.$refs.TabError.init)
@@ -529,12 +568,11 @@ export default {
       }
     },
     async validAll() {
-      let allValid = true;
       for (const ref of this.$refs.TabItem) {
         let valid = await ref.valid();
-        if (!valid) allValid = false;
+        if (!valid) return false;
       }
-      return allValid;
+      return true;
     },
     checkNotFilled(stepName) {
       if (!this.eapSteps.includes(stepName) || !this.originalSteps[stepName])
