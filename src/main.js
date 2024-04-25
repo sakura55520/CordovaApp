@@ -28,9 +28,11 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Treeselect from '@riophae/vue-treeselect'
 import SelectUserinfo from '@/components/select_userinfo.vue'
 import CodeScanner from '@/components/CodeScanner.vue'
+import SelectAccessoryLife from '@/components/SelectAccessoryLife.vue'
 Vue.component('Treeselect', Treeselect)
 Vue.component('SelectUserinfo', SelectUserinfo)
 Vue.component('CodeScanner', CodeScanner)
+Vue.component('SelectAccessoryLife', SelectAccessoryLife)
 
 // 全局修改默认配置，点击空白处不能关闭弹窗
 ElementUI.Dialog.props.closeOnClickModal.default = false
