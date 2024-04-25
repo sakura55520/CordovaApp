@@ -438,6 +438,16 @@ ul, li, ol {
   .el-form-item {
     display: inline-flex;
   }
+  .el-form-item__content {
+    margin-left: 0 !important;
+    .el-select,
+    .el-input,
+    .el-input-group,
+    .el-input-number,
+    .field-bar {
+      width: 200px !important;
+    }
+  }
 }
 
 .scan-wrap {

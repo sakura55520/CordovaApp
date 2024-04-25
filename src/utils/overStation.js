@@ -51,7 +51,9 @@ function directInOrOut(storage, processingOrderCode) {
       processingOrderCode,
       wipStorageStatus
     }).then(() => {
-      Message.success(`【${operator}】操作成功!`)
+      const msg = `【${operator}】操作成功!`
+      postMessage(msg)
+      Message.success(msg)
     })
   }).catch((e) => {
     console.log(e)
@@ -89,4 +91,12 @@ export function resetStationStore() {
   store.dispatch('SetStationCallback', null)
   store.dispatch('SetStationVisible', false)
   store.dispatch('SetFlowLineVisible', false)
+}
+
+export function postMessage(msg) {
+  if (!window._pc_window) return
+  window._pc_window.postMessage({
+    msg,
+    tag: 'close dialog'
+  }, process.env.BASE_PC)
 }
