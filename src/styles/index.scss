@@ -515,6 +515,16 @@ ul, li, ol {
 .col-button + .el-form-item__error {
   left: 50%;
 }
+.form-disabled {
+  .el-button {
+    display: none;
+  }
+}
+.pre-label {
+  .el-form-item__label {
+    white-space: pre;
+  }
+}
 
 .pad-form .fromCard {
   .el-form-item {
@@ -526,10 +536,13 @@ ul, li, ol {
     width: 100%;
   }
   .el-form-item__label {
-    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    line-height: 1;
   }
   .el-form-item__content {
-    flex: 1;
+    flex: 2;
   }
   .el-input,
   .el-autocomplete,

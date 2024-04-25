@@ -1,6 +1,9 @@
 <!--长晶-->
 <template>
-  <div class="detailBox">
+  <div
+    :class="{'form-disabled': $route.query.view}"
+    class="detailBox"
+  >
     <!-- 顶部信息卡片 -->
     <div class="topInfoCard">
       <div class="grid-container">
@@ -129,6 +132,7 @@ export default {
         },
         {
           stepName: "升温",
+          canAddRecord: true, // 允许添加记录
         },
         {
           stepName: "化料",
@@ -302,9 +306,22 @@ export default {
         this.deleteNeedlessFields(arr[index]);
       }
     },
+    transformAccessoryLife(arr, index) {
+      const formItem = arr[index]
+      const { extValue, tag, disabled } = formItem
+      if (tag === 'SelectAccessoryLife') {
+        const { objScan, objCode, objLife } = extValue
+        if (disabled) {
+          arr.splice(index, 1, objCode, objLife)
+        } else {
+          arr.splice(index, 1, objScan, objCode, objLife)
+        }
+      }
+    },
     transformTechs(arr) {
       if (!Array.isArray(arr)) return;
       for (let index = 0; index < arr.length; index++) {
+        this.transformAccessoryLife(arr, index)
         const { extValue } = arr[index];
         if (extValue && typeof extValue === "object") {
           arr[index].extValue = JSON.stringify(extValue);
@@ -320,6 +337,7 @@ export default {
         "border",
         "changeTag",
         "clearable",
+        "defaultValue",
         "disabled",
         "dictCode",
         "document",
@@ -417,6 +435,18 @@ export default {
         }))
       );
     },
+    // 辅料寿命
+    initAccessoryLife (formItem, extValue, label2value) {
+      const {fieldScan, fieldLife, label, tag} = formItem
+      if (tag === 'SelectAccessoryLife') {
+        extValue = {
+          objCode: label2value[label], // 编号
+          objScan: label2value[fieldScan], // 编号(扫码)
+          objLife: label2value[fieldLife] // 已使用寿命/额定寿命
+        }
+      }
+      return extValue;
+    },
     // 工艺参数
     initTech(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-工艺参数`];
@@ -445,23 +475,13 @@ export default {
         stepData[recordIdx],
         "techs",
         form.content.map((formItem) => {
-          let { extValue, tag } = formItem
-          debugger
-          if (tag === 'SelectAccessoryLife') {
-            // 辅料寿命
-            const { fieldScan, fieldLife } = formItem
-            extValue = {
-              // ...label2value[],
-              code: extValue, // 编号
-              objScan: label2value[fieldScan], // 编号(扫码)
-              objLife: label2value[fieldLife] // 已使用寿命/额定寿命
-            }
-          }
+          let { extValue, label, vModel } = formItem
+          extValue = this.initAccessoryLife(formItem, extValue, label2value)
           return {
             ...formItem,
-            ...(label2value[formItem.vModel] || label2value[formItem.label]),
+            ...(label2value[vModel] || label2value[label]),
             extValue,
-            extKey: formItem.vModel,
+            extKey: vModel,
           }
         })
       );
