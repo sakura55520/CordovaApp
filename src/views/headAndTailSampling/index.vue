@@ -140,12 +140,17 @@
                     placeholder=""
                     @change="(val) => handleSampleTypeChange(val, scope.$index)"
                   >
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in sampleTypeList"
-                      :key="item.value"
-                    ></el-option>
+                    <div v-for="item in sampleTypeList" :key="item.value">
+                      <el-option
+                        v-if="
+                          item.value === '样片' ||
+                          item.value === '中间样片' ||
+                          (item.value === '氧化片' && needYH)
+                        "
+                        :label="item.label"
+                        :value="item.value"
+                      ></el-option>
+                    </div>
                   </el-select>
                 </template>
               </el-table-column>
@@ -167,9 +172,9 @@
                       v-for="item in sampleIdentificationList"
                       :key="item.value"
                       :disabled="
-                        (scope.row.type === 'YP' && item.value === 'M') ||
-                        (scope.row.type === 'YH' && item.value === 'M') ||
-                        (scope.row.type === 'YP-M' &&
+                        (scope.row.type === '样片' && item.value === 'M') ||
+                        (scope.row.type === '氧化片' && item.value === 'M') ||
+                        (scope.row.type === '中间样片' &&
                           (item.value === 'H' || item.value === 'T'))
                       "
                     ></el-option>
@@ -331,6 +336,13 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
+    needYH() {
+      return (
+        this.formData.osf === "≤10" ||
+        this.formData.osf === "≤100" ||
+        this.formData.osf === "无"
+      );
+    },
   },
   mounted() {
     this.init();
@@ -348,14 +360,14 @@ export default {
           if (isEmpty(fromData.wipCuttingSampleInfos)) {
             fromData.wipCuttingSampleInfos = [
               {
-                type: "YP",
+                type: "样片",
                 sampleIdentification: "H",
                 samplePosition: 0,
                 valid: true,
                 sampleNumber: undefined,
               },
               {
-                type: "YP",
+                type: "样片",
                 sampleIdentification: "T",
                 samplePosition: fromData.lengthQty,
                 valid: true,
@@ -364,7 +376,7 @@ export default {
             ];
             if (fromData.lengthQty >= 700) {
               fromData.wipCuttingSampleInfos.push({
-                type: "YP-M",
+                type: "中间样片",
                 sampleIdentification: "M",
                 samplePosition: fromData.lengthQty - 300,
                 valid: true,
@@ -384,8 +396,7 @@ export default {
         big_url: fileItem.fileUrl,
         thumb_url: fileItem.fileUrl,
       }));
-
-      getSeleteData("sampleType", this.sampleTypeList);
+      await getSeleteData("sampleType", this.sampleTypeList);
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
 
       this.fetchSampleCode();
@@ -435,7 +446,7 @@ export default {
       if (!this.formData.wipCuttingSampleInfos)
         this.formData.wipCuttingSampleInfos = [];
       this.formData.wipCuttingSampleInfos.push({
-        type: "YH",
+        type: this.needYH ? "氧化片" : "样片",
         sampleIdentification: "H",
         samplePosition: 0,
         valid: true,
@@ -459,29 +470,31 @@ export default {
       list.forEach((item) => {
         if (!item.type) return;
         let currentIndex;
-        if (item.type === "YP" && item.sampleIdentification === "H") {
+        if (item.type === "样片" && item.sampleIdentification === "H") {
           ypHIndex++;
           currentIndex = ypHIndex;
         }
-        if (item.type === "YP" && item.sampleIdentification === "T") {
+        if (item.type === "样片" && item.sampleIdentification === "T") {
           ypTIndex++;
           currentIndex = ypTIndex;
         }
-        if (item.type === "YP-M" && item.sampleIdentification === "M") {
+        if (item.type === "中间样片" && item.sampleIdentification === "M") {
           ypMIndex++;
           currentIndex = ypMIndex;
         }
-        if (item.type === "YH" && item.sampleIdentification === "H") {
+        if (item.type === "氧化片" && item.sampleIdentification === "H") {
           yhHIndex++;
           currentIndex = yhHIndex;
         }
-        if (item.type === "YH" && item.sampleIdentification === "T") {
+        if (item.type === "氧化片" && item.sampleIdentification === "T") {
           yhTIndex++;
           currentIndex = yhTIndex;
         }
-
+        let sampleType = this.sampleTypeList.find(
+          (ele) => ele.value === item.type
+        );
         Api.getSampleCode({
-          sampleType: item.type.split("-")[0],
+          sampleType: sampleType.extendValue,
           crystalNo: this.formData.processOrderCode,
           sampleIdentification: item.sampleIdentification,
           index: currentIndex,
@@ -492,19 +505,19 @@ export default {
       this.$set(this.formData, "wipCuttingSampleInfos", list);
     },
     handleSampleTypeChange(val, index) {
-      if (val === "YH")
+      if (val === "氧化片")
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",
           "H"
         );
-      if (val === "YP")
+      if (val === "样片")
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",
           "H"
         );
-      if (val === "YP-M")
+      if (val === "中间样片")
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",
