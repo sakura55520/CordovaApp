@@ -132,6 +132,28 @@
             </template>
 
           </div>
+
+          <!--    等径记录      -->
+          <div v-if="recordItem.equivalentCrystalVariables && recordItem.equivalentCrystalVariables.length" class="growth-section">
+            <SubTitle label="等径记录"/>
+            <el-table
+              :data="recordItem.equivalentCrystalVariables[0]"
+              max-height="666"
+              border
+              fit
+              highlight-current-row
+              class="admin_table"
+            >
+              <el-table-column
+                v-for="(val, key) in recordItem.equivalentCrystalVariables[0][0]"
+                :key="key"
+                :label="key"
+                :prop="key"
+                :formatter="formatCol"
+                min-width="140"
+              />
+            </el-table>
+          </div>
         </el-card>
       </el-form>
     </el-collapse-item>
@@ -264,6 +286,12 @@ export default {
     },
     calcComponentName(noFormItem) {
       return noFormItem ? 'div' : 'elFormItem'
+    },
+    formatCol(row, column, val) {
+      if (val && typeof val === 'object') {
+        return (val.value || '') + (val.unit || '')
+      }
+      return val
     }
   },
 };
