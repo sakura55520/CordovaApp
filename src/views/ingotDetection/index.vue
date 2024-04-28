@@ -387,7 +387,11 @@
               />
               <el-table-column label="操作" align="center" min-width="200">
                 <template slot-scope="scope">
-                  <el-button type="text" @click="handleUpdateStatus(scope.row)">
+                  <el-button
+                    v-if="scope.row.status === 0"
+                    type="text"
+                    @click="handleUpdateStatus(scope.row)"
+                  >
                     返切操作
                   </el-button>
                   <el-button
@@ -432,19 +436,12 @@
             class="form-item-cover"
             :disabled="backCuttingFormType === '编辑'"
           >
-            <div v-for="item in sampleTypeList" :key="item.value">
-              <el-option
-                v-if="
-                  !(
-                    item.value === '头尾样片' ||
-                    item.value === '中间样片' ||
-                    item.value === '氧化样片'
-                  )
-                "
-                :label="item.label"
-                :value="item.value"
-              ></el-option>
-            </div>
+            <el-option
+              v-for="item in backCutTypeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="返切标识" prop="sampleIdentification">
@@ -516,7 +513,7 @@ import SelectUserinfo from "@/components/select_userinfo";
 import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
 import { mapState } from "vuex";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, isEmpty } from "lodash-es";
 import PhotoNew from "@/views/components/photoNew";
 import moment from "moment";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation";
@@ -588,6 +585,7 @@ export default {
         ],
       },
       sampleTypeList: [],
+      backCutTypeList: [],
       conventionalDefectList: [],
       osfDensityList: [],
       sampleIdentificationList: [],
@@ -667,6 +665,8 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
       getSeleteData("sampleType", this.sampleTypeList);
+      getSeleteData("backCutType", this.backCutTypeList);
+
       getSeleteData("conventionalDefect", this.conventionalDefectList);
       getSeleteData("osfDensity", this.osfDensityList);
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
@@ -705,23 +705,29 @@ export default {
     async updateDetails() {
       const { processingOrderCode } = this.$route.query;
       getCurrentWipStorageData(processingOrderCode).then((res) => {
-        if (!res.data || !res.data.length)
-          return Message.warning("未查询到过站信息!");
-
-        // const details = res.data[0].fromData.details.filter(
-        //   (item) =>
-        //     item.type === "头尾样片" ||
-        //     item.type === "中间样片" ||
-        //     item.type === "氧化样片"
-        // );
-        this.$set(this.formData, "details", res.data[0].fromData.details);
+        if (!res.data || !res.data.length) return;
+        (res.data[0].fromData.details || []).forEach((item) => {
+          let index = this.formData.details.findIndex(
+            (ele) => item.sampleNumber === ele.sampleNumber
+          );
+          if (index > -1) {
+            this.$set(
+              this.formData.details[index],
+              "samplePosition",
+              item.samplePosition
+            );
+          } else {
+            this.formData.details.push(item);
+          }
+        });
       });
     },
     async handleAddBackCuttings() {
+      this.$refs.backCuttingFormRef.clearValidate();
       this.backCuttingFormData = {
-        type: undefined,
-        sampleIdentification: undefined,
-        samplePosition: undefined,
+        type: "",
+        sampleIdentification: "",
+        samplePosition: 0,
         tall: 4,
         recycle: 1,
         userCreate: this.realName,
@@ -737,17 +743,14 @@ export default {
 
       if (
         this.formData.backCuttings.some(
-          item.samplePosition == this.backCuttingFormData.samplePosition
+          (item) =>
+            item.samplePosition == this.backCuttingFormData.samplePosition &&
+            item.sampleNumber !== this.backCuttingFormData.sampleNumber
         )
       ) {
         this.$message.warning("返切位置不能重复");
         return;
       }
-
-      this.backCuttingFormData.backCutNumber =
-        this.formData.processOrderCode +
-        "_" +
-        this.backCuttingFormData.samplePosition;
 
       this.backCuttingFormData.processOrderCode =
         this.formData.processOrderCode;
@@ -758,9 +761,14 @@ export default {
           item.sampleIdentification ===
             this.backCuttingFormData.sampleIdentification
       );
+
+      let sampleType = this.backCutTypeList.find(
+        (ele) => ele.value == this.backCuttingFormData.type
+      ).extendValue;
+
       let index = list.length + 1;
-      let res = await Api.getCutBackSampleCode({
-        sampleType: this.backCuttingFormData.type,
+      let res = await Api.getSampleCode({
+        sampleType,
         crystalNo: this.formData.processOrderCode,
         sampleIdentification: this.backCuttingFormData.sampleIdentification,
         index,
@@ -781,7 +789,7 @@ export default {
       });
     },
     async handleUpdateBackCuttings(row, index) {
-      this.backCuttingFormData = row;
+      this.backCuttingFormData = cloneDeep(row);
       this.backCuttingFormType = "编辑";
       this.backCuttingDialogVisible = true;
       this.selectIndex = index;
@@ -789,68 +797,23 @@ export default {
     async updateBackCuttings() {
       if (
         this.formData.backCuttings.some(
-          item.samplePosition == this.backCuttingFormData.samplePosition
+          (item) =>
+            item.samplePosition == this.backCuttingFormData.samplePosition &&
+            item.sampleNumber !== this.backCuttingFormData.sampleNumber
         )
       ) {
         this.$message.warning("返切位置不能重复");
         return;
       }
 
-      this.backCuttingFormData.backCutNumber =
-        this.formData.processOrderCode +
-        "_" +
-        this.backCuttingFormData.samplePosition;
-
       this.backCuttingFormData.processOrderCode =
         this.formData.processOrderCode;
 
-      let list = cloneDeep(this.formData.backCuttings);
-      list[this.selectIndex] = this.backCuttingFormData;
-
-      let typeIdentificationMap = {};
-      let getCutBackSampleCodeList = [];
-      let updateSampleRecordList = [];
-
-      list.forEach((item, index) => {
-        let typeIdentification = item.type + "_" + item.sampleIdentification;
-        let number;
-
-        typeIdentificationMap[typeIdentification] =
-          (typeIdentificationMap[typeIdentification] || 0) + 1;
-        number = typeIdentificationMap[typeIdentification];
-
-        getCutBackSampleCodeList.push({ item, index, number });
-      });
-
-      Promise.all(
-        getCutBackSampleCodeList.map(({ item, index, number }) =>
-          Api.getCutBackSampleCode({
-            sampleType: item.type,
-            crystalNo: this.formData.processOrderCode,
-            sampleIdentification: item.sampleIdentification,
-            index: number,
-          }).then((res) => {
-            if (this.selectIndex === index || item.sampleNumber !== res.data) {
-              item.sampleNumber = res.data;
-              updateSampleRecordList.push(item);
-            }
-          })
-        )
-      ).then(() => {
-        Promise.all(
-          updateSampleRecordList.map((item) =>
-            Api.updateBackCuttingSampleRecord(item)
-          )
-        ).then(() => {
-          this.$message.success("返切指令更新成功");
-          this.fetchBackCuttingSampleRecord();
-          this.updateDetails();
-          this.backCuttingDialogVisible = false;
-        });
-      });
-    },
-    async updateSampleRecord() {
-      return;
+      await Api.updateBackCuttingSampleRecord(this.backCuttingFormData);
+      this.$message.success("返切指令更新成功");
+      this.fetchBackCuttingSampleRecord();
+      this.updateDetails();
+      this.backCuttingDialogVisible = false;
     },
     handleBackCuttingFormConfirm() {
       if (this.backCuttingFormType === "新增") this.addBackCuttings();
@@ -887,6 +850,9 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       } = this.$route.query;
+      if (isEmpty(this.formData.wipCrystalGrowthOutErrors)) {
+        delete this.formData.wipCrystalGrowthOutErrors;
+      }
       await Api.inOrOutStation({
         equipmentCode,
         param: {
@@ -926,22 +892,23 @@ export default {
     },
     calcHalfRrg(index) {
       let item = this.formData.details[index];
-      data = (item.halfRes - item.resC) / item.resC;
+      let data = (item.halfRes - item.resC) / item.resC;
       this.$set(this.formData.details[index], "halfRrg", data);
     },
     calcRrg(index) {
       let item = this.formData.details[index];
-      data = (item.resE - item.resC) / item.resC;
+      let data = (item.resE - item.resC) / item.resC;
       this.$set(this.formData.details[index], "rrg", data);
     },
     calcTargetDeviation(index) {
       let item = this.formData.details[index];
-      data = (item.resC - item.res) / item.res;
+      let data = (item.resC - item.res) / item.res;
       this.$set(this.formData.details[index], "targetDeviation", data);
     },
     calcOrg(index) {
       let item = this.formData.details[index];
-      data = Math.abs(item.oiC - item.oiE) / item.oiC;
+      console.log(item);
+      let data = Math.abs(item.oiC - item.oiE) / item.oiC;
       this.$set(this.formData.details[index], "org", data);
     },
     calcHeadTailResistivityRatio(row, index) {
