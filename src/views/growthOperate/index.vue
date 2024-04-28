@@ -25,7 +25,7 @@
         tab-position="left"
         @tab-click="handleSetpClick"
       >
-        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :name="stepName" :key="index">
+        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :name="stepName" :key="stepName + index">
           <span
             slot="label"
             :class="{ 'tabs-label': checkNotFilled(stepName) }"
@@ -35,7 +35,7 @@
             ref="TabItem"
             :step-data="steps[stepName]"
             :step-name="stepName"
-            :can-add-record="!!calcAddRecordMap[stepName]"
+            :can-add-record="calcAddRecordMap[stepName]"
             :crystal-growth-err-list="crystalGrowthErrList"
           />
         </el-tab-pane>
@@ -159,6 +159,7 @@ export default {
         {
           stepName: "吊单晶",
           canAddRecord: true,
+          recordMax: 1
         },
         {
           stepName: "回熔",
@@ -176,7 +177,7 @@ export default {
     },
     calcAddRecordMap() {
       const map = {};
-      this.stepTabs.forEach((item) => (map[item.stepName] = item.canAddRecord));
+      this.stepTabs.forEach((item) => (map[item.stepName] = item.canAddRecord ? item : null));
       return map;
     },
     calcStepNameList() {

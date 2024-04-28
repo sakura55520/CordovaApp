@@ -159,7 +159,7 @@
     </el-collapse-item>
 
     <el-button
-      v-if="canAddRecord"
+      v-if="addVisible"
       class="block-btn"
       type="primary"
       plain
@@ -191,7 +191,7 @@ export default {
       required: true,
     },
     canAddRecord: {
-      type: Boolean,
+      type: Object | null,
       required: true,
     },
     crystalGrowthErrList: Array,
@@ -201,6 +201,14 @@ export default {
       detailForm: {},
       activeCollapse: ["0"],
     };
+  },
+  computed: {
+    addVisible() {
+      if (!this.canAddRecord) return false
+      const { recordMax } = this.canAddRecord
+      if (typeof recordMax === 'number' && recordMax <= this.stepData.length) return false
+      return true
+    }
   },
   created() {
     this.activeCollapse = ["0"];
