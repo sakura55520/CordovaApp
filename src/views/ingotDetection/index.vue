@@ -37,12 +37,12 @@
             <el-form-item
               label="单晶异常"
               class="form-item-cover"
-              v-for="(item, index) in wipCrystalGrowthOutErrors"
+              v-for="(item, index) in formData.wipCrystalGrowthOutErrors"
               :key="index"
             >
               <div class="input">
-                <el-input class="value" v-model="formData.errorType" disabled />
-                <el-input class="value" v-model="formData.errorInfo" disabled />
+                <el-input class="value" v-model="item.taskStep" disabled />
+                <el-input class="value" v-model="item.errorMessage" disabled />
               </div>
             </el-form-item>
           </div>
@@ -430,6 +430,7 @@
             v-model="backCuttingFormData.type"
             placeholder=""
             class="form-item-cover"
+            :disabled="backCuttingFormType === '编辑'"
           >
             <div v-for="item in sampleTypeList" :key="item.value">
               <el-option
@@ -451,6 +452,7 @@
             v-model="backCuttingFormData.sampleIdentification"
             placeholder=""
             class="form-item-cover"
+            :disabled="backCuttingFormType === '编辑'"
           >
             <div v-for="item in sampleIdentificationList" :key="item.value">
               <el-option
@@ -734,6 +736,15 @@ export default {
       const valid = await this.$refs.backCuttingFormRef.validate();
       if (!valid) return;
 
+      if (
+        this.formData.backCuttings.some(
+          item.samplePosition == this.backCuttingFormData.samplePosition
+        )
+      ) {
+        this.$message.warning("返切位置不能重复");
+        return;
+      }
+
       this.backCuttingFormData.backCutNumber =
         this.formData.processOrderCode +
         "_" +
@@ -777,6 +788,15 @@ export default {
       this.selectIndex = index;
     },
     async updateBackCuttings() {
+      if (
+        this.formData.backCuttings.some(
+          item.samplePosition == this.backCuttingFormData.samplePosition
+        )
+      ) {
+        this.$message.warning("返切位置不能重复");
+        return;
+      }
+
       this.backCuttingFormData.backCutNumber =
         this.formData.processOrderCode +
         "_" +
@@ -927,7 +947,7 @@ export default {
     },
     calcHeadTailResistivityRatio(row, index) {
       let headTailResistivityRatio = null;
-      let reverseDetails = (this.formData.details || []).reverse();
+      let reverseDetails = (cloneDeep(this.formData.details) || []).reverse();
       let headIndex =
         reverseDetails.length -
         reverseDetails.findIndex(
