@@ -30,16 +30,16 @@
                 :row-class-name="tableRowClassName"
               >
                 <el-table-column
-                  label="样片编号"
-                  min-width="120"
-                  align="center"
-                  prop="sampleNumber"
-                />
-                <el-table-column
                   label="样片类型"
                   min-width="120"
                   align="center"
-                  prop="sampleType"
+                  prop="type"
+                />
+                <el-table-column
+                  label="样片编号"
+                  min-width="200"
+                  align="center"
+                  prop="sampleNumber"
                 />
                 <el-table-column
                   label="样片标识"
@@ -54,10 +54,10 @@
                   prop="samplePosition"
                 />
                 <el-table-column
-                  label="类别"
+                  label="产品类型"
                   min-width="100"
                   align="center"
-                  prop="category"
+                  prop="productCategory"
                 />
                 <el-table-column
                   label="晶向"
@@ -76,7 +76,11 @@
                   min-width="180"
                   align="center"
                   prop="crystalDensity"
-                />
+                >
+                  <template slot-scope="scope">
+                    {{ scope.row.crystalDensity }}%
+                  </template>
+                </el-table-column>
                 <el-table-column
                   label="RES"
                   min-width="80"
@@ -102,10 +106,10 @@
                   prop="halfRes"
                 />
                 <el-table-column
-                  label="1/2 RRG"
+                  label="目标偏差"
                   min-width="100"
                   align="center"
-                  prop="halfRrg"
+                  prop="targetDeviation"
                 />
                 <el-table-column
                   label="RRG"
@@ -114,22 +118,34 @@
                   prop="rrg"
                 />
                 <el-table-column
+                  label="1/2 RRG"
+                  min-width="100"
+                  align="center"
+                  prop="halfRrg"
+                />
+                <el-table-column
+                  label="头尾电阻比"
+                  min-width="100"
+                  align="center"
+                  prop="headTailResistivityRatio"
+                />
+                <el-table-column
                   label="OI_C"
                   min-width="80"
                   align="center"
                   prop="oiC"
                 />
                 <el-table-column
-                  label="CS"
-                  min-width="80"
-                  align="center"
-                  prop="cs"
-                />
-                <el-table-column
                   label="OI_E"
                   min-width="80"
                   align="center"
                   prop="oiE"
+                />
+                <el-table-column
+                  label="CS"
+                  min-width="80"
+                  align="center"
+                  prop="cs"
                 />
                 <el-table-column
                   label="ORG"
@@ -166,6 +182,18 @@
                   min-width="120"
                   align="center"
                   prop="boron"
+                />
+                <el-table-column
+                  label="基砷"
+                  min-width="120"
+                  align="center"
+                  prop="arsenic"
+                />
+                <el-table-column
+                  label="基锑"
+                  min-width="120"
+                  align="center"
+                  prop="antimony"
                 />
                 <el-table-column
                   label="检测人员"
@@ -208,7 +236,11 @@
                 color: '#606266',
               }"
             >
-              <el-table-column label="晶锭编号" min-width="150" align="center">
+              <el-table-column
+                label="晶锭编号/回收料编号"
+                min-width="200"
+                align="center"
+              >
                 <template slot-scope="scope">
                   <div v-if="scope.row.segmentNo">
                     {{ scope.row.segmentNo }}
@@ -220,9 +252,31 @@
                   </div>
                 </template>
               </el-table-column>
+              <el-table-column
+                label="类型"
+                min-width="150"
+                align="center"
+                prop="recycle"
+              >
+                <template slot-scope="scope">
+                  <el-select
+                    v-model="scope.row.recycle"
+                    placeholder=""
+                    class="form-item-cover"
+                  >
+                    <el-option
+                      :label="item.label"
+                      :value="Number(item.value)"
+                      v-for="item in backCuttingAndReuseList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
               <el-table-column label="下发工单" min-width="300" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    v-if="scope.row.recycle !== 1"
                     v-model="scope.row.orderCode"
                     @focus="handleWorkOrderFocus(scope.$index)"
                   />
@@ -249,14 +303,9 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="流程说明" min-width="300" align="center">
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.processName" disabled></el-input>
-                </template>
-              </el-table-column>
               <el-table-column
                 label="直径"
-                min-width="100"
+                min-width="150"
                 align="center"
                 prop="diameter"
               >
@@ -264,21 +313,25 @@
                   <el-input
                     v-model="scope.row.diameter"
                     v-direction="{ x: 0, y: scope.$index }"
-                  ></el-input>
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="头部位置" min-width="100" align="center">
+              <el-table-column label="头部位置" min-width="150" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :disabled="scope.row.recycle === 1"
                     v-model="scope.row.headPosition"
                     @change="(value) => handleHeadChange(value, scope.$index)"
                     v-direction="{ x: 1, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="尾部位置" min-width="100" align="center">
+              <el-table-column label="尾部位置" min-width="150" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :disabled="scope.row.recycle === 1"
                     v-model="scope.row.tailPosition"
                     @change="(value) => handleTailChange(value, scope.$index)"
                     v-direction="{ x: 2, y: scope.$index }"
@@ -287,20 +340,13 @@
               </el-table-column>
               <el-table-column
                 label="晶锭长度"
-                min-width="100"
+                min-width="150"
                 align="center"
                 prop="length"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.length"
-                    v-direction="{ x: 3, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="计划重量"
-                min-width="100"
+                min-width="200"
                 align="center"
                 prop="planWeight"
               >
@@ -322,14 +368,27 @@
                 </template>
               </el-table-column> -->
               <el-table-column
-                label="段位"
-                min-width="100"
+                label="计算位置"
+                min-width="150"
                 align="center"
-                prop="segmentNum"
+                prop="calculatedPosition"
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.segmentNum"
+                    v-model="scope.row.calculatedPosition"
+                    v-direction="{ x: 5, y: scope.$index }"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="计算电阻率"
+                min-width="150"
+                align="center"
+                prop="calculatedResistivity"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.calculatedResistivity"
                     v-direction="{ x: 5, y: scope.$index }"
                   ></el-input>
                 </template>
@@ -396,65 +455,25 @@
                 min-width="100"
                 align="center"
                 prop="head79oi"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.head79oi"
-                    @change="
-                      (value) => handleHead79oiChange(value, scope.$index)
-                    "
-                    v-direction="{ x: 10, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="79oi尾"
                 min-width="100"
                 align="center"
                 prop="tail79oi"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.tail79oi"
-                    @change="
-                      (value) => handleTail79oiChange(value, scope.$index)
-                    "
-                    v-direction="{ x: 11, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="83oi头"
                 min-width="100"
                 align="center"
                 prop="head83oi"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.head83oi"
-                    @change="
-                      (value) => handleHead83oiChange(value, scope.$index)
-                    "
-                    v-direction="{ x: 12, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="83oi尾"
                 min-width="100"
                 align="center"
                 prop="tail83oi"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.tail83oi"
-                    @change="
-                      (value) => handleTail83oiChange(value, scope.$index)
-                    "
-                    v-direction="{ x: 13, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <!-- <el-table-column
                 label="滚圆"
                 min-width="80"
@@ -609,10 +628,6 @@
                       <div class="value">{{ item.diameter }}</div>
                     </div>
                     <div class="item">
-                      <div class="label">段位：</div>
-                      <div class="value">{{ item.segmentNum }}</div>
-                    </div>
-                    <div class="item">
                       <div class="label">晶锭长度：</div>
                       <div class="value">{{ item.length }}</div>
                     </div>
@@ -671,7 +686,9 @@
               >
                 <div>{{ item }}</div>
                 <div class="left-number" v-if="index === 0">0</div>
-                <div class="right-number">{{ (index + 1) * 50 }}</div>
+                <div class="right-number" v-if="index % 2 == 1">
+                  {{ (index + 1) * 50 }}
+                </div>
               </div>
             </div>
           </div>
@@ -930,6 +947,9 @@ export default {
       selectedWorkOrder: null,
       erpWorkOrderTypeList: [], // ERP工单类型 list
       activeName: "checkInfo",
+      backCuttingAndReuseList: [],
+      selectRollingDiameter: null,
+      diameterList: [],
     };
   },
   computed: {
@@ -982,11 +1002,13 @@ export default {
     },
     rowClick(row) {
       this.selectedWorkOrder = row.workOrderNo;
+      this.selectRollingDiameter = row.rollingDiameter;
     },
     async handleWorkOrderFocus(index) {
       this.selectedSegmentWorkOrderIndex = index;
       this.workOrderDialog = true;
       this.selectedWorkOrder = null;
+      this.selectRollingDiameter = null;
 
       let item = this.formData.segmentedInstructionDetailVos[index];
       let { dopAnt, pnType, processOrderCode } = this.formData;
@@ -996,7 +1018,7 @@ export default {
         processingOrderCode: processOrderCode,
         resistanceHead: item.headResistance,
         resistanceTail: item.tailResistance,
-        waferSize: item.diameter,
+        waferSize: item.size,
       });
       this.workOrderList = res.data;
     },
@@ -1004,6 +1026,13 @@ export default {
       this.workOrderDialog = false;
     },
     handleConfirm() {
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[
+          this.selectedSegmentWorkOrderIndex
+        ],
+        "rollingDiameter",
+        this.selectRollingDiameter
+      );
       this.$set(
         this.formData.segmentedInstructionDetailVos[
           this.selectedSegmentWorkOrderIndex
@@ -1041,6 +1070,8 @@ export default {
         "wipStorageInStorageReason",
         this.wipStorageInStorageReasonList
       );
+      getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
+      await getSeleteData("diameter", this.diameterList);
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -1066,6 +1097,34 @@ export default {
       let list = ingotDetectionRes.data.rows;
       if (!isEmpty(list)) {
         this.checkInfo = list[0].details;
+
+        let oi = this.calcOi();
+        let cloneSegmentedInstructionDetailVos =
+          this.formData.wipCrystalCheckSampleRangeDtos.map((item) => {
+            let length = item.tail - item.head;
+            return {
+              segmentNo: item.sampleNumber,
+              recycle: item.recycle,
+              headPosition: item.head,
+              tailPosition: item.tail,
+              length,
+              headResistance: 0,
+              tailResistance: 0,
+              diameter: this.formData.diameter,
+              planWeight: this.calcPlanWeight(length),
+              status: 0,
+              head79oi: oi[0],
+              head83oi: oi[1],
+              tail79oi: oi[2],
+              tail83oi: oi[3],
+            };
+          });
+
+        this.$set(
+          this.formData,
+          "segmentedInstructionDetailVos",
+          cloneSegmentedInstructionDetailVos
+        );
       }
 
       this.formData._files = (this.formData.photo || []).map((fileItem) => ({
@@ -1084,6 +1143,10 @@ export default {
       let totalLength = (
         this.formData.segmentedInstructionDetailVos || []
       ).reduce((acc, cur) => acc + cur.length, 0);
+      if (totalLength + "" == "NaN") {
+        this.$message.warning("头部位置和尾部位置请填写完整");
+        return;
+      }
       if (totalLength !== length) {
         this.$message.warning(
           `晶锭总长度需要和单晶长度一致,晶锭总长度:${totalLength}mm,单晶长度:${length}mm`
@@ -1102,15 +1165,19 @@ export default {
       let headPosition;
       if (list.length === 0) headPosition = 0;
       else headPosition = list[list.length - 1].tailPosition;
+      let oi = this.calcOi();
       let item = {
         headPosition,
-        type: 0,
-        segmentNum: 0,
+        recycle: 2,
         headResistance: 0,
         tailResistance: 0,
         diameter: this.formData.diameter,
         planWeight: 0,
         status: 0,
+        head79oi: oi[0],
+        head83oi: oi[1],
+        tail79oi: oi[2],
+        tail83oi: oi[3],
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -1134,6 +1201,7 @@ export default {
         )
           item.length = item.tailPosition - item.headPosition;
         else item.length = 0;
+        item.planWeight = this.calcPlanWeight(item.length);
       }
       this.formData.segmentedInstructionDetailVos = list;
       this.handleCodeClick();
@@ -1151,33 +1219,37 @@ export default {
         )
           item.length = item.tailPosition - item.headPosition;
         else item.length = 0;
+        item.planWeight = this.calcPlanWeight(item.length);
       }
       this.formData.segmentedInstructionDetailVos = list;
       this.handleCodeClick();
     },
-    handleHead79oiChange(value, index) {
-      if (value || value === 0)
-        this.formData.segmentedInstructionDetailVos[index].head83oi = (
-          value * 0.509
-        ).toFixed(3);
+    calcPlanWeight(length) {
+      let density = this.diameterList.find(
+        (item) => item.value == "6"
+      ).extendValue;
+      console.log((length * density) / 1000);
+      return ((length * density) / 1000).toFixed(5);
     },
-    handleTail79oiChange(value, index) {
-      if (value || value === 0)
-        this.formData.segmentedInstructionDetailVos[index].tail83oi = (
-          value * 0.509
-        ).toFixed(3);
-    },
-    handleHead83oiChange(value, index) {
-      if (value || value === 0)
-        this.formData.segmentedInstructionDetailVos[index].head79oi = (
-          value / 0.509
-        ).toFixed(3);
-    },
-    handleTail83oiChange(value, index) {
-      if (value || value === 0)
-        this.formData.segmentedInstructionDetailVos[index].tail79oi = (
-          value / 0.509
-        ).toFixed(3);
+    calcOi() {
+      let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
+      let reverseHeadIndex = reverseDetails.findIndex(
+        (item) => item.type === "头尾样片" && item.sampleIdentification === "H"
+      );
+      let reverseTailIndex = reverseDetails.findIndex(
+        (item) => item.type === "头尾样片" && item.sampleIdentification === "T"
+      );
+      let headIndex = reverseDetails.length - reverseHeadIndex - 1;
+      let tailIndex = reverseDetails.length - reverseTailIndex - 1;
+
+      if (reverseHeadIndex === -1 || reverseTailIndex === -1) return [];
+
+      let head79oi = (this.checkInfo[headIndex] || {}).oiC;
+      let head83oi = (head79oi * 0.509).toFixed(3);
+      let tail79oi = (this.checkInfo[tailIndex] || {}).oiC;
+      let tail83oi = (tail79oi * 0.509).toFixed(3);
+      console.log([head79oi, head83oi, tail79oi, tail83oi]);
+      return [head79oi, head83oi, tail79oi, tail83oi];
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -1493,11 +1565,11 @@ export default {
     }
   }
   .table {
-    margin-top: 40px;
+    margin-top: 50px;
   }
   .add-btn {
     position: absolute;
-    right: 20px;
+    left: 20px;
   }
 }
 .unit {
@@ -1515,8 +1587,8 @@ export default {
   margin-right: 8px;
 }
 .collapse {
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
   padding: 0 10px;
   border-radius: 5px;
 }
