@@ -666,7 +666,6 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
-      console.log(JSON.parse(JSON.stringify(fromData)));
       getSeleteData("sampleType", this.sampleTypeList);
       getSeleteData("conventionalDefect", this.conventionalDefectList);
       getSeleteData("osfDensity", this.osfDensityList);

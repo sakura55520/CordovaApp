@@ -304,7 +304,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="直径"
+                label="尺寸"
                 min-width="150"
                 align="center"
                 prop="diameter"
@@ -313,6 +313,21 @@
                   <el-input
                     v-model="scope.row.diameter"
                     v-direction="{ x: 0, y: scope.$index }"
+                  >
+                    <template slot="append">寸</template>
+                  </el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="直径"
+                min-width="150"
+                align="center"
+                prop="diametermm"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.diametermm"
+                    v-direction="{ x: 1, y: scope.$index }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -324,7 +339,7 @@
                     :disabled="scope.row.recycle === 1"
                     v-model="scope.row.headPosition"
                     @change="(value) => handleHeadChange(value, scope.$index)"
-                    v-direction="{ x: 1, y: scope.$index }"
+                    v-direction="{ x: 2, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -334,7 +349,7 @@
                     :disabled="scope.row.recycle === 1"
                     v-model="scope.row.tailPosition"
                     @change="(value) => handleTailChange(value, scope.$index)"
-                    v-direction="{ x: 2, y: scope.$index }"
+                    v-direction="{ x: 3, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -389,7 +404,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.calculatedResistivity"
-                    v-direction="{ x: 5, y: scope.$index }"
+                    v-direction="{ x: 6, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -402,7 +417,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.headResistance"
-                    v-direction="{ x: 6, y: scope.$index }"
+                    v-direction="{ x: 7, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -415,7 +430,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.tailResistance"
-                    v-direction="{ x: 7, y: scope.$index }"
+                    v-direction="{ x: 8, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -424,27 +439,13 @@
                 min-width="150"
                 align="center"
                 prop="headResistanceActual"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.headResistanceActual"
-                    v-direction="{ x: 8, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="尾部电阻率实测"
                 min-width="150"
                 align="center"
                 prop="tailResistanceActual"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.tailResistanceActual"
-                    v-direction="{ x: 9, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <!-- <el-table-column
                 label="头尾电阻比"
                 min-width="120"
@@ -493,7 +494,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.remarks"
-                    v-direction="{ x: 14, y: scope.$index }"
+                    v-direction="{ x: 9, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -514,7 +515,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.qualifiedLength"
-                    v-direction="{ x: 15, y: scope.$index }"
+                    v-direction="{ x: 10, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -527,7 +528,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.qualifiedWeight"
-                    v-direction="{ x: 16, y: scope.$index }"
+                    v-direction="{ x: 11, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -624,8 +625,12 @@
                   </div>
                   <div class="detail">
                     <div class="item">
-                      <div class="label">直径：</div>
+                      <div class="label">尺寸：</div>
                       <div class="value">{{ item.diameter }}</div>
+                    </div>
+                    <div class="item">
+                      <div class="label">直径：</div>
+                      <div class="value">{{ item.diametermm }}</div>
                     </div>
                     <div class="item">
                       <div class="label">晶锭长度：</div>
@@ -1018,7 +1023,7 @@ export default {
         processingOrderCode: processOrderCode,
         resistanceHead: item.headResistance,
         resistanceTail: item.tailResistance,
-        waferSize: item.size,
+        waferSize: item.diameter,
       });
       this.workOrderList = res.data;
     },
@@ -1111,6 +1116,7 @@ export default {
               headResistance: 0,
               tailResistance: 0,
               diameter: this.formData.diameter,
+              diametermm: this.formData.diametermm,
               planWeight: this.calcPlanWeight(length),
               status: 0,
               head79oi: oi[0],
@@ -1172,6 +1178,7 @@ export default {
         headResistance: 0,
         tailResistance: 0,
         diameter: this.formData.diameter,
+        diametermm: this.formData.diametermm,
         planWeight: 0,
         status: 0,
         head79oi: oi[0],
@@ -1226,9 +1233,8 @@ export default {
     },
     calcPlanWeight(length) {
       let density = this.diameterList.find(
-        (item) => item.value == "6"
+        (item) => item.value == this.formData.diameter
       ).extendValue;
-      console.log((length * density) / 1000);
       return ((length * density) / 1000).toFixed(5);
     },
     calcOi() {
@@ -1248,7 +1254,6 @@ export default {
       let head83oi = (head79oi * 0.509).toFixed(3);
       let tail79oi = (this.checkInfo[tailIndex] || {}).oiC;
       let tail83oi = (tail79oi * 0.509).toFixed(3);
-      console.log([head79oi, head83oi, tail79oi, tail83oi]);
       return [head79oi, head83oi, tail79oi, tail83oi];
     },
     async save() {
