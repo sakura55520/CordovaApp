@@ -29,91 +29,40 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
-            <el-form-item label="合格数量" prop="goodQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.goodQty" disabled>
-                  <template slot="append">kg</template>
-                </el-input>
-              </div>
-            </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">分段信息</div>
-            <el-table
-              :data="formData.segments"
-              class="table"
-              :header-cell-style="{
-                background: 'rgba(242, 242, 242)',
-                color: '#606266',
-              }"
-            >
-              <el-table-column
-                label="晶锭编号"
-                prop="ingotNumber"
-                min-width="100"
-                align="center"
+            <el-form-item label="计划长度" prop="planLength" class="item">
+              <el-input v-model="formData.planLength" disabled>
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="原始长度" prop="originLength" class="item">
+              <el-input
+                v-model="formData.originLength"
+                @change="handleLengthChange"
               >
-              </el-table-column>
-              <el-table-column
-                label="计划长度"
-                prop="planLength"
-                min-width="120"
-                align="center"
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="崩边长度" prop="chippingLength" class="item">
+              <el-input
+                v-model="formData.chippingLength"
+                @change="handleLengthChange"
               >
-              </el-table-column>
-              <el-table-column
-                label="原始长度"
-                prop="originLength"
-                min-width="120"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input-number
-                    v-model="scope.row.originLength"
-                    @change="handleLengthChange(scope.$index)"
-                  ></el-input-number>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="崩边长度"
-                prop="chippingLength"
-                min-width="120"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input-number
-                    v-model="scope.row.chippingLength"
-                    @change="handleLengthChange(scope.$index)"
-                  ></el-input-number>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="椭圆长度"
-                prop="ellipticLength"
-                min-width="120"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input-number
-                    v-model="scope.row.ellipticLength"
-                    @change="handleLengthChange(scope.$index)"
-                  ></el-input-number>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="合格长度"
-                prop="qualifiedLength"
-                min-width="120"
-                align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.qualifiedLength"
-                    disabled
-                  ></el-input>
-                </template>
-              </el-table-column>
-            </el-table>
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
+              <el-input v-model="formData.ellipticLength">
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="合格长度" prop="qualifiedLength" class="item">
+              <el-input v-model="formData.qualifiedLength" disabled>
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
           </div>
         </el-form>
       </div>
@@ -141,28 +90,32 @@ export default {
   mixins: [overStation],
   data() {
     return {
-      batchNumber: "Z0116504581",
-      grownCrystalFurnace: "A21",
-      furnaceNumber: "A2010504581",
-      recipe: "Reczl20240310v1",
-      processPath: "X0010101",
-      dataOrderCode: "",
-      productName: "",
       formData: {
         userCreate: null,
-        goodQty: null,
-        scrapQty: null,
-        segments: [],
+        planLength: null,
+        originLength: null,
+        chippingLength: null,
+        ellipticLength: null,
+        qualifiedLength: null,
       },
       formRules: {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
-        goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "change" },
+        planLength: [
+          { required: true, message: "计划长度不能为空", trigger: "change" },
         ],
-        scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "change" },
+        originLength: [
+          { required: true, message: "原始长度不能为空", trigger: "change" },
+        ],
+        chippingLength: [
+          { required: true, message: "崩边长度不能为空", trigger: "change" },
+        ],
+        ellipticLength: [
+          { required: true, message: "椭圆长度不能为空", trigger: "change" },
+        ],
+        qualifiedLength: [
+          { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
       },
     };
@@ -191,14 +144,15 @@ export default {
         }
       }
       this.formData = { ...this.formData, ...fromData };
-      this.handleQtyChange();
-      if (!isEmpty(this.formData.segments)) {
-        this.formData.segments.forEach((element) => {
-          let { originLength, chippingLength, ellipticLength } = element;
-          element.qualifiedLength =
-            (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
-        });
-      }
+      const { originLength, planLength, chippingLength, ellipticLength } =
+        this.formData;
+      this.formData.originLength = originLength || planLength || 0;
+      this.formData.chippingLength = chippingLength || 0;
+      this.formData.ellipticLength = ellipticLength || 0;
+      this.formData.qualifiedLength =
+        this.formData.originLength -
+        this.formData.chippingLength -
+        this.formData.ellipticLength;
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -209,14 +163,11 @@ export default {
     async confirm() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
-      for (const item of this.formData.segments) {
-        let { originLength, planLength } = item;
-        if (originLength - planLength > 5) {
-          this.$message.warning("原始长度与计划长度的差值不能超过5mm");
-          return;
-        }
-      }
       let { originLength, planLength } = this.formData;
+      if (Math.abs(originLength - planLength) > 10) {
+        this.$message.warning("原始长度与计划长度的差值不能超过10mm");
+        return;
+      }
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
@@ -240,15 +191,13 @@ export default {
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
     },
-    handleLengthChange(index) {
-      let { originLength, chippingLength, ellipticLength } =
-        this.formData.segments[index];
-      this.formData.segments[index].qualifiedLength =
-        (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
-    },
-    handleQtyChange() {
-      let { totalQty, scrapQty } = this.formData;
-      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
+    handleLengthChange() {
+      let { originLength, chippingLength, ellipticLength } = this.formData;
+      this.$set(
+        this.formData,
+        "qualifiedLength",
+        (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0)
+      );
     },
   },
 };
