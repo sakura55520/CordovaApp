@@ -24,7 +24,7 @@ export default {
   display: inline-block;
   margin-bottom: 8px;
   border-radius: 8px;
-  border: 1px solid #1283F9;
+  border: 1px solid rgb(121, 187, 255);
   padding: 0 12px;
   font-size: 15px;
   line-height: 1.9;
