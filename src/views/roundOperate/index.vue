@@ -32,20 +32,6 @@
             <el-form-item label="操作者">
               <el-input v-model="detailForm.userCreate" disabled />
             </el-form-item>
-            <el-form-item label="合格数量" prop="goodQty">
-              <el-input v-model="detailForm.goodQty" disabled>
-                <template slot="append">kg</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="报废数量" prop="scrapQty">
-              <el-input
-                v-model="detailForm.scrapQty"
-                @change="handleQtyChange"
-                :style="{ width: '100%' }"
-              >
-                <template slot="append">kg</template>
-              </el-input>
-            </el-form-item>
           </div>
 
           <div class="headLine">
@@ -54,7 +40,7 @@
 
           <div>
             <el-form-item label="计划长度" prop="planLength">
-              <el-input v-model="detailForm.planLength" type="number">
+              <el-input v-model="detailForm.planLength" type="number" disabled>
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
@@ -86,8 +72,121 @@
               </el-input>
             </el-form-item>
             <el-form-item label="合格长度" prop="qualifiedLength">
-              <el-input v-model="detailForm.qualifiedLength" type="number">
+              <el-input
+                v-model="detailForm.qualifiedLength"
+                type="number"
+                disabled
+              >
                 <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="A点晶向" class="multiple-form-item">
+              <template slot="label">
+                <div class="multiple-form-item-label">A点晶向</div>
+              </template>
+              <div class="inputs">
+                <el-form-item label="" prop="aDegrees">
+                  <el-input
+                    v-model="detailForm.aDegrees"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">°</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="" prop="aMinute">
+                  <el-input
+                    v-model="detailForm.aMinute"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">'</template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="B点晶向"
+              prop="crystallinePhaseB"
+              class="multiple-form-item"
+            >
+              <template slot="label">
+                <div class="multiple-form-item-label">B点晶向</div>
+              </template>
+              <div class="inputs">
+                <el-form-item label="" prop="bDegrees">
+                  <el-input
+                    v-model="detailForm.bDegrees"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">°</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="" prop="bMinute">
+                  <el-input
+                    v-model="detailForm.bMinute"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">'</template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="C点晶向"
+              prop="crystallinePhaseC"
+              class="multiple-form-item"
+            >
+              <template slot="label">
+                <div class="multiple-form-item-label">C点晶向</div>
+              </template>
+              <div class="inputs">
+                <el-form-item label="" prop="cDegrees">
+                  <el-input
+                    v-model="detailForm.cDegrees"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">°</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="" prop="cMinute">
+                  <el-input
+                    v-model="detailForm.cMinute"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">'</template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="D点晶向"
+              prop="crystallinePhaseD"
+              class="multiple-form-item"
+            >
+              <template slot="label">
+                <div class="multiple-form-item-label">D点晶向</div>
+              </template>
+              <div class="inputs">
+                <el-form-item label="" prop="dDegrees">
+                  <el-input
+                    v-model="detailForm.dDegrees"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">°</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="" prop="dMinute">
+                  <el-input
+                    v-model="detailForm.dMinute"
+                    @change="calcCrystallinePhase"
+                  >
+                    <template slot="append">'</template>
+                  </el-input>
+                </el-form-item>
+              </div>
+            </el-form-item>
+            <el-form-item label="晶向偏差" prop="crystalDeviation">
+              <el-input v-model="detailForm.crystalDeviation" disabled>
+                <template slot="append">°</template>
               </el-input>
             </el-form-item>
             <el-form-item label="滚圆实测直径头" prop="circleDiameterHead">
@@ -98,26 +197,6 @@
             <el-form-item label="滚圆实测直径尾" prop="circleDiameterTail">
               <el-input v-model="detailForm.circleDiameterTail" type="number">
                 <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="A点晶向" prop="crystallinePhaseA">
-              <el-input v-model="detailForm.crystallinePhaseA">
-                <template slot="append">°</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="B点晶向" prop="crystallinePhaseB">
-              <el-input v-model="detailForm.crystallinePhaseB">
-                <template slot="append">°</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="C点晶向" prop="crystallinePhaseC">
-              <el-input v-model="detailForm.crystallinePhaseC">
-                <template slot="append">°</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="D点晶向" prop="crystallinePhaseD">
-              <el-input v-model="detailForm.crystallinePhaseD">
-                <template slot="append">°</template>
               </el-input>
             </el-form-item>
           </div>
@@ -145,8 +224,6 @@ import moment from "moment";
 import overStation from "@/mixins/overStation";
 
 const defaultForm = {
-  goodQty: null, // 合格数量
-  scrapQty: null, // 报废数量
   planLength: null, // 计划长度
   originLength: null, // 原始长度
   chippingLength: null, // 崩边长度
@@ -158,6 +235,15 @@ const defaultForm = {
   crystallinePhaseB: null, // B点晶向
   crystallinePhaseC: null, // C点晶向
   crystallinePhaseD: null, // D点晶向
+  aDegrees: null,
+  bDegrees: null,
+  cDegrees: null,
+  dDegrees: null,
+  aMinute: null,
+  bMinute: null,
+  cMinute: null,
+  dMinute: null,
+  crystalDeviation: null, //偏差
 };
 
 export default {
@@ -171,9 +257,6 @@ export default {
     return {
       detailForm: Object.assign({}, defaultForm), // 表单列表
       rules: {
-        scrapQty: [
-          { required: true, message: "请输入报废数量", trigger: "change" },
-        ],
         planLength: [
           { required: true, message: "请输入计划长度", trigger: "change" },
         ],
@@ -203,17 +286,29 @@ export default {
             trigger: "change",
           },
         ],
-        crystallinePhaseA: [
-          { required: true, message: "请输入A点晶向", trigger: "change" },
+        aDegrees: [
+          { required: true, message: "请输入A点晶向(度)", trigger: "change" },
         ],
-        crystallinePhaseB: [
-          { required: true, message: "请输入B点晶向", trigger: "change" },
+        aMinute: [
+          { required: true, message: "请输入A点晶向(分)", trigger: "change" },
         ],
-        crystallinePhaseC: [
-          { required: true, message: "请输入C点晶向", trigger: "change" },
+        bDegrees: [
+          { required: true, message: "请输入B点晶向(度)", trigger: "change" },
         ],
-        crystallinePhaseD: [
-          { required: true, message: "请输入D点晶向", trigger: "change" },
+        bMinute: [
+          { required: true, message: "请输入B点晶向(分)", trigger: "change" },
+        ],
+        cDegrees: [
+          { required: true, message: "请输入C点晶向(度)", trigger: "change" },
+        ],
+        cMinute: [
+          { required: true, message: "请输入C点晶向(分)", trigger: "change" },
+        ],
+        dDegrees: [
+          { required: true, message: "请输入D点晶向(度)", trigger: "change" },
+        ],
+        dMinute: [
+          { required: true, message: "请输入D点晶向(分)", trigger: "change" },
         ],
       },
     };
@@ -246,7 +341,81 @@ export default {
       }
 
       this.detailForm = Object.assign({}, defaultForm, fromData);
-      this.handleQtyChange();
+      this.initLength();
+      this.calcDegreesMinute();
+    },
+    initLength() {
+      const { originLength, planLength, chippingLength, ellipticLength } =
+        this.detailForm;
+      this.detailForm.originLength = originLength || planLength || 0;
+      this.detailForm.chippingLength = chippingLength || 0;
+      this.detailForm.ellipticLength = ellipticLength || 0;
+      this.detailForm.qualifiedLength =
+        this.detailForm.originLength -
+        this.detailForm.chippingLength -
+        this.detailForm.ellipticLength;
+    },
+    calcDegreesMinute() {
+      const {
+        crystallinePhaseA,
+        crystallinePhaseB,
+        crystallinePhaseC,
+        crystallinePhaseD,
+      } = this.detailForm;
+      let aDegreesMinute = this.formatDegree(crystallinePhaseA);
+      let bDegreesMinute = this.formatDegree(crystallinePhaseB);
+      let cDegreesMinute = this.formatDegree(crystallinePhaseC);
+      let dDegreesMinute = this.formatDegree(crystallinePhaseD);
+      this.detailForm.aDegrees = aDegreesMinute[0];
+      this.detailForm.aMinute = aDegreesMinute[1];
+      this.detailForm.bDegrees = bDegreesMinute[0];
+      this.detailForm.bMinute = bDegreesMinute[1];
+      this.detailForm.cDegrees = cDegreesMinute[0];
+      this.detailForm.cMinute = cDegreesMinute[1];
+      this.detailForm.dDegrees = dDegreesMinute[0];
+      this.detailForm.dMinute = dDegreesMinute[1];
+      this.detailForm.crystalDeviation = Number(
+        ((crystallinePhaseA - crystallinePhaseB) ** 2 -
+          (crystallinePhaseC - crystallinePhaseD) ** 2) **
+          (1 / 2) /
+          2
+      ).toFixed(5);
+    },
+    calcCrystallinePhase() {
+      const {
+        aDegrees,
+        aMinute,
+        bDegrees,
+        bMinute,
+        cDegrees,
+        cMinute,
+        dDegrees,
+        dMinute,
+      } = this.detailForm;
+
+      let crystallinePhaseA = this.formatCrystallinePhase(aDegrees, aMinute);
+      let crystallinePhaseB = this.formatCrystallinePhase(bDegrees, bMinute);
+      let crystallinePhaseC = this.formatCrystallinePhase(cDegrees, cMinute);
+      let crystallinePhaseD = this.formatCrystallinePhase(dDegrees, dMinute);
+      this.detailForm.crystallinePhaseA = crystallinePhaseA;
+      this.detailForm.crystallinePhaseB = crystallinePhaseB;
+      this.detailForm.crystallinePhaseC = crystallinePhaseC;
+      this.detailForm.crystallinePhaseD = crystallinePhaseD;
+      this.detailForm.crystalDeviation = (
+        Math.sqrt(
+          (crystallinePhaseA - crystallinePhaseB) ** 2 -
+            (crystallinePhaseC - crystallinePhaseD) ** 2
+        ) / 2
+      ).toFixed(5);
+    },
+    formatDegree(value) {
+      value = Math.abs(value);
+      let v1 = Math.floor(value);
+      let v2 = Math.floor((value - v1) * 60);
+      return [v1, v2];
+    },
+    formatCrystallinePhase(degrees, minute) {
+      return (Number(degrees) + Number(minute) / 60).toFixed(4);
     },
     // 操作
     handle(typeName) {
@@ -297,11 +466,23 @@ export default {
       qualifiedLength -= this.detailForm.ellipticLength || 0; // 椭圆长度
       this.detailForm.qualifiedLength = round(qualifiedLength, 2);
     },
-    handleQtyChange() {
-      let { totalQty, scrapQty } = this.detailForm;
-      this.detailForm.goodQty = (totalQty || 0) - (scrapQty || 0);
-    },
+    calcCrystalDeviation() {},
   },
 };
 </script>
-
+<style lang="scss" scoped>
+.inputs {
+  display: flex;
+  gap: 8px;
+}
+.multiple-form-item /deep/ {
+  margin-bottom: 0px !important;
+  .el-form-item__label {
+    height: 40px !important;
+  }
+}
+.multiple-form-item-label:before {
+  content: "* ";
+  color: red;
+}
+</style>

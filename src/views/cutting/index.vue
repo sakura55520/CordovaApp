@@ -144,6 +144,9 @@ export default {
         }
       }
       this.formData = { ...this.formData, ...fromData };
+      this.initLength();
+    },
+    initLength() {
       const { originLength, planLength, chippingLength, ellipticLength } =
         this.formData;
       this.formData.originLength = originLength || planLength || 0;
