@@ -27,66 +27,41 @@
         >
           <div class="form">
             <div class="form-title">单晶信息</div>
-            <el-form-item label="进站数量" prop="pullQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.pullQty">
-                  <template slot="append">kg</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="合格数量" prop="goodQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.goodQty">
-                  <template slot="append">kg</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="接收长度" prop="lengthQty" class="item">
-              <el-input v-model="formData.lengthQty">
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="型号" prop="model" class="item">
-              <el-input v-model="formData.model"></el-input>
-            </el-form-item>
-            <el-form-item label="尺寸" prop="size" class="item">
+            <el-form-item label="生产备注" class="form-item-cover">
               <el-input
-                v-model="formData.size"
-                @input="handleBaseFormChange"
-              ></el-input>
-            </el-form-item>
-            <el-form-item label="晶向" prop="orientation" class="item">
-              <el-input
-                v-model="formData.orientation"
-                @input="handleBaseFormChange"
-              ></el-input>
+                class="value"
+                v-model="formData.productionRemark"
+                disabled
+              />
             </el-form-item>
             <el-form-item
-              label="目标电阻率"
-              prop="targetResistivity"
-              class="item"
+              label="单晶异常"
+              class="form-item-cover"
+              v-for="(item, index) in wipCrystalGrowthOutErrors"
+              :key="index"
             >
-              <el-input v-model="formData.targetResistivity"></el-input>
+              <div class="input">
+                <el-input class="value" v-model="formData.errorType" disabled />
+                <el-input class="value" v-model="formData.errorInfo" disabled />
+              </div>
             </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">样片信息</div>
-            <el-button
-              size="small"
-              type="primary"
-              class="add-btn"
-              @click="addDetails"
-              >+ 新增</el-button
-            >
             <el-table
               :data="formData.details"
-              class="table"
               :header-cell-style="{
                 background: 'rgba(242, 242, 242)',
                 color: '#606266',
               }"
               :row-class-name="tableRowClassName"
             >
+              <el-table-column
+                label="样片类型"
+                min-width="150"
+                align="center"
+                prop="type"
+              />
               <el-table-column
                 label="样片编号"
                 min-width="180"
@@ -95,81 +70,22 @@
               >
               </el-table-column>
               <el-table-column
-                label="样片类型"
-                min-width="150"
-                align="center"
-                prop="type"
-              >
-                <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.type"
-                    placeholder=""
-                    @change="(val) => handleSampleTypeChange(val, scope.$index)"
-                  >
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in sampleTypeList"
-                      :key="item.value"
-                    ></el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
-              <el-table-column
                 label="样片标识"
                 min-width="100"
                 align="center"
                 prop="sampleIdentification"
-              >
-                <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.sampleIdentification"
-                    placeholder=""
-                    @change="handleSampleIdentificationChange"
-                  >
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in sampleIdentificationList"
-                      :key="item.value"
-                      :disabled="
-                        (scope.row.type === 'YP' && item.value === 'M') ||
-                        (scope.row.type === 'CC' &&
-                          (item.value === 'H' || item.value === 'T'))
-                      "
-                    ></el-option>
-                  </el-select>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="样片位置"
                 min-width="120"
                 align="center"
                 prop="samplePosition"
-              >
-                <template slot="header">
-                  <div class="form-table-header">样片位置</div>
-                </template>
-                <template slot-scope="scope">
-                  <el-form-item
-                    label=""
-                    label-width="0px"
-                    :prop="'details.' + scope.$index + '.samplePosition'"
-                    :rules="formRules.samplePosition"
-                    class="form-input"
-                  >
-                    <el-input
-                      v-model="scope.row.samplePosition"
-                      v-direction="{ x: 0, y: scope.$index }"
-                    ></el-input>
-                  </el-form-item>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
-                label="型号"
+                label="产品类型"
                 min-width="100"
                 align="center"
-                prop="category"
+                prop="productCategory"
               >
               </el-table-column>
               <el-table-column
@@ -228,6 +144,8 @@
                       () => {
                         calcHalfRrg();
                         calcRrg();
+                        calcTargetDeviation();
+                        calcHeadTailResistivityRatio(scope.row, scope.$index);
                       }
                     "
                   ></el-input>
@@ -249,11 +167,12 @@
                     @input="calcHalfRrg"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="1/2 RRG" min-width="120" align="center">
+              <el-table-column label="目标偏差" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    v-model="scope.row.halfRrg"
+                    v-model="scope.row.targetDeviation"
                     v-direction="{ x: 6, y: scope.$index }"
+                    @input="calcHalfRrg"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="RRG" min-width="120" align="center">
@@ -263,41 +182,62 @@
                     v-direction="{ x: 7, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
+              <el-table-column label="1/2 RRG" min-width="120" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.halfRrg"
+                    v-direction="{ x: 8, y: scope.$index }"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column
+                label="头尾电阻比"
+                min-width="120"
+                align="center"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.headTailResistivityRatio"
+                    v-direction="{ x: 9, y: scope.$index }"
+                  ></el-input>
+                </template>
+              </el-table-column>
               <el-table-column label="OI_C" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiC"
-                    v-direction="{ x: 8, y: scope.$index }"
+                    v-direction="{ x: 10, y: scope.$index }"
                     @input="calcOrg"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column label="CS" min-width="100" align="center">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.cs"
-                    v-direction="{ x: 9, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="OI_E" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiE"
-                    v-direction="{ x: 10, y: scope.$index }"
+                    v-direction="{ x: 11, y: scope.$index }"
                     @input="calcOrg"
                   ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="CS" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <div :class="getInternalControlColor('cs', scope.row.cs)">
+                    <el-input
+                      v-model="scope.row.cs"
+                      v-direction="{ x: 12, y: scope.$index }"
+                    ></el-input>
+                  </div> </template
               ></el-table-column>
               <el-table-column label="ORG" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.org"
-                    v-direction="{ x: 11, y: scope.$index }"
+                    v-direction="{ x: 13, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="少子寿命" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.minorityCarrierLifetime"
-                    v-direction="{ x: 12, y: scope.$index }"
+                    v-direction="{ x: 14, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="常规缺陷" min-width="100" align="center">
@@ -326,14 +266,28 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.phosphorus"
-                    v-direction="{ x: 13, y: scope.$index }"
+                    v-direction="{ x: 15, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="基硼" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.boron"
-                    v-direction="{ x: 14, y: scope.$index }"
+                    v-direction="{ x: 16, y: scope.$index }"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="基砷" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.arsenic"
+                    v-direction="{ x: 17, y: scope.$index }"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="基锑" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.antimony"
+                    v-direction="{ x: 18, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="检测人员" min-width="150" align="center">
@@ -353,14 +307,95 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                   /> </template
               ></el-table-column>
-              <el-table-column label="操作" align="center">
+            </el-table>
+          </div>
+          <div class="form">
+            <div class="form-title">返切指令</div>
+            <el-button
+              size="small"
+              type="primary"
+              class="add-btn"
+              @click="handleAddBackCuttings"
+              >+ 新增返切指令</el-button
+            >
+            <el-table
+              :data="formData.backCuttings"
+              class="table"
+              :header-cell-style="{
+                background: 'rgba(242, 242, 242)',
+                color: '#606266',
+              }"
+            >
+              <el-table-column
+                label="返切类型"
+                min-width="150"
+                align="center"
+                prop="type"
+              />
+              <el-table-column
+                label="返切标识"
+                min-width="100"
+                align="center"
+                prop="sampleIdentification"
+              />
+              <el-table-column
+                label="返切样片厚度"
+                min-width="120"
+                align="center"
+                prop="tall"
+              />
+              <el-table-column
+                label="返切位置"
+                min-width="120"
+                align="center"
+                prop="samplePosition"
+              />
+              <el-table-column
+                label="是否返切再利用"
+                min-width="150"
+                align="center"
+                prop="recycle"
+                :formatter="formRecycle"
+              />
+              <el-table-column
+                label="样片编码"
+                min-width="200"
+                align="center"
+                prop="sampleNumber"
+              />
+              <el-table-column
+                label="状态"
+                min-width="100"
+                align="center"
+                prop="status"
+              >
                 <template slot-scope="scope">
+                  {{ scope.row.status ? "已切" : "待切" }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="创建人"
+                min-width="100"
+                align="center"
+                prop="userCreate"
+              />
+              <el-table-column
+                label="创建时间"
+                min-width="250"
+                align="center"
+                prop="gmtCreate"
+              />
+              <el-table-column label="操作" align="center" min-width="200">
+                <template slot-scope="scope">
+                  <el-button type="text" @click="handleUpdateStatus(scope.row)">
+                    返切操作
+                  </el-button>
                   <el-button
                     type="text"
-                    style="color: red"
-                    class="el-icon-delete"
-                    @click="deleteDetails(scope.$index)"
-                  />
+                    @click="handleUpdateBackCuttings(scope.row, scope.$index)"
+                  >
+                    编辑
+                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -379,6 +414,86 @@
         </el-form>
       </div>
     </div>
+    <el-dialog
+      :title="`${backCuttingFormType}}返切样片`"
+      :visible.sync="backCuttingDialogVisible"
+    >
+      <el-form
+        :model="backCuttingFormData"
+        label-position="left"
+        label-width="150px"
+        :rules="backCuttingFormRules"
+        ref="backCuttingFormRef"
+      >
+        <el-form-item label="返切类型" prop="type">
+          <el-select
+            v-model="backCuttingFormData.type"
+            placeholder=""
+            class="form-item-cover"
+          >
+            <div v-for="item in sampleTypeList" :key="item.value">
+              <el-option
+                v-if="
+                  !(
+                    item.value === '头尾样片' ||
+                    item.value === '中间样片' ||
+                    item.value === '氧化样片'
+                  )
+                "
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </div>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="返切标识" prop="sampleIdentification">
+          <el-select
+            v-model="backCuttingFormData.sampleIdentification"
+            placeholder=""
+            class="form-item-cover"
+          >
+            <div v-for="item in sampleIdentificationList" :key="item.value">
+              <el-option
+                v-if="item.value !== 'M'"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </div>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="返切样片厚度" prop="tall">
+          <el-input v-model="backCuttingFormData.tall"></el-input>
+        </el-form-item>
+        <el-form-item label="返切位置" prop="samplePosition">
+          <el-input v-model="backCuttingFormData.samplePosition"></el-input>
+        </el-form-item>
+        <el-form-item label="是否返切再利用" prop="recycle">
+          <el-select
+            v-model="backCuttingFormData.recycle"
+            placeholder=""
+            class="form-item-cover"
+          >
+            <el-option
+              :label="item.label"
+              :value="Number(item.value)"
+              v-for="item in backCuttingAndReuseList"
+              :key="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="submit" @click="backCuttingDialogVisible = false"
+          >取 消</el-button
+        >
+        <el-button
+          class="submit"
+          type="primary"
+          @click="handleBackCuttingFormConfirm"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
     <div class="page-handle-box" v-if="!$route.query.view">
       <el-button plain class="cancel" @click="back(null, 'confirm')"
         >取消</el-button
@@ -401,20 +516,16 @@ import { getSeleteData } from "@/utils/select";
 import { mapState } from "vuex";
 import { cloneDeep } from "lodash-es";
 import PhotoNew from "@/views/components/photoNew";
+import moment from "moment";
+import { getCurrentWipStorageData } from "@/api/overStation/overStation";
 
 export default {
   mixins: [overStation],
   components: { SelectUserinfo, PhotoNew },
   data() {
     return {
-      batchNumber: "Z0116504581",
-      grownCrystalFurnace: "A21",
-      furnaceNumber: "A2010504581",
-      recipe: "Reczl20240310v1",
-      processPath: "X0010101",
-      dataOrderCode: "",
-      productName: "",
       formData: {
+        productionRemark: null,
         inspector: null,
         tester: null,
         confirmer: null,
@@ -429,8 +540,10 @@ export default {
         headWeight: null,
         tailWeight: null,
         lengthQty: null,
+        wipCrystalGrowthOutErrors: [],
         details: [],
         _files: [],
+        backCuttings: [],
       },
       formRules: {
         inspector: [
@@ -476,15 +589,54 @@ export default {
       conventionalDefectList: [],
       osfDensityList: [],
       sampleIdentificationList: [],
+      backCuttingAndReuseList: [],
+      internalControlRules: {
+        cs: 0.4,
+      },
+      backCuttingFormData: {
+        type: undefined,
+        sampleIdentification: undefined,
+        samplePosition: undefined,
+        tall: undefined,
+        recycle: undefined,
+        userCreate: undefined,
+        gmtCreate: undefined,
+        processId: undefined,
+      },
+      backCuttingFormRules: {
+        type: [
+          { required: true, message: "返切类型不能为空", trigger: "change" },
+        ],
+        sampleIdentification: [
+          { required: true, message: "返切标识不能为空", trigger: "change" },
+        ],
+        samplePosition: [
+          { required: true, message: "返切位置不能为空", trigger: "change" },
+        ],
+        tall: [
+          {
+            required: true,
+            message: "返切样片厚度不能为空",
+            trigger: "change",
+          },
+        ],
+        recycle: [
+          {
+            required: true,
+            message: "是否返切再利用不能为空",
+            trigger: "change",
+          },
+        ],
+      },
+      backCuttingDialogVisible: false,
+      backCuttingFormType: undefined,
+      selectIndex: undefined,
     };
   },
   computed: {
     buffParams() {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
-    },
-    newDetails() {
-      return JSON.parse(JSON.stringify(this.formData.details));
     },
     ...mapState({
       realName: (state) => state.user.realName,
@@ -512,17 +664,25 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
-      console.log(JSON.parse(JSON.stringify(this.formData)));
+      console.log(JSON.parse(JSON.stringify(fromData)));
       getSeleteData("sampleType", this.sampleTypeList);
       getSeleteData("conventionalDefect", this.conventionalDefectList);
       getSeleteData("osfDensity", this.osfDensityList);
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
+      getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
 
       this.formData._files = (this.formData.photo || []).map((fileItem) => ({
         ...fileItem,
         big_url: fileItem.fileUrl,
         thumb_url: fileItem.fileUrl,
       }));
+
+      this.formData.details = (this.formData.details || []).map((item) => ({
+        ...item,
+        crystalDensity: this.getCrystalDensity(item.samplePosition),
+      }));
+
+      this.fetchBackCuttingSampleRecord();
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -541,41 +701,147 @@ export default {
         }
       });
     },
-    addDetails() {
-      if (!this.formData.details) this.formData.details = [];
-      this.formData.details.push({
-        sampleNumber:
-          "CC-" + (this.formData.details.length + 1 + "").padStart(7, "0"),
-        type: "CC",
-        sampleIdentification: "M",
-        samplePosition: 0,
-        category: "0",
-        size: this.formData.size,
-        orientation: this.formData.orientation,
-        res: 0,
-        resC: 0,
-        resE: 0,
-        halfRes: 0,
-        halfRrg: 0,
-        rrg: 0,
-        tailResistivity: 0,
-        headTailResistivityRatio: 0,
-        oiC: 0,
-        cs: 0,
-        oiE: 0,
-        org: 0,
-        minorityCarrierLifetime: 0,
-        valid: true,
-        inspector: undefined,
-        checkDate: undefined,
+    async updateDetails() {
+      const { processingOrderCode } = this.$route.query;
+      getCurrentWipStorageData(processingOrderCode).then((res) => {
+        if (!res.data || !res.data.length)
+          return Message.warning("未查询到过站信息!");
+
+        // const details = res.data[0].fromData.details.filter(
+        //   (item) =>
+        //     item.type === "头尾样片" ||
+        //     item.type === "中间样片" ||
+        //     item.type === "氧化样片"
+        // );
+        this.$set(this.formData, "details", res.data[0].fromData.details);
       });
-      this.handleSampleIdentificationChange();
     },
-    deleteDetails(index) {
-      let list = [...this.formData.details];
-      list.splice(index, 1);
-      this.formData.details = list;
-      this.handleSampleIdentificationChange();
+    async handleAddBackCuttings() {
+      this.backCuttingFormData = {
+        type: undefined,
+        sampleIdentification: undefined,
+        samplePosition: undefined,
+        tall: 4,
+        recycle: 1,
+        userCreate: this.realName,
+        gmtCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
+        processId: this.formData.processId,
+      };
+      this.backCuttingFormType = "新增";
+      this.backCuttingDialogVisible = true;
+    },
+    async addBackCuttings() {
+      const valid = await this.$refs.backCuttingFormRef.validate();
+      if (!valid) return;
+
+      this.backCuttingFormData.backCutNumber =
+        this.formData.processOrderCode +
+        "_" +
+        this.backCuttingFormData.samplePosition;
+
+      this.backCuttingFormData.processOrderCode =
+        this.formData.processOrderCode;
+
+      let list = this.formData.backCuttings.filter(
+        (item) =>
+          item.type === this.backCuttingFormData.type &&
+          item.sampleIdentification ===
+            this.backCuttingFormData.sampleIdentification
+      );
+      let index = list.length + 1;
+      let res = await Api.getCutBackSampleCode({
+        sampleType: this.backCuttingFormData.type,
+        crystalNo: this.formData.processOrderCode,
+        sampleIdentification: this.backCuttingFormData.sampleIdentification,
+        index,
+      });
+
+      this.backCuttingFormData.sampleNumber = res.data;
+      await Api.createBackCuttingSampleRecord(this.backCuttingFormData);
+      this.$message.success("返切指令创建成功");
+      this.fetchBackCuttingSampleRecord();
+      this.updateDetails();
+      this.backCuttingDialogVisible = false;
+    },
+    async handleUpdateStatus(row) {
+      Api.updateIngotDetectionStatus(row).then(() => {
+        this.$message.success("更新状态成功");
+        this.fetchBackCuttingSampleRecord();
+        this.updateDetails();
+      });
+    },
+    async handleUpdateBackCuttings(row, index) {
+      this.backCuttingFormData = row;
+      this.backCuttingFormType = "编辑";
+      this.backCuttingDialogVisible = true;
+      this.selectIndex = index;
+    },
+    async updateBackCuttings() {
+      this.backCuttingFormData.backCutNumber =
+        this.formData.processOrderCode +
+        "_" +
+        this.backCuttingFormData.samplePosition;
+
+      this.backCuttingFormData.processOrderCode =
+        this.formData.processOrderCode;
+
+      let list = cloneDeep(this.formData.backCuttings);
+      list[this.selectIndex] = this.backCuttingFormData;
+
+      let typeIdentificationMap = {};
+      let getCutBackSampleCodeList = [];
+      let updateSampleRecordList = [];
+
+      list.forEach((item, index) => {
+        let typeIdentification = item.type + "_" + item.sampleIdentification;
+        let number;
+
+        typeIdentificationMap[typeIdentification] =
+          (typeIdentificationMap[typeIdentification] || 0) + 1;
+        number = typeIdentificationMap[typeIdentification];
+
+        getCutBackSampleCodeList.push({ item, index, number });
+      });
+
+      Promise.all(
+        getCutBackSampleCodeList.map(({ item, index, number }) =>
+          Api.getCutBackSampleCode({
+            sampleType: item.type,
+            crystalNo: this.formData.processOrderCode,
+            sampleIdentification: item.sampleIdentification,
+            index: number,
+          }).then((res) => {
+            if (this.selectIndex === index || item.sampleNumber !== res.data) {
+              item.sampleNumber = res.data;
+              updateSampleRecordList.push(item);
+            }
+          })
+        )
+      ).then(() => {
+        Promise.all(
+          updateSampleRecordList.map((item) =>
+            Api.updateBackCuttingSampleRecord(item)
+          )
+        ).then(() => {
+          this.$message.success("返切指令更新成功");
+          this.fetchBackCuttingSampleRecord();
+          this.updateDetails();
+          this.backCuttingDialogVisible = false;
+        });
+      });
+    },
+    async updateSampleRecord() {
+      return;
+    },
+    handleBackCuttingFormConfirm() {
+      if (this.backCuttingFormType === "新增") this.addBackCuttings();
+      else this.updateBackCuttings();
+    },
+    async fetchBackCuttingSampleRecord() {
+      let res = await Api.getBackCuttingSampleRecord({
+        search_EQ_ProcessOrderCode: this.formData.processingOrderCode,
+      });
+      this.$set(this.formData, "backCuttings", res.data.rows);
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -586,6 +852,13 @@ export default {
     async confirm() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+
+      let backCuttings = this.formData.backCuttings;
+      if (backCuttings.some((item) => !item.status)) {
+        this.$message.warning("存在返切指令状态为待切，请先执行返切操作");
+        return;
+      }
+
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
@@ -609,9 +882,10 @@ export default {
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
     },
-    handleSamplePositionChange(val, index) {
+    getCrystalDensity(val) {
       let crystalDensity;
       let value = Number(val);
+      let info = this.formData;
       if (!value || value === "NaN" || !info.weight || !info.lengthQty)
         crystalDensity = "";
       else
@@ -624,73 +898,12 @@ export default {
             info.weight) *
           100
         ).toFixed(2);
-      this.formData.details[index].crystalDensity = crystalDensity;
-    },
-    handleSampleIdentificationChange() {
-      let list = this.formData.details.map((item, itemIndex) => ({
-        ...item,
-        valid: !this.formData.details.some(
-          (ele, eleIndex) =>
-            item.sampleIdentification === ele.sampleIdentification &&
-            itemIndex < eleIndex
-        ),
-      }));
-      this.formData.details = [...list];
-      this.fetchSampleCode();
-    },
-    handleBaseFormChange() {
-      let list = this.formData.details.map((item) => ({
-        ...item,
-        size: this.formData.size,
-        orientation: this.formData.orientation,
-      }));
-      this.formData.details = [...list];
+      return crystalDensity;
     },
     tableRowClassName({ row }) {
       if (!row.valid) {
         return "invalid_tr";
       }
-    },
-    fetchSampleCode() {
-      let list = cloneDeep(this.formData.details);
-      let headIndex = 0;
-      let tailIndex = 0;
-      let centerIndex = 0;
-      list.forEach((item) => {
-        if (!item.type) return;
-        let currentIndex;
-        if (item.type === "YP") {
-          if (!item.sampleIdentification) return;
-          if (item.sampleIdentification === "H") {
-            headIndex++;
-            currentIndex = headIndex;
-          }
-          if (item.sampleIdentification === "T") {
-            tailIndex++;
-            currentIndex = tailIndex;
-          }
-        } else {
-          centerIndex++;
-          currentIndex = centerIndex;
-        }
-
-        Api.getSampleCode({
-          sampleType: item.type,
-          crystalNo: this.formData.processOrderCode,
-          sampleIdentification: item.sampleIdentification,
-          index: currentIndex,
-        }).then((res) => {
-          item.sampleNumber = res.data;
-        });
-      });
-      this.$set(this.formData, "details", list);
-    },
-    handleSampleTypeChange(val, index) {
-      if (val === "CC")
-        this.$set(this.formData.details[index], "sampleIdentification", "M");
-      if (val === "YP")
-        this.$set(this.formData.details[index], "sampleIdentification", "H");
-      this.handleSampleIdentificationChange();
     },
     calcHalfRrg(index) {
       let item = this.formData.details[index];
@@ -702,10 +915,48 @@ export default {
       data = (item.resE - item.resC) / item.resC;
       this.$set(this.formData.details[index], "rrg", data);
     },
+    calcTargetDeviation(index) {
+      let item = this.formData.details[index];
+      data = (item.resC - item.res) / item.res;
+      this.$set(this.formData.details[index], "targetDeviation", data);
+    },
     calcOrg(index) {
       let item = this.formData.details[index];
-      data = Math.abs(item.oiC - item.oiE);
+      data = Math.abs(item.oiC - item.oiE) / item.oiC;
       this.$set(this.formData.details[index], "org", data);
+    },
+    calcHeadTailResistivityRatio(row, index) {
+      let headTailResistivityRatio = null;
+      let reverseDetails = (this.formData.details || []).reverse();
+      let headIndex =
+        reverseDetails.length -
+        reverseDetails.findIndex(
+          (item) =>
+            item.type === "头尾样片" && item.sampleIdentification === "H"
+        ) -
+        1;
+      let tailIndex =
+        reverseDetails.length -
+        reverseDetails.findIndex(
+          (item) =>
+            item.type === "头尾样片" && item.sampleIdentification === "T"
+        ) -
+        1;
+      let headResC = this.formData.details[headIndex].resC;
+      let tailResC = this.formData.details[tailIndex].resC;
+
+      if (
+        row.type === "头尾样片" &&
+        (index === headIndex || index === tailIndex) &&
+        (headResC || headResC === 0) &&
+        tailResC
+      )
+        headTailResistivityRatio = headResC / tailResC;
+      this.$set(
+        this.formData.details[index],
+        "headTailResistivityRatio",
+        headTailResistivityRatio
+      );
     },
     handleFileChange() {
       const photo = (this.formData._files || []).map(
@@ -718,6 +969,16 @@ export default {
     },
     handleInspectorSelect(val, index) {
       this.$set(this.formData.details[index], "checkDate", new Date());
+    },
+    getInternalControlColor(key, val) {
+      let target = this.internalControlRules[key];
+      return "";
+    },
+    formRecycle(row, column, recycle) {
+      const matched = this.backCuttingAndReuseList.find(
+        (item) => item.value == recycle
+      );
+      return matched ? matched.label : "";
     },
   },
 };
@@ -820,12 +1081,9 @@ export default {
     left: 20px;
     background: white;
   }
-  .table {
-    margin-top: 40px;
-  }
   .add-btn {
     position: absolute;
-    right: 10px;
+    left: 12px;
   }
 }
 .unit {
@@ -837,5 +1095,15 @@ export default {
 .form-table-header:before {
   content: "* ";
   color: red;
+}
+.table {
+  margin-top: 50px;
+}
+.form-item-cover {
+  width: 100% !important;
+  .input {
+    display: flex;
+    gap: 8px;
+  }
 }
 </style>

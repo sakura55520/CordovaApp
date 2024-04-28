@@ -152,10 +152,10 @@ export function updateBackCuttingSampleRecord(data) {
 }
 
 // 更新晶锭检验
-export function updateIngotDetectionStatus(params) {
+export function updateIngotDetectionStatus(data) {
   return request({
-    url: `/wipBackCuttingSampleRecord/updateStatus`,
-    method: "get",
-    params,
+    url: `/wipBackCuttingSampleRecord/updateDoneStatus`,
+    method: "post",
+    data,
   });
 }
