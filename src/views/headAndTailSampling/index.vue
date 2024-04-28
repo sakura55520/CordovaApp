@@ -143,9 +143,9 @@
                     <div v-for="item in sampleTypeList" :key="item.value">
                       <el-option
                         v-if="
-                          item.value === '样片' ||
+                          item.value === '头尾样片' ||
                           item.value === '中间样片' ||
-                          (item.value === '氧化片' && needYH)
+                          (item.value === '氧化样片' && needYH)
                         "
                         :label="item.label"
                         :value="item.value"
@@ -172,8 +172,8 @@
                       v-for="item in sampleIdentificationList"
                       :key="item.value"
                       :disabled="
-                        (scope.row.type === '样片' && item.value === 'M') ||
-                        (scope.row.type === '氧化片' && item.value === 'M') ||
+                        (scope.row.type === '头尾样片' && item.value === 'M') ||
+                        (scope.row.type === '氧化样片' && item.value === 'M') ||
                         (scope.row.type === '中间样片' &&
                           (item.value === 'H' || item.value === 'T'))
                       "
@@ -360,14 +360,14 @@ export default {
           if (isEmpty(fromData.wipCuttingSampleInfos)) {
             fromData.wipCuttingSampleInfos = [
               {
-                type: "样片",
+                type: "头尾样片",
                 sampleIdentification: "H",
                 samplePosition: 0,
                 valid: true,
                 sampleNumber: undefined,
               },
               {
-                type: "样片",
+                type: "头尾样片",
                 sampleIdentification: "T",
                 samplePosition: fromData.lengthQty,
                 valid: true,
@@ -446,7 +446,7 @@ export default {
       if (!this.formData.wipCuttingSampleInfos)
         this.formData.wipCuttingSampleInfos = [];
       this.formData.wipCuttingSampleInfos.push({
-        type: this.needYH ? "氧化片" : "样片",
+        type: this.needYH ? "氧化样片" : "头尾样片",
         sampleIdentification: "H",
         samplePosition: 0,
         valid: true,
@@ -470,11 +470,11 @@ export default {
       list.forEach((item) => {
         if (!item.type) return;
         let currentIndex;
-        if (item.type === "样片" && item.sampleIdentification === "H") {
+        if (item.type === "头尾样片" && item.sampleIdentification === "H") {
           ypHIndex++;
           currentIndex = ypHIndex;
         }
-        if (item.type === "样片" && item.sampleIdentification === "T") {
+        if (item.type === "头尾样片" && item.sampleIdentification === "T") {
           ypTIndex++;
           currentIndex = ypTIndex;
         }
@@ -482,19 +482,16 @@ export default {
           ypMIndex++;
           currentIndex = ypMIndex;
         }
-        if (item.type === "氧化片" && item.sampleIdentification === "H") {
+        if (item.type === "氧化样片" && item.sampleIdentification === "H") {
           yhHIndex++;
           currentIndex = yhHIndex;
         }
-        if (item.type === "氧化片" && item.sampleIdentification === "T") {
+        if (item.type === "氧化样片" && item.sampleIdentification === "T") {
           yhTIndex++;
           currentIndex = yhTIndex;
         }
-        let sampleType = this.sampleTypeList.find(
-          (ele) => ele.value === item.type
-        );
         Api.getSampleCode({
-          sampleType: sampleType.extendValue,
+          sampleType: item.type,
           crystalNo: this.formData.processOrderCode,
           sampleIdentification: item.sampleIdentification,
           index: currentIndex,
@@ -505,13 +502,13 @@ export default {
       this.$set(this.formData, "wipCuttingSampleInfos", list);
     },
     handleSampleTypeChange(val, index) {
-      if (val === "氧化片")
+      if (val === "氧化样片")
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",
           "H"
         );
-      if (val === "样片")
+      if (val === "头尾样片")
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",

@@ -119,3 +119,43 @@ export function getSampleCode(params) {
     method: "get",
   });
 }
+
+export function getCutBackSampleCode(params) {
+  return request({
+    url: `/wipcrystalcheck/sample-code/cutback/${params.sampleType}/${params.crystalNo}/${params.sampleIdentification}/${params.index}`,
+    method: "get",
+  });
+}
+
+export function getBackCuttingSampleRecord(params) {
+  return request({
+    url: `/wipBackCuttingSampleRecord/listByPage`,
+    method: "get",
+    params,
+  });
+}
+
+export function createBackCuttingSampleRecord(data) {
+  return request({
+    url: `/wipBackCuttingSampleRecord/createRecord`,
+    method: "post",
+    data,
+  });
+}
+
+export function updateBackCuttingSampleRecord(data) {
+  return request({
+    url: `/wipBackCuttingSampleRecord/updateRecord`,
+    method: "post",
+    data,
+  });
+}
+
+// 更新晶锭检验
+export function updateIngotDetectionStatus(data) {
+  return request({
+    url: `/wipBackCuttingSampleRecord/updateDoneStatus`,
+    method: "post",
+    data,
+  });
+}
