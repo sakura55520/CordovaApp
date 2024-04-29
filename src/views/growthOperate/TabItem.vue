@@ -173,6 +173,7 @@
 import Render from "@/components/renderForm/render.vue";
 import { isEmpty } from "lodash-es";
 import * as Api from "@/api/inStation";
+import moment from "moment"
 
 export default {
   name: "TabItem",
@@ -226,44 +227,90 @@ export default {
       }
     },
     handleTechsInput(event, recordIdx, formItemIdx) {
-      console.log(event, recordIdx, formItemIdx)
       this.$set(this.stepData[recordIdx].techs[formItemIdx], "extValue", event);
 
-      // 补掺-籽晶编号
-      if (this.stepData[recordIdx].techs[formItemIdx].extKey === "籽晶编号") {
-        Api.getSeed({ uniqueCode: event }).then((res) => {
-          let index = this.stepData[recordIdx].techs.findIndex(
-            (item) => item.extKey === "籽晶寿命"
-          );
-          this.$set(
-            this.stepData[recordIdx].techs[index],
-            "extValue",
-            res.data.usefulLife
-          );
-        });
+      const { techs } = this.stepData[recordIdx]
+      const { extKey } = techs[formItemIdx]
+      switch (extKey) {
+        case '籽晶编号':
+          this.handleSeedChange(event, techs)
+          break
+        case '掺杂剂编号':
+          this.handleDopantChange(event, techs)
+          break
+        case '冷却开始时间':
+        case '冷却结束时间':
+          this.handleCoolTimeChange(techs)
+          break
+        case '吊单晶开始时间':
+        case '吊单晶结束时间':
+          this.handleHangUpTimeChange(techs)
+          break
       }
-
-      // 补掺-掺杂剂编号
-      if (this.stepData[recordIdx].techs[formItemIdx].extKey === "掺杂剂编号") {
-        Api.findByCode({ code: event }).then((res) => {
-          let typeIndex = this.stepData[recordIdx].techs.findIndex(
-            (item) => item.extKey === "掺杂剂类型"
-          );
-          let dosageIndex = this.stepData[recordIdx].techs.findIndex(
-            (item) => item.extKey === "补掺量"
-          );
-          this.$set(
-            this.stepData[recordIdx].techs[typeIndex],
-            "extValue",
-            res.data.materialTypeName
-          );
-          this.$set(
-            this.stepData[recordIdx].techs[dosageIndex],
-            "extValue",
-            res.data.qty
-          );
-        });
-      }
+    },
+    // 补掺-籽晶编号 change
+    handleSeedChange(event, techs) {
+      Api.getSeed({uniqueCode: event}).then((res) => {
+        let index = techs.findIndex(
+          (item) => item.extKey === "籽晶寿命"
+        );
+        this.$set(
+          techs[index],
+          "extValue",
+          res.data.usefulLife
+        );
+      });
+    },
+    // 补掺-掺杂剂编号 change
+    handleDopantChange(event, techs) {
+      Api.findByCode({code: event}).then((res) => {
+        let typeIndex = techs.findIndex(
+          (item) => item.extKey === "掺杂剂类型"
+        );
+        let dosageIndex = techs.findIndex(
+          (item) => item.extKey === "补掺量"
+        );
+        this.$set(
+          techs[typeIndex],
+          "extValue",
+          res.data.materialTypeName
+        );
+        this.$set(
+          techs[dosageIndex],
+          "extValue",
+          res.data.qty
+        );
+      });
+    },
+    // 冷却-冷却开始时间 冷却结束时间
+    handleCoolTimeChange(techs) {
+      const startItem = techs.find((item) => item.extKey === "冷却开始时间")
+      if (!startItem) return
+      const start = startItem.extValue
+      const endItem = techs.find((item) => item.extKey === "冷却结束时间")
+      if (!endItem) return
+      const end = endItem.extValue
+      const durationItem = techs.find(item => item.extKey === "冷却时长")
+      this.$set(
+        durationItem,
+        "extValue",
+        moment(end).diff(start, "hours")
+      )
+    },
+    // 吊单晶-吊单晶开始时间 吊单晶结束时间
+    handleHangUpTimeChange(techs) {
+      const startItem = techs.find((item) => item.extKey === "吊单晶开始时间")
+      if (!startItem) return
+      const start = startItem.extValue
+      const endItem = techs.find((item) => item.extKey === "吊单晶结束时间")
+      if (!endItem) return
+      const end = endItem.extValue
+      const durationItem = techs.find(item => item.extKey === "吊单晶时长")
+      this.$set(
+        durationItem,
+        "extValue",
+        moment(end).diff(start, "hours")
+      )
     },
     handleIncrease() {
       const stepData = JSON.parse(

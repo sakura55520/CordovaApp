@@ -98,6 +98,7 @@ export default {
       rules: {},
       loading: true,
       tabsVisible: false,
+      enabledInput: false,
       crystalGrowthErrList: [], // 拉晶异常list
       originalSteps: {},
       eapSteps: [
@@ -194,6 +195,11 @@ export default {
   },
   methods: {
     async init() {
+      // 长晶输入框是否可以输入
+      const enabledList = []
+      await getSeleteData('isEnabledGrowthInput', enabledList)
+      this.enabledInput = enabledList && enabledList[0] && enabledList[0].value === '可输入'
+
       // 拉晶异常list
       await getSeleteData("crystalGrowthErr", this.crystalGrowthErrList);
 
@@ -460,6 +466,7 @@ export default {
           stepData._defaultStepData.techs = form.content.map((formItem) => ({
             ...formItem,
             extKey: formItem.vModel,
+            disabled: !this.enabledInput && formItem.disabled
           }));
         }
       }
@@ -483,6 +490,7 @@ export default {
             ...(label2value[vModel] || label2value[label]),
             extValue,
             extKey: vModel,
+            disabled: !this.enabledInput && formItem.disabled
           }
         })
       );
@@ -499,6 +507,7 @@ export default {
           stepData._defaultStepData.exts = form.content.map((formItem) => ({
             ...formItem,
             extKey: formItem.label,
+            disabled: !this.enabledInput && formItem.disabled
           }));
         }
       }
@@ -517,6 +526,7 @@ export default {
           ...formItem,
           ...label2value[formItem.label],
           extKey: formItem.label,
+          disabled: !this.enabledInput && formItem.disabled
         }))
       );
     },
