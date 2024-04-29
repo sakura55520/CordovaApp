@@ -35,14 +35,17 @@ export default {
         return {
           // 编号
           objCode: {
+            extKey: this.label,
             extValue: ''
           },
           // 编号(扫码)
           objScan: {
+            extKey: this.fieldScan,
             extValue: ''
           },
           // 已使用寿命/额定寿命
           objLife: {
+            extKey: this.fieldLife,
             extValue: ''
           },
         }
@@ -83,6 +86,7 @@ export default {
           ...this.value,
           objScan: {
             ...this.value.objScan,
+            extKey: this.fieldScan,
             extValue
           }
         })
@@ -94,10 +98,12 @@ export default {
         return objLife ? objLife.extValue : ''
       },
       set(extValue) {
+        console.log('set life', JSON.parse(JSON.stringify(this.value.objLife)))
         this.$emit('input', {
           ...this.value,
           objLife: {
             ...this.value.objLife,
+            extKey: this.fieldLife,
             extValue
           }
         })
