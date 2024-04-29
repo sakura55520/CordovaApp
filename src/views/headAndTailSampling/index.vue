@@ -66,7 +66,11 @@
             </el-form-item>
             <el-form-item label="晶体实测长度" prop="lengthQty" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.lengthQty">
+                <el-input
+                  class="value"
+                  v-model="formData.lengthQty"
+                  @change="handleLengthChange"
+                >
                   <template slot="append">mm</template>
                 </el-input>
               </div>
@@ -164,7 +168,12 @@
                   <el-select
                     v-model="scope.row.sampleIdentification"
                     placeholder=""
-                    @change="handleSampleIdentificationChange"
+                    @change="
+                      (val) => {
+                        handleUpdateSamplePosition(val, scope.$index);
+                        handleSampleIdentificationChange();
+                      }
+                    "
                   >
                     <el-option
                       :label="item.label"
@@ -400,6 +409,7 @@ export default {
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
 
       this.fetchSampleCode();
+      this.handleLengthChange();
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -502,25 +512,66 @@ export default {
       this.$set(this.formData, "wipCuttingSampleInfos", list);
     },
     handleSampleTypeChange(val, index) {
-      if (val === "氧化样片")
+      if (val === "氧化样片") {
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",
           "H"
         );
-      if (val === "头尾样片")
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "samplePosition",
+          0
+        );
+      }
+      if (val === "头尾样片") {
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",
           "H"
         );
-      if (val === "中间样片")
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "samplePosition",
+          0
+        );
+      }
+      if (val === "中间样片") {
         this.$set(
           this.formData.wipCuttingSampleInfos[index],
           "sampleIdentification",
           "M"
         );
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "samplePosition",
+          this.formData.lengthQty - 300
+        );
+      }
       this.handleSampleIdentificationChange();
+    },
+    handleUpdateSamplePosition(val, index) {
+      if (val === "H") {
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "samplePosition",
+          0
+        );
+      }
+      if (val === "T") {
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "samplePosition",
+          this.formData.lengthQty
+        );
+      }
+      if (val === "M") {
+        this.$set(
+          this.formData.wipCuttingSampleInfos[index],
+          "samplePosition",
+          this.formData.lengthQty - 300
+        );
+      }
     },
     handleSampleIdentificationChange() {
       this.handleSamplePositionChange();
@@ -549,6 +600,39 @@ export default {
         code,
       };
       this.printVisible = true;
+    },
+    handleLengthChange(val) {
+      let mIndex = this.formData.wipCuttingSampleInfos.findIndex(
+        (item) => item.type === "中间样片"
+      );
+      if (mIndex === -1 && this.formData.lengthQty >= 700) {
+        this.formData.wipCuttingSampleInfos.push({
+          type: "中间样片",
+          sampleIdentification: "M",
+          samplePosition: this.formData.lengthQty - 300,
+          valid: true,
+          sampleNumber: undefined,
+        });
+      }
+      if (mIndex > -1 && this.formData.lengthQty < 700) {
+        this.formData.wipCuttingSampleInfos.splice(mIndex, 1);
+      }
+      this.formData.wipCuttingSampleInfos.forEach((item, index) => {
+        if (item.sampleIdentification === "T") {
+          this.$set(
+            this.formData.wipCuttingSampleInfos[index],
+            "samplePosition",
+            this.formData.lengthQty
+          );
+        }
+        if (item.sampleIdentification === "M") {
+          this.$set(
+            this.formData.wipCuttingSampleInfos[index],
+            "samplePosition",
+            this.formData.lengthQty - 300
+          );
+        }
+      });
     },
   },
 };
