@@ -159,14 +159,12 @@
                   </el-form-item>
                 </template>
               </el-table-column>
-              <el-table-column label="RES" min-width="120" align="center">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.res"
-                    v-direction="{ x: 2, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              <el-table-column
+                label="RES"
+                min-width="120"
+                align="center"
+                prop="res"
+              />
               <el-table-column label="RES_C" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
@@ -174,9 +172,9 @@
                     v-direction="{ x: 3, y: scope.$index }"
                     @input="
                       () => {
-                        calcHalfRrg();
-                        calcRrg();
-                        calcTargetDeviation();
+                        calcHalfRrg(scope.$index);
+                        calcRrg(scope.$index);
+                        calcTargetDeviation(scope.$index);
                         calcHeadTailResistivityRatio(scope.row, scope.$index);
                       }
                     "
@@ -188,7 +186,7 @@
                   <el-input
                     v-model="scope.row.resE"
                     v-direction="{ x: 4, y: scope.$index }"
-                    @input="calcRrg"
+                    @input="calcRrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="1/2RES" min-width="120" align="center">
@@ -196,60 +194,50 @@
                   <el-input
                     v-model="scope.row.halfRes"
                     v-direction="{ x: 5, y: scope.$index }"
-                    @input="calcHalfRrg"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column label="目标偏差" min-width="120" align="center">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.targetDeviation"
-                    v-direction="{ x: 6, y: scope.$index }"
-                    @input="calcHalfRrg"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column label="RRG" min-width="120" align="center">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.rrg"
-                    v-direction="{ x: 7, y: scope.$index }"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column label="1/2 RRG" min-width="120" align="center">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.halfRrg"
-                    v-direction="{ x: 8, y: scope.$index }"
+                    @input="calcHalfRrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column
-                label="头尾电阻比"
-                min-width="120"
+                label="目标偏差"
+                min-width="140"
                 align="center"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.headTailResistivityRatio"
-                    v-direction="{ x: 9, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column label="OI_C" min-width="100" align="center">
+                prop="targetDeviation"
+              />
+              <el-table-column
+                label="RRG"
+                min-width="140"
+                align="center"
+                prop="rrg"
+              />
+              <el-table-column
+                label="1/2 RRG"
+                min-width="140"
+                align="center"
+                prop="halfRrg"
+              />
+              <el-table-column
+                label="头尾电阻比"
+                min-width="140"
+                align="center"
+                prop="headTailResistivityRatio"
+              />
+              <el-table-column label="OI_C" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiC"
                     v-direction="{ x: 10, y: scope.$index }"
-                    @input="calcOrg"
+                    @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="OI_E" min-width="100" align="center">
+              <el-table-column label="OI_E" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.oiE"
                     v-direction="{ x: 11, y: scope.$index }"
-                    @input="calcOrg"
+                    @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="CS" min-width="100" align="center">
+              <el-table-column label="CS" min-width="140" align="center">
                 <template slot-scope="scope">
                   <div :class="getInternalControlColor('cs', scope.row.cs)">
                     <el-input
@@ -258,21 +246,20 @@
                     ></el-input>
                   </div> </template
               ></el-table-column>
-              <el-table-column label="ORG" min-width="100" align="center">
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.org"
-                    v-direction="{ x: 13, y: scope.$index }"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column label="少子寿命" min-width="100" align="center">
+              <el-table-column
+                label="ORG"
+                min-width="140"
+                align="center"
+                prop="org"
+              />
+              <el-table-column label="少子寿命" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.minorityCarrierLifetime"
                     v-direction="{ x: 14, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="常规缺陷" min-width="100" align="center">
+              <el-table-column label="常规缺陷" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.flaw" placeholder="">
                     <el-option
@@ -283,7 +270,7 @@
                     ></el-option>
                   </el-select> </template
               ></el-table-column>
-              <el-table-column label="OSF密度" min-width="100" align="center">
+              <el-table-column label="OSF密度" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.osf" placeholder="">
                     <el-option
@@ -294,32 +281,42 @@
                     ></el-option>
                   </el-select> </template
               ></el-table-column>
-              <el-table-column label="基磷" min-width="100" align="center">
+              <el-table-column label="基磷" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.phosphorus"
                     v-direction="{ x: 15, y: scope.$index }"
+                    @change="
+                      (val) => handleToFixed(val, scope.$index, 'phosphorus')
+                    "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基硼" min-width="100" align="center">
+              <el-table-column label="基硼" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.boron"
                     v-direction="{ x: 16, y: scope.$index }"
+                    @change="(val) => handleToFixed(val, scope.$index, 'boron')"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基砷" min-width="100" align="center">
+              <el-table-column label="基砷" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.arsenic"
                     v-direction="{ x: 17, y: scope.$index }"
+                    @change="
+                      (val) => handleToFixed(val, scope.$index, 'arsenic')
+                    "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基锑" min-width="100" align="center">
+              <el-table-column label="基锑" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.antimony"
                     v-direction="{ x: 18, y: scope.$index }"
+                    @change="
+                      (val) => handleToFixed(val, scope.$index, 'antimony')
+                    "
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="检测人员" min-width="150" align="center">
@@ -714,6 +711,7 @@ export default {
         ...item,
         orientation: this.formData.orientation,
         size: this.formData.size,
+        res: this.formData.targetResistivity,
         crystalDensity:
           item.crystalDensity || this.getCrystalDensity(item.samplePosition),
       }));
@@ -931,23 +929,22 @@ export default {
     },
     calcHalfRrg(index) {
       let item = this.formData.details[index];
-      let data = (item.halfRes - item.resC) / item.resC;
+      let data = ((item.halfRes - item.resC) / item.resC).toFixed(5);
       this.$set(this.formData.details[index], "halfRrg", data);
     },
     calcRrg(index) {
       let item = this.formData.details[index];
-      let data = (item.resE - item.resC) / item.resC;
+      let data = ((item.resE - item.resC) / item.resC).toFixed(5);
       this.$set(this.formData.details[index], "rrg", data);
     },
     calcTargetDeviation(index) {
       let item = this.formData.details[index];
-      let data = (item.resC - item.res) / item.res;
+      let data = ((item.resC - item.res) / item.res).toFixed(5);
       this.$set(this.formData.details[index], "targetDeviation", data);
     },
     calcOrg(index) {
       let item = this.formData.details[index];
-      console.log(item);
-      let data = Math.abs(item.oiC - item.oiE) / item.oiC;
+      let data = (Math.abs(item.oiC - item.oiE) / item.oiC).toFixed(5);
       this.$set(this.formData.details[index], "org", data);
     },
     calcHeadTailResistivityRatio(row, index) {
@@ -976,9 +973,14 @@ export default {
         (headResC || headResC === 0) &&
         tailResC
       )
-        headTailResistivityRatio = headResC / tailResC;
+        headTailResistivityRatio = (headResC / tailResC).toFixed(5);
       this.$set(
-        this.formData.details[index],
+        this.formData.details[headIndex],
+        "headTailResistivityRatio",
+        headTailResistivityRatio
+      );
+      this.$set(
+        this.formData.details[tailIndex],
         "headTailResistivityRatio",
         headTailResistivityRatio
       );
@@ -1004,6 +1006,10 @@ export default {
         (item) => item.value == recycle
       );
       return matched ? matched.label : "";
+    },
+    handleToFixed(val, index, key) {
+      let value = Number(val).toFixed(5);
+      this.$set(this.formData.details[index], key, value);
     },
   },
 };
