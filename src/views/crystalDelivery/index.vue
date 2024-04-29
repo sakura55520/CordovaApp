@@ -21,160 +21,192 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="160px"
+          label-width="150px"
           :rules="formRules"
           :disabled="$route.query.view"
         >
           <div class="base-form">
-            <el-form-item label="操作者" prop="userCreate" class="item">
-              <el-input v-model="formData.userCreate" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="反馈重量" prop="feedbackQty" class="item">
-              <el-input v-model="formData.feedbackQty" disabled>
-                <template slot="append">kg</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="收尾情况" prop="endSitutation" class="item">
-              <el-input v-model="formData.endSitutation" disabled></el-input>
-            </el-form-item>
+            <div class="row">
+              <el-form-item
+                label="操作者"
+                prop="userCreate"
+                class="item"
+                label-width="90px"
+              >
+                <el-input v-model="formData.userCreate" disabled></el-input>
+              </el-form-item>
+              <el-form-item
+                label="反馈重量"
+                prop="feedbackQty"
+                class="item"
+                label-width="90px"
+              >
+                <el-input v-model="formData.feedbackQty" disabled>
+                  <template slot="append">kg</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="收尾情况"
+                prop="endSitutation"
+                class="item"
+                label-width="90px"
+              >
+                <el-input v-model="formData.endSitutation" disabled></el-input>
+              </el-form-item>
+            </div>
           </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
-            <el-form-item
-              label="单晶编号一致性"
-              prop="numberConsistence"
-              class="item"
-            >
-              <el-select
-                v-model="formData.numberConsistence"
-                placeholder=""
-                :style="{ width: '100%' }"
+            <div class="row">
+              <el-form-item
+                label="单晶编号一致性"
+                prop="numberConsistence"
+                class="item"
+                label-width="140px"
               >
-                <el-option label="是" :value="true"></el-option>
-                <el-option label="否" :value="false"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              label="位错反延线标识"
-              prop="dislocationIdentification"
-              class="item"
-            >
-              <el-select
-                v-model="formData.dislocationIdentification"
-                placeholder=""
-                :style="{ width: '100%' }"
+                <el-select
+                  v-model="formData.numberConsistence"
+                  placeholder=""
+                  :style="{ width: '100%' }"
+                >
+                  <el-option label="是" :value="true"></el-option>
+                  <el-option label="否" :value="false"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item
+                label="位错反延线标识"
+                prop="dislocationIdentification"
+                class="item"
+                label-width="140px"
               >
-                <el-option label="是" :value="true"></el-option>
-                <el-option label="否" :value="false"></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              label="位错反延线长度"
-              prop="dislocationIdentificationLength"
-              class="item"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.dislocationIdentificationLength"
+                <el-select
+                  v-model="formData.dislocationIdentification"
+                  placeholder=""
+                  :style="{ width: '100%' }"
                 >
-                  <template slot="append">mm</template></el-input
-                >
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="脱开直径"
-              prop="disengageDiameter"
-              class="item"
-            >
-              <div class="input">
-                <el-input class="value" v-model="formData.disengageDiameter">
+                  <el-option label="是" :value="true"></el-option>
+                  <el-option label="否" :value="false"></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item
+                label="位错反延线长度"
+                prop="dislocationIdentificationLength"
+                class="item"
+                label-width="130px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.dislocationIdentificationLength"
+                  >
+                    <template slot="append">mm</template></el-input
+                  >
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="脱开直径"
+                prop="disengageDiameter"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input class="value" v-model="formData.disengageDiameter">
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+
+            <div class="row">
+              <el-form-item
+                label="拉晶实测直径(头)"
+                prop="measuredDiameterHead"
+                class="item"
+              >
+                <el-input class="value" v-model="formData.measuredDiameterHead">
                   <template slot="append">mm</template>
                 </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="拉晶实测直径(头)"
-              prop="measuredDiameterHead"
-              class="item"
-            >
-              <el-input class="value" v-model="formData.measuredDiameterHead">
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item
-              label="拉晶实测直径(中)"
-              prop="measuredDiameterMiddle"
-              class="item"
-            >
-              <el-input class="value" v-model="formData.measuredDiameterMiddle">
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item
-              label="拉晶实测直径(尾)"
-              prop="measuredDiameterTail"
-              class="item"
-            >
-              <el-input class="value" v-model="formData.measuredDiameterTail">
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="晶锭称重" prop="ingotWeight" class="item">
-              <div class="input">
+              </el-form-item>
+              <el-form-item
+                label="拉晶实测直径(中)"
+                prop="measuredDiameterMiddle"
+                class="item"
+              >
                 <el-input
                   class="value"
-                  v-model="formData.ingotWeight"
-                  @change="handleIngotWeightChange"
+                  v-model="formData.measuredDiameterMiddle"
                 >
-                  <template slot="append">kg</template>
+                  <template slot="append">mm</template>
                 </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="埚底料毛重"
-              prop="bottomMaterialGrossWeight"
-              class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '埚底料毛重不能为空',
-                  trigger: 'change',
-                },
-              ]"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  disabled
-                  v-model="formData.bottomMaterialGrossWeight"
-                >
-                  <template slot="append">kg</template>
+              </el-form-item>
+              <el-form-item
+                label="拉晶实测直径(尾)"
+                prop="measuredDiameterTail"
+                class="item"
+              >
+                <el-input class="value" v-model="formData.measuredDiameterTail">
+                  <template slot="append">mm</template>
                 </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="埚底料净重"
-              prop="bottomMaterialNetWeight"
-              class="item"
-              :rules="[
-                {
-                  required: true,
-                  message: '埚底料净重不能为空',
-                  trigger: 'change',
-                },
-              ]"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.bottomMaterialNetWeight"
-                  placeholder="埚底料称量重量"
-                >
-                  <template slot="append">kg</template>
-                </el-input>
-              </div>
-            </el-form-item>
+              </el-form-item>
+            </div>
+
+            <div class="row">
+              <el-form-item label="晶锭称重" prop="ingotWeight" class="item">
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.ingotWeight"
+                    @change="handleIngotWeightChange"
+                  >
+                    <template slot="append">kg</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="埚底料毛重"
+                prop="bottomMaterialGrossWeight"
+                class="item"
+                :rules="[
+                  {
+                    required: true,
+                    message: '埚底料毛重不能为空',
+                    trigger: 'change',
+                  },
+                ]"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    disabled
+                    v-model="formData.bottomMaterialGrossWeight"
+                  >
+                    <template slot="append">kg</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="埚底料净重"
+                prop="bottomMaterialNetWeight"
+                class="item"
+                :rules="[
+                  {
+                    required: true,
+                    message: '埚底料净重不能为空',
+                    trigger: 'change',
+                  },
+                ]"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.bottomMaterialNetWeight"
+                    placeholder="埚底料称量重量"
+                  >
+                    <template slot="append">kg</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
           </div>
         </el-form>
       </div>
@@ -595,5 +627,14 @@ export default {
 .required:before {
   content: "* ";
   color: red;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  .item {
+    flex: 1;
+  }
 }
 </style>
