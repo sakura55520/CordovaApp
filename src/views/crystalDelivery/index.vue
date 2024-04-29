@@ -468,7 +468,7 @@ export default {
         ingotWeight,
         shoulderWeight,
       } = this.formData;
-      if (ingotWeight === "") {
+      if (!ingotWeight && ingotWeight !== 0) {
         this.formData.bottomMaterialGrossWeight =
           (totalPolysiliconWeight || 0) -
           (feedbackQty || 0) -
