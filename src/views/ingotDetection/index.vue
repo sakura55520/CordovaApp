@@ -27,6 +27,38 @@
         >
           <div class="form">
             <div class="form-title">单晶信息</div>
+            <el-form-item label="进站数量" prop="pullQty" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.pullQty" disabled>
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="接收长度" prop="lengthQty" class="item">
+              <el-input v-model="formData.lengthQty" disabled>
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="型号" prop="model" class="item">
+              <el-input v-model="formData.model" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="尺寸" prop="size" class="item">
+              <el-input v-model="formData.size" disabled></el-input>
+            </el-form-item>
+            <el-form-item label="晶向" prop="orientation" class="item">
+              <el-input v-model="formData.orientation" disabled></el-input>
+            </el-form-item>
+            <el-form-item
+              label="目标电阻率"
+              prop="targetResistivity"
+              class="item"
+            >
+              <el-input
+                v-model="formData.targetResistivity"
+                disabled
+              ></el-input>
+            </el-form-item>
+
             <el-form-item label="生产备注" class="form-item-cover">
               <el-input
                 class="value"
@@ -680,6 +712,8 @@ export default {
 
       this.formData.details = (this.formData.details || []).map((item) => ({
         ...item,
+        orientation: this.formData.orientation,
+        size: this.formData.size,
         crystalDensity: this.getCrystalDensity(item.samplePosition),
       }));
 
@@ -717,6 +751,8 @@ export default {
               item.samplePosition
             );
           } else {
+            item.orientation = this.formData.orientation;
+            item.size = this.formData.size;
             this.formData.details.push(item);
           }
         });

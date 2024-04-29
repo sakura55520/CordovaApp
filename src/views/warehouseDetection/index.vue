@@ -29,22 +29,12 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
-            <el-form-item label="合格数量" prop="goodQty" class="item">
-              <el-input v-model="formData.goodQty" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="报废数量" prop="scrapQty" class="item">
-              <el-input-number
-                v-model="formData.scrapQty"
-                @change="handleQtyChange"
-                :style="{ width: '100%' }"
-              ></el-input-number>
-            </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
             <el-form-item label="计划长度" prop="planLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.planLength">
+                <el-input class="value" v-model="formData.planLength" disabled>
                   <template slot="append">mm</template>
                 </el-input>
               </div>
@@ -93,10 +83,10 @@
                 </el-input>
               </div>
             </el-form-item>
-            <el-form-item label="头部电阻率" prop="resHead" class="item">
+            <el-form-item label="头部实测电阻率" prop="resHead" class="item">
               <el-input class="value" v-model="formData.resHead"></el-input>
             </el-form-item>
-            <el-form-item label="尾部电阻率" prop="resTail" class="item">
+            <el-form-item label="尾部实测电阻率" prop="resTail" class="item">
               <el-input class="value" v-model="formData.resTail"></el-input>
             </el-form-item>
             <el-form-item
@@ -148,11 +138,31 @@
               prop="mainReferenceSurfaceCrystalOrientation"
               class="item"
             >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.mainReferenceSurfaceCrystalOrientation"
-                ></el-input>
+              <div class="inputs">
+                <el-form-item
+                  label=""
+                  prop="mainReferenceSurfaceCrystalOrientationDegrees"
+                >
+                  <el-input
+                    v-model="
+                      formData.mainReferenceSurfaceCrystalOrientationDegrees
+                    "
+                  >
+                    <template slot="append">°</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item
+                  label=""
+                  prop="mainReferenceSurfaceCrystalOrientationMinute"
+                >
+                  <el-input
+                    v-model="
+                      formData.mainReferenceSurfaceCrystalOrientationMinute
+                    "
+                  >
+                    <template slot="append">'</template>
+                  </el-input>
+                </el-form-item>
               </div>
             </el-form-item>
             <el-form-item
@@ -170,14 +180,35 @@
               </div>
             </el-form-item>
             <el-form-item
+              label="滚圆实测副参考面长度"
+              prop="auxiliaryReferenceSurfaceLength"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.auxiliaryReferenceSurfaceLength"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item
               label="滚圆主副测夹角"
               prop="mainAuxiliaryAngle"
               class="item"
             >
-              <div class="input">
-                <el-input class="value" v-model="formData.mainAuxiliaryAngle">
-                  <template slot="append">°</template>
-                </el-input>
+              <div class="inputs">
+                <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
+                  <el-input v-model="formData.mainAuxiliaryAngleDegrees">
+                    <template slot="append">°</template>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label="" prop="mainAuxiliaryAngleMinute">
+                  <el-input v-model="formData.mainAuxiliaryAngleMinute">
+                    <template slot="append">'</template>
+                  </el-input>
+                </el-form-item>
               </div>
             </el-form-item>
             <el-form-item
@@ -209,7 +240,7 @@
               </div>
             </el-form-item>
             <el-form-item
-              label="滚圆副测主参考面宽度头"
+              label="滚圆实测副参考面宽度头"
               prop="auxiliaryReferenceSurfaceHead"
               class="item"
             >
@@ -223,7 +254,7 @@
               </div>
             </el-form-item>
             <el-form-item
-              label="滚圆副测主参考面宽度尾"
+              label="滚圆实测副参考面宽度尾"
               prop="auxiliaryReferenceSurfaceTail"
               class="item"
             >
@@ -281,12 +312,6 @@ export default {
   },
   data() {
     return {
-      batchNumber: "Z0116504581",
-      furnaceNumber: "A2010504581",
-      recipe: "Reczl20240310v1",
-      processPath: "X0010101",
-      dataOrderCode: "",
-      productName: "",
       formData: {
         userCreate: null,
         goodQty: null,
@@ -301,8 +326,13 @@ export default {
         circleDiameterHead: null,
         circleDiameterTail: null,
         mainReferenceSurfaceCrystalOrientation: null,
+        mainReferenceSurfaceCrystalOrientationDegrees: null,
+        mainReferenceSurfaceCrystalOrientationMinute: null,
         mainReferenceSurfaceLength: null,
+        auxiliaryReferenceSurfaceLength: null,
         mainAuxiliaryAngle: null,
+        mainAuxiliaryAngleDegrees: null,
+        mainAuxiliaryAngleMinute: null,
         mainReferenceSurfaceWidthHead: null,
         mainReferenceSurfaceWidthTail: null,
         auxiliaryReferenceSurfaceHead: null,
@@ -334,75 +364,6 @@ export default {
         qualifiedLength: [
           { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
-        resHead: [
-          { required: true, message: "头部电阻率不能为空", trigger: "change" },
-        ],
-        resTail: [
-          { required: true, message: "尾部电阻率不能为空", trigger: "change" },
-        ],
-        mainReferenceSurfaceCrystalOrientation: [
-          {
-            required: true,
-            message: "滚圆实测主参考面晶向不能为空",
-            trigger: "change",
-          },
-        ],
-        mainReferenceSurfaceLength: [
-          {
-            required: true,
-            message: "滚圆实测主参考面长度不能为空",
-            trigger: "change",
-          },
-        ],
-        mainAuxiliaryAngle: [
-          {
-            required: true,
-            message: "滚圆主副测夹角不能为空",
-            trigger: "change",
-          },
-        ],
-        mainReferenceSurfaceWidthHead: [
-          {
-            required: true,
-            message: "滚圆实测主参考面宽度头不能为空",
-            trigger: "change",
-          },
-        ],
-        mainReferenceSurfaceWidthTail: [
-          {
-            required: true,
-            message: "滚圆实测主参考面宽度尾不能为空",
-            trigger: "change",
-          },
-        ],
-        auxiliaryReferenceSurfaceHead: [
-          {
-            required: true,
-            message: "滚圆副测主参考面宽度头不能为空",
-            trigger: "change",
-          },
-        ],
-        auxiliaryReferenceSurfaceTail: [
-          {
-            required: true,
-            message: "滚圆副测主参考面宽度尾不能为空",
-            trigger: "change",
-          },
-        ],
-        // lineWarehouse: [
-        //   {
-        //     required: true,
-        //     message: "线边仓不能为空",
-        //     trigger: "change",
-        //   },
-        // ],
-        lineWarehouseLocation: [
-          {
-            required: true,
-            message: "线边仓库位不能为空",
-            trigger: "change",
-          },
-        ],
       },
     };
   },
@@ -431,7 +392,63 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
-      this.handleQtyChange();
+      this.initLength();
+      this.calcDegreesMinute();
+    },
+    initLength() {
+      const { originLength, planLength, chippingLength, ellipticLength } =
+        this.formData;
+      this.formData.originLength = originLength || planLength || 0;
+      this.formData.chippingLength = chippingLength || 0;
+      this.formData.ellipticLength = ellipticLength || 0;
+      this.formData.qualifiedLength =
+        this.formData.originLength -
+        this.formData.chippingLength -
+        this.formData.ellipticLength;
+    },
+    calcDegreesMinute() {
+      const { mainReferenceSurfaceCrystalOrientation, mainAuxiliaryAngle } =
+        this.formData;
+      let mainReferenceSurfaceCrystalOrientationDegreesMinute =
+        this.formatDegree(mainReferenceSurfaceCrystalOrientation);
+      let mainAuxiliaryAngleDegreesMinute =
+        this.formatDegree(mainAuxiliaryAngle);
+
+      this.formData.mainReferenceSurfaceCrystalOrientationDegrees =
+        mainReferenceSurfaceCrystalOrientationDegreesMinute[0];
+      this.formData.mainReferenceSurfaceCrystalOrientationMinute =
+        mainReferenceSurfaceCrystalOrientationDegreesMinute[1];
+
+      this.formData.mainAuxiliaryAngleDegrees =
+        mainAuxiliaryAngleDegreesMinute[0];
+      this.formData.mainAuxiliaryAngleMinute =
+        mainAuxiliaryAngleDegreesMinute[1];
+    },
+    calcAngle() {
+      const {
+        mainReferenceSurfaceCrystalOrientationDegrees,
+        mainReferenceSurfaceCrystalOrientationMinute,
+        mainAuxiliaryAngleDegrees,
+        mainAuxiliaryAngleMinute,
+      } = this.formData;
+
+      this.formData.mainReferenceSurfaceCrystalOrientation = this.formatAngle(
+        mainReferenceSurfaceCrystalOrientationDegrees,
+        mainReferenceSurfaceCrystalOrientationMinute
+      );
+      this.formData.mainAuxiliaryAngle = this.formatAngle(
+        mainAuxiliaryAngleDegrees,
+        mainAuxiliaryAngleMinute
+      );
+    },
+    formatDegree(value) {
+      value = Math.abs(value);
+      let v1 = Math.floor(value);
+      let v2 = Math.floor((value - v1) * 60);
+      return [v1, v2];
+    },
+    formatAngle(degrees, minute) {
+      return (Number(degrees) + Number(minute) / 60).toFixed(4);
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -440,6 +457,7 @@ export default {
       this.back(msg);
     },
     async confirm() {
+      this.calcAngle();
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
       await this.$confirm("确认提交当前操作数据?", "提示", {
@@ -472,10 +490,6 @@ export default {
       let { originLength, chippingLength, ellipticLength } = this.formData;
       this.formData.qualifiedLength =
         (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
-    },
-    handleQtyChange() {
-      let { totalQty, scrapQty } = this.formData;
-      this.formData.goodQty = (totalQty || 0) - (scrapQty || 0);
     },
   },
 };
@@ -581,5 +595,15 @@ export default {
 }
 .unit {
   width: 60px;
+}
+.inputs {
+  display: flex;
+  gap: 8px;
+}
+.multiple-form-item /deep/ {
+  margin-bottom: 0px !important;
+  .el-form-item__label {
+    height: 40px !important;
+  }
 }
 </style>

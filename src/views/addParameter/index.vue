@@ -88,9 +88,6 @@
               prop="mainReferenceSurfaceCrystalOrientation"
               class="item"
             >
-              <template slot="label">
-                <div class="multiple-form-item-label">实测主参考面晶向</div>
-              </template>
               <div class="inputs">
                 <el-form-item
                   label=""
@@ -151,9 +148,6 @@
               prop="mainAuxiliaryAngle"
               class="item"
             >
-              <template slot="label">
-                <div class="multiple-form-item-label">主副侧夹角</div>
-              </template>
               <div class="inputs">
                 <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
                   <el-input v-model="formData.mainAuxiliaryAngleDegrees">
@@ -294,76 +288,6 @@ export default {
         qualifiedLength: [
           { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
-        mainReferenceSurfaceCrystalOrientationDegrees: [
-          {
-            required: true,
-            message: "实测主参考面晶向(度)不能为空",
-            trigger: "change",
-          },
-        ],
-        mainReferenceSurfaceCrystalOrientationMinute: [
-          {
-            required: true,
-            message: "实测主参考面晶向(分)不能为空",
-            trigger: "change",
-          },
-        ],
-        mainReferenceSurfaceLength: [
-          {
-            required: true,
-            message: "实测主参考面长度不能为空",
-            trigger: "change",
-          },
-        ],
-        auxiliaryReferenceSurfaceLength: [
-          {
-            required: true,
-            message: "实测副参考面长度不能为空",
-            trigger: "change",
-          },
-        ],
-        mainAuxiliaryAngleDegrees: [
-          {
-            required: true,
-            message: "主副测夹角(度)不能为空",
-            trigger: "change",
-          },
-        ],
-        mainAuxiliaryAngleMinute: [
-          {
-            required: true,
-            message: "主副测夹角(分)不能为空",
-            trigger: "change",
-          },
-        ],
-        mainReferenceSurfaceWidthHead: [
-          {
-            required: true,
-            message: "实测主参考面宽度头不能为空",
-            trigger: "change",
-          },
-        ],
-        mainReferenceSurfaceWidthTail: [
-          {
-            required: true,
-            message: "实测主参考面宽度尾不能为空",
-            trigger: "change",
-          },
-        ],
-        auxiliaryReferenceSurfaceHead: [
-          {
-            required: true,
-            message: "实测副参考面宽度头不能为空",
-            trigger: "change",
-          },
-        ],
-        auxiliaryReferenceSurfaceTail: [
-          {
-            required: true,
-            message: "实测副参考面宽度尾不能为空",
-            trigger: "change",
-          },
-        ],
       },
     };
   },
@@ -391,7 +315,19 @@ export default {
         }
       }
       this.formData = { ...this.formData, ...fromData };
+      this.initLength();
       this.calcDegreesMinute();
+    },
+    initLength() {
+      const { originLength, planLength, chippingLength, ellipticLength } =
+        this.formData;
+      this.formData.originLength = originLength || planLength || 0;
+      this.formData.chippingLength = chippingLength || 0;
+      this.formData.ellipticLength = ellipticLength || 0;
+      this.formData.qualifiedLength =
+        this.formData.originLength -
+        this.formData.chippingLength -
+        this.formData.ellipticLength;
     },
     calcDegreesMinute() {
       const { mainReferenceSurfaceCrystalOrientation, mainAuxiliaryAngle } =
@@ -594,9 +530,5 @@ export default {
   .el-form-item__label {
     height: 40px !important;
   }
-}
-.multiple-form-item-label:before {
-  content: "* ";
-  color: red;
 }
 </style>
