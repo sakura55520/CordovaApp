@@ -1105,28 +1105,31 @@ export default {
       let list = ingotDetectionRes.data.rows;
       if (!isEmpty(list)) {
         this.checkInfo = list[0].details;
+      }
 
+      if (isEmpty(this.formData.segmentedInstructionDetailVos)) {
         let oi = this.calcOi();
-        let cloneSegmentedInstructionDetailVos =
-          this.formData.wipCrystalCheckSampleRangeDtos.map((item) => {
-            let length = item.tail - item.head;
-            return {
-              segmentNo: item.sampleNumber,
-              type: item.type,
-              headPosition: item.head,
-              tailPosition: item.tail,
-              length,
-              headResistance: 0,
-              tailResistance: 0,
-              diameter: this.formData.diameter,
-              diametermm: this.formData.diametermm,
-              planWeight: this.calcPlanWeight(length),
-              head79oi: oi[0],
-              head83oi: oi[1],
-              tail79oi: oi[2],
-              tail83oi: oi[3],
-            };
-          });
+        let cloneSegmentedInstructionDetailVos = (
+          this.formData.wipCrystalCheckSampleRangeDtos || []
+        ).map((item) => {
+          let length = item.tail - item.head;
+          return {
+            segmentNo: item.sampleNumber,
+            type: item.type,
+            headPosition: item.head,
+            tailPosition: item.tail,
+            length,
+            headResistance: 0,
+            tailResistance: 0,
+            diameter: this.formData.diameter,
+            diametermm: this.formData.diametermm,
+            planWeight: this.calcPlanWeight(length),
+            head79oi: oi[0],
+            head83oi: oi[1],
+            tail79oi: oi[2],
+            tail83oi: oi[3],
+          };
+        });
 
         this.$set(
           this.formData,
@@ -1319,18 +1322,20 @@ export default {
       return matched ? matched.name : "";
     },
     handleStatusChange(val, index) {
-      if (val == 0) {
-        this.$set(
-          this.formData.segmentedInstructionDetailVos[index],
-          "qualifiedLength",
-          this.formData.segmentedInstructionDetailVos[index].length
-        );
-        this.$set(
-          this.formData.segmentedInstructionDetailVos[index],
-          "qualifiedWeight",
-          this.formData.segmentedInstructionDetailVos[index].planWeight
-        );
-      }
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[index],
+        "qualifiedLength",
+        val == 0
+          ? this.formData.segmentedInstructionDetailVos[index].length
+          : null
+      );
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[index],
+        "qualifiedWeight",
+        val == 0
+          ? this.formData.segmentedInstructionDetailVos[index].planWeight
+          : null
+      );
     },
   },
 };
