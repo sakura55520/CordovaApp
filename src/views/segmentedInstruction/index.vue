@@ -364,14 +364,7 @@
                 min-width="200"
                 align="center"
                 prop="planWeight"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.planWeight"
-                    v-direction="{ x: 4, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <!-- <el-table-column
                 label="晶段类型"
                 min-width="100"
@@ -387,27 +380,13 @@
                 min-width="150"
                 align="center"
                 prop="calculatedPosition"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.calculatedPosition"
-                    v-direction="{ x: 5, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="计算电阻率"
                 min-width="150"
                 align="center"
                 prop="calculatedResistivity"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.calculatedResistivity"
-                    v-direction="{ x: 6, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="头部电阻率"
                 min-width="120"
@@ -1131,6 +1110,20 @@ export default {
           };
         });
 
+        this.$set(
+          this.formData,
+          "segmentedInstructionDetailVos",
+          cloneSegmentedInstructionDetailVos
+        );
+      } else {
+        let cloneSegmentedInstructionDetailVos =
+          this.formData.segmentedInstructionDetailVos.map((item) => {
+            let length = item.tailPosition - item.headPosition;
+            return {
+              ...item,
+              planWeight: this.calcPlanWeight(length),
+            };
+          });
         this.$set(
           this.formData,
           "segmentedInstructionDetailVos",
