@@ -247,7 +247,7 @@
                   </div>
                   <div v-else>
                     <el-button type="text" @click="handleCodeClick"
-                      >获取晶锭编号</el-button
+                      >获取晶锭/回收料编号</el-button
                     >
                   </div>
                 </template>
@@ -267,7 +267,7 @@
                     <el-option
                       :label="item.label"
                       :value="Number(item.value)"
-                      v-for="item in backCuttingAndReuseList"
+                      v-for="item in segmentTypeList"
                       :key="item.value"
                     ></el-option>
                   </el-select>
@@ -955,7 +955,7 @@ export default {
       selectedWorkOrder: null,
       erpWorkOrderTypeList: [], // ERP工单类型 list
       activeName: "checkInfo",
-      backCuttingAndReuseList: [],
+      segmentTypeList: [],
       selectRollingDiameter: null,
       diameterList: [],
     };
@@ -1078,7 +1078,7 @@ export default {
         "wipStorageInStorageReason",
         this.wipStorageInStorageReasonList
       );
-      getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
+      getSeleteData("segmentType", this.segmentTypeList);
       await getSeleteData("diameter", this.diameterList);
       let fromData = {};
       // 查询保存的数据
