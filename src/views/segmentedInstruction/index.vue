@@ -256,11 +256,11 @@
                 label="类型"
                 min-width="150"
                 align="center"
-                prop="recycle"
+                prop="type"
               >
                 <template slot-scope="scope">
                   <el-select
-                    v-model="scope.row.recycle"
+                    v-model="scope.row.type"
                     placeholder=""
                     class="form-item-cover"
                   >
@@ -276,7 +276,7 @@
               <el-table-column label="下发工单" min-width="300" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    v-if="scope.row.recycle !== 1"
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.orderCode"
                     @focus="handleWorkOrderFocus(scope.$index)"
                   />
@@ -336,7 +336,7 @@
               <el-table-column label="头部位置" min-width="150" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :disabled="scope.row.recycle === 1"
+                    :disabled="scope.row.type === 2"
                     v-model="scope.row.headPosition"
                     @change="(value) => handleHeadChange(value, scope.$index)"
                     v-direction="{ x: 2, y: scope.$index }"
@@ -346,7 +346,7 @@
               <el-table-column label="尾部位置" min-width="150" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :disabled="scope.row.recycle === 1"
+                    :disabled="scope.row.type === 2"
                     v-model="scope.row.tailPosition"
                     @change="(value) => handleTailChange(value, scope.$index)"
                     v-direction="{ x: 3, y: scope.$index }"
@@ -1112,7 +1112,7 @@ export default {
             let length = item.tail - item.head;
             return {
               segmentNo: item.sampleNumber,
-              recycle: item.recycle,
+              type: item.type,
               headPosition: item.head,
               tailPosition: item.tail,
               length,
@@ -1176,7 +1176,7 @@ export default {
       let oi = this.calcOi();
       let item = {
         headPosition,
-        recycle: 2,
+        type: 1,
         headResistance: 0,
         tailResistance: 0,
         diameter: this.formData.diameter,
@@ -1616,8 +1616,8 @@ export default {
   margin-right: 8px;
 }
 .collapse {
-  border-left: 1px solid rgba(0, 0, 0, 0.3);
-  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0 10px;
   border-radius: 5px;
 }
