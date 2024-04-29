@@ -759,7 +759,9 @@ export default {
       });
     },
     async handleAddBackCuttings() {
-      this.$refs.backCuttingFormRef.clearValidate();
+      setTimeout(() => {
+        this.$refs.backCuttingFormRef.clearValidate();
+      });
       this.backCuttingFormData = {
         type: "",
         sampleIdentification: "",
