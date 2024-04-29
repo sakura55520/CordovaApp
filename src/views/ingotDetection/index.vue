@@ -714,7 +714,8 @@ export default {
         ...item,
         orientation: this.formData.orientation,
         size: this.formData.size,
-        crystalDensity: this.getCrystalDensity(item.samplePosition),
+        crystalDensity:
+          item.crystalDensity || this.getCrystalDensity(item.samplePosition),
       }));
 
       this.fetchBackCuttingSampleRecord();
