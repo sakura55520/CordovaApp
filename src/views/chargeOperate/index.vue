@@ -10,7 +10,7 @@
         </div>
         <div class="grid-item">
           <span class="grid-item-name">长晶炉：</span>
-          <span class="grid-item-value">{{ $route.query.deviceCode }}</span>
+          <span class="grid-item-value">{{ detailForm.deviceCode }}</span>
         </div>
       </div>
     </div>
