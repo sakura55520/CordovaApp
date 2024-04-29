@@ -122,7 +122,11 @@
             </el-form-item>
             <el-form-item label="晶锭称重" prop="ingotWeight" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.ingotWeight">
+                <el-input
+                  class="value"
+                  v-model="formData.ingotWeight"
+                  @change="handleIngotWeightChange"
+                >
                   <template slot="append">kg</template>
                 </el-input>
               </div>
@@ -393,6 +397,8 @@ export default {
       this.bottomMaterialDifference = bottomMaterialDifferences.find(
         (item) => item.name === "default"
       ).value;
+
+      this.handleIngotWeightChange();
     },
     async handleCheck() {
       const valid = await this.$refs.formRef.validate();
@@ -454,6 +460,24 @@ export default {
       this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
+    },
+    handleIngotWeightChange() {
+      const {
+        totalPolysiliconWeight,
+        feedbackQty,
+        ingotWeight,
+        shoulderWeight,
+      } = this.formData;
+      if (ingotWeight === "") {
+        this.formData.bottomMaterialGrossWeight =
+          (totalPolysiliconWeight || 0) -
+          (feedbackQty || 0) -
+          (shoulderWeight || 0);
+      } else
+        this.formData.bottomMaterialGrossWeight =
+          (totalPolysiliconWeight || 0) -
+          (ingotWeight || 0) -
+          (shoulderWeight || 0);
     },
   },
 };
