@@ -172,7 +172,10 @@
                   message: '请输入多晶硅编号',
                   trigger: 'change',
                 },
-                { validator: this.validPolysiliconsAmount, trigger: 'change' },
+                {
+                  validator: this.validPolysiliconsAmount,
+                  trigger: 'change',
+                },
               ]"
             >
               <div class="multipleCodeScan-container">
@@ -528,7 +531,7 @@ export default {
       if (this.totalDopantAmount !== feedingDopantTotal)
         return callback(
           new Error(
-            `掺杂精用量[${this.totalDopantAmount}]必须等于总量[${feedingDopantTotal}]`
+            `掺杂剂用量[${this.totalDopantAmount}]必须等于总量[${feedingDopantTotal}]`
           )
         );
       callback();
@@ -624,9 +627,12 @@ export default {
     gap: 10px;
   }
 }
-.multipleCodeScan-form-item {
+.multipleCodeScan-form-item /deep/ {
   width: 100% !important;
   padding-right: 10px;
+  .el-form-item__label {
+    height: 40px;
+  }
 }
 .codeScan-form-item {
   width: 100% !important;
