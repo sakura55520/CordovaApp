@@ -500,7 +500,10 @@
               </el-table-column>
               <el-table-column label="合格状态" min-width="120" align="center">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.status">
+                  <el-select
+                    v-model="scope.row.status"
+                    @change="(val) => handleStatusChange(val, scope.$index)"
+                  >
                     <el-option label="合格" :value="0"></el-option>
                     <el-option label="不合格" :value="1"></el-option>
                   </el-select>
@@ -508,7 +511,7 @@
               </el-table-column>
               <el-table-column
                 label="合格长度"
-                min-width="100"
+                min-width="150"
                 align="center"
                 prop="qualifiedLength"
               >
@@ -521,7 +524,7 @@
               </el-table-column>
               <el-table-column
                 label="合格重量"
-                min-width="100"
+                min-width="150"
                 align="center"
                 prop="qualifiedWeight"
               >
@@ -1118,7 +1121,6 @@ export default {
               diameter: this.formData.diameter,
               diametermm: this.formData.diametermm,
               planWeight: this.calcPlanWeight(length),
-              status: 0,
               head79oi: oi[0],
               head83oi: oi[1],
               tail79oi: oi[2],
@@ -1205,10 +1207,14 @@ export default {
         if (
           (item.tailPosition || item.tailPosition === 0) &&
           (item.headPosition || item.headPosition === 0)
-        )
+        ) {
           item.length = item.tailPosition - item.headPosition;
-        else item.length = 0;
+        } else item.length = 0;
         item.planWeight = this.calcPlanWeight(item.length);
+        if (item.status == 0) {
+          item.qualifiedLength = item.length;
+          item.qualifiedWeight = item.planWeight;
+        }
       }
       this.formData.segmentedInstructionDetailVos = list;
       this.handleCodeClick();
@@ -1227,6 +1233,10 @@ export default {
           item.length = item.tailPosition - item.headPosition;
         else item.length = 0;
         item.planWeight = this.calcPlanWeight(item.length);
+        if (item.status == 0) {
+          item.qualifiedLength = item.length;
+          item.qualifiedWeight = item.planWeight;
+        }
       }
       this.formData.segmentedInstructionDetailVos = list;
       this.handleCodeClick();
@@ -1307,6 +1317,20 @@ export default {
         (item) => item.value === cellValue
       );
       return matched ? matched.name : "";
+    },
+    handleStatusChange(val, index) {
+      if (val == 0) {
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "qualifiedLength",
+          this.formData.segmentedInstructionDetailVos[index].length
+        );
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "qualifiedWeight",
+          this.formData.segmentedInstructionDetailVos[index].planWeight
+        );
+      }
     },
   },
 };
