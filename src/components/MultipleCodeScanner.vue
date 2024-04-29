@@ -69,7 +69,7 @@ export default {
       required: true,
       type: String,
     },
-    unit: Number,
+    unit: String,
     materialCodes: Array,
   },
   data() {
@@ -196,6 +196,7 @@ export default {
         }
         this.codes.push(res.data);
         this.inputDialog = false;
+        this.input = null;
       });
     },
   },
