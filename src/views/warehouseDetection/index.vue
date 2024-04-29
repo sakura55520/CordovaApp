@@ -95,7 +95,7 @@
               class="item"
               :rules="[
                 {
-                  required: formData.needRollingCircle,
+                  required: !!formData.needRollingCircle,
                   message: '滚圆直径头不能为空',
                   trigger: 'change',
                 },
@@ -117,7 +117,7 @@
               class="item"
               :rules="[
                 {
-                  required: formData.needRollingCircle,
+                  required: !!formData.needRollingCircle,
                   message: '滚圆直径尾不能为空',
                   trigger: 'change',
                 },
