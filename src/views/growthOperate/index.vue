@@ -75,10 +75,9 @@ import { fetchModelForm } from "@/api/modelform";
 import { getSeleteData } from "@/utils/select";
 import overStation from "@/mixins/overStation";
 
-const defaultCheckItem = {
-  checkItem: null, // 点检项
-  isError: null, // 是否异常
-  errorMessage: null, // 异常说明
+const defaultItem = {
+  extKey: null,
+  extValue: null,
 };
 
 export default {
@@ -98,6 +97,7 @@ export default {
       rules: {},
       loading: true,
       tabsVisible: false,
+      enabledInput: false,
       crystalGrowthErrList: [], // 拉晶异常list
       originalSteps: {},
       eapSteps: [
@@ -194,6 +194,11 @@ export default {
   },
   methods: {
     async init() {
+      // 长晶输入框是否可以输入
+      const enabledList = []
+      await getSeleteData('isEnabledGrowthInput', enabledList)
+      this.enabledInput = enabledList && enabledList[0] && enabledList[0].value === '可输入'
+
       // 拉晶异常list
       await getSeleteData("crystalGrowthErr", this.crystalGrowthErrList);
 
@@ -310,7 +315,7 @@ export default {
     transformAccessoryLife(arr, index) {
       const formItem = arr[index]
       const { extValue, tag, disabled } = formItem
-      if (tag === 'SelectAccessoryLife') {
+      if (tag === 'SelectAccessoryLife' && typeof extValue === 'object') {
         const { objScan, objCode, objLife } = extValue
         if (disabled) {
           arr.splice(index, 1, objCode, objLife)
@@ -323,7 +328,12 @@ export default {
       if (!Array.isArray(arr)) return;
       for (let index = 0; index < arr.length; index++) {
         this.transformAccessoryLife(arr, index)
-        const { extValue } = arr[index];
+        const { extKey, extValue } = arr[index];
+        if (!extKey) {
+          arr.splice(index, 1)
+          index--
+          continue
+        }
         if (extValue && typeof extValue === "object") {
           arr[index].extValue = JSON.stringify(extValue);
         }
@@ -437,16 +447,13 @@ export default {
       );
     },
     // 辅料寿命
-    initAccessoryLife (formItem, extValue, label2value) {
-      const {fieldScan, fieldLife, label, tag} = formItem
-      if (tag === 'SelectAccessoryLife') {
-        extValue = {
-          objCode: label2value[label], // 编号
-          objScan: label2value[fieldScan], // 编号(扫码)
-          objLife: label2value[fieldLife] // 已使用寿命/额定寿命
-        }
+    initAccessoryLife (formItem, label2value) {
+      const {fieldScan, fieldLife, label} = formItem
+      return {
+        objCode: label2value[label] || defaultItem, // 编号
+        objScan: label2value[fieldScan] || defaultItem, // 编号(扫码)
+        objLife: label2value[fieldLife] || defaultItem // 已使用寿命/额定寿命
       }
-      return extValue;
     },
     // 工艺参数
     initTech(stepName, recordIdx) {
@@ -460,6 +467,7 @@ export default {
           stepData._defaultStepData.techs = form.content.map((formItem) => ({
             ...formItem,
             extKey: formItem.vModel,
+            disabled: !this.enabledInput && formItem.disabled
           }));
         }
       }
@@ -476,13 +484,17 @@ export default {
         stepData[recordIdx],
         "techs",
         form.content.map((formItem) => {
-          let { extValue, label, vModel } = formItem
-          extValue = this.initAccessoryLife(formItem, extValue, label2value)
+          const { vModel, tag } = formItem
+          let { extValue } = label2value[vModel] || {}
+          if (tag === 'SelectAccessoryLife') {
+            extValue = this.initAccessoryLife(formItem, label2value)
+          }
           return {
             ...formItem,
-            ...(label2value[vModel] || label2value[label]),
+            ...label2value[vModel],
             extValue,
             extKey: vModel,
+            disabled: !this.enabledInput && formItem.disabled
           }
         })
       );
@@ -499,6 +511,7 @@ export default {
           stepData._defaultStepData.exts = form.content.map((formItem) => ({
             ...formItem,
             extKey: formItem.label,
+            disabled: !this.enabledInput && formItem.disabled
           }));
         }
       }
@@ -517,6 +530,7 @@ export default {
           ...formItem,
           ...label2value[formItem.label],
           extKey: formItem.label,
+          disabled: !this.enabledInput && formItem.disabled
         }))
       );
     },
