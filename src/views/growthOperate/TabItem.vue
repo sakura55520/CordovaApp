@@ -137,7 +137,7 @@
           <div v-if="recordItem.equivalentCrystalVariables && recordItem.equivalentCrystalVariables.length" class="growth-section">
             <SubTitle label="等径记录"/>
             <el-table
-              :data="recordItem.equivalentCrystalVariables[0]"
+              :data="recordItem.equivalentCrystalVariables"
               max-height="666"
               border
               fit
@@ -145,10 +145,9 @@
               class="admin_table"
             >
               <el-table-column
-                v-for="(val, key) in recordItem.equivalentCrystalVariables[0][0]"
-                :key="key"
-                :label="key"
-                :prop="key"
+                v-for="(item, index) in recordItem.equivalentCrystalVariables[0]"
+                :key="index"
+                :label="Object.keys(item)[0]"
                 :formatter="formatCol"
                 min-width="140"
               />
@@ -342,7 +341,11 @@ export default {
     calcComponentName(noFormItem) {
       return noFormItem ? 'div' : 'elFormItem'
     },
-    formatCol(row, column, val) {
+    formatCol(row, column, cellValue, index) {
+      const obj = row[index]
+      if (!obj || JSON.stringify(obj) === '{}') return
+      const prop = Object.keys(obj)[0]
+      const val = obj[prop]
       if (val && typeof val === 'object') {
         return (val.value || '') + (val.unit || '')
       }
