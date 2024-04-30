@@ -98,7 +98,6 @@ export default {
         return objLife ? objLife.extValue : ''
       },
       set(extValue) {
-        console.log('set life', JSON.parse(JSON.stringify(this.value.objLife)))
         this.$emit('input', {
           ...this.value,
           objLife: {
