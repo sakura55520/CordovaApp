@@ -37,168 +37,217 @@
           <div class="headLine">
             <div class="headLine-title">设备/工艺参数确认</div>
           </div>
-
-          <div>
-            <el-form-item label="计划长度" prop="planLength">
-              <el-input v-model="detailForm.planLength" type="number" disabled>
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="原始长度" prop="originLength">
-              <el-input
-                v-model="detailForm.originLength"
-                type="number"
-                @change="calcQualifLength"
+          <div class="form-container">
+            <div class="row">
+              <el-form-item
+                label="计划长度"
+                prop="planLength"
+                label-width="90px"
               >
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="崩边长度" prop="chippingLength">
-              <el-input
-                v-model="detailForm.chippingLength"
-                type="number"
-                @change="calcQualifLength"
+                <el-input
+                  v-model="detailForm.planLength"
+                  type="number"
+                  disabled
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="原始长度"
+                prop="originLength"
+                label-width="90px"
               >
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="椭圆长度" prop="ellipticLength">
-              <el-input
-                v-model="detailForm.ellipticLength"
-                type="number"
-                @change="calcQualifLength"
+                <el-input
+                  v-model="detailForm.originLength"
+                  type="number"
+                  @change="calcQualifLength"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="崩边长度"
+                prop="chippingLength"
+                label-width="90px"
               >
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="合格长度" prop="qualifiedLength">
-              <el-input
-                v-model="detailForm.qualifiedLength"
-                type="number"
-                disabled
+                <el-input
+                  v-model="detailForm.chippingLength"
+                  type="number"
+                  @change="calcQualifLength"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="椭圆长度"
+                prop="ellipticLength"
+                label-width="90px"
               >
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="A点晶向" class="multiple-form-item">
-              <template slot="label">
-                <div class="multiple-form-item-label">A点晶向</div>
-              </template>
-              <div class="inputs">
-                <el-form-item label="" prop="aDegrees">
-                  <el-input
-                    v-model="detailForm.aDegrees"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">°</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item label="" prop="aMinute">
-                  <el-input
-                    v-model="detailForm.aMinute"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">'</template>
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="B点晶向"
-              prop="crystallinePhaseB"
-              class="multiple-form-item"
-            >
-              <template slot="label">
-                <div class="multiple-form-item-label">B点晶向</div>
-              </template>
-              <div class="inputs">
-                <el-form-item label="" prop="bDegrees">
-                  <el-input
-                    v-model="detailForm.bDegrees"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">°</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item label="" prop="bMinute">
-                  <el-input
-                    v-model="detailForm.bMinute"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">'</template>
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="C点晶向"
-              prop="crystallinePhaseC"
-              class="multiple-form-item"
-            >
-              <template slot="label">
-                <div class="multiple-form-item-label">C点晶向</div>
-              </template>
-              <div class="inputs">
-                <el-form-item label="" prop="cDegrees">
-                  <el-input
-                    v-model="detailForm.cDegrees"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">°</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item label="" prop="cMinute">
-                  <el-input
-                    v-model="detailForm.cMinute"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">'</template>
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="D点晶向"
-              prop="crystallinePhaseD"
-              class="multiple-form-item"
-            >
-              <template slot="label">
-                <div class="multiple-form-item-label">D点晶向</div>
-              </template>
-              <div class="inputs">
-                <el-form-item label="" prop="dDegrees">
-                  <el-input
-                    v-model="detailForm.dDegrees"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">°</template>
-                  </el-input>
-                </el-form-item>
-                <el-form-item label="" prop="dMinute">
-                  <el-input
-                    v-model="detailForm.dMinute"
-                    @change="calcCrystallinePhase"
-                  >
-                    <template slot="append">'</template>
-                  </el-input>
-                </el-form-item>
-              </div>
-            </el-form-item>
-            <el-form-item label="晶向偏差" prop="crystalDeviation">
-              <el-input v-model="detailForm.crystalDeviation" disabled>
-                <template slot="append">°</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="滚圆实测直径头" prop="circleDiameterHead">
-              <el-input v-model="detailForm.circleDiameterHead" type="number">
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="滚圆实测直径尾" prop="circleDiameterTail">
-              <el-input v-model="detailForm.circleDiameterTail" type="number">
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
+                <el-input
+                  v-model="detailForm.ellipticLength"
+                  type="number"
+                  @change="calcQualifLength"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="合格长度"
+                prop="qualifiedLength"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="detailForm.qualifiedLength"
+                  type="number"
+                  disabled
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="A点晶向"
+                class="multiple-form-item"
+                label-width="90px"
+              >
+                <template slot="label">
+                  <div class="multiple-form-item-label">A点晶向</div>
+                </template>
+                <div class="inputs">
+                  <el-form-item label="" prop="aDegrees">
+                    <el-input
+                      v-model="detailForm.aDegrees"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="aMinute">
+                    <el-input
+                      v-model="detailForm.aMinute"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="B点晶向"
+                prop="crystallinePhaseB"
+                class="multiple-form-item"
+                label-width="90px"
+              >
+                <template slot="label">
+                  <div class="multiple-form-item-label">B点晶向</div>
+                </template>
+                <div class="inputs">
+                  <el-form-item label="" prop="bDegrees">
+                    <el-input
+                      v-model="detailForm.bDegrees"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="bMinute">
+                    <el-input
+                      v-model="detailForm.bMinute"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="C点晶向"
+                prop="crystallinePhaseC"
+                class="multiple-form-item"
+                label-width="90px"
+              >
+                <template slot="label">
+                  <div class="multiple-form-item-label">C点晶向</div>
+                </template>
+                <div class="inputs">
+                  <el-form-item label="" prop="cDegrees">
+                    <el-input
+                      v-model="detailForm.cDegrees"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="cMinute">
+                    <el-input
+                      v-model="detailForm.cMinute"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="D点晶向"
+                prop="crystallinePhaseD"
+                class="multiple-form-item"
+                label-width="90px"
+              >
+                <template slot="label">
+                  <div class="multiple-form-item-label">D点晶向</div>
+                </template>
+                <div class="inputs">
+                  <el-form-item label="" prop="dDegrees">
+                    <el-input
+                      v-model="detailForm.dDegrees"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="dMinute">
+                    <el-input
+                      v-model="detailForm.dMinute"
+                      @change="calcCrystallinePhase"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="晶向偏差"
+                prop="crystalDeviation"
+                label-width="90px"
+                class="item"
+              >
+                <el-input v-model="detailForm.crystalDeviation" disabled>
+                  <template slot="append">°</template>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="滚圆实测直径头"
+                prop="circleDiameterHead"
+                label-width="140px"
+              >
+                <el-input v-model="detailForm.circleDiameterHead" type="number">
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测直径尾"
+                prop="circleDiameterTail"
+                label-width="140px"
+              >
+                <el-input v-model="detailForm.circleDiameterTail" type="number">
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+            </div>
           </div>
         </el-form>
       </div>
@@ -476,6 +525,7 @@ export default {
   gap: 8px;
 }
 .multiple-form-item /deep/ {
+  flex: 1;
   margin-bottom: 0px !important;
   .el-form-item__label {
     height: 40px !important;
@@ -484,5 +534,20 @@ export default {
 .multiple-form-item-label:before {
   content: "* ";
   color: red;
+}
+.row /deep/ {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: space-between;
+  .item {
+    flex: 1;
+  }
+  .el-input-group__append {
+    padding: 0 5px;
+  }
+}
+.form-container {
+  padding: 20px 12px;
 }
 </style>
