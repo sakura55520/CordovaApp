@@ -32,191 +32,234 @@
           </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
-            <el-form-item label="计划长度" prop="planLength" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.planLength" disabled>
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="原始长度" prop="originLength" class="item">
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.originLength"
-                  @input="handleLengthChange"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="崩边长度" prop="chippingLength" class="item">
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.chippingLength"
-                  @input="handleLengthChange"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.ellipticLength"
-                  @input="handleLengthChange"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="合格长度" prop="qualifiedLength" class="item">
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.qualifiedLength"
-                  disabled
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="实测主参考面晶向"
-              prop="mainReferenceSurfaceCrystalOrientation"
-              class="item"
-            >
-              <div class="inputs">
-                <el-form-item
-                  label=""
-                  prop="mainReferenceSurfaceCrystalOrientationDegrees"
-                >
+            <div class="row">
+              <el-form-item
+                label="计划长度"
+                prop="planLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
                   <el-input
-                    v-model="
-                      formData.mainReferenceSurfaceCrystalOrientationDegrees
-                    "
+                    class="value"
+                    v-model="formData.planLength"
+                    disabled
                   >
-                    <template slot="append">°</template>
+                    <template slot="append">mm</template>
                   </el-input>
-                </el-form-item>
-                <el-form-item
-                  label=""
-                  prop="mainReferenceSurfaceCrystalOrientationMinute"
-                >
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="原始长度"
+                prop="originLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
                   <el-input
-                    v-model="
-                      formData.mainReferenceSurfaceCrystalOrientationMinute
-                    "
+                    class="value"
+                    v-model="formData.originLength"
+                    @input="handleLengthChange"
                   >
-                    <template slot="append">'</template>
+                    <template slot="append">mm</template>
                   </el-input>
-                </el-form-item>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="实测主参考面长度"
-              prop="mainReferenceSurfaceLength"
-              class="item"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.mainReferenceSurfaceLength"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="实测副参考面长度"
-              prop="auxiliaryReferenceSurfaceLength"
-              class="item"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.auxiliaryReferenceSurfaceLength"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="主副侧夹角"
-              prop="mainAuxiliaryAngle"
-              class="item"
-            >
-              <div class="inputs">
-                <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
-                  <el-input v-model="formData.mainAuxiliaryAngleDegrees">
-                    <template slot="append">°</template>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="崩边长度"
+                prop="chippingLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.chippingLength"
+                    @input="handleLengthChange"
+                  >
+                    <template slot="append">mm</template>
                   </el-input>
-                </el-form-item>
-                <el-form-item label="" prop="mainAuxiliaryAngleMinute">
-                  <el-input v-model="formData.mainAuxiliaryAngleMinute">
-                    <template slot="append">'</template>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="椭圆长度"
+                prop="ellipticLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.ellipticLength"
+                    @input="handleLengthChange"
+                  >
+                    <template slot="append">mm</template>
                   </el-input>
-                </el-form-item>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="实测主参考面宽度头"
-              prop="mainReferenceSurfaceWidthHead"
-              class="item"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.mainReferenceSurfaceWidthHead"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="实测主参考面宽度尾"
-              prop="mainReferenceSurfaceWidthTail"
-              class="item"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.mainReferenceSurfaceWidthTail"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="实测副参考面宽度头"
-              prop="auxiliaryReferenceSurfaceHead"
-              class="item"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.auxiliaryReferenceSurfaceHead"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item
-              label="实测副参考面宽度尾"
-              prop="auxiliaryReferenceSurfaceTail"
-              class="item"
-            >
-              <div class="input">
-                <el-input
-                  class="value"
-                  v-model="formData.auxiliaryReferenceSurfaceTail"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </div>
-            </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="合格长度"
+                prop="qualifiedLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.qualifiedLength"
+                    disabled
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="实测主参考面晶向"
+                prop="mainReferenceSurfaceCrystalOrientation"
+                class="item"
+                label-width="140px"
+              >
+                <div class="inputs">
+                  <el-form-item
+                    label=""
+                    prop="mainReferenceSurfaceCrystalOrientationDegrees"
+                  >
+                    <el-input
+                      v-model="
+                        formData.mainReferenceSurfaceCrystalOrientationDegrees
+                      "
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item
+                    label=""
+                    prop="mainReferenceSurfaceCrystalOrientationMinute"
+                  >
+                    <el-input
+                      v-model="
+                        formData.mainReferenceSurfaceCrystalOrientationMinute
+                      "
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测主参考面长度"
+                prop="mainReferenceSurfaceLength"
+                class="item"
+                label-width="140px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.mainReferenceSurfaceLength"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测副参考面长度"
+                prop="auxiliaryReferenceSurfaceLength"
+                class="item"
+                label-width="140px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.auxiliaryReferenceSurfaceLength"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="主副侧夹角"
+                prop="mainAuxiliaryAngle"
+                class="item"
+                label-width="95px"
+              >
+                <div class="inputs">
+                  <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
+                    <el-input v-model="formData.mainAuxiliaryAngleDegrees">
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="mainAuxiliaryAngleMinute">
+                    <el-input v-model="formData.mainAuxiliaryAngleMinute">
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="实测主参考面宽度头"
+                prop="mainReferenceSurfaceWidthHead"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.mainReferenceSurfaceWidthHead"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测主参考面宽度尾"
+                prop="mainReferenceSurfaceWidthTail"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.mainReferenceSurfaceWidthTail"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测副参考面宽度头"
+                prop="auxiliaryReferenceSurfaceHead"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.auxiliaryReferenceSurfaceHead"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测副参考面宽度尾"
+                prop="auxiliaryReferenceSurfaceTail"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.auxiliaryReferenceSurfaceTail"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
           </div>
         </el-form>
       </div>
@@ -523,12 +566,23 @@ export default {
 }
 .inputs {
   display: flex;
-  gap: 8px;
+  gap: 4px;
 }
 .multiple-form-item /deep/ {
   margin-bottom: 0px !important;
   .el-form-item__label {
     height: 40px !important;
+  }
+}
+.row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  .item /deep/ {
+    flex: 1;
+    .el-input-group__append {
+      padding: 0 10px;
+    }
   }
 }
 </style>
