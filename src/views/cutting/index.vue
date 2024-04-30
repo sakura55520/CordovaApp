@@ -54,7 +54,10 @@
               </el-input>
             </el-form-item>
             <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
-              <el-input v-model="formData.ellipticLength">
+              <el-input
+                v-model="formData.ellipticLength"
+                @change="handleLengthChange"
+              >
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
