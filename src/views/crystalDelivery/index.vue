@@ -501,15 +501,17 @@ export default {
         shoulderWeight,
       } = this.formData;
       if (!ingotWeight && ingotWeight !== 0) {
-        this.formData.bottomMaterialGrossWeight =
+        this.formData.bottomMaterialGrossWeight = (
           (totalPolysiliconWeight || 0) -
           (feedbackQty || 0) -
-          (shoulderWeight || 0);
+          (shoulderWeight || 0)
+        ).toFixed(3);
       } else
-        this.formData.bottomMaterialGrossWeight =
+        this.formData.bottomMaterialGrossWeight = (
           (totalPolysiliconWeight || 0) -
           (ingotWeight || 0) -
-          (shoulderWeight || 0);
+          (shoulderWeight || 0)
+        ).toFixed(3);
     },
   },
 };
