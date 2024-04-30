@@ -12,7 +12,7 @@
           <span class="grid-item-value">{{ fromData.processOrderCode }}</span>
         </div>
         <div class="grid-item">
-          <span class="grid-item-name">长晶炉：</span>
+          <span class="grid-item-name">生产设备：</span>
           <span class="grid-item-value">{{ fromData.deviceCode }}</span>
         </div>
       </div>

@@ -9,7 +9,7 @@
           <span class="grid-item-value">{{ detailForm.processOrderCode }}</span>
         </div>
         <div class="grid-item">
-          <span class="grid-item-name">长晶炉：</span>
+          <span class="grid-item-name">生产设备：</span>
           <span class="grid-item-value">{{ detailForm.deviceCode }}</span>
         </div>
       </div>
