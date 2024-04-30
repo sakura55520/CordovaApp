@@ -104,20 +104,12 @@
           <div slot-scope="scope" class="btns">
             <template v-if="listType === 'accessory'">
               <el-button
-                v-if="scope.row.status === 0"
+                v-if="scope.row.status === 0 || scope.row.status === 1"
                 icon="el-icon-document-remove"
                 type="danger"
                 plain
                 @click="handleReturn(scope.row)"
               >退库</el-button>
-
-              <el-button
-               v-if="scope.row.status === 1"
-                icon="el-icon-document-remove"
-                type="danger"
-                plain
-                @click="downComputer(scope.row)"
-              >下机</el-button>
 
               <el-button
                v-if="scope.row.status === 0"
