@@ -464,6 +464,7 @@
             placeholder=""
             class="form-item-cover"
             :disabled="backCuttingFormType === '编辑'"
+            @change="handleBackCutTypeChange"
           >
             <el-option
               v-for="item in backCutTypeList"
@@ -482,9 +483,13 @@
           >
             <div v-for="item in sampleIdentificationList" :key="item.value">
               <el-option
-                v-if="item.value !== 'M'"
                 :label="item.label"
                 :value="item.value"
+                :disabled="
+                  (backCuttingFormData.type === '中间片' &&
+                    item.value !== 'M') ||
+                  (backCuttingFormData.type !== '中间片' && item.value === 'M')
+                "
               ></el-option>
             </div>
           </el-select>
@@ -1010,6 +1015,11 @@ export default {
     handleToFixed(val, index, key) {
       let value = Number(val).toFixed(5);
       this.$set(this.formData.details[index], key, value);
+    },
+    handleBackCutTypeChange(val) {
+      if (val === "中间片") this.backCuttingFormData.sampleIdentification = "M";
+      else if (this.backCuttingFormData.sampleIdentification === "M")
+        this.backCuttingFormData.sampleIdentification = "H";
     },
   },
 };
