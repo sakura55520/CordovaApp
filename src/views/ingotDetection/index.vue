@@ -433,7 +433,7 @@
               </el-table-column>
             </el-table>
           </div>
-          <div class="form">
+          <!-- <div class="form">
             <div class="form-title">留档文档记录</div>
             <div class="growth-section">
               <PhotoNew
@@ -443,7 +443,7 @@
                 @input="handleFileChange"
               />
             </div>
-          </div>
+          </div> -->
         </el-form>
       </div>
     </div>
