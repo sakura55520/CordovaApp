@@ -36,7 +36,9 @@
               <SelectUserinfo v-model="detailForm.userConfirm" />
             </el-form-item>
             <el-form-item label="连尾重量" prop="goodQty">
-              <el-input v-model="detailForm.goodQty" disabled />
+              <el-input v-model="detailForm.goodQty" disabled>
+                <template slot="append">kg</template>
+              </el-input>
             </el-form-item>
             <el-form-item label="工艺编号" prop="technologyNumber">
               <el-select v-model="detailForm.technologyNumber" filterable>
