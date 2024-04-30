@@ -1,19 +1,24 @@
 <!--过站操作-->
 <template>
   <div v-show="visible" class="detailBox">
-    <div v-show="!routerReplace" class="topInfoCard">
-      <div class="topBox">
-        <div class="topBox-label">编号</div>
+    <el-form ref="dataForm" :model="temp" :rules="rules" class="topInfoCard">
+      <el-form-item label="编号" prop="processingOrderCode">
         <CodeScanner
           ref="CodeScanner"
-          v-model="processingOrderCode"
-          :placeholder="'请扫描或输入'"
+          v-model="temp.processingOrderCode"
+          placeholder="请扫描或输入编号"
           @has-done="codeScannerCallBack"
           @clear="onCodeScannerClear"
-          style="flex: 1;"
         />
-      </div>
-    </div>
+      </el-form-item>
+      <el-form-item v-if="storage && storage.isNeedsDevice" label="设备" prop="deviceCode">
+        <CodeScanner
+          ref="CodeScanner"
+          v-model="temp.deviceCode"
+          placeholder="请扫描或输入设备"
+        />
+      </el-form-item>
+    </el-form>
 
     <div v-show="stationList && stationList.length" class="fromCard">
       <div class="headLine">
@@ -51,14 +56,19 @@ import * as Api from '@/api/overStation/overStation.js'
 import CodeScanner from '@/components/CodeScanner';
 import {calcIsSkip, calcStationOperator, handleInOrOutStation} from '@/utils/overStation'
 
+const defaultForm = {
+  processingOrderCode: null,
+  deviceCode: null,
+}
+
 export default {
   components: {
     CodeScanner
   },
   data() {
     return {
+      temp: Object.assign({}, defaultForm),
       visible: false,
-      processingOrderCode: undefined,//工单号
       wipStorageName: null,//工序绑定项
       storage: null,//当前选中工序数据
       stationList: [],//工序列表
@@ -75,6 +85,12 @@ export default {
     // 尝试立即跳转到表单页
     routerReplace() {
       return this.$route.query.routerReplace
+    },
+    rules() {
+      return {
+        processingOrderCode: [{ required: true, message: '请输入编号', trigger: 'change' }],
+        deviceCode: [{ required: this.storage && this.storage.isNeedsDevice, message: '请输入设备', trigger: 'change' }]
+      }
     }
   },
   mounted() {
@@ -91,12 +107,21 @@ export default {
       }
 
       if (this.$route.query.processingOrderCode) {
-        this.processingOrderCode = this.$route.query.processingOrderCode
+        this.temp.processingOrderCode = this.$route.query.processingOrderCode
         this.codeScannerCallBack()
       }
     },
     handleInOrOutStation() {
-      handleInOrOutStation(this.storage, this.processingOrderCode)
+      this.$refs.dataForm.validate(valid => {
+        if (valid) {
+          const {deviceCode} = this.temp
+          handleInOrOutStation({
+            ...this.storage,
+            equipmentCode: deviceCode,
+            deviceCode,
+          }, this.temp.processingOrderCode)
+        }
+      })
     },
     // 当选中工序时
     handleClickSite(row, index) {
@@ -104,13 +129,16 @@ export default {
         ...row,
         index
       }
+      if (row.deviceCode) this.temp.deviceCode = row.deviceCode
     },
     // 扫码回调
     codeScannerCallBack() {
-      Api.getCurrentWipStorageData(this.processingOrderCode).then(res => {
-        this.stationList = res.data
-        if (this.routerReplace && res.data.length === 1) {
-          this.storage = res.data[0]
+      Api.getCurrentWipStorageData(this.temp.processingOrderCode).then(res => {
+        if (!res.data || !res.data.length) return Message.warning('未查询到过站信息!')
+        const list = res.data
+        this.stationList = list
+        if (this.routerReplace && list.length === 1 && !list[0].isNeedsDevice) {
+          this.storage = list[0]
           this.handleInOrOutStation()
         } else {
           this.visible = true
@@ -125,10 +153,13 @@ export default {
     },
     // 重置页面数据
     resetData() {
-      this.processingOrderCode = null
+      this.temp = Object.assign({}, defaultForm)
       this.wipStorageName = null
       this.storage = null
       this.stationList = []
+      this.$nextTick(() => {
+        this.$refs.dataForm.clearValidate()
+      })
     }
   }
 }
