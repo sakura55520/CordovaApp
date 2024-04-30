@@ -148,6 +148,7 @@
                 v-for="(item, index) in recordItem.equivalentCrystalVariables[0]"
                 :key="index"
                 :label="Object.keys(item)[0]"
+                :prop="String(index)"
                 :formatter="formatCol"
                 min-width="140"
               />
@@ -341,11 +342,10 @@ export default {
     calcComponentName(noFormItem) {
       return noFormItem ? 'div' : 'elFormItem'
     },
-    formatCol(row, column, cellValue, index) {
-      const obj = row[index]
-      if (!obj || JSON.stringify(obj) === '{}') return
-      const prop = Object.keys(obj)[0]
-      const val = obj[prop]
+    formatCol(row, column, cellValue) {
+      if (!cellValue || JSON.stringify(cellValue) === '{}') return
+      const prop = Object.keys(cellValue)[0]
+      const val = cellValue[prop]
       if (val && typeof val === 'object') {
         return (val.value || '') + (val.unit || '')
       }
