@@ -15,7 +15,10 @@
         </div>
       </div>
       <el-divider class="divider" />
-      <h3>出站数据录入</h3>
+      <h3>
+        出站数据录入
+        <i class="el-icon-refresh" @click="fetchSwitchDict"/>
+      </h3>
       <div class="outStation-form">
         <el-form
           ref="formRef"
@@ -43,7 +46,7 @@
                   <el-input
                     class="value"
                     v-model="formData.planLength"
-                    disabled
+                    :disabled="!enableMap.planLength"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -59,6 +62,7 @@
                   <el-input
                     class="value"
                     v-model="formData.originLength"
+                    :disabled="!enableMap.originLength"
                     @input="handleLengthChange"
                   >
                     <template slot="append">mm</template>
@@ -75,6 +79,7 @@
                   <el-input
                     class="value"
                     v-model="formData.chippingLength"
+                    :disabled="!enableMap.chippingLength"
                     @input="handleLengthChange"
                   >
                     <template slot="append">mm</template>
@@ -91,6 +96,7 @@
                   <el-input
                     class="value"
                     v-model="formData.ellipticLength"
+                    :disabled="!enableMap.ellipticLength"
                     @input="handleLengthChange"
                   >
                     <template slot="append">mm</template>
@@ -107,7 +113,7 @@
                   <el-input
                     class="value"
                     v-model="formData.qualifiedLength"
-                    disabled
+                    :disabled="!enableMap.qualifiedLength"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -121,7 +127,7 @@
                 class="item"
                 label-width="130px"
               >
-                <el-input class="value" v-model="formData.resHead"></el-input>
+                <el-input class="value" v-model="formData.resHead" :disabled="!enableMap.resHead"></el-input>
               </el-form-item>
               <el-form-item
                 label="尾部实测电阻率"
@@ -129,26 +135,19 @@
                 class="item"
                 label-width="130px"
               >
-                <el-input class="value" v-model="formData.resTail"></el-input>
+                <el-input class="value" v-model="formData.resTail" :disabled="!enableMap.resTail"></el-input>
               </el-form-item>
               <el-form-item
                 label="滚圆直径头"
                 prop="circleDiameterHead"
                 class="item"
-                :rules="[
-                  {
-                    required: !!formData.needRollingCircle,
-                    message: '滚圆直径头不能为空',
-                    trigger: 'change',
-                  },
-                ]"
                 label-width="100px"
               >
                 <div class="input">
                   <el-input
                     class="value"
                     v-model="formData.circleDiameterHead"
-                    :disabled="!formData.needRollingCircle"
+                    :disabled="!enableMap.circleDiameterHead && !formData.needRollingCircle"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -158,20 +157,13 @@
                 label="滚圆直径尾"
                 prop="circleDiameterTail"
                 class="item"
-                :rules="[
-                  {
-                    required: !!formData.needRollingCircle,
-                    message: '滚圆直径尾不能为空',
-                    trigger: 'change',
-                  },
-                ]"
                 label-width="100px"
               >
                 <div class="input">
                   <el-input
                     class="value"
                     v-model="formData.circleDiameterTail"
-                    :disabled="!formData.needRollingCircle"
+                    :disabled="!enableMap.circleDiameterTail && !formData.needRollingCircle"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -191,9 +183,8 @@
                     prop="mainReferenceSurfaceCrystalOrientationDegrees"
                   >
                     <el-input
-                      v-model="
-                        formData.mainReferenceSurfaceCrystalOrientationDegrees
-                      "
+                      v-model="formData.mainReferenceSurfaceCrystalOrientationDegrees"
+                      :disabled="!enableMap.mainReferenceSurfaceCrystalOrientationDegrees"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -203,9 +194,8 @@
                     prop="mainReferenceSurfaceCrystalOrientationMinute"
                   >
                     <el-input
-                      v-model="
-                        formData.mainReferenceSurfaceCrystalOrientationMinute
-                      "
+                      v-model="formData.mainReferenceSurfaceCrystalOrientationMinute"
+                      :disabled="!enableMap.mainReferenceSurfaceCrystalOrientationMinute"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -222,6 +212,7 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceLength"
+                    :disabled="!enableMap.mainReferenceSurfaceLength"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -237,6 +228,7 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceLength"
+                    :disabled="!enableMap.auxiliaryReferenceSurfaceLength"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -250,12 +242,12 @@
               >
                 <div class="inputs">
                   <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
-                    <el-input v-model="formData.mainAuxiliaryAngleDegrees">
+                    <el-input v-model="formData.mainAuxiliaryAngleDegrees" :disabled="!enableMap.mainAuxiliaryAngleDegrees">
                       <template slot="append">°</template>
                     </el-input>
                   </el-form-item>
                   <el-form-item label="" prop="mainAuxiliaryAngleMinute">
-                    <el-input v-model="formData.mainAuxiliaryAngleMinute">
+                    <el-input v-model="formData.mainAuxiliaryAngleMinute" :disabled="!enableMap.mainAuxiliaryAngleMinute">
                       <template slot="append">'</template>
                     </el-input>
                   </el-form-item>
@@ -273,6 +265,7 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthHead"
+                    :disabled="!enableMap.mainReferenceSurfaceWidthHead"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -288,6 +281,7 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthTail"
+                    :disabled="!enableMap.mainReferenceSurfaceWidthTail"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -303,6 +297,7 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceHead"
+                    :disabled="!enableMap.auxiliaryReferenceSurfaceHead"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -318,6 +313,7 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceTail"
+                    :disabled="!enableMap.auxiliaryReferenceSurfaceTail"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -361,6 +357,7 @@
 import * as Api from "@/api/inStation";
 import SelectLinesideTree from "@/components/SelectLinesideTree";
 import overStation from "@/mixins/overStation";
+import {getSeleteData} from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -421,7 +418,15 @@ export default {
         qualifiedLength: [
           { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
+        // !!formData.needRollingCircle,
+        circleDiameterHead: [
+          { required: true, message: "滚圆直径头不能为空", trigger: "change" },
+        ],
+        circleDiameterTail: [
+          { required: true, message: "滚圆直径尾不能为空", trigger: "change" },
+        ],
       },
+      enableMap: {} // 字段是否允许编辑
     };
   },
   computed: {
@@ -449,8 +454,11 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
+      this.formRules.circleDiameterHead[0].required =  this.formRules.circleDiameterTail[0].required = !!this.formData.needRollingCircle
+
       this.initLength();
       this.calcDegreesMinute();
+      this.fetchSwitchDict()
     },
     initLength() {
       const { originLength, planLength, chippingLength, ellipticLength } =
@@ -548,6 +556,27 @@ export default {
       this.formData.qualifiedLength =
         (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
     },
+    fetchSwitchDict() {
+      const nameSpace = 'RKJC'
+      const list = []
+      this.enableMap = {}
+      // 系统全局开关 字典
+      getSeleteData('global_switch', list).then(() => {
+        list.forEach(({ name, value, extendValue, extendValue1 }) => {
+          if (name !== nameSpace || !value) return
+
+          const enable = extendValue === '1'
+          this.$set(this.enableMap, value, enable)
+
+          const required = extendValue1 === '1'
+          if (this.formRules[value] && this.formRules[value][0]) {
+            this.formRules[value][0].required = required
+          } else if (required) {
+            this.$set(this.formRules, value, [{ required, message: "必填项", trigger: "change" }])
+          }
+        })
+      })
+    }
   },
 };
 </script>
