@@ -757,6 +757,7 @@ export default {
           } else {
             item.orientation = this.formData.orientation;
             item.size = this.formData.size;
+            item.res = this.formData.targetResistivity;
             this.formData.details.push(item);
           }
         });
@@ -863,7 +864,7 @@ export default {
     },
     async fetchBackCuttingSampleRecord() {
       let res = await Api.getBackCuttingSampleRecord({
-        search_EQ_ProcessOrderCode: this.formData.processingOrderCode,
+        search_EQ_ProcessOrderCode: this.formData.processOrderCode,
       });
       this.$set(this.formData, "backCuttings", res.data.rows);
     },
