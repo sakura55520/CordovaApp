@@ -116,6 +116,7 @@ export default {
         search_LIKE_wheel: null,
         search_LIKE_equipmentCode: null,
         search_LIKE_processingOrderCode: null,
+        search_EQ_status: 2,
         startTimeRange: "",
         endTimeRange: "",
       },
@@ -196,6 +197,7 @@ export default {
         search_LT_endTime: !isEmpty(this.formData.endTimeRange)
           ? this.formData.endTimeRange[1]
           : null,
+        search_EQ_status: this.formData.search_EQ_status,
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);

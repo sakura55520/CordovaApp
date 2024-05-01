@@ -613,6 +613,7 @@ export default {
           valid: true,
           sampleNumber: undefined,
         });
+        this.fetchSampleCode();
       }
       if (mIndex > -1 && this.formData.lengthQty < 700) {
         this.formData.wipCuttingSampleInfos.splice(mIndex, 1);
