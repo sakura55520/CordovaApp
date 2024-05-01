@@ -754,10 +754,17 @@ export default {
               "samplePosition",
               item.samplePosition
             );
+            this.$set(
+              this.formData.details[index],
+              "crystalDensity",
+              this.formData.details[index].crystalDensity ||
+                this.getCrystalDensity(item.samplePosition)
+            );
           } else {
             item.orientation = this.formData.orientation;
             item.size = this.formData.size;
             item.res = this.formData.targetResistivity;
+            item.crystalDensity = this.getCrystalDensity(item.samplePosition);
             this.formData.details.push(item);
           }
         });
