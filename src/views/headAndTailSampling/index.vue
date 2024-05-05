@@ -578,16 +578,28 @@ export default {
       this.fetchSampleCode();
     },
     handleSamplePositionChange() {
-      let list = this.formData.wipCuttingSampleInfos.map((item, itemIndex) => ({
-        ...item,
-        valid: !this.formData.wipCuttingSampleInfos.some(
-          (ele, eleIndex) =>
-            item.type === ele.type &&
-            item.sampleIdentification === ele.sampleIdentification &&
-            item.samplePosition == ele.samplePosition &&
-            itemIndex < eleIndex
-        ),
-      }));
+      let list = this.formData.wipCuttingSampleInfos.map((item, itemIndex) => {
+        let valid;
+        if (item.type === "头尾样片")
+          valid = !this.formData.wipCuttingSampleInfos.some(
+            (ele, eleIndex) =>
+              item.type === ele.type &&
+              item.sampleIdentification === ele.sampleIdentification &&
+              itemIndex < eleIndex
+          );
+        else
+          valid = !this.formData.wipCuttingSampleInfos.some(
+            (ele, eleIndex) =>
+              item.type === ele.type &&
+              item.sampleIdentification === ele.sampleIdentification &&
+              item.samplePosition == ele.samplePosition &&
+              itemIndex < eleIndex
+          );
+        return {
+          ...item,
+          valid,
+        };
+      });
       this.$set(this.formData, "wipCuttingSampleInfos", list);
     },
     tableRowClassName({ row }) {

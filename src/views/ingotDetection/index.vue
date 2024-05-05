@@ -871,7 +871,7 @@ export default {
     },
     async fetchBackCuttingSampleRecord() {
       let res = await Api.getBackCuttingSampleRecord({
-        search_EQ_ProcessOrderCode: this.formData.processOrderCode,
+        search_EQ_processOrderCode: this.formData.processOrderCode,
       });
       this.$set(this.formData, "backCuttings", res.data.rows);
     },
