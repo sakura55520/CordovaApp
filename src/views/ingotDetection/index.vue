@@ -136,7 +136,7 @@
               </el-table-column>
               <el-table-column
                 label="结晶比重"
-                min-width="180"
+                min-width="140"
                 align="center"
                 prop="crystalDensity"
                 ><template slot="header">
