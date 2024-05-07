@@ -147,7 +147,13 @@
                     label=""
                     label-width="0px"
                     :prop="'details.' + scope.$index + '.crystalDensity'"
-                    :rules="formRules.crystalDensity"
+                    :rules="[
+                      {
+                        required: scope.row.valid,
+                        message: '结晶比重不能为空',
+                        trigger: 'change',
+                      },
+                    ]"
                     class="form-input"
                   >
                     <el-input
