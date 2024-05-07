@@ -405,7 +405,7 @@
                 prop="status"
               >
                 <template slot-scope="scope">
-                  {{ scope.row.status ? "已切" : "待切" }}
+                  {{ scope.row.status == 1 ? "待切" : "已切" }}
                 </template>
               </el-table-column>
               <el-table-column
@@ -423,7 +423,7 @@
               <el-table-column label="操作" align="center" min-width="200">
                 <template slot-scope="scope">
                   <el-button
-                    v-if="scope.row.status === 0"
+                    v-if="scope.row.status === 1"
                     type="text"
                     @click="handleUpdateStatus(scope.row)"
                   >
