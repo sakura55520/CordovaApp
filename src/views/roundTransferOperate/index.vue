@@ -24,7 +24,7 @@
           ref="detailForm"
           :model="detailForm"
           label-width="120px"
-          :rules="rules"
+          :rules="formrules"
           inline
           :disabled="$route.query.view"
           style="padding-bottom: 500px"
@@ -89,7 +89,7 @@ export default {
   data() {
     return {
       detailForm: Object.assign({}, defaultForm), // 表单列表
-      rules: {
+      formrules: {
         scrapQty: [
           { required: true, message: "请输入报废数量", trigger: "change" },
         ],

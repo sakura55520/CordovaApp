@@ -24,7 +24,7 @@
           ref="detailForm"
           :model="detailForm"
           label-width="150px"
-          :rules="rules"
+          :rules="formRules"
           inline
           :disabled="$route.query.view"
         >
@@ -305,7 +305,7 @@ export default {
   data() {
     return {
       detailForm: Object.assign({}, defaultForm), // 表单列表
-      rules: {
+      formRules: {
         planLength: [
           { required: true, message: "请输入计划长度", trigger: "change" },
         ],

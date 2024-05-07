@@ -24,7 +24,7 @@
           ref="detailForm"
           :model="detailForm"
           label-width="150px"
-          :rules="rules"
+          :rules="formRules"
           inline
           :disabled="$route.query.view"
         >
@@ -324,7 +324,7 @@ export default {
     return {
       detailInfo: {}, // 描述信息
       detailForm: Object.assign({}, cloneDeep(defaultForm)), // 表单列表
-      rules: {
+      formRules: {
         userConfirm: [
           { required: true, message: "请输入掺杂剂确认者", trigger: "change" },
         ],
