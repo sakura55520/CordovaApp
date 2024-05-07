@@ -151,6 +151,14 @@ export function updateBackCuttingSampleRecord(data) {
   });
 }
 
+export function deleteBackCuttingSampleRecord(params) {
+  return request({
+    url: `/wipBackCuttingSampleRecord/deleteRecord`,
+    method: "delete",
+    params,
+  });
+}
+
 // 更新晶锭检验
 export function updateIngotDetectionStatus(data) {
   return request({

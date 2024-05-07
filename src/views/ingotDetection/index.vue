@@ -416,7 +416,7 @@
               />
               <el-table-column
                 label="创建时间"
-                min-width="250"
+                min-width="300"
                 align="center"
                 prop="gmtCreate"
               />
@@ -434,6 +434,12 @@
                     @click="handleUpdateBackCuttings(scope.row, scope.$index)"
                   >
                     编辑
+                  </el-button>
+                  <el-button
+                    type="danger"
+                    @click="handleDeleteBackCuttings(scope.row)"
+                  >
+                    删除
                   </el-button>
                 </template>
               </el-table-column>
@@ -870,6 +876,17 @@ export default {
       this.fetchBackCuttingSampleRecord();
       this.updateDetails();
       this.backCuttingDialogVisible = false;
+    },
+    async handleDeleteBackCuttings(row) {
+      await this.$confirm(`请确认是否删除`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      await Api.deleteBackCuttingSampleRecord({ id: row.id });
+      this.$message.success("返切指令删除成功");
+      this.fetchBackCuttingSampleRecord();
+      this.updateDetails();
     },
     handleBackCuttingFormConfirm() {
       if (this.backCuttingFormType === "新增") this.addBackCuttings();
