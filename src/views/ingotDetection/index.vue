@@ -756,8 +756,10 @@ export default {
       const { processingOrderCode } = this.$route.query;
       getCurrentWipStorageData(processingOrderCode).then((res) => {
         if (!res.data || !res.data.length) return;
-        (res.data[0].fromData.details || []).forEach((item) => {
-          let index = this.formData.details.findIndex(
+        let newDetails = res.data[0].fromData.details || [];
+        let oldDetails = this.formData.details || [];
+        newDetails.forEach((item) => {
+          let index = oldDetails.findIndex(
             (ele) => item.sampleNumber === ele.sampleNumber
           );
           if (index > -1) {
@@ -778,6 +780,14 @@ export default {
             item.res = this.formData.targetResistivity;
             item.crystalDensity = this.getCrystalDensity(item.samplePosition);
             this.formData.details.push(item);
+          }
+        });
+
+        oldDetails.forEach((item, index) => {
+          if (
+            !newDetails.some((ele) => item.sampleNumber === ele.sampleNumber)
+          ) {
+            this.formData.details.splice(index, 1);
           }
         });
       });
@@ -817,18 +827,22 @@ export default {
       this.backCuttingFormData.processOrderCode =
         this.formData.processOrderCode;
 
-      let list = this.formData.backCuttings.filter(
-        (item) =>
-          item.type === this.backCuttingFormData.type &&
-          item.sampleIdentification ===
-            this.backCuttingFormData.sampleIdentification
-      );
+      let list = this.formData.backCuttings
+        .filter(
+          (item) =>
+            item.type === this.backCuttingFormData.type &&
+            item.sampleIdentification ===
+              this.backCuttingFormData.sampleIdentification
+        )
+        .map((item) => Number(item.sampleNumber.split("-")[3]));
+
+      let max = isEmpty(list) ? 0 : Math.max(...list);
 
       let sampleType = this.backCutTypeList.find(
         (ele) => ele.value == this.backCuttingFormData.type
       ).extendValue;
 
-      let index = list.length + 1;
+      let index = max + 1;
       let res = await Api.getSampleCode({
         sampleType,
         crystalNo: this.formData.processOrderCode,
