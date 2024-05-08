@@ -94,7 +94,7 @@ export default {
     },
     postPreview(data) {
       return Api.docketPrintPreview({
-        data, // 打印基础信息
+        data: data.data, // 打印基础信息
         type: 1, // 执行类型：0：不填充数据，1：填充数据
         printNum: 1, // 打印份数
         documentMould: this.documentMould,
@@ -115,7 +115,7 @@ export default {
     },
     postPrint(data) {
       return Api.docketPrint({
-        data, // 打印基础信息
+        data: data.data, // 打印基础信息
         type: 1, // 执行类型：0：不填充数据，1：填充数据
         printNum: this.printNum, // 打印份数
         documentMould: this.documentMould,
