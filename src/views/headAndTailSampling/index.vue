@@ -77,38 +77,38 @@
             </el-form-item>
             <el-form-item
               label="头部回收料编码"
-              prop="headReclaimedMaterialsCode"
+              prop="headReclaimedMaterialCode"
               class="item"
             >
               <div class="input">
                 <el-input
                   class="value"
-                  v-model="formData.headReclaimedMaterialsCode"
+                  v-model="formData.headReclaimedMaterialCode"
                   disabled
                 />
                 <el-button
                   type="primary"
                   class="print-btn"
-                  @click="handlePrint(formData.tailReclaimedMaterialsCode)"
+                  @click="handlePrint(formData.headReclaimedMaterialCode)"
                   >打印回收料条码</el-button
                 >
               </div>
             </el-form-item>
             <el-form-item
               label="尾部回收料编码"
-              prop="tailReclaimedMaterialsCode"
+              prop="tailReclaimedMaterialCode"
               class="item"
             >
               <div class="input">
                 <el-input
                   class="value"
-                  v-model="formData.tailReclaimedMaterialsCode"
+                  v-model="formData.tailReclaimedMaterialCode"
                   disabled
                 />
                 <el-button
                   type="primary"
                   class="print-btn"
-                  @click="handlePrint(formData.tailReclaimedMaterialsCode)"
+                  @click="handlePrint(formData.tailReclaimedMaterialCode)"
                   >打印回收料条码</el-button
                 >
               </div>
@@ -266,7 +266,7 @@
     <PrintDialog
       :visible.sync="printVisible"
       :print-data="printData"
-      document-mould="回收料条码打印"
+      document-mould="切头尾取样-回收料编码"
     />
   </div>
 </template>
@@ -287,12 +287,6 @@ export default {
   },
   data() {
     return {
-      batchNumber: "Z0116504581",
-      furnaceNumber: "A2010504581",
-      recipe: "Reczl20240310v1",
-      processPath: "X0010101",
-      dataOrderCode: "",
-      productName: "",
       formData: {
         userCreate: null,
         totalQty: null,
@@ -607,10 +601,8 @@ export default {
         return "invalid_tr";
       }
     },
-    handlePrint(code) {
-      this.printData = {
-        code,
-      };
+    handlePrint(reclaimedMaterialCode) {
+      this.printData.data = reclaimedMaterialCode;
       this.printVisible = true;
     },
     handleLengthChange(val) {
