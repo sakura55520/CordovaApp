@@ -28,9 +28,10 @@
             />
           </el-form-item>
           <el-form-item label="设备编号">
-            <el-select v-model="detailForm.deviceNumber" filterable default-first-option>
-              <el-option v-for="item in eqpList" :value="item.code" :key="item.id"/>
-            </el-select>
+            <div class="field-bar">
+              {{ detailForm.deviceNumber }}
+              <el-button type="primary" size="mini" @click="dialogDeviceVisible = true">选择</el-button>
+            </div>
           </el-form-item>
         </div>
       </div>
@@ -41,17 +42,17 @@
         </div>
         <div>
           <el-form-item label="是否维修" prop="repair">
-            <el-radio-group v-model="detailForm.repair" class="field-bar">
-              <el-radio :label="0">正常</el-radio>
-              <el-radio :label="1">异常</el-radio>
-            </el-radio-group>
+            <el-select v-model="detailForm.repair" clearable>
+              <el-option :value="0" label="正常"/>
+              <el-option :value="1" label="异常"/>
+            </el-select>
           </el-form-item>
           <el-form-item label="维修结果" prop="repairResult">
             <el-input v-model="detailForm.repairResult"/>
           </el-form-item>
           <el-form-item label="当前工序" prop="currentProcess">
             <el-select v-model="detailForm.currentProcess">
-              <el-option v-for="item in processList" :value="item.name" :key="item.id"/>
+              <el-option v-for="item in processList" :label="item.name" :value="item.value" :key="item.id"/>
             </el-select>
           </el-form-item>
           <el-form-item label="等径长度" prop="diameter">
@@ -79,6 +80,13 @@
       </div>
     </el-form>
 
+    <!--弹窗: 选择设备-->
+    <SelectDeviceList
+      :visible.sync="dialogDeviceVisible"
+      estimate-visible
+      @has-confirm="hasSelectDeviceConfirm"
+    />
+
     <!-- 页面操作 -->
     <div class="page-handle-box" v-if="!$route.query.view">
       <template v-if="isDetail">
@@ -98,17 +106,17 @@ import SelectUserinfo from "@/components/select_userinfo";
 import * as Api from "@/api/shiftChange";
 import { cloneDeep } from "lodash-es";
 import PhotoNew from "@/views/components/photoNew.vue";
-import {getfactoryModelTree} from "@/api/overStationExecution/overStation";
+import { getSeleteData } from "@/utils/select";
 import { mapState } from 'vuex'
-import {fetchEqp} from "@/api/eqp";
 import overStation from "@/mixins/overStation";
+import SelectDeviceList from "@/components/SelectDeviceList.vue";
 
 const defaultForm = {
   shiftTakerName: null, // 接班人
   handOverName: null, // 交班人
   handOverTime: null, // 交接班时间
   deviceNumber: null, // 设备编号
-  repair: 1, // 是否维修
+  repair: null, // 是否维修
   repairResult: null, // 维修结果
   currentProcess: null, // 当前工序
   diameter: null, // 等径长度
@@ -122,6 +130,7 @@ export default {
   components: {
     PhotoNew,
     SelectUserinfo,
+    SelectDeviceList
   },
   data() {
     return {
@@ -130,10 +139,9 @@ export default {
         shiftTakerName: [{ required: true, message: '请输入接班人', trigger: 'change' }],
         handOverName: [{ required: true, message: '请输入交班人', trigger: 'change' }],
         handOverTime: [{ required: true, message: '请输入交接班时间', trigger: 'change' }],
-        repair: [{ required: true, message: '请输入是否维修', trigger: 'change' }],
       },
       processList: [],
-      eqpList: []
+      dialogDeviceVisible: false,
     };
   },
   computed: {
@@ -159,8 +167,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchProcessList()
-    this.fetchEqp()
+    getSeleteData('shiftProcess', this.processList)
     if (this.isCreate) {
       this.detailForm.shiftTakerName = this.realName
     } else {
@@ -216,23 +223,8 @@ export default {
         photo: arrPhoto ? JSON.stringify(arrPhoto) : null,
       }
     },
-    fetchProcessList() {
-      return getfactoryModelTree().then(res => {
-        const workshopList = res.data[0].children[0].children
-        workshopList.forEach(({ children }) => {
-          if (!children) return
-          children.forEach(processItem => {
-            this.processList.push(processItem)
-          })
-        })
-      })
-    },
-    fetchEqp() {
-      fetchEqp({
-        search_EQ_enableState: true
-      }).then(res => {
-        this.eqpList = res.data
-      })
+    hasSelectDeviceConfirm(id, equipmentCode) {
+      this.detailForm.deviceNumber = equipmentCode
     },
   },
 };
