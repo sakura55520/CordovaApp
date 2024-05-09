@@ -129,6 +129,16 @@ export default {
             },
           ],
         },
+        {
+          group: "交接班管理",
+          children: [
+            {
+              name: "交接班管理",
+              href: "/shiftChange",
+              icon: "guozhan",
+            },
+          ],
+        },
       ];
       // 通过key筛选权限
       const filteredList = groupedList

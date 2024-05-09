@@ -43,6 +43,20 @@ export const constantRouterMap = [
     hidden: true,
     meta: {text: '过站操作'},
   },
+  {
+    name: 'shiftChange',
+    path: '/shiftChange',
+    component: () => import('@/views/shiftChange/index'),
+    hidden: true,
+    meta: {text: '交接班管理'},
+  },
+  {
+    name: 'shiftChangeOperate',
+    path: '/shiftChangeOperate',
+    component: () => import('@/views/shiftChange/shiftChangeOperate'),
+    hidden: true,
+    meta: {text: '交接班'},
+  },
 
   {
     name: 'overStationExecution',
