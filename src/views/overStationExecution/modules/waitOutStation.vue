@@ -23,6 +23,7 @@
             }}</template>
           </el-table-column>
           <el-table-column label="数量" prop="number" />
+          <el-table-column label="轮编号" prop="extend1" />
           <el-table-column label="进站时间" prop="inTime" min-width="100" />
           <el-table-column label="操作者" prop="processUserCreate" />
         </el-table>
