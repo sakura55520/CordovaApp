@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    class="pad-form"
+    :class="{'pc-style': $store.getters.fromPC , 'pad-form': true}"
   >
     <Heads
       v-if="!$route.meta.HeadsHide && !$store.getters.fromPC"

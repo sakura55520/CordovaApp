@@ -575,3 +575,8 @@ ul, li, ol {
   }
 }
 
+.pc-style{
+  .scan-input + button {
+    display: none;
+  }
+}
