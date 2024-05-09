@@ -386,6 +386,18 @@
                 prop="samplePosition"
               />
               <el-table-column
+                label="返切距头位置"
+                min-width="120"
+                align="center"
+                prop="cutDistanceStart"
+              />
+              <el-table-column
+                label="返切距尾位置"
+                min-width="120"
+                align="center"
+                prop="cutDistanceEnd"
+              />
+              <el-table-column
                 label="是否返切再利用"
                 min-width="150"
                 align="center"
@@ -510,7 +522,22 @@
           <el-input v-model="backCuttingFormData.tall"></el-input>
         </el-form-item>
         <el-form-item label="返切位置" prop="samplePosition">
-          <el-input v-model="backCuttingFormData.samplePosition"></el-input>
+          <el-input
+            v-model="backCuttingFormData.samplePosition"
+            @change="handleBackCutPositionChange"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="返切距头位置" prop="cutDistanceStart">
+          <el-input
+            v-model="backCuttingFormData.cutDistanceStart"
+            disabled
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="返切距尾位置" prop="cutDistanceEnd">
+          <el-input
+            v-model="backCuttingFormData.cutDistanceEnd"
+            disabled
+          ></el-input>
         </el-form-item>
         <el-form-item label="是否返切再利用" prop="recycle">
           <el-select
@@ -643,6 +670,8 @@ export default {
         type: undefined,
         sampleIdentification: undefined,
         samplePosition: undefined,
+        cutDistanceStart: undefined,
+        cutDistanceEnd: undefined,
         tall: undefined,
         recycle: undefined,
         userCreate: undefined,
@@ -658,6 +687,20 @@ export default {
         ],
         samplePosition: [
           { required: true, message: "返切位置不能为空", trigger: "change" },
+        ],
+        cutDistanceStart: [
+          {
+            required: true,
+            message: "返切距头位置不能为空",
+            trigger: "change",
+          },
+        ],
+        cutDistanceEnd: [
+          {
+            required: true,
+            message: "返切距尾位置不能为空",
+            trigger: "change",
+          },
         ],
         tall: [
           {
@@ -800,6 +843,8 @@ export default {
         type: "",
         sampleIdentification: "",
         samplePosition: 0,
+        cutDistanceStart: 0,
+        cutDistanceEnd: this.formData.lengthQty || 0,
         tall: 4,
         recycle: 1,
         userCreate: this.realName,
@@ -1065,6 +1110,11 @@ export default {
       if (val === "中间片") this.backCuttingFormData.sampleIdentification = "M";
       else if (this.backCuttingFormData.sampleIdentification === "M")
         this.backCuttingFormData.sampleIdentification = "H";
+    },
+    handleBackCutPositionChange(val) {
+      this.backCuttingFormData.cutDistanceStart = val;
+      this.backCuttingFormData.cutDistanceEnd =
+        (this.formData.lengthQty || 0) - val;
     },
   },
 };
