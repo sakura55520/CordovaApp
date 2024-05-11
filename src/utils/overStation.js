@@ -56,6 +56,7 @@ function directInOrOut(storage, processingOrderCode) {
       Message.success(msg)
     })
   }).catch((e) => {
+    postMessage(null)
     console.log(e)
   })
 }
