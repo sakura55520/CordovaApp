@@ -1004,7 +1004,7 @@ export default {
       let value = Number(val);
       let info = this.formData;
       if (!value || value === "NaN" || !info.weight || !info.lengthQty)
-        crystalDensity = "";
+        crystalDensity = "0";
       else
         crystalDensity = (
           ((((info.goodWeight || 0) -
