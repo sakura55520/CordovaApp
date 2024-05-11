@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-      <el-divider class="divider" />
+      <el-divider class="divider"/>
       <h3>出站数据录入</h3>
       <div class="outStation-form">
         <el-form
@@ -99,7 +99,8 @@
                     class="value"
                     v-model="formData.dislocationIdentificationLength"
                   >
-                    <template slot="append">mm</template></el-input
+                    <template slot="append">mm</template>
+                  </el-input
                   >
                 </div>
               </el-form-item>
@@ -208,18 +209,48 @@
               </el-form-item>
             </div>
           </div>
+
+          <div class="form">
+            <div class="form-title">参数说明</div>
+            <div class="row">
+              锅底料毛重计算公式：<br/>
+            </div>
+            <div class="row" v-if="!!formData.ingotWeight && formData.ingotWeight !== 0">
+              <b>晶锭称量有值</b>：锅底料毛重（{{
+                (formData.totalPolysiliconWeight || 0) -
+                (formData.ingotWeight || 0) -
+                (formData.shoulderWeight || 0)
+              }} kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
+              晶锭称量的值（{{ formData.ingotWeight }} kg） - 吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br/>
+            </div>
+            <div class="row" v-else>
+              <b>晶锭称量没有值</b>：锅底料毛重
+              （{{
+                (formData.totalPolysiliconWeight || 0) -
+                (formData.feedbackQty || 0) -
+                (formData.shoulderWeight || 0)
+              }} kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
+              反馈重量（{{ formData.feedbackQty }} kg） - 吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br/>
+            </div>
+            <div class="row">
+              反馈重量（{{ formData.feedbackQty }} kg）：来源于长晶过站中，最后一条晶体重量的值<br/>
+            </div>
+          </div>
         </el-form>
       </div>
     </div>
     <div class="page-handle-box" v-if="!$route.query.view">
       <el-button plain class="cancel" @click="back(null, 'confirm')"
-        >取消</el-button
+      >取消
+      </el-button
       >
       <el-button type="primary" plain class="save" @click="save"
-        >保存</el-button
+      >保存
+      </el-button
       >
       <el-button type="primary" class="submit" @click="handleCheck"
-        >出站确认</el-button
+      >出站确认
+      </el-button
       >
     </div>
     <el-dialog
@@ -301,10 +332,9 @@
 
 <script>
 import * as Api from "@/api/inStation";
-import { isEmpty } from "lodash-es";
 import overStation from "@/mixins/overStation";
-import { mapState } from "vuex";
-import { getSeleteData } from "@/utils/select";
+import {mapState} from "vuex";
+import {getSeleteData} from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -329,16 +359,16 @@ export default {
       },
       formRules: {
         userCreate: [
-          { required: true, message: "操作者不能为空", trigger: "change" },
+          {required: true, message: "操作者不能为空", trigger: "change"},
         ],
         feedbackQty: [
-          { required: true, message: "反馈数量不能为空", trigger: "change" },
+          {required: true, message: "反馈数量不能为空", trigger: "change"},
         ],
         endSitutation: [
-          { required: true, message: "收尾情况不能为空", trigger: "change" },
+          {required: true, message: "收尾情况不能为空", trigger: "change"},
         ],
         scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "change" },
+          {required: true, message: "报废数量不能为空", trigger: "change"},
         ],
         numberConsistence: [
           {
@@ -391,8 +421,8 @@ export default {
   },
   computed: {
     buffParams() {
-      const { processUuid, processingOrderCode } = this.$route.query;
-      return { processUuid, processingOrderCode };
+      const {processUuid, processingOrderCode} = this.$route.query;
+      return {processUuid, processingOrderCode};
     },
     ...mapState({
       realName: (state) => state.user.realName,
@@ -435,7 +465,7 @@ export default {
     async handleCheck() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
-      let { bottomMaterialGrossWeight, bottomMaterialNetWeight } =
+      let {bottomMaterialGrossWeight, bottomMaterialNetWeight} =
         this.formData;
       if (
         Math.abs(bottomMaterialGrossWeight - bottomMaterialNetWeight) >
@@ -500,7 +530,7 @@ export default {
         ingotWeight,
         shoulderWeight,
       } = this.formData;
-      if (!ingotWeight && ingotWeight !== 0) {
+      if (!!ingotWeight && ingotWeight !== 0) {
         this.formData.bottomMaterialGrossWeight = (
           (totalPolysiliconWeight || 0) -
           (feedbackQty || 0) -
@@ -521,22 +551,27 @@ export default {
 .outStationExecution-container {
   padding: 12px 12px 100px 12px;
   background-color: rgb(245, 245, 245);
+
   .info-container {
     background-color: rgb(245, 245, 245);
     display: flex;
     flex-wrap: wrap;
   }
+
   .info {
     display: flex;
     width: 50%;
     margin-bottom: 8px;
+
     .info-label {
       width: 40%;
     }
+
     .info-value {
       width: 60%;
     }
   }
+
   .outStation-form {
     border: 1px solid rgba(0, 0, 0, 0.1);
     min-height: 200px;
@@ -545,9 +580,11 @@ export default {
     background-color: white;
   }
 }
+
 .divider {
   margin: 8px 0px;
 }
+
 .btn {
   position: fixed;
   bottom: 0px;
@@ -557,34 +594,43 @@ export default {
   width: 100%;
   display: flex;
   gap: 8px;
+
   .cancel-btn {
     flex: 1;
   }
+
   .save-btn {
     flex: 1;
   }
+
   .confirm-btn {
     flex: 2;
   }
 }
+
 .base-form {
   display: flex;
   flex-wrap: wrap;
   gap: 2%;
+
   .item {
     width: 49%;
+
     .input {
       display: flex;
       gap: 8px;
+
       .value {
         flex: 1;
       }
+
       .unit {
         width: 30px;
       }
     }
   }
 }
+
 .form {
   margin-top: 20px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -595,19 +641,24 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 2%;
+
   .item {
     width: 49%;
+
     .input {
       display: flex;
       gap: 8px;
+
       .value {
         flex: 1;
       }
+
       .unit {
         width: 30px;
       }
     }
   }
+
   .form-title {
     position: absolute;
     top: -10px;
@@ -615,13 +666,16 @@ export default {
     background: white;
   }
 }
+
 .unit {
   width: 60px;
 }
+
 .dialog-footer {
   display: flex;
   justify-content: end;
 }
+
 .error {
   color: red;
 }
@@ -635,6 +689,7 @@ export default {
   display: flex;
   gap: 10px;
   width: 100%;
+
   .item {
     flex: 1;
   }
