@@ -21,7 +21,7 @@ export default {
       this.$router.back()
     },
     fetchSwitchDict() {
-      const nameSpace = this.$route.query.processCode
+      const nameSpace = this.$route.query.wipStorageCode
       const list = []
       this.enableMap = {}
       // 系统全局开关 字典
