@@ -10,7 +10,9 @@
           </div>
           <div class="grid-item">
             <span class="grid-item-name">生产设备：</span>
-            <span class="grid-item-value">{{ formData.deviceCode || $route.query.deviceCode }}</span>
+            <span class="grid-item-value">{{
+              formData.deviceCode || $route.query.deviceCode
+            }}</span>
           </div>
         </div>
       </div>
@@ -432,7 +434,7 @@
                 align="center"
                 prop="gmtCreate"
               />
-              <el-table-column label="操作" align="center" min-width="200">
+              <el-table-column label="操作" align="center" min-width="250">
                 <template slot-scope="scope">
                   <el-button
                     v-if="scope.row.status === 1"
@@ -448,7 +450,8 @@
                     编辑
                   </el-button>
                   <el-button
-                    type="danger"
+                    type="text"
+                    style="color: red"
                     @click="handleDeleteBackCuttings(scope.row)"
                   >
                     删除
@@ -968,7 +971,7 @@ export default {
       if (!valid) return;
 
       let backCuttings = this.formData.backCuttings;
-      if (backCuttings.some((item) => !item.status)) {
+      if (backCuttings.some((item) => item.status == 1)) {
         this.$message.warning("存在返切指令状态为待切，请先执行返切操作");
         return;
       }
