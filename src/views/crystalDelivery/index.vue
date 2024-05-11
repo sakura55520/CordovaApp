@@ -215,15 +215,7 @@
             <div class="row">
               锅底料毛重计算公式：<br/>
             </div>
-            <div class="row" v-if="!!formData.ingotWeight && formData.ingotWeight !== 0">
-              <b>晶锭称量有值</b>：锅底料毛重（{{
-                (formData.totalPolysiliconWeight || 0) -
-                (formData.ingotWeight || 0) -
-                (formData.shoulderWeight || 0)
-              }} kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
-              晶锭称量的值（{{ formData.ingotWeight }} kg） - 吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br/>
-            </div>
-            <div class="row" v-else>
+            <div class="row" v-if="!formData.ingotWeight && formData.ingotWeight !== 0">
               <b>晶锭称量没有值</b>：锅底料毛重
               （{{
                 (formData.totalPolysiliconWeight || 0) -
@@ -231,6 +223,14 @@
                 (formData.shoulderWeight || 0)
               }} kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
               反馈重量（{{ formData.feedbackQty }} kg） - 吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br/>
+            </div>
+            <div class="row" v-else>
+              <b>晶锭称量有值</b>：锅底料毛重（{{
+                (formData.totalPolysiliconWeight || 0) -
+                (formData.ingotWeight || 0) -
+                (formData.shoulderWeight || 0)
+              }} kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
+              晶锭称量的值（{{ formData.ingotWeight }} kg） - 吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br/>
             </div>
             <div class="row">
               反馈重量（{{ formData.feedbackQty }} kg）：来源于长晶过站中，最后一条晶体重量的值<br/>
@@ -530,7 +530,7 @@ export default {
         ingotWeight,
         shoulderWeight,
       } = this.formData;
-      if (!!ingotWeight && ingotWeight !== 0) {
+      if (!ingotWeight && ingotWeight !== 0) {
         this.formData.bottomMaterialGrossWeight = (
           (totalPolysiliconWeight || 0) -
           (feedbackQty || 0) -
