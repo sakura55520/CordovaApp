@@ -32,40 +32,46 @@
           </div>
           <div class="form">
             <div class="form-title">分段信息</div>
-            <el-form-item label="计划长度" prop="planLength" class="item">
-              <el-input v-model="formData.planLength" disabled>
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="原始长度" prop="originLength" class="item">
-              <el-input
-                v-model="formData.originLength"
-                @change="handleLengthChange"
+            <div class="row">
+              <el-form-item label="计划长度" prop="planLength" class="item">
+                <el-input v-model="formData.planLength" disabled>
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="原始长度" prop="originLength" class="item">
+                <el-input
+                  v-model="formData.originLength"
+                  @change="handleLengthChange"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="崩边长度" prop="chippingLength" class="item">
+                <el-input
+                  v-model="formData.chippingLength"
+                  @change="handleLengthChange"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
+                <el-input
+                  v-model="formData.ellipticLength"
+                  @change="handleLengthChange"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="合格长度"
+                prop="qualifiedLength"
+                class="item"
               >
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="崩边长度" prop="chippingLength" class="item">
-              <el-input
-                v-model="formData.chippingLength"
-                @change="handleLengthChange"
-              >
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
-              <el-input
-                v-model="formData.ellipticLength"
-                @change="handleLengthChange"
-              >
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="合格长度" prop="qualifiedLength" class="item">
-              <el-input v-model="formData.qualifiedLength" disabled>
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
+                <el-input v-model="formData.qualifiedLength" disabled>
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+            </div>
           </div>
         </el-form>
       </div>
@@ -313,5 +319,16 @@ export default {
 }
 .unit {
   width: 60px;
+}
+.row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  .item /deep/ {
+    flex: 1;
+    .el-input-group__append {
+      padding: 0 5px;
+    }
+  }
 }
 </style>
