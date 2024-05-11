@@ -10,7 +10,9 @@
           </div>
           <div class="grid-item">
             <span class="grid-item-name">生产设备：</span>
-            <span class="grid-item-value">{{ formData.deviceCode || $route.query.deviceCode }}</span>
+            <span class="grid-item-value">{{
+              formData.deviceCode || $route.query.deviceCode
+            }}</span>
           </div>
         </div>
       </div>
@@ -285,6 +287,7 @@
               <el-table-column label="流程编号" min-width="300" align="center">
                 <template slot-scope="scope">
                   <el-select
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.processCode"
                     @visible-change="
                       (val) => handleProcessCodeVisibleChange(val, scope.$index)
