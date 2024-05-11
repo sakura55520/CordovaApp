@@ -10,7 +10,7 @@
           </div>
           <div class="grid-item">
             <span class="grid-item-name">生产设备：</span>
-            <span class="grid-item-value">{{ $route.query.deviceCode }}</span>
+            <span class="grid-item-value">{{ formData.deviceCode || $route.query.deviceCode }}</span>
           </div>
         </div>
       </div>

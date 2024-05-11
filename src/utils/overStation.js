@@ -5,13 +5,13 @@ import { getCurrentWipStorageData } from '@/api/overStation/overStation'
 import { inOrOutStation } from "@/api/inStation";
 
 // 根据加工工单查询站点
-export function fetchStorage(processingOrderCode) {
+export function fetchStorage(processingOrderCode, deviceCode) {
   getCurrentWipStorageData(processingOrderCode).then(res => {
     if (!res.data || !res.data.length) return Message.warning('未查询到过站信息!')
 
     const list = res.data
     if (list.length === 1 && !list[0].isNeedsDevice) {
-      handleInOrOutStation(list[0], processingOrderCode)
+      handleInOrOutStation(list[0], processingOrderCode, deviceCode)
     } else {
       store.dispatch('SetProcessingOrderCode', processingOrderCode)
       store.dispatch('SetStationList', list)
@@ -20,7 +20,7 @@ export function fetchStorage(processingOrderCode) {
 }
 
 // 进站/出站
-export function handleInOrOutStation(storage, processingOrderCode) {
+export function handleInOrOutStation(storage, processingOrderCode, deviceCode) {
   switch (storage.operationType) {
     // operationType 0：直接出站/直接进站，1：自定义表单，2：定制化页面
     case 0:
@@ -30,7 +30,7 @@ export function handleInOrOutStation(storage, processingOrderCode) {
       trendsform(storage, processingOrderCode)
       break
     case 2:
-      goOperationPage(storage, processingOrderCode);
+      goOperationPage(storage, processingOrderCode, deviceCode);
       break
   }
 }
@@ -74,12 +74,13 @@ export function calcStationOperator(skipStatus, wipStorageStatus) {
 }
 
 // 跳转到操作页面
-function goOperationPage(storage, processingOrderCode) {
+function goOperationPage(storage, processingOrderCode, deviceCode) {
   const go = router.app._route.query.routerReplace ? 'replace' : 'push'
   router[go]({
     path: storage.operationData,
     query: {
       ...storage,
+      deviceCode,
       processingOrderCode,
       fromData: JSON.stringify(storage.fromData)
     }
