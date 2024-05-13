@@ -484,8 +484,9 @@ export default {
       let { bottomMaterialGrossWeight, bottomMaterialNetWeight } =
         this.formData;
       if (
+        this.formData.end &&
         Math.abs(bottomMaterialGrossWeight - bottomMaterialNetWeight) >
-        this.bottomMaterialDifference
+          this.bottomMaterialDifference
       ) {
         this.$message.warning(
           `埚底料毛重和净重的差值不能超过：${this.bottomMaterialDifference}kg`
