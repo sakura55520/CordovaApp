@@ -227,24 +227,24 @@
               v-if="!formData.ingotWeight && formData.ingotWeight !== 0"
             >
               <b>晶锭称量没有值</b>：埚底料毛重 （{{
-                (formData.totalPolysiliconWeight || 0) -
+                (formData.polysiliconWeight || 0) -
                 (formData.feedbackQty || 0) -
                 (formData.shoulderWeight || 0)
               }}
               kg） = 总投料多晶硅重量（{{
-                formData.totalPolysiliconWeight
+                formData.polysiliconWeight
               }}
               kg） - 反馈重量（{{ formData.feedbackQty }} kg） -
               吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br />
             </div>
             <div class="row" v-else>
               <b>晶锭称量有值</b>：埚底料毛重（{{
-                (formData.totalPolysiliconWeight || 0) -
+                (formData.polysiliconWeight || 0) -
                 (formData.ingotWeight || 0) -
                 (formData.shoulderWeight || 0)
               }}
               kg） = 总投料多晶硅重量（{{
-                formData.totalPolysiliconWeight
+                formData.polysiliconWeight
               }}
               kg） - 晶锭称量的值（{{ formData.ingotWeight }} kg） -
               吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br />
@@ -540,20 +540,20 @@ export default {
     },
     handleIngotWeightChange() {
       const {
-        totalPolysiliconWeight,
+        polysiliconWeight,
         feedbackQty,
         ingotWeight,
         shoulderWeight,
       } = this.formData;
       if (!ingotWeight && ingotWeight !== 0) {
         this.formData.bottomMaterialGrossWeight = (
-          (totalPolysiliconWeight || 0) -
+          (polysiliconWeight || 0) -
           (feedbackQty || 0) -
           (shoulderWeight || 0)
         ).toFixed(3);
       } else
         this.formData.bottomMaterialGrossWeight = (
-          (totalPolysiliconWeight || 0) -
+          (polysiliconWeight || 0) -
           (ingotWeight || 0) -
           (shoulderWeight || 0)
         ).toFixed(3);
