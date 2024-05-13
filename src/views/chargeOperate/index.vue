@@ -332,7 +332,7 @@ export default {
           { required: true, message: "请输入报废数量", trigger: "change" },
         ],
         technologyNumber: [
-          { required: true, message: "请输入工艺编号", trigger: "blur" },
+          { required: true, message: "请输入工艺编号", trigger: "change" },
         ],
         seedCrystalNumber: [
           { required: true, message: "请输入籽晶编号", trigger: "change" },
