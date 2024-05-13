@@ -228,24 +228,33 @@
               v-if="!formData.ingotWeight && formData.ingotWeight !== 0"
             >
               <b>晶锭称量没有值</b>：埚底料毛重 （{{
-                (formData.polysiliconWeight || 0) -
-                (formData.feedbackQty || 0) -
-                (formData.shoulderWeight || 0)
+                (
+                  (formData.totalPolysiliconWeight || 0) -
+                  (formData.feedbackQty || 0) -
+                  (formData.totalPreIngotWeight || 0) -
+                  (formData.totalShoulderWeight || 0)
+                ).toFixed(3)
               }}
-              kg） = 总投料多晶硅重量（{{ formData.polysiliconWeight }} kg） -
-              反馈重量（{{ formData.feedbackQty }} kg） - 吊肩记录重量总和（{{
+              kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
+              反馈重量（{{ formData.feedbackQty }} kg） -
+              前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
+              吊肩记录重量总和（{{
                 formData.shoulderWeight
               }}
               kg）<br />
             </div>
             <div class="row" v-else>
               <b>晶锭称量有值</b>：埚底料毛重（{{
-                (formData.polysiliconWeight || 0) -
-                (formData.ingotWeight || 0) -
-                (formData.shoulderWeight || 0)
+                (
+                  (formData.totalPolysiliconWeight || 0) -
+                  (formData.ingotWeight || 0) -
+                  (formData.totalPreIngotWeight || 0) -
+                  (formData.totalShoulderWeight || 0)
+                ).toFixed(3)
               }}
-              kg） = 总投料多晶硅重量（{{ formData.polysiliconWeight }} kg） -
+              kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
               晶锭称量的值（{{ formData.ingotWeight }} kg） -
+              前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
               吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br />
             </div>
             <div class="row">
