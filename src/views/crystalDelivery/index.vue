@@ -234,14 +234,12 @@
                   (formData.totalPreIngotWeight || 0) -
                   (formData.totalShoulderWeight || 0)
                 ).toFixed(3)
+              }} kg） = 总投料多晶硅重量（{{
+                formData.totalPolysiliconWeight
               }}
-              kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
-              反馈重量（{{ formData.feedbackQty }} kg） -
+              kg） - 反馈重量（{{ formData.feedbackQty }} kg） -
               前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
-              吊肩记录重量总和（{{
-                formData.totalShoulderWeight
-              }}
-              kg）<br />
+              吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）<br />
             </div>
             <div class="row" v-else>
               <b>晶锭称量有值</b>：埚底料毛重（{{
@@ -252,8 +250,10 @@
                   (formData.totalShoulderWeight || 0)
                 ).toFixed(3)
               }}
-              kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
-              晶锭称量的值（{{ formData.ingotWeight }} kg） -
+              kg） = 总投料多晶硅重量（{{
+                formData.totalPolysiliconWeight
+              }}
+              kg） - 晶锭称量的值（{{ formData.ingotWeight }} kg） -
               前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
               吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）<br />
             </div>
@@ -495,8 +495,9 @@ export default {
       let { totalBottomMaterialGrossWeight, bottomMaterialNetWeight } =
         this.formData;
       if (
+        this.formData.end &&
         Math.abs(totalBottomMaterialGrossWeight - bottomMaterialNetWeight) >
-        this.bottomMaterialDifference
+          this.bottomMaterialDifference
       ) {
         this.$message.warning(
           `埚底料毛重和净重的差值不能超过：${this.bottomMaterialDifference}kg`
@@ -555,6 +556,7 @@ export default {
         totalPolysiliconWeight,
         feedbackQty,
         ingotWeight,
+        totalPreIngotWeight,
         totalShoulderWeight,
       } = this.formData;
       // if (!ingotWeight && ingotWeight !== 0) {
