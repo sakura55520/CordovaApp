@@ -166,7 +166,7 @@
                   <el-input
                     class="value"
                     v-model="formData.ingotWeight"
-                    @change="handleIngotWeightChange"
+                    @input="handleIngotWeightChange"
                   >
                     <template slot="append">kg</template>
                   </el-input>
