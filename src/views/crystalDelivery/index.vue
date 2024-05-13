@@ -221,12 +221,12 @@
 
           <div class="form">
             <div class="form-title">参数说明</div>
-            <div class="row">锅底料毛重计算公式：<br /></div>
+            <div class="row">埚底料毛重计算公式：<br /></div>
             <div
               class="row"
               v-if="!formData.ingotWeight && formData.ingotWeight !== 0"
             >
-              <b>晶锭称量没有值</b>：锅底料毛重 （{{
+              <b>晶锭称量没有值</b>：埚底料毛重 （{{
                 (formData.totalPolysiliconWeight || 0) -
                 (formData.feedbackQty || 0) -
                 (formData.shoulderWeight || 0)
@@ -238,7 +238,7 @@
               吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br />
             </div>
             <div class="row" v-else>
-              <b>晶锭称量有值</b>：锅底料毛重（{{
+              <b>晶锭称量有值</b>：埚底料毛重（{{
                 (formData.totalPolysiliconWeight || 0) -
                 (formData.ingotWeight || 0) -
                 (formData.shoulderWeight || 0)
