@@ -174,7 +174,7 @@
               </el-form-item>
               <el-form-item
                 label="埚底料毛重"
-                prop="bottomMaterialGrossWeight"
+                prop="totalBottomMaterialGrossWeight"
                 class="item"
                 :rules="[
                   {
@@ -188,7 +188,7 @@
                   <el-input
                     class="value"
                     disabled
-                    v-model="formData.bottomMaterialGrossWeight"
+                    v-model="formData.totalBottomMaterialGrossWeight"
                   >
                     <template slot="append">kg</template>
                   </el-input>
@@ -373,6 +373,10 @@ export default {
         disengageDiameter: null,
         bottomMaterialGrossWeight: null,
         bottomMaterialNetWeight: null,
+        totalBottomMaterialGrossWeight: null,
+        totalShoulderWeight: null,
+        totalPolysiliconWeight: null,
+        totalPreIngotWeight: null,
         ingotWeight: null,
       },
       formRules: {
@@ -481,10 +485,10 @@ export default {
     async handleCheck() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
-      let { bottomMaterialGrossWeight, bottomMaterialNetWeight } =
+      let { totalBottomMaterialGrossWeight, bottomMaterialNetWeight } =
         this.formData;
       if (
-        Math.abs(bottomMaterialGrossWeight - bottomMaterialNetWeight) >
+        Math.abs(totalBottomMaterialGrossWeight - bottomMaterialNetWeight) >
         this.bottomMaterialDifference
       ) {
         this.$message.warning(
@@ -541,23 +545,36 @@ export default {
     },
     handleIngotWeightChange() {
       const {
-        polysiliconWeight,
+        totalPolysiliconWeight,
         feedbackQty,
         ingotWeight,
-        shoulderWeight,
+        totalShoulderWeight,
       } = this.formData;
+      // if (!ingotWeight && ingotWeight !== 0) {
+      //   this.formData.totalBottomMaterialGrossWeight = (
+      //     (polysiliconWeight || 0) -
+      //     (feedbackQty || 0) -
+      //     (shoulderWeight || 0)
+      //   ).toFixed(3);
+      // } else
+      //   this.formData.totalBottomMaterialGrossWeight = (
+      //     (polysiliconWeight || 0) -
+      //     (ingotWeight || 0) -
+      //     (shoulderWeight || 0)
+      //   ).toFixed(3);
       if (!ingotWeight && ingotWeight !== 0) {
-        this.formData.bottomMaterialGrossWeight = (
-          (polysiliconWeight || 0) -
+        this.formData.totalBottomMaterialGrossWeight = (
+          (totalPolysiliconWeight || 0) -
           (feedbackQty || 0) -
-          (shoulderWeight || 0)
+          (totalShoulderWeight || 0)
         ).toFixed(3);
       } else
-        this.formData.bottomMaterialGrossWeight = (
-          (polysiliconWeight || 0) -
+        this.formData.totalBottomMaterialGrossWeight = (
+          (totalPolysiliconWeight || 0) -
           (ingotWeight || 0) -
-          (shoulderWeight || 0)
+          (totalShoulderWeight || 0)
         ).toFixed(3);
+
     },
   },
 };
