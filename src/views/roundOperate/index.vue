@@ -425,13 +425,13 @@ export default {
       this.detailForm.cMinute = cDegreesMinute[1];
       this.detailForm.dDegrees = dDegreesMinute[0];
       this.detailForm.dMinute = dDegreesMinute[1];
-      this.detailForm.crystalDeviation = Number(
-        Math.pow(
-          Math.pow((crystallinePhaseA - crystallinePhaseC) / 2, 2) -
-            Math.pow(crystallinePhaseB - crystallinePhaseD, 2),
-          1 / 2
-        ) / 2
-      ).toFixed(2);
+
+      let crystalDeviation = null;
+      let temp =
+        Math.pow((crystallinePhaseA - crystallinePhaseC) / 2, 2) -
+        Math.pow(crystallinePhaseB - crystallinePhaseD, 2);
+      if (temp >= 0) crystalDeviation = (Math.sqrt(temp) / 2).toFixed(2);
+      this.detailForm.crystalDeviation = crystalDeviation;
     },
     calcCrystallinePhase() {
       const {
@@ -453,13 +453,13 @@ export default {
       this.detailForm.crystallinePhaseB = crystallinePhaseB;
       this.detailForm.crystallinePhaseC = crystallinePhaseC;
       this.detailForm.crystallinePhaseD = crystallinePhaseD;
-      this.detailForm.crystalDeviation = Number(
-        Math.pow(
-          Math.pow((crystallinePhaseA - crystallinePhaseC) / 2, 2) -
-            Math.pow(crystallinePhaseB - crystallinePhaseD, 2),
-          1 / 2
-        ) / 2
-      ).toFixed(2);
+
+      let crystalDeviation = null;
+      let temp =
+        Math.pow((crystallinePhaseA - crystallinePhaseC) / 2, 2) -
+        Math.pow(crystallinePhaseB - crystallinePhaseD, 2);
+      if (temp >= 0) crystalDeviation = (Math.sqrt(temp) / 2).toFixed(2);
+      this.detailForm.crystalDeviation = crystalDeviation;
     },
     formatDegree(value) {
       value = Math.abs(value);

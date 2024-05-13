@@ -205,6 +205,7 @@
                     trigger: 'change',
                   },
                 ]"
+                v-if="formData.end"
               >
                 <div class="input">
                   <el-input
@@ -308,11 +309,11 @@
           min-width="150"
           prop="polysiliconDeductionQty"
         ></el-table-column>
-<!--        <el-table-column-->
-<!--          label="多晶硅扣料计算"-->
-<!--          min-width="250"-->
-<!--          prop="polysiliconDeductionCalc"-->
-<!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          label="多晶硅扣料计算"-->
+        <!--          min-width="250"-->
+        <!--          prop="polysiliconDeductionCalc"-->
+        <!--        ></el-table-column>-->
         <el-table-column
           label="石英坩埚投料"
           min-width="150"
@@ -333,11 +334,11 @@
           min-width="150"
           prop="dopantDeductionQty"
         ></el-table-column>
-<!--        <el-table-column-->
-<!--          label="掺杂剂扣料计算"-->
-<!--          min-width="250"-->
-<!--          prop="dopantDeductionCalc"-->
-<!--        ></el-table-column>-->
+        <!--        <el-table-column-->
+        <!--          label="掺杂剂扣料计算"-->
+        <!--          min-width="250"-->
+        <!--          prop="dopantDeductionCalc"-->
+        <!--        ></el-table-column>-->
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogCheckVisible = false">取 消</el-button>
