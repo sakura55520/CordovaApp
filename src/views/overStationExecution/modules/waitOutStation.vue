@@ -80,7 +80,7 @@
           class="list-radio"
           border
           :label="item.processUuid"
-          >{{ item.wipStorageName }}</el-radio
+          >{{ item.lastWipStorageName }}</el-radio
         >
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
