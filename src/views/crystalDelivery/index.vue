@@ -566,12 +566,14 @@ export default {
         this.formData.totalBottomMaterialGrossWeight = (
           (totalPolysiliconWeight || 0) -
           (feedbackQty || 0) -
+          (totalPreIngotWeight || 0) -
           (totalShoulderWeight || 0)
         ).toFixed(3);
       } else
         this.formData.totalBottomMaterialGrossWeight = (
           (totalPolysiliconWeight || 0) -
           (ingotWeight || 0) -
+          (totalPreIngotWeight || 0) -
           (totalShoulderWeight || 0)
         ).toFixed(3);
 
