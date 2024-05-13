@@ -266,12 +266,13 @@
                     placeholder=""
                     class="form-item-cover"
                   >
-                    <el-option
-                      :label="item.label"
-                      :value="Number(item.value)"
-                      v-for="item in segmentTypeList"
-                      :key="item.value"
-                    ></el-option>
+                    <div v-for="item in segmentTypeList" :key="item.value">
+                      <el-option
+                        v-if="Number(item.value) !== 2"
+                        :label="item.label"
+                        :value="Number(item.value)"
+                      ></el-option>
+                    </div>
                   </el-select>
                 </template>
               </el-table-column>
@@ -313,12 +314,7 @@
                 prop="diameter"
               >
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.diameter"
-                    v-direction="{ x: 0, y: scope.$index }"
-                  >
-                    <template slot="append">寸</template>
-                  </el-input>
+                  {{ scope.row.diameter }}寸
                 </template>
               </el-table-column>
               <el-table-column
@@ -383,13 +379,29 @@
                 min-width="150"
                 align="center"
                 prop="calculatedPosition"
-              />
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.calculatedPosition"
+                    @change="(value) => calcResistivity(value, scope.$index)"
+                    v-direction="{ x: 4, y: scope.$index }"
+                  ></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="计算电阻率"
                 min-width="150"
                 align="center"
                 prop="calculatedResistivity"
-              />
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.calculatedResistivity"
+                    @change="(value) => calcPosition(value, scope.$index)"
+                    v-direction="{ x: 5, y: scope.$index }"
+                  ></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="头部电阻率"
                 min-width="120"
@@ -399,7 +411,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.headResistance"
-                    v-direction="{ x: 7, y: scope.$index }"
+                    v-direction="{ x: 6, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -412,7 +424,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.tailResistance"
-                    v-direction="{ x: 8, y: scope.$index }"
+                    v-direction="{ x: 7, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -476,7 +488,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.remarks"
-                    v-direction="{ x: 9, y: scope.$index }"
+                    v-direction="{ x: 8, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -500,7 +512,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.qualifiedLength"
-                    v-direction="{ x: 10, y: scope.$index }"
+                    v-direction="{ x: 9, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -513,7 +525,7 @@
                 <template slot-scope="scope">
                   <el-input
                     v-model="scope.row.qualifiedWeight"
-                    v-direction="{ x: 11, y: scope.$index }"
+                    v-direction="{ x: 10, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -964,6 +976,18 @@ export default {
       }
       return list;
     },
+    headResistance() {
+      let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
+      return reverseDetails.find(
+        (item) => item.type === "头尾样片" && item.sampleIdentification === "H"
+      ).resC;
+    },
+    tailResistance() {
+      let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
+      return reverseDetails.find(
+        (item) => item.type === "头尾样片" && item.sampleIdentification === "T"
+      ).resC;
+    },
   },
   created() {
     this.initKeyup();
@@ -1134,11 +1158,13 @@ export default {
         );
       }
 
-      this.formData._files = (this.formData.photo || []).map((fileItem) => ({
-        ...fileItem,
-        big_url: fileItem.fileUrl,
-        thumb_url: fileItem.fileUrl,
-      }));
+      this.formData._files = JSON.parse(this.formData.photo || "[]").map(
+        (fileItem) => ({
+          ...fileItem,
+          big_url: fileItem.fileUrl,
+          thumb_url: fileItem.fileUrl,
+        })
+      );
     },
     async handleCodeClick() {
       let { length } = this.formData;
@@ -1154,12 +1180,12 @@ export default {
         this.$message.warning("头部位置和尾部位置请填写完整");
         return;
       }
-      if (totalLength !== length) {
-        this.$message.warning(
-          `晶锭总长度需要和单晶长度一致,晶锭总长度:${totalLength}mm,单晶长度:${length}mm`
-        );
-        return;
-      }
+      // if (totalLength !== length) {
+      //   this.$message.warning(
+      //     `晶锭总长度需要和单晶长度一致,晶锭总长度:${totalLength}mm,单晶长度:${length}mm`
+      //   );
+      //   return;
+      // }
       let res = await Api.segmentedInstructionGenerateNo(this.formData);
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
       res.segmentedInstructionDetailVos.forEach((item, index) => {
@@ -1331,6 +1357,65 @@ export default {
         val == 0
           ? this.formData.segmentedInstructionDetailVos[index].planWeight
           : null
+      );
+    },
+    calcResistivity(y, index) {
+      let g = 14.8; //单晶重量
+      // let s = this.formData.length;
+      let s = 600;
+      let h = 0.36; //头料重量
+      let i = 0.845; //尾料重量
+      let j = 29.91; //投料量
+      // let a = this.headResistance;
+      // let b = this.tailResistance;
+      let a = 39.9;
+      let b = 28.5;
+      let K = 2;
+
+      let p1 =
+        Math.pow(
+          1 - ((g / s) * (s - y)) / (j - (g - i - (g / s) * (s - y))),
+          K - 1
+        ) * b;
+
+      let x1 =
+        (a *
+          Math.pow(
+            1 - h / j,
+            Math.log(b / a) / Math.log((1 - h / j) / (1 - (g - i) / j))
+          )) /
+        Math.pow(
+          1 -
+            (Math.PI / 4) *
+              ((Math.pow(
+                Math.pow(((g - h - i) / 2.33) * Math.PI * s, 0.5) * 2,
+                2
+              ) *
+                y *
+                2.33) /
+                (j * 1000000)),
+          Math.log(b / a) / Math.log((1 - h / j) / (1 - (g - i) / j))
+        );
+
+      let calculatedResistivity = ((p1 + x1) / 2).toFixed(5);
+
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[index],
+        "calculatedResistivity",
+        calculatedResistivity
+      );
+    },
+    calcPosition(x, index) {
+      let a = 39.9;
+      let b = 28.5;
+      let s = 600;
+
+      let calculatedPosition = (((a - x) * s) / (a - b)).toFixed(5);
+
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[index],
+        "calculatedPosition",
+        calculatedPosition
       );
     },
   },
