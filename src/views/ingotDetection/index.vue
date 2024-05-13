@@ -1065,16 +1065,14 @@ export default {
         tailResC
       )
         headTailResistivityRatio = (headResC / tailResC).toFixed(5);
-      this.$set(
-        this.formData.details[headIndex],
-        "headTailResistivityRatio",
-        headTailResistivityRatio
-      );
-      this.$set(
-        this.formData.details[tailIndex],
-        "headTailResistivityRatio",
-        headTailResistivityRatio
-      );
+
+      this.formData.details.forEach((element, index) => {
+        this.$set(
+          this.formData.details[index],
+          "headTailResistivityRatio",
+          headTailResistivityRatio
+        );
+      });
     },
     handleInspectorSelect(val, index) {
       this.$set(this.formData.details[index], "checkDate", new Date());
