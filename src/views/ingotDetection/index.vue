@@ -1058,21 +1058,19 @@ export default {
       let headResC = this.formData.details[headIndex].resC;
       let tailResC = this.formData.details[tailIndex].resC;
 
-      if (
-        row.type === "头尾样片" &&
-        (index === headIndex || index === tailIndex) &&
-        (headResC || headResC === 0) &&
-        tailResC
-      )
-        headTailResistivityRatio = (headResC / tailResC).toFixed(5);
+      if ((headResC || headResC === 0) && tailResC)
+        headTailResistivityRatio = (headResC / tailResC).toFixed(3);
 
-      this.formData.details.forEach((element, index) => {
-        this.$set(
-          this.formData.details[index],
-          "headTailResistivityRatio",
-          headTailResistivityRatio
-        );
-      });
+      this.$set(
+        this.formData.details[headIndex],
+        "headTailResistivityRatio",
+        headTailResistivityRatio
+      );
+      this.$set(
+        this.formData.details[tailIndex],
+        "headTailResistivityRatio",
+        headTailResistivityRatio
+      );
     },
     handleInspectorSelect(val, index) {
       this.$set(this.formData.details[index], "checkDate", new Date());
