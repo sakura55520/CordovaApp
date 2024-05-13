@@ -10,7 +10,9 @@
         </div>
         <div class="grid-item">
           <span class="grid-item-name">生产设备：</span>
-          <span class="grid-item-value">{{ detailForm.deviceCode || $route.query.deviceCode }}</span>
+          <span class="grid-item-value">{{
+            detailForm.deviceCode || $route.query.deviceCode
+          }}</span>
         </div>
       </div>
     </div>
@@ -424,11 +426,12 @@ export default {
       this.detailForm.dDegrees = dDegreesMinute[0];
       this.detailForm.dMinute = dDegreesMinute[1];
       this.detailForm.crystalDeviation = Number(
-        ((crystallinePhaseA - crystallinePhaseB) ** 2 -
-          (crystallinePhaseC - crystallinePhaseD) ** 2) **
-          (1 / 2) /
-          2
-      ).toFixed(5);
+        Math.pow(
+          Math.pow((crystallinePhaseA - crystallinePhaseC) / 2, 2) -
+            Math.pow(crystallinePhaseB - crystallinePhaseD, 2),
+          1 / 2
+        ) / 2
+      ).toFixed(2);
     },
     calcCrystallinePhase() {
       const {
@@ -450,12 +453,13 @@ export default {
       this.detailForm.crystallinePhaseB = crystallinePhaseB;
       this.detailForm.crystallinePhaseC = crystallinePhaseC;
       this.detailForm.crystallinePhaseD = crystallinePhaseD;
-      this.detailForm.crystalDeviation = (
-        Math.sqrt(
-          (crystallinePhaseA - crystallinePhaseB) ** 2 -
-            (crystallinePhaseC - crystallinePhaseD) ** 2
+      this.detailForm.crystalDeviation = Number(
+        Math.pow(
+          Math.pow((crystallinePhaseA - crystallinePhaseC) / 2, 2) -
+            Math.pow(crystallinePhaseB - crystallinePhaseD, 2),
+          1 / 2
         ) / 2
-      ).toFixed(5);
+      ).toFixed(2);
     },
     formatDegree(value) {
       value = Math.abs(value);
