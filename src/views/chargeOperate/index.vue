@@ -10,7 +10,9 @@
         </div>
         <div class="grid-item">
           <span class="grid-item-name">生产设备：</span>
-          <span class="grid-item-value">{{ detailForm.deviceCode || $route.query.deviceCode }}</span>
+          <span class="grid-item-value">{{
+            detailForm.deviceCode || $route.query.deviceCode
+          }}</span>
         </div>
       </div>
     </div>
@@ -540,7 +542,8 @@ export default {
     },
     getProcessNo() {
       getProcessNo({
-        search_EQ_equipmentCode: this.$route.query.deviceCode,
+        search_EQ_equipmentCode:
+          this.detailForm.deviceCode || this.$route.query.deviceCode,
         page: 1,
         rows: 1000,
       }).then((res) => {

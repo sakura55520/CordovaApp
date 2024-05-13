@@ -102,7 +102,14 @@
                 label="位错反延线长度"
                 prop="dislocationIdentificationLength"
                 class="item"
-                label-width="130px"
+                label-width="140px"
+                :rules="[
+                  {
+                    required: this.formData.dislocationIdentification,
+                    message: '位错反延线标识不能为空',
+                    trigger: 'change',
+                  },
+                ]"
               >
                 <div class="input">
                   <el-input
@@ -166,7 +173,7 @@
                   <el-input
                     class="value"
                     v-model="formData.ingotWeight"
-                    @change="handleIngotWeightChange"
+                    @input="handleIngotWeightChange"
                   >
                     <template slot="append">kg</template>
                   </el-input>
@@ -234,7 +241,8 @@
                   (formData.totalPreIngotWeight || 0) -
                   (formData.totalShoulderWeight || 0)
                 ).toFixed(3)
-              }} kg） = 总投料多晶硅重量（{{
+              }}
+              kg） = 总投料多晶硅重量（{{
                 formData.totalPolysiliconWeight
               }}
               kg） - 反馈重量（{{ formData.feedbackQty }} kg） -

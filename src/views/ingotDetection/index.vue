@@ -757,6 +757,7 @@ export default {
 
       this.formData.details = (this.formData.details || []).map((item) => ({
         ...item,
+        productCategory: this.formData.productCategory,
         orientation: this.formData.orientation,
         size: this.formData.size,
         res: this.formData.targetResistivity,
@@ -806,6 +807,7 @@ export default {
                 this.getCrystalDensity(item.samplePosition)
             );
           } else {
+            item.productCategory = this.formData.productCategory;
             item.orientation = this.formData.orientation;
             item.size = this.formData.size;
             item.res = this.formData.targetResistivity;
