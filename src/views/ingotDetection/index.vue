@@ -216,13 +216,19 @@
                 min-width="140"
                 align="center"
                 prop="rrg"
-              />
+              >
+                <template slot-scope="scope"> {{ scope.row.rrg }}% </template>
+              </el-table-column>
               <el-table-column
                 label="1/2 RRG"
                 min-width="140"
                 align="center"
                 prop="halfRrg"
-              />
+              >
+                <template slot-scope="scope">
+                  {{ scope.row.halfRrg }}%
+                </template>
+              </el-table-column>
               <el-table-column
                 label="头尾电阻比"
                 min-width="140"
@@ -1014,12 +1020,12 @@ export default {
     },
     calcHalfRrg(index) {
       let item = this.formData.details[index];
-      let data = ((item.halfRes - item.resC) / item.resC).toFixed(3);
+      let data = (((item.halfRes - item.resC) / item.resC) * 100).toFixed(3);
       this.$set(this.formData.details[index], "halfRrg", data);
     },
     calcRrg(index) {
       let item = this.formData.details[index];
-      let data = ((item.resE - item.resC) / item.resC).toFixed(3);
+      let data = (((item.resE - item.resC) / item.resC) * 100).toFixed(3);
       this.$set(this.formData.details[index], "rrg", data);
     },
     calcTargetDeviation(index) {
@@ -1029,7 +1035,7 @@ export default {
     },
     calcOrg(index) {
       let item = this.formData.details[index];
-      let data = (Math.abs(item.oiC - item.oiE) / item.oiC).toFixed(3);
+      let data = ((Math.abs(item.oiC - item.oiE) / item.oiC) * 100).toFixed(3);
       this.$set(this.formData.details[index], "org", data);
     },
     calcHeadTailResistivityRatio(row, index) {
