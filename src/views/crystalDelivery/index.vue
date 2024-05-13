@@ -234,8 +234,7 @@
                   (formData.totalPreIngotWeight || 0) -
                   (formData.totalShoulderWeight || 0)
                 ).toFixed(3)
-              }}
-              kg） = 总投料多晶硅重量（{{
+              }} kg） = 总投料多晶硅重量（{{
                 formData.totalPolysiliconWeight
               }}
               kg） - 反馈重量（{{ formData.feedbackQty }} kg） -
