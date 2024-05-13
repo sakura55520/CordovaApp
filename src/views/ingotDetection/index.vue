@@ -1030,22 +1030,22 @@ export default {
     },
     calcHalfRrg(index) {
       let item = this.formData.details[index];
-      let data = ((item.halfRes - item.resC) / item.resC).toFixed(5);
+      let data = ((item.halfRes - item.resC) / item.resC).toFixed(3);
       this.$set(this.formData.details[index], "halfRrg", data);
     },
     calcRrg(index) {
       let item = this.formData.details[index];
-      let data = ((item.resE - item.resC) / item.resC).toFixed(5);
+      let data = ((item.resE - item.resC) / item.resC).toFixed(3);
       this.$set(this.formData.details[index], "rrg", data);
     },
     calcTargetDeviation(index) {
       let item = this.formData.details[index];
-      let data = ((item.resC - item.res) / item.res).toFixed(5);
+      let data = ((item.resC - item.res) / item.res).toFixed(3);
       this.$set(this.formData.details[index], "targetDeviation", data);
     },
     calcOrg(index) {
       let item = this.formData.details[index];
-      let data = (Math.abs(item.oiC - item.oiE) / item.oiC).toFixed(5);
+      let data = (Math.abs(item.oiC - item.oiE) / item.oiC).toFixed(3);
       this.$set(this.formData.details[index], "org", data);
     },
     calcHeadTailResistivityRatio(row, index) {
