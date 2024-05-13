@@ -462,17 +462,6 @@
               </el-table-column>
             </el-table>
           </div>
-          <!-- <div class="form">
-            <div class="form-title">留档文档记录</div>
-            <div class="growth-section">
-              <PhotoNew
-                v-model="formData._files"
-                :componentDisabled="false"
-                :name="'CHECK_DEVICE'"
-                @input="handleFileChange"
-              />
-            </div>
-          </div> -->
         </el-form>
       </div>
     </div>
@@ -620,7 +609,6 @@ export default {
         lengthQty: null,
         wipCrystalGrowthOutErrors: [],
         details: [],
-        _files: [],
         backCuttings: [],
       },
       formRules: {
@@ -766,12 +754,6 @@ export default {
       getSeleteData("osfDensity", this.osfDensityList);
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
       getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
-
-      this.formData._files = (this.formData.photo || []).map((fileItem) => ({
-        ...fileItem,
-        big_url: fileItem.fileUrl,
-        thumb_url: fileItem.fileUrl,
-      }));
 
       this.formData.details = (this.formData.details || []).map((item) => ({
         ...item,
@@ -1085,15 +1067,6 @@ export default {
         "headTailResistivityRatio",
         headTailResistivityRatio
       );
-    },
-    handleFileChange() {
-      const photo = (this.formData._files || []).map(
-        ({ big_url, thumb_url, ...item }) => ({
-          ...item,
-          fileUrl: big_url,
-        })
-      );
-      this.formData.photo = photo;
     },
     handleInspectorSelect(val, index) {
       this.$set(this.formData.details[index], "checkDate", new Date());

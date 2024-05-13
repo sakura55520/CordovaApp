@@ -10,7 +10,9 @@
           </div>
           <div class="grid-item">
             <span class="grid-item-name">生产设备：</span>
-            <span class="grid-item-value">{{ formData.deviceCode || $route.query.deviceCode }}</span>
+            <span class="grid-item-value">{{
+              formData.deviceCode || $route.query.deviceCode
+            }}</span>
           </div>
         </div>
       </div>
@@ -386,6 +388,15 @@ export default {
                 sampleNumber: undefined,
               });
             }
+            if (this.needYH) {
+              fromData.wipCuttingSampleInfos.push({
+                type: "氧化样片",
+                sampleIdentification: "H",
+                samplePosition: 300,
+                valid: true,
+                sampleNumber: undefined,
+              });
+            }
           }
         } catch (e) {
           console.log(e);
@@ -394,11 +405,13 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
 
-      this.formData._files = (this.formData.photo || []).map((fileItem) => ({
-        ...fileItem,
-        big_url: fileItem.fileUrl,
-        thumb_url: fileItem.fileUrl,
-      }));
+      this.formData._files = JSON.parse(this.formData.photo || "[]").map(
+        (fileItem) => ({
+          ...fileItem,
+          big_url: fileItem.fileUrl,
+          thumb_url: fileItem.fileUrl,
+        })
+      );
       await getSeleteData("sampleType", this.sampleTypeList);
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
 
@@ -452,7 +465,7 @@ export default {
       this.formData.wipCuttingSampleInfos.push({
         type: this.needYH ? "氧化样片" : "头尾样片",
         sampleIdentification: "H",
-        samplePosition: 0,
+        samplePosition: this.needYH ? 300 : 0,
         valid: true,
         sampleNumber: undefined,
       });
