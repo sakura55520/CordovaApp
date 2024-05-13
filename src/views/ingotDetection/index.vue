@@ -259,7 +259,9 @@
                 min-width="140"
                 align="center"
                 prop="org"
-              />
+              >
+                <template slot-scope="scope"> {{ scope.row.org }}% </template>
+              </el-table-column>
               <el-table-column label="少子寿命" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
@@ -593,10 +595,11 @@ import { cloneDeep, isEmpty } from "lodash-es";
 import PhotoNew from "@/views/components/photoNew";
 import moment from "moment";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation";
+import template from "./../template/index.vue";
 
 export default {
   mixins: [overStation],
-  components: { SelectUserinfo, PhotoNew },
+  components: { SelectUserinfo, PhotoNew, template },
   data() {
     return {
       formData: {
