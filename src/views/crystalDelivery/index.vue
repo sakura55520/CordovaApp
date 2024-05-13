@@ -239,7 +239,7 @@
               反馈重量（{{ formData.feedbackQty }} kg） -
               前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
               吊肩记录重量总和（{{
-                formData.shoulderWeight
+                formData.totalShoulderWeight
               }}
               kg）<br />
             </div>
@@ -255,7 +255,7 @@
               kg） = 总投料多晶硅重量（{{ formData.totalPolysiliconWeight }} kg） -
               晶锭称量的值（{{ formData.ingotWeight }} kg） -
               前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
-              吊肩记录重量总和（{{ formData.shoulderWeight }} kg）<br />
+              吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）<br />
             </div>
             <div class="row">
               反馈重量（{{
