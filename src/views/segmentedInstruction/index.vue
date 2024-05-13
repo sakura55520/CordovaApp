@@ -118,13 +118,19 @@
                   min-width="80"
                   align="center"
                   prop="rrg"
-                />
+                >
+                  <template slot-scope="scope"> {{ scope.row.rrg }}% </template>
+                </el-table-column>
                 <el-table-column
                   label="1/2 RRG"
                   min-width="100"
                   align="center"
                   prop="halfRrg"
-                />
+                >
+                  <template slot-scope="scope">
+                    {{ scope.row.halfRrg }}%
+                  </template>
+                </el-table-column>
                 <el-table-column
                   label="头尾电阻比"
                   min-width="100"
@@ -154,7 +160,9 @@
                   min-width="80"
                   align="center"
                   prop="org"
-                />
+                >
+                  <template slot-scope="scope"> {{ scope.row.org }}% </template>
+                </el-table-column>
                 <el-table-column
                   label="少子寿命"
                   min-width="100"
@@ -952,6 +960,7 @@ export default {
       segmentTypeList: [],
       selectRollingDiameter: null,
       diameterList: [],
+      kValueList: [],
     };
   },
   computed: {
@@ -995,6 +1004,7 @@ export default {
   mounted() {
     this.init();
     getSeleteData("erpWorkOrderType", this.erpWorkOrderTypeList); // ERP工单类型 list
+    getSeleteData("kValue", this.kValueList);
   },
   methods: {
     initKeyup() {
@@ -1360,17 +1370,17 @@ export default {
       );
     },
     calcResistivity(y, index) {
-      let g = 14.8; //单晶重量
-      // let s = this.formData.length;
-      let s = 600;
-      let h = 0.36; //头料重量
-      let i = 0.845; //尾料重量
-      let j = 29.91; //投料量
-      // let a = this.headResistance;
-      // let b = this.tailResistance;
-      let a = 39.9;
-      let b = 28.5;
-      let K = 2;
+      let { number, length, headWeight, tailWeight, inventoryRating } =
+        this.formData;
+      let g = number; //单晶重量
+      let s = length;
+      let h = headWeight; //头料重量
+      let i = tailWeight; //尾料重量
+      let j = inventoryRating; //投料量
+      let a = this.headResistance;
+      let b = this.tailResistance;
+
+      let K = this.kValueList.find((item) => item.name === "default").value;
 
       let p1 =
         Math.pow(
@@ -1397,25 +1407,25 @@ export default {
           Math.log(b / a) / Math.log((1 - h / j) / (1 - (g - i) / j))
         );
 
-      let calculatedResistivity = ((p1 + x1) / 2).toFixed(5);
+      let calculatedResistivity = ((p1 + x1) / 2).toFixed(3);
 
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
         "calculatedResistivity",
-        calculatedResistivity
+        isNaN(calculatedResistivity) ? null : calculatedResistivity
       );
     },
     calcPosition(x, index) {
-      let a = 39.9;
-      let b = 28.5;
-      let s = 600;
+      let a = this.headResistance;
+      let b = this.tailResistance;
+      let s = this.formData.length;
 
-      let calculatedPosition = (((a - x) * s) / (a - b)).toFixed(5);
+      let calculatedPosition = (((a - x) * s) / (a - b)).toFixed(3);
 
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
         "calculatedPosition",
-        calculatedPosition
+        isNaN(calculatedPosition) ? null : calculatedPosition
       );
     },
   },
