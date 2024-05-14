@@ -1,9 +1,6 @@
 <!--长晶-->
 <template>
-  <div
-    :class="{'form-disabled': $route.query.view}"
-    class="detailBox"
-  >
+  <div :class="{ 'form-disabled': $route.query.view }" class="detailBox">
     <!-- 顶部信息卡片 -->
     <div class="topInfoCard">
       <div class="grid-container">
@@ -11,9 +8,14 @@
           <span class="grid-item-name">批次号：</span>
           <span class="grid-item-value">{{ fromData.processOrderCode }}</span>
         </div>
-        <div class="grid-item">
+        <div
+          class="grid-item"
+          v-if="fromData.deviceCode || $route.query.deviceCode"
+        >
           <span class="grid-item-name">生产设备：</span>
-          <span class="grid-item-value">{{ fromData.deviceCode || $route.query.deviceCode }}</span>
+          <span class="grid-item-value">{{
+            fromData.deviceCode || $route.query.deviceCode
+          }}</span>
         </div>
       </div>
     </div>
@@ -25,7 +27,11 @@
         tab-position="left"
         @tab-click="handleSetpClick"
       >
-        <el-tab-pane v-for="(stepName, index) in calcStepNameList" :name="stepName" :key="stepName + index">
+        <el-tab-pane
+          v-for="(stepName, index) in calcStepNameList"
+          :name="stepName"
+          :key="stepName + index"
+        >
           <span
             slot="label"
             :class="{ 'tabs-label': checkNotFilled(stepName) }"
@@ -90,7 +96,7 @@ export default {
   },
   data() {
     return {
-      currentStepName: '',
+      currentStepName: "",
       name2form: {},
       fromData: {},
       steps: {},
@@ -159,7 +165,7 @@ export default {
         {
           stepName: "吊单晶",
           canAddRecord: true,
-          recordMax: 1
+          recordMax: 1,
         },
         {
           stepName: "回熔",
@@ -177,7 +183,9 @@ export default {
     },
     calcAddRecordMap() {
       const map = {};
-      this.stepTabs.forEach((item) => (map[item.stepName] = item.canAddRecord ? item : null));
+      this.stepTabs.forEach(
+        (item) => (map[item.stepName] = item.canAddRecord ? item : null)
+      );
       return map;
     },
     calcStepNameList() {
@@ -195,9 +203,10 @@ export default {
   methods: {
     async init() {
       // 长晶输入框是否可以输入
-      const enabledList = []
-      await getSeleteData('isEnabledGrowthInput', enabledList)
-      this.enabledInput = enabledList && enabledList[0] && enabledList[0].value === '可输入'
+      const enabledList = [];
+      await getSeleteData("isEnabledGrowthInput", enabledList);
+      this.enabledInput =
+        enabledList && enabledList[0] && enabledList[0].value === "可输入";
 
       // 拉晶异常list
       await getSeleteData("crystalGrowthErr", this.crystalGrowthErrList);
@@ -221,7 +230,7 @@ export default {
       await this.initFormContent();
       this.loading = false;
       this.tabsVisible = true;
-      this.currentStepName = this.calcStepNameList[0]
+      this.currentStepName = this.calcStepNameList[0];
     },
     // 操作
     async handle(typeName) {
@@ -313,26 +322,26 @@ export default {
       }
     },
     transformAccessoryLife(arr, index) {
-      const formItem = arr[index]
-      const { extValue, tag, disabled } = formItem
-      if (tag === 'SelectAccessoryLife' && typeof extValue === 'object') {
-        const { objScan, objCode, objLife } = extValue
+      const formItem = arr[index];
+      const { extValue, tag, disabled } = formItem;
+      if (tag === "SelectAccessoryLife" && typeof extValue === "object") {
+        const { objScan, objCode, objLife } = extValue;
         if (disabled) {
-          arr.splice(index, 1, objCode, objLife)
+          arr.splice(index, 1, objCode, objLife);
         } else {
-          arr.splice(index, 1, objScan, objCode, objLife)
+          arr.splice(index, 1, objScan, objCode, objLife);
         }
       }
     },
     transformTechs(arr) {
       if (!Array.isArray(arr)) return;
       for (let index = 0; index < arr.length; index++) {
-        this.transformAccessoryLife(arr, index)
+        this.transformAccessoryLife(arr, index);
         const { extKey, extValue } = arr[index];
         if (!extKey) {
-          arr.splice(index, 1)
-          index--
-          continue
+          arr.splice(index, 1);
+          index--;
+          continue;
         }
         if (extValue && typeof extValue === "object") {
           arr[index].extValue = JSON.stringify(extValue);
@@ -447,13 +456,13 @@ export default {
       );
     },
     // 辅料寿命
-    initAccessoryLife (formItem, label2value) {
-      const {fieldScan, fieldLife, label} = formItem
+    initAccessoryLife(formItem, label2value) {
+      const { fieldScan, fieldLife, label } = formItem;
       return {
         objCode: label2value[label] || defaultItem, // 编号
         objScan: label2value[fieldScan] || defaultItem, // 编号(扫码)
-        objLife: label2value[fieldLife] || defaultItem // 已使用寿命/额定寿命
-      }
+        objLife: label2value[fieldLife] || defaultItem, // 已使用寿命/额定寿命
+      };
     },
     // 工艺参数
     initTech(stepName, recordIdx) {
@@ -467,7 +476,7 @@ export default {
           stepData._defaultStepData.techs = form.content.map((formItem) => ({
             ...formItem,
             extKey: formItem.vModel,
-            disabled: !this.enabledInput && formItem.disabled
+            disabled: !this.enabledInput && formItem.disabled,
           }));
         }
       }
@@ -484,18 +493,18 @@ export default {
         stepData[recordIdx],
         "techs",
         form.content.map((formItem) => {
-          const { vModel, tag } = formItem
-          let { extValue } = label2value[vModel] || {}
-          if (tag === 'SelectAccessoryLife') {
-            extValue = this.initAccessoryLife(formItem, label2value)
+          const { vModel, tag } = formItem;
+          let { extValue } = label2value[vModel] || {};
+          if (tag === "SelectAccessoryLife") {
+            extValue = this.initAccessoryLife(formItem, label2value);
           }
           return {
             ...formItem,
             ...label2value[vModel],
             extValue,
             extKey: vModel,
-            disabled: !this.enabledInput && formItem.disabled
-          }
+            disabled: !this.enabledInput && formItem.disabled,
+          };
         })
       );
     },
@@ -511,7 +520,7 @@ export default {
           stepData._defaultStepData.exts = form.content.map((formItem) => ({
             ...formItem,
             extKey: formItem.label,
-            disabled: !this.enabledInput && formItem.disabled
+            disabled: !this.enabledInput && formItem.disabled,
           }));
         }
       }
@@ -530,7 +539,7 @@ export default {
           ...formItem,
           ...label2value[formItem.label],
           extKey: formItem.label,
-          disabled: !this.enabledInput && formItem.disabled
+          disabled: !this.enabledInput && formItem.disabled,
         }))
       );
     },

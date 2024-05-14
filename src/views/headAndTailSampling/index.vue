@@ -8,7 +8,10 @@
             <span class="grid-item-name">批次号：</span>
             <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           </div>
-          <div class="grid-item">
+          <div
+            class="grid-item"
+            v-if="formData.deviceCode || $route.query.deviceCode"
+          >
             <span class="grid-item-name">生产设备：</span>
             <span class="grid-item-value">{{
               formData.deviceCode || $route.query.deviceCode
@@ -310,13 +313,13 @@ export default {
         defectQty: [
           { required: true, message: "缺陷数量不能为空", trigger: "change" },
         ],
-        dislocationIdentificationLength: [
-          {
-            required: true,
-            message: "位错反延线长度不能为空",
-            trigger: "change",
-          },
-        ],
+        // dislocationIdentificationLength: [
+        //   {
+        //     required: true,
+        //     message: "位错反延线长度不能为空",
+        //     trigger: "change",
+        //   },
+        // ],
         headWeight: [
           { required: true, message: "头部重量不能为空", trigger: "change" },
         ],

@@ -8,7 +8,10 @@
             <span class="grid-item-name">批次号：</span>
             <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           </div>
-          <div class="grid-item">
+          <div
+            class="grid-item"
+            v-if="formData.deviceCode || $route.query.deviceCode"
+          >
             <span class="grid-item-name">生产设备：</span>
             <span class="grid-item-value">{{
               formData.deviceCode || $route.query.deviceCode
@@ -80,7 +83,9 @@
                   prop="crystalDensity"
                 >
                   <template slot-scope="scope">
-                    {{ scope.row.crystalDensity }}%
+                    <div v-if="scope.row.crystalDensity">
+                      {{ scope.row.crystalDensity }}%
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -119,7 +124,9 @@
                   align="center"
                   prop="rrg"
                 >
-                  <template slot-scope="scope"> {{ scope.row.rrg }}% </template>
+                  <template slot-scope="scope">
+                    <div v-if="scope.row.rrg">{{ scope.row.rrg }}%</div>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   label="1/2 RRG"
@@ -128,7 +135,7 @@
                   prop="halfRrg"
                 >
                   <template slot-scope="scope">
-                    {{ scope.row.halfRrg }}%
+                    <div v-if="scope.row.halfRrg">{{ scope.row.halfRrg }}%</div>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -161,7 +168,9 @@
                   align="center"
                   prop="org"
                 >
-                  <template slot-scope="scope"> {{ scope.row.org }}% </template>
+                  <template slot-scope="scope">
+                    <div v-if="scope.row.org">{{ scope.row.org }}%</div>
+                  </template>
                 </el-table-column>
                 <el-table-column
                   label="少子寿命"

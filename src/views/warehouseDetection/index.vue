@@ -8,16 +8,21 @@
             <span class="grid-item-name">批次号：</span>
             <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           </div>
-          <div class="grid-item">
+          <div
+            class="grid-item"
+            v-if="formData.deviceCode || $route.query.deviceCode"
+          >
             <span class="grid-item-name">生产设备：</span>
-            <span class="grid-item-value">{{ formData.deviceCode || $route.query.deviceCode }}</span>
+            <span class="grid-item-value">{{
+              formData.deviceCode || $route.query.deviceCode
+            }}</span>
           </div>
         </div>
       </div>
       <el-divider class="divider" />
       <h3>
         出站数据录入
-        <i class="el-icon-refresh" @click="fetchSwitchDict"/>
+        <i class="el-icon-refresh" @click="fetchSwitchDict" />
       </h3>
       <div class="outStation-form">
         <el-form
@@ -127,7 +132,11 @@
                 class="item"
                 label-width="130px"
               >
-                <el-input class="value" v-model="formData.resHead" :disabled="!enableMap.resHead"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.resHead"
+                  :disabled="!enableMap.resHead"
+                ></el-input>
               </el-form-item>
               <el-form-item
                 label="尾部实测电阻率"
@@ -135,7 +144,11 @@
                 class="item"
                 label-width="130px"
               >
-                <el-input class="value" v-model="formData.resTail" :disabled="!enableMap.resTail"></el-input>
+                <el-input
+                  class="value"
+                  v-model="formData.resTail"
+                  :disabled="!enableMap.resTail"
+                ></el-input>
               </el-form-item>
               <el-form-item
                 label="滚圆直径头"
@@ -147,7 +160,10 @@
                   <el-input
                     class="value"
                     v-model="formData.circleDiameterHead"
-                    :disabled="!enableMap.circleDiameterHead && !formData.needRollingCircle"
+                    :disabled="
+                      !enableMap.circleDiameterHead &&
+                      !formData.needRollingCircle
+                    "
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -163,7 +179,10 @@
                   <el-input
                     class="value"
                     v-model="formData.circleDiameterTail"
-                    :disabled="!enableMap.circleDiameterTail && !formData.needRollingCircle"
+                    :disabled="
+                      !enableMap.circleDiameterTail &&
+                      !formData.needRollingCircle
+                    "
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -183,8 +202,12 @@
                     prop="mainReferenceSurfaceCrystalOrientationDegrees"
                   >
                     <el-input
-                      v-model="formData.mainReferenceSurfaceCrystalOrientationDegrees"
-                      :disabled="!enableMap.mainReferenceSurfaceCrystalOrientationDegrees"
+                      v-model="
+                        formData.mainReferenceSurfaceCrystalOrientationDegrees
+                      "
+                      :disabled="
+                        !enableMap.mainReferenceSurfaceCrystalOrientationDegrees
+                      "
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -194,8 +217,12 @@
                     prop="mainReferenceSurfaceCrystalOrientationMinute"
                   >
                     <el-input
-                      v-model="formData.mainReferenceSurfaceCrystalOrientationMinute"
-                      :disabled="!enableMap.mainReferenceSurfaceCrystalOrientationMinute"
+                      v-model="
+                        formData.mainReferenceSurfaceCrystalOrientationMinute
+                      "
+                      :disabled="
+                        !enableMap.mainReferenceSurfaceCrystalOrientationMinute
+                      "
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -242,12 +269,18 @@
               >
                 <div class="inputs">
                   <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
-                    <el-input v-model="formData.mainAuxiliaryAngleDegrees" :disabled="!enableMap.mainAuxiliaryAngleDegrees">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleDegrees"
+                      :disabled="!enableMap.mainAuxiliaryAngleDegrees"
+                    >
                       <template slot="append">°</template>
                     </el-input>
                   </el-form-item>
                   <el-form-item label="" prop="mainAuxiliaryAngleMinute">
-                    <el-input v-model="formData.mainAuxiliaryAngleMinute" :disabled="!enableMap.mainAuxiliaryAngleMinute">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleMinute"
+                      :disabled="!enableMap.mainAuxiliaryAngleMinute"
+                    >
                       <template slot="append">'</template>
                     </el-input>
                   </el-form-item>
@@ -357,7 +390,7 @@
 import * as Api from "@/api/inStation";
 import SelectLinesideTree from "@/components/SelectLinesideTree";
 import overStation from "@/mixins/overStation";
-import {getSeleteData} from "@/utils/select";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -453,11 +486,13 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
-      this.formRules.circleDiameterHead[0].required =  this.formRules.circleDiameterTail[0].required = !!this.formData.needRollingCircle
+      this.formRules.circleDiameterHead[0].required =
+        this.formRules.circleDiameterTail[0].required =
+          !!this.formData.needRollingCircle;
 
       this.initLength();
       this.calcDegreesMinute();
-      this.fetchSwitchDict()
+      this.fetchSwitchDict();
     },
     initLength() {
       const { originLength, planLength, chippingLength, ellipticLength } =
@@ -554,7 +589,7 @@ export default {
       let { originLength, chippingLength, ellipticLength } = this.formData;
       this.formData.qualifiedLength =
         (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
-    }
+    },
   },
 };
 </script>

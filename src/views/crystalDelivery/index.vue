@@ -8,7 +8,10 @@
             <span class="grid-item-name">批次号：</span>
             <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           </div>
-          <div class="grid-item">
+          <div
+            class="grid-item"
+            v-if="formData.deviceCode || $route.query.deviceCode"
+          >
             <span class="grid-item-name">生产设备：</span>
             <span class="grid-item-value">{{
               formData.deviceCode || $route.query.deviceCode
