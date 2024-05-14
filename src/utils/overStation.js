@@ -81,7 +81,7 @@ function goOperationPage(storage, processingOrderCode, deviceCode) {
     path: storage.operationData,
     query: {
       ...storage,
-      deviceCode,
+      deviceCode: storage.deviceCode || deviceCode,
       processingOrderCode,
       fromData: JSON.stringify(storage.fromData)
     }
