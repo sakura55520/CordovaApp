@@ -480,6 +480,8 @@ export default {
       } else {
         try {
           fromData = JSON.parse(this.$route.query.fromData);
+          fromData.resHead = undefined
+          fromData.resTail = undefined
         } catch (e) {
           console.log(e);
         }
