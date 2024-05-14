@@ -551,6 +551,7 @@
             v-model="backCuttingFormData.recycle"
             placeholder=""
             class="form-item-cover"
+            :disabled="backCuttingFormType === '编辑'"
           >
             <el-option
               :label="item.label"
