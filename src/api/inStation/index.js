@@ -3,16 +3,16 @@ import store from "@/store";
 import { resetStationStore } from "@/utils/overStation";
 
 //进出站操作-关联业务
-export function inOrOutStation(data) {
+export function inOrOutStation(data, noCallback) {
   return request({
     url: "/wipStorage/inOrOutStation",
     method: "post",
     data,
   })
     .then((res) => {
-      store.state.station.stationCallback &&
+      store.state.station.stationCallback && !noCallback &&
         store.state.station.stationCallback();
-      resetStationStore();
+      !noCallback && resetStationStore();
       return res;
     })
     .catch((err) => {
