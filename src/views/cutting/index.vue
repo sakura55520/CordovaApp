@@ -43,10 +43,15 @@
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
-              <el-form-item label="原始长度" prop="originLength" class="item">
+              <el-form-item
+                label="检测实测长度"
+                prop="originLength"
+                class="item"
+                label-width="120px"
+              >
                 <el-input
                   v-model="formData.originLength"
-                  @change="handleLengthChange"
+                  @input="handleLengthChange"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -54,7 +59,7 @@
               <el-form-item label="崩边长度" prop="chippingLength" class="item">
                 <el-input
                   v-model="formData.chippingLength"
-                  @change="handleLengthChange"
+                  @input="handleLengthChange"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -62,7 +67,7 @@
               <el-form-item label="椭圆长度" prop="ellipticLength" class="item">
                 <el-input
                   v-model="formData.ellipticLength"
-                  @change="handleLengthChange"
+                  @input="handleLengthChange"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -76,6 +81,19 @@
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
+            </div>
+          </div>
+          <div class="form">
+            <div class="form-title">参数说明</div>
+            <div class="row">合格长度计算公式：<br /></div>
+            <div class="row">
+              合格长度（{{ formData.qualifiedLength }} mm） = 检测实测长度（{{
+                formData.originLength
+              }}
+              mm） - 崩边长度（{{ formData.chippingLength }} mm） - 椭圆长度（{{
+                formData.ellipticLength
+              }}
+              mm）<br />
             </div>
           </div>
         </el-form>

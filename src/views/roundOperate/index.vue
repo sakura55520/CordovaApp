@@ -58,14 +58,14 @@
                 </el-input>
               </el-form-item>
               <el-form-item
-                label="原始长度"
+                label="检测实测长度"
                 prop="originLength"
-                label-width="90px"
+                label-width="120px"
               >
                 <el-input
                   v-model="detailForm.originLength"
                   type="number"
-                  @change="calcQualifLength"
+                  @input="calcQualifLength"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -78,7 +78,7 @@
                 <el-input
                   v-model="detailForm.chippingLength"
                   type="number"
-                  @change="calcQualifLength"
+                  @input="calcQualifLength"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -91,7 +91,7 @@
                 <el-input
                   v-model="detailForm.ellipticLength"
                   type="number"
-                  @change="calcQualifLength"
+                  @input="calcQualifLength"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -253,6 +253,17 @@
                 </el-input>
               </el-form-item>
             </div>
+            <div class="form">
+              <div class="form-title">参数说明</div>
+              <div class="row">合格长度计算公式：<br /></div>
+              <div class="row">
+                合格长度（{{ detailForm.qualifiedLength }} mm） =
+                检测实测长度（{{ detailForm.originLength }} mm） - 崩边长度（{{
+                  detailForm.chippingLength
+                }}
+                mm） - 椭圆长度（{{ detailForm.ellipticLength }} mm）<br />
+              </div>
+            </div>
           </div>
         </el-form>
       </div>
@@ -279,7 +290,7 @@ import overStation from "@/mixins/overStation";
 
 const defaultForm = {
   planLength: null, // 计划长度
-  originLength: null, // 原始长度
+  originLength: null, // 检测实测长度
   chippingLength: null, // 崩边长度
   ellipticLength: null, // 椭圆长度
   qualifiedLength: null, // 合格长度
@@ -315,7 +326,7 @@ export default {
           { required: true, message: "请输入计划长度", trigger: "change" },
         ],
         originLength: [
-          { required: true, message: "请输入原始长度", trigger: "change" },
+          { required: true, message: "请输入检测实测长度", trigger: "change" },
         ],
         chippingLength: [
           { required: true, message: "请输入崩边长度", trigger: "change" },
@@ -516,7 +527,7 @@ export default {
       }
     },
     calcQualifLength() {
-      let qualifiedLength = this.detailForm.originLength; // 原始长度
+      let qualifiedLength = this.detailForm.originLength; // 检测实测长度
       qualifiedLength -= this.detailForm.chippingLength || 0; // 崩边长度
       qualifiedLength -= this.detailForm.ellipticLength || 0; // 椭圆长度
       this.detailForm.qualifiedLength = round(qualifiedLength, 2);
@@ -555,5 +566,50 @@ export default {
 }
 .form-container {
   padding: 20px 12px;
+}
+.form {
+  margin-top: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  min-height: 100px;
+  padding: 20px 12px 12px;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2%;
+  .item {
+    width: 49%;
+    .input {
+      display: flex;
+      gap: 8px;
+      .value {
+        flex: 1;
+      }
+      .unit {
+        width: 30px;
+      }
+    }
+  }
+  .form-title {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: white;
+  }
+  .add-btn {
+    position: absolute;
+    right: 10px;
+  }
+}
+.row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  .item /deep/ {
+    flex: 1;
+    .el-input-group__append {
+      padding: 0 5px;
+    }
+  }
 }
 </style>

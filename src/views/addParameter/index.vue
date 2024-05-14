@@ -55,10 +55,10 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="原始长度"
+                label="检测实测长度"
                 prop="originLength"
                 class="item"
-                label-width="90px"
+                label-width="120px"
               >
                 <div class="input">
                   <el-input
@@ -266,6 +266,19 @@
               </el-form-item>
             </div>
           </div>
+          <div class="form">
+            <div class="form-title">参数说明</div>
+            <div class="row">合格长度计算公式：<br /></div>
+            <div class="row">
+              合格长度（{{ formData.qualifiedLength }} mm） = 检测实测长度（{{
+                formData.originLength
+              }}
+              mm） - 崩边长度（{{ formData.chippingLength }} mm） - 椭圆长度（{{
+                formData.ellipticLength
+              }}
+              mm）<br />
+            </div>
+          </div>
         </el-form>
       </div>
     </div>
@@ -325,7 +338,11 @@ export default {
           { required: true, message: "计划长度不能为空", trigger: "change" },
         ],
         originLength: [
-          { required: true, message: "原始长度不能为空", trigger: "change" },
+          {
+            required: true,
+            message: "检测实测长度不能为空",
+            trigger: "change",
+          },
         ],
         chippingLength: [
           { required: true, message: "崩边长度不能为空", trigger: "change" },
@@ -433,7 +450,7 @@ export default {
       if (!valid) return;
       let { originLength, planLength } = this.formData;
       if (originLength - planLength > 5) {
-        this.$message.warning("原始长度与计划长度的差值不能超过5mm");
+        this.$message.warning("检测实测长度与计划长度的差值不能超过5mm");
         return;
       }
       await this.$confirm("确认提交当前操作数据?", "提示", {
