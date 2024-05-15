@@ -1012,7 +1012,10 @@ export default {
     getSeleteData("kValue", this.kValueList);
     window.addEventListener("resize", this.handleResize);
   },
-  beforeDestory() {
+  destroyed() {
+    for (const line of this.lineList) {
+      line.remove();
+    }
     window.removeEventListener("resize", this.handleResize);
   },
   watch: {
