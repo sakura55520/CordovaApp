@@ -55,17 +55,18 @@
           </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
-            <el-form-item label="头部重量" prop="headWeight" class="item">
+            <el-form-item
+              label="原始长度"
+              prop="originalLengthQty"
+              class="item"
+            >
               <div class="input">
-                <el-input class="value" v-model="formData.headWeight">
-                  <template slot="append">kg</template>
-                </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="尾部重量" prop="tailWeight" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.tailWeight">
-                  <template slot="append">kg</template>
+                <el-input
+                  class="value"
+                  v-model="formData.originalLengthQty"
+                  disabled
+                >
+                  <template slot="append">mm</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -77,6 +78,20 @@
                   @change="handleLengthChange"
                 >
                   <template slot="append">mm</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="头部重量" prop="headWeight" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.headWeight">
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="尾部重量" prop="tailWeight" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.tailWeight">
+                  <template slot="append">kg</template>
                 </el-input>
               </div>
             </el-form-item>
@@ -296,6 +311,7 @@ export default {
         userCreate: null,
         totalQty: null,
         defectQty: null,
+        originalLengthQty: null,
         dislocationIdentificationLength: null,
         headWeight: null,
         tailWeight: null,
