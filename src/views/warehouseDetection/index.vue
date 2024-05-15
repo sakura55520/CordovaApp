@@ -69,6 +69,7 @@
                     v-model="formData.originLength"
                     :disabled="!enableMap.originLength"
                     @input="handleLengthChange"
+                    v-direction="{ x: 1, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -86,6 +87,7 @@
                     v-model="formData.chippingLength"
                     :disabled="!enableMap.chippingLength"
                     @input="handleLengthChange"
+                    v-direction="{ x: 2, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -103,6 +105,7 @@
                     v-model="formData.ellipticLength"
                     :disabled="!enableMap.ellipticLength"
                     @input="handleLengthChange"
+                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -136,6 +139,7 @@
                   class="value"
                   v-model="formData.resHead"
                   :disabled="!enableMap.resHead"
+                  v-direction="{ x: 1, y: 2 }"
                 ></el-input>
               </el-form-item>
               <el-form-item
@@ -148,6 +152,7 @@
                   class="value"
                   v-model="formData.resTail"
                   :disabled="!enableMap.resTail"
+                  v-direction="{ x: 2, y: 2 }"
                 ></el-input>
               </el-form-item>
               <el-form-item
@@ -164,6 +169,7 @@
                       !enableMap.circleDiameterHead &&
                       !formData.needRollingCircle
                     "
+                    v-direction="{ x: 3, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -183,6 +189,7 @@
                       !enableMap.circleDiameterTail &&
                       !formData.needRollingCircle
                     "
+                    v-direction="{ x: 4, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -208,6 +215,8 @@
                       :disabled="
                         !enableMap.mainReferenceSurfaceCrystalOrientationDegrees
                       "
+                      v-direction="{ x: 1, y: 3 }"
+                      @input="handleNext"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -223,6 +232,8 @@
                       :disabled="
                         !enableMap.mainReferenceSurfaceCrystalOrientationMinute
                       "
+                      v-direction="{ x: 2, y: 3 }"
+                      @input="handleNext"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -240,6 +251,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceLength"
                     :disabled="!enableMap.mainReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -256,6 +268,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceLength"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceLength"
+                    v-direction="{ x: 4, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -272,6 +285,8 @@
                     <el-input
                       v-model="formData.mainAuxiliaryAngleDegrees"
                       :disabled="!enableMap.mainAuxiliaryAngleDegrees"
+                      v-direction="{ x: 5, y: 3 }"
+                      @input="handleNext"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -280,6 +295,8 @@
                     <el-input
                       v-model="formData.mainAuxiliaryAngleMinute"
                       :disabled="!enableMap.mainAuxiliaryAngleMinute"
+                      v-direction="{ x: 6, y: 3 }"
+                      @input="handleNext"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -299,6 +316,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthHead"
                     :disabled="!enableMap.mainReferenceSurfaceWidthHead"
+                    v-direction="{ x: 1, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -315,6 +333,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthTail"
                     :disabled="!enableMap.mainReferenceSurfaceWidthTail"
+                    v-direction="{ x: 2, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -331,6 +350,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceHead"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceHead"
+                    v-direction="{ x: 3, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -347,6 +367,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceTail"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceTail"
+                    v-direction="{ x: 4, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -467,6 +488,9 @@ export default {
       return { processUuid, processingOrderCode };
     },
   },
+  created() {
+    this.initKeyup();
+  },
   mounted() {
     this.init();
   },
@@ -480,8 +504,8 @@ export default {
       } else {
         try {
           fromData = JSON.parse(this.$route.query.fromData);
-          fromData.resHead = undefined
-          fromData.resTail = undefined
+          fromData.resHead = undefined;
+          fromData.resTail = undefined;
         } catch (e) {
           console.log(e);
         }
@@ -495,6 +519,23 @@ export default {
       this.initLength();
       this.calcDegreesMinute();
       this.fetchSwitchDict();
+    },
+    initKeyup() {
+      let direction = this.$getDirection();
+      direction.on("keyup", function (e, val) {
+        if (e.keyCode === 39) {
+          direction.next();
+        }
+        if (e.keyCode === 37) {
+          direction.previous();
+        }
+        if (e.keyCode === 38) {
+          direction.previousLine();
+        }
+        if (e.keyCode === 40) {
+          direction.nextLine();
+        }
+      });
     },
     initLength() {
       const { originLength, planLength, chippingLength, ellipticLength } =
@@ -591,6 +632,9 @@ export default {
       let { originLength, chippingLength, ellipticLength } = this.formData;
       this.formData.qualifiedLength =
         (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+    },
+    handleNext(val) {
+      if ((val + "").length >= 2) this.$getDirection().next();
     },
   },
 };

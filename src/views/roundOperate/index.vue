@@ -66,6 +66,7 @@
                   v-model="detailForm.originLength"
                   type="number"
                   @input="calcQualifLength"
+                  v-direction="{ x: 1, y: 1 }"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -79,6 +80,7 @@
                   v-model="detailForm.chippingLength"
                   type="number"
                   @input="calcQualifLength"
+                  v-direction="{ x: 2, y: 1 }"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -92,6 +94,7 @@
                   v-model="detailForm.ellipticLength"
                   type="number"
                   @input="calcQualifLength"
+                  v-direction="{ x: 3, y: 1 }"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -124,6 +127,8 @@
                     <el-input
                       v-model="detailForm.aDegrees"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 1, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -132,6 +137,8 @@
                     <el-input
                       v-model="detailForm.aMinute"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 2, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -152,6 +159,8 @@
                     <el-input
                       v-model="detailForm.bDegrees"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 3, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -160,6 +169,8 @@
                     <el-input
                       v-model="detailForm.bMinute"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 4, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -180,6 +191,8 @@
                     <el-input
                       v-model="detailForm.cDegrees"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 5, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -188,6 +201,8 @@
                     <el-input
                       v-model="detailForm.cMinute"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 6, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -208,6 +223,8 @@
                     <el-input
                       v-model="detailForm.dDegrees"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 7, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -216,6 +233,8 @@
                     <el-input
                       v-model="detailForm.dMinute"
                       @change="calcCrystallinePhase"
+                      v-direction="{ x: 8, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -239,7 +258,11 @@
                 prop="circleDiameterHead"
                 label-width="140px"
               >
-                <el-input v-model="detailForm.circleDiameterHead" type="number">
+                <el-input
+                  v-model="detailForm.circleDiameterHead"
+                  type="number"
+                  v-direction="{ x: 1, y: 3 }"
+                >
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
@@ -248,7 +271,11 @@
                 prop="circleDiameterTail"
                 label-width="140px"
               >
-                <el-input v-model="detailForm.circleDiameterTail" type="number">
+                <el-input
+                  v-model="detailForm.circleDiameterTail"
+                  type="number"
+                  v-direction="{ x: 2, y: 3 }"
+                >
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
@@ -387,6 +414,9 @@ export default {
       return { processUuid, processingOrderCode };
     },
   },
+  created() {
+    this.initKeyup();
+  },
   mounted() {
     this.init();
   },
@@ -408,6 +438,23 @@ export default {
       this.detailForm = Object.assign({}, defaultForm, fromData);
       this.initLength();
       this.calcDegreesMinute();
+    },
+    initKeyup() {
+      let direction = this.$getDirection();
+      direction.on("keyup", function (e, val) {
+        if (e.keyCode === 39) {
+          direction.next();
+        }
+        if (e.keyCode === 37) {
+          direction.previous();
+        }
+        if (e.keyCode === 38) {
+          direction.previousLine();
+        }
+        if (e.keyCode === 40) {
+          direction.nextLine();
+        }
+      });
     },
     initLength() {
       const { originLength, planLength, chippingLength, ellipticLength } =
@@ -533,6 +580,9 @@ export default {
       this.detailForm.qualifiedLength = round(qualifiedLength, 2);
     },
     calcCrystalDeviation() {},
+    handleNext(val) {
+      if ((val + "").length >= 2) this.$getDirection().next();
+    },
   },
 };
 </script>

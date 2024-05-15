@@ -65,6 +65,7 @@
                     class="value"
                     v-model="formData.originLength"
                     @input="handleLengthChange"
+                    v-direction="{ x: 1, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -81,6 +82,7 @@
                     class="value"
                     v-model="formData.chippingLength"
                     @input="handleLengthChange"
+                    v-direction="{ x: 2, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -97,6 +99,7 @@
                     class="value"
                     v-model="formData.ellipticLength"
                     @input="handleLengthChange"
+                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -135,6 +138,8 @@
                       v-model="
                         formData.mainReferenceSurfaceCrystalOrientationDegrees
                       "
+                      v-direction="{ x: 1, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">°</template>
                     </el-input>
@@ -147,6 +152,8 @@
                       v-model="
                         formData.mainReferenceSurfaceCrystalOrientationMinute
                       "
+                      v-direction="{ x: 2, y: 2 }"
+                      @input="handleNext"
                     >
                       <template slot="append">'</template>
                     </el-input>
@@ -163,6 +170,7 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -178,6 +186,7 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceLength"
+                    v-direction="{ x: 4, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -191,12 +200,20 @@
               >
                 <div class="inputs">
                   <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
-                    <el-input v-model="formData.mainAuxiliaryAngleDegrees">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleDegrees"
+                      v-direction="{ x: 5, y: 2 }"
+                      @input="handleNext"
+                    >
                       <template slot="append">°</template>
                     </el-input>
                   </el-form-item>
                   <el-form-item label="" prop="mainAuxiliaryAngleMinute">
-                    <el-input v-model="formData.mainAuxiliaryAngleMinute">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleMinute"
+                      v-direction="{ x: 6, y: 2 }"
+                      @input="handleNext"
+                    >
                       <template slot="append">'</template>
                     </el-input>
                   </el-form-item>
@@ -214,6 +231,7 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthHead"
+                    v-direction="{ x: 1, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -229,6 +247,7 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthTail"
+                    v-direction="{ x: 2, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -244,6 +263,7 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceHead"
+                    v-direction="{ x: 3, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -259,6 +279,7 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceTail"
+                    v-direction="{ x: 4, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -362,6 +383,9 @@ export default {
       return { processUuid, processingOrderCode };
     },
   },
+  created() {
+    this.initKeyup();
+  },
   mounted() {
     this.init();
   },
@@ -382,6 +406,23 @@ export default {
       this.formData = { ...this.formData, ...fromData };
       this.initLength();
       this.calcDegreesMinute();
+    },
+    initKeyup() {
+      let direction = this.$getDirection();
+      direction.on("keyup", function (e, val) {
+        if (e.keyCode === 39) {
+          direction.next();
+        }
+        if (e.keyCode === 37) {
+          direction.previous();
+        }
+        if (e.keyCode === 38) {
+          direction.previousLine();
+        }
+        if (e.keyCode === 40) {
+          direction.nextLine();
+        }
+      });
     },
     initLength() {
       const { originLength, planLength, chippingLength, ellipticLength } =
@@ -480,6 +521,9 @@ export default {
       let { originLength, chippingLength, ellipticLength } = this.formData;
       this.formData.qualifiedLength =
         (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0);
+    },
+    handleNext(val) {
+      if ((val + "").length >= 2) this.$getDirection().next();
     },
   },
 };
