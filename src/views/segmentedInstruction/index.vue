@@ -507,8 +507,8 @@
                     v-model="scope.row.status"
                     @change="(val) => handleStatusChange(val, scope.$index)"
                   >
-                    <el-option label="合格" :value="0"></el-option>
-                    <el-option label="不合格" :value="1"></el-option>
+                    <el-option label="合格" :value="1"></el-option>
+                    <el-option label="不合格" :value="0"></el-option>
                   </el-select>
                 </template>
               </el-table-column>
@@ -648,6 +648,14 @@
                 :key="index"
                 :id="`detail_${index}`"
               >
+                <div class="item" v-if="item.type === 2">
+                  <div class="label">回收料编号：</div>
+                  <div class="value">{{ item.segmentNo }}</div>
+                </div>
+                <div class="item" v-if="item.type === 0">
+                  <div class="label">晶锭编号：</div>
+                  <div class="value">{{ item.segmentNo }}</div>
+                </div>
                 <div class="item">
                   <div class="label">尺寸：</div>
                   <div class="value">{{ item.diameter }}</div>
@@ -707,7 +715,7 @@
                 <div class="item" v-if="item.type !== 2">
                   <div class="label">合格状态：</div>
                   <div class="value">
-                    {{ item.status === 0 ? "合格" : "不合格" }}
+                    {{ item.status === 1 ? "合格" : "不合格" }}
                   </div>
                 </div>
                 <div class="item" v-if="item.type !== 2">
@@ -1284,7 +1292,6 @@ export default {
         diameter: this.formData.diameter,
         diametermm: this.formData.diametermm,
         planWeight: 0,
-        status: 0,
         head79oi: oi[0],
         head83oi: oi[1],
         tail79oi: oi[2],
@@ -1313,7 +1320,7 @@ export default {
           item.length = item.tailPosition - item.headPosition;
         } else item.length = 0;
         item.planWeight = this.calcPlanWeight(item.length);
-        if (item.status == 0) {
+        if (item.status == 1) {
           item.qualifiedLength = item.length;
           item.qualifiedWeight = item.planWeight;
         }
@@ -1335,7 +1342,7 @@ export default {
           item.length = item.tailPosition - item.headPosition;
         else item.length = 0;
         item.planWeight = this.calcPlanWeight(item.length);
-        if (item.status == 0) {
+        if (item.status == 1) {
           item.qualifiedLength = item.length;
           item.qualifiedWeight = item.planWeight;
         }
@@ -1424,14 +1431,14 @@ export default {
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
         "qualifiedLength",
-        val == 0
+        val == 1
           ? this.formData.segmentedInstructionDetailVos[index].length
           : null
       );
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
         "qualifiedWeight",
-        val == 0
+        val == 1
           ? this.formData.segmentedInstructionDetailVos[index].planWeight
           : null
       );
@@ -1696,7 +1703,10 @@ export default {
         width: 100%;
         height: 100%;
         font-size: 12px;
+        text-overflow: ellipsis;
+        overflow: hidden;
         word-break: break-all;
+        white-space: nowrap;
         padding: 0px 10px;
       }
     }
@@ -1738,7 +1748,11 @@ export default {
         width: 100%;
         height: 100%;
         font-size: 12px;
+        text-overflow: ellipsis;
+        overflow: hidden;
         word-break: break-all;
+        white-space: nowrap;
+        padding: 0px 10px;
       }
     }
   }
