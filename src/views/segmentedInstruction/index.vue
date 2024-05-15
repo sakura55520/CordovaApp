@@ -664,19 +664,27 @@
                   <div class="label">计划重量：</div>
                   <div class="value">{{ item.planWeight }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
+                  <div class="label">计算位置：</div>
+                  <div class="value">{{ item.calculatedPosition }}</div>
+                </div>
+                <div class="item" v-if="item.type !== 2">
+                  <div class="label">计算电阻率：</div>
+                  <div class="value">{{ item.calculatedResistivity }}</div>
+                </div>
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">头部电阻率：</div>
                   <div class="value">{{ item.headResistance }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">尾部电阻率：</div>
                   <div class="value">{{ item.tailResistance }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">头部电阻率实测：</div>
                   <div class="value">{{ item.headResistanceActual }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">尾部电阻率实测：</div>
                   <div class="value">{{ item.tailResistanceActual }}</div>
                 </div>
@@ -689,16 +697,24 @@
                   <div class="value">{{ item.tail79oi }}</div>
                 </div>
                 <div class="item">
+                  <div class="label">83oi头：</div>
+                  <div class="value">{{ item.head83oi }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">83oi尾：</div>
+                  <div class="value">{{ item.tail83oi }}</div>
+                </div>
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">合格状态：</div>
                   <div class="value">
                     {{ item.status === 0 ? "合格" : "不合格" }}
                   </div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">合格长度：</div>
                   <div class="value">{{ item.qualifiedLength }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">合格重量：</div>
                   <div class="value">{{ item.qualifiedWeight }}</div>
                 </div>
@@ -1738,6 +1754,7 @@ export default {
     margin-top: 70px;
     width: 100%;
     gap: 10px;
+    flex-wrap: wrap;
     .detail {
       flex: 1;
       font-size: 12px;
@@ -1745,7 +1762,7 @@ export default {
       border: 1px solid rgba(0, 0, 0, 0.3);
       margin-top: 10px;
       text-align: center;
-      padding: 20px;
+      padding: 10px;
       border-radius: 10px;
       .item {
         display: flex;
@@ -1755,10 +1772,12 @@ export default {
         .label {
           flex: 1;
           text-align: right;
+          min-width: 110px;
         }
         .value {
           flex: 1;
           text-align: left;
+          min-width: 70px;
         }
       }
     }
