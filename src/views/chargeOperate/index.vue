@@ -384,7 +384,8 @@ export default {
     },
     feedPercent() {
       return (
-        floor((this.totalFeedingAmount / this.detailForm.goodQty) * 100) || 0
+        floor((this.totalFeedingAmount / this.detailForm.feedingTotal) * 100) ||
+        0
       );
     },
     buffParams() {
@@ -525,10 +526,10 @@ export default {
       ).diff(time, "minutes");
     },
     validPolysiliconsAmount(rule, value, callback) {
-      if (this.totalFeedingAmount !== this.detailForm.goodQty)
+      if (this.totalFeedingAmount !== this.detailForm.feedingTotal)
         return callback(
           new Error(
-            `加料量[${this.totalFeedingAmount}]必须等于总量[${this.detailForm.goodQty}]`
+            `加料量[${this.totalFeedingAmount}]必须等于总量[${this.detailForm.feedingTotal}]`
           )
         );
       callback();
