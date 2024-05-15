@@ -276,24 +276,8 @@
                 min-width="150"
                 align="center"
                 prop="type"
-              >
-                <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.type"
-                    placeholder=""
-                    class="form-item-cover"
-                    :disabled="scope.row.type === 2"
-                  >
-                    <div v-for="item in segmentTypeList" :key="item.value">
-                      <el-option
-                        :disabled="Number(item.value) === 2"
-                        :label="item.label"
-                        :value="Number(item.value)"
-                      ></el-option>
-                    </div>
-                  </el-select>
-                </template>
-              </el-table-column>
+                :formatter="formatSegmentType"
+              />
               <el-table-column label="下发工单" min-width="300" align="center">
                 <template slot-scope="scope">
                   <el-input
@@ -526,27 +510,13 @@
                 min-width="150"
                 align="center"
                 prop="qualifiedLength"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.qualifiedLength"
-                    v-direction="{ x: 9, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="合格重量"
                 min-width="150"
                 align="center"
                 prop="qualifiedWeight"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.qualifiedWeight"
-                    v-direction="{ x: 10, y: scope.$index }"
-                  ></el-input>
-                </template>
-              </el-table-column>
+              />
               <el-table-column
                 label="不合格原因"
                 min-width="150"
@@ -1442,6 +1412,10 @@ export default {
         isNaN(calculatedPosition) ? null : calculatedPosition
       );
     },
+    formatSegmentType(row, column, type) {
+      const matched = this.segmentTypeList.find((item) => item.value == type);
+      return matched ? matched.name : "";
+    },
   },
 };
 </script>
@@ -1638,6 +1612,7 @@ export default {
         z-index: 2;
         width: 100%;
         height: 100%;
+        font-size: 12px;
       }
     }
     .bar-selected {
@@ -1677,9 +1652,11 @@ export default {
         z-index: 2;
         width: 100%;
         height: 100%;
+        font-size: 12px;
       }
     }
     .detail {
+      font-size: 12px;
       margin: 0 auto;
       width: calc(100% - 30px);
       border: 1px solid rgba(0, 0, 0, 0.3);
