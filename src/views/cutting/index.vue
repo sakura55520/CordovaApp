@@ -138,7 +138,7 @@ export default {
           { required: true, message: "计划长度不能为空", trigger: "change" },
         ],
         originLength: [
-          { required: true, message: "原始长度不能为空", trigger: "change" },
+          { required: true, message: "检测实测长度不能为空", trigger: "change" },
         ],
         chippingLength: [
           { required: true, message: "崩边长度不能为空", trigger: "change" },
@@ -200,7 +200,7 @@ export default {
       if (!valid) return;
       let { originLength, planLength } = this.formData;
       if (Math.abs(originLength - planLength) > 10) {
-        this.$message.warning("原始长度与计划长度的差值不能超过10mm");
+        this.$message.warning("检测实测长度与计划长度的差值不能超过10mm");
         return;
       }
       await this.$confirm("确认提交当前操作数据?", "提示", {
