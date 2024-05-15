@@ -1237,7 +1237,7 @@ export default {
       if (index !== 0) list[index - 1].tailPosition = value;
 
       for (const item of list) {
-        item.segmentNo = null;
+        if (item.type !== 2) item.segmentNo = null;
         if (
           (item.tailPosition || item.tailPosition === 0) &&
           (item.headPosition || item.headPosition === 0)
@@ -1259,7 +1259,7 @@ export default {
         list[index + 1].headPosition = value;
 
       for (const item of list) {
-        item.segmentNo = null;
+        if (item.type !== 2) item.segmentNo = null;
         if (
           (item.tailPosition || item.tailPosition === 0) &&
           (item.headPosition || item.headPosition === 0)
