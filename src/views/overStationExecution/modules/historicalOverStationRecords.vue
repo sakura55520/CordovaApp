@@ -74,6 +74,12 @@
           >
             <!-- <el-table-column label="产品料号" prop="number" min-width="100" />
           <el-table-column label="产品类型" prop="type" min-width="100" /> -->
+            <el-table-column
+              v-if="item.equipmentCode"
+              label="执行设备"
+              prop="equipmentCode"
+              min-width="100"
+            />
             <el-table-column label="数量" prop="number" min-width="80" />
             <el-table-column
               label="进站时间"

@@ -1,7 +1,12 @@
 <template>
   <div>
     <div>
-      <div v-if="list.length !== 0" class="card" v-for="item in list" :key="item.code">
+      <div
+        v-if="list.length !== 0"
+        class="card"
+        v-for="item in list"
+        :key="item.code"
+      >
         <div class="header">{{ item.code }}</div>
         <el-divider class="divider" />
         <el-table
@@ -12,6 +17,18 @@
             color: '#606266',
           }"
         >
+          <el-table-column
+            v-if="item.extend2"
+            label="生产设备"
+            prop="extend2"
+            min-width="100"
+          />
+          <el-table-column
+            v-if="item.equipmentCode"
+            label="执行设备"
+            prop="equipmentCode"
+            min-width="100"
+          />
           <el-table-column
             label="产品料号"
             prop="materialCode"
@@ -84,8 +101,12 @@
         >
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
-        <el-button class="submit" @click="closeExitstationDialog">取 消</el-button>
-        <el-button class="submit" type="primary" @click="handleExitStation">确 定</el-button>
+        <el-button class="submit" @click="closeExitstationDialog"
+          >取 消</el-button
+        >
+        <el-button class="submit" type="primary" @click="handleExitStation"
+          >确 定</el-button
+        >
       </span>
     </el-dialog>
   </div>
@@ -99,7 +120,7 @@ import { inOrOutStation } from "@/api/inStation";
 import { fetchStorage } from "@/utils/overStation";
 
 export default {
-  name: 'WaitOutStation',
+  name: "WaitOutStation",
   data() {
     return {
       currentPage: 1,
@@ -119,13 +140,13 @@ export default {
   },
   methods: {
     searchRows() {
-      this.currentPage = 1
-      this.fetchData()
+      this.currentPage = 1;
+      this.fetchData();
     },
     fetchData() {
       Api.fetchWaitOutStationPage({
         search_EQ_status: 1, // 加工状态 0：待加工；1：加工中；2：加工完成；3：入库完成
-        search_IN_wipStorageStatus: '0,1', // 站点状态 0：待进站；1：已经站；2：已出站
+        search_IN_wipStorageStatus: "0,1", // 站点状态 0：待进站；1：已经站；2：已出站
         search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
@@ -135,41 +156,40 @@ export default {
       });
     },
     handleOverStationExecutionClick(code, deviceCode) {
-      this.processingOrderCode = code
-      fetchStorage(code, deviceCode)
-      this.$store.dispatch('SetStationCallback', this.fetchData)
+      this.processingOrderCode = code;
+      fetchStorage(code, deviceCode);
+      this.$store.dispatch("SetStationCallback", this.fetchData);
     },
     async getCurrentWipStorageData() {
       // 在制品查询站点
-      const res = await getCurrentWipStorageData(this.processingOrderCode)
-      this.siteList = res.data || []
-      const { length } = this.siteList
-      if (!length) return this.$message.warning('未查询到过站信息!')
+      const res = await getCurrentWipStorageData(this.processingOrderCode);
+      this.siteList = res.data || [];
+      const { length } = this.siteList;
+      if (!length) return this.$message.warning("未查询到过站信息!");
       if (length === 1) {
-        const { wipStorageStatus, operationType } = this.siteList[0]
-        this.currentSite = this.siteList[0]
+        const { wipStorageStatus, operationType } = this.siteList[0];
+        this.currentSite = this.siteList[0];
         // operationType 0：直接出站/直接进站，1：自定义表单，2：定制化页面
 
         // 调用接口
         switch (operationType) {
           case 0:
-            break
+            break;
           case 1:
-            break
+            break;
           case 2:
             this.$router.push({
               path: this.currentSite.operationData,
               query: {
                 ...this.currentSite,
                 processingOrderCode: this.processingOrderCode,
-                fromData: JSON.stringify(this.currentSite.fromData)
-              }
-            })
-            break
+                fromData: JSON.stringify(this.currentSite.fromData),
+              },
+            });
+            break;
         }
         if (operationType === 0) {
           // 直接进站
-
           // this.$confirm(`是否确定${wipStorageStatus === 0 ? '进站' : '出站'}？`, '提示', {
           //   confirmButtonText: '确定',
           //   cancelButtonText: '取消',
@@ -179,7 +199,6 @@ export default {
           // })
         }
       } else {
-
       }
     },
 
@@ -190,8 +209,8 @@ export default {
         equipmentCode: this.currentSite.deviceCode,
         processUuid: this.currentSite.processUuid,
         processingOrderCode: this.processingOrderCode,
-        wipStorageStatus: this.currentSite.wipStorageStatus
-      })
+        wipStorageStatus: this.currentSite.wipStorageStatus,
+      });
     },
     closeExitstationDialog() {
       this.preStationList = [];
