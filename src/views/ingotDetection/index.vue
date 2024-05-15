@@ -422,6 +422,12 @@
                 :formatter="formRecycle"
               />
               <el-table-column
+                label="返切条码"
+                min-width="200"
+                align="center"
+                prop="backCutNumber"
+              />
+              <el-table-column
                 label="样片编码"
                 min-width="200"
                 align="center"
@@ -531,7 +537,7 @@
         <el-form-item label="返切位置" prop="samplePosition">
           <el-input
             v-model="backCuttingFormData.samplePosition"
-            @change="handleBackCutPositionChange"
+            @input="handleBackCutPositionChange"
           ></el-input>
         </el-form-item>
         <el-form-item label="返切距头位置" prop="cutDistanceStart">
@@ -598,11 +604,10 @@ import { cloneDeep, isEmpty } from "lodash-es";
 import PhotoNew from "@/views/components/photoNew";
 import moment from "moment";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation";
-import template from "./../template/index.vue";
 
 export default {
   mixins: [overStation],
-  components: { SelectUserinfo, PhotoNew, template },
+  components: { SelectUserinfo, PhotoNew },
   data() {
     return {
       formData: {
@@ -881,7 +886,8 @@ export default {
           (item) =>
             item.type === this.backCuttingFormData.type &&
             item.sampleIdentification ===
-              this.backCuttingFormData.sampleIdentification
+              this.backCuttingFormData.sampleIdentification &&
+            item.sampleNumber
         )
         .map((item) => Number(item.sampleNumber.split("-")[3]));
 
