@@ -329,6 +329,7 @@
                   <el-input
                     v-model="scope.row.diametermm"
                     v-direction="{ x: 1, y: scope.$index }"
+                    :disabled="scope.row.type === 2"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -384,6 +385,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.calculatedPosition"
                     @change="(value) => calcResistivity(value, scope.$index)"
                     v-direction="{ x: 4, y: scope.$index }"
@@ -398,6 +400,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.calculatedResistivity"
                     @change="(value) => calcPosition(value, scope.$index)"
                     v-direction="{ x: 5, y: scope.$index }"
@@ -412,6 +415,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.headResistance"
                     v-direction="{ x: 6, y: scope.$index }"
                   ></el-input>
@@ -425,6 +429,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.tailResistance"
                     v-direction="{ x: 7, y: scope.$index }"
                   ></el-input>
@@ -489,6 +494,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.remarks"
                     v-direction="{ x: 8, y: scope.$index }"
                   ></el-input>
@@ -497,6 +503,7 @@
               <el-table-column label="合格状态" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-select
+                    v-if="scope.row.type !== 2"
                     v-model="scope.row.status"
                     @change="(val) => handleStatusChange(val, scope.$index)"
                   >
@@ -524,7 +531,11 @@
                 prop="reason"
               >
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.reason" clearable>
+                  <el-select
+                    v-model="scope.row.reason"
+                    clearable
+                    v-if="scope.row.type !== 2"
+                  >
                     <el-option
                       :label="item.label"
                       :value="item.value"
@@ -541,7 +552,11 @@
                 prop="reasonIn"
               >
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.reasonIn" clearable>
+                  <el-select
+                    v-model="scope.row.reasonIn"
+                    clearable
+                    v-if="scope.row.type !== 2"
+                  >
                     <el-option
                       :label="item.label"
                       :value="item.value"
@@ -1195,7 +1210,7 @@ export default {
       let oi = this.calcOi();
       let item = {
         headPosition,
-        type: 1,
+        type: 0,
         headResistance: 0,
         tailResistance: 0,
         diameter: this.formData.diameter,
