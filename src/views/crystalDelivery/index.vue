@@ -331,7 +331,16 @@
           label="多晶硅扣料计算"
           min-width="250"
           prop="polysiliconDeductionCalc"
-        ></el-table-column>
+        >
+          <template slot="header">
+            <el-tooltip class="item" effect="dark" placement="bottom">
+              <template slot="content"
+                >多晶硅扣料： 当前轮次良品数 / 轮次总良品数 * 总投料</template
+              >
+              <span> 多晶硅扣料计算 <i class="el-icon-question"></i></span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column
           label="石英坩埚投料"
           min-width="150"
@@ -341,7 +350,14 @@
           label="石英坩埚扣料"
           min-width="150"
           prop="quartzCrucibleDeductionQty"
-        ></el-table-column>
+        >
+          <template slot="header">
+            <el-tooltip class="item" effect="dark" placement="bottom">
+              <template slot="content">石英坩埚扣料：1 / 总轮次</template>
+              <span> 石英坩埚扣料 <i class="el-icon-question"></i></span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column
           label="掺杂剂用量投料"
           min-width="150"
@@ -356,7 +372,29 @@
           label="掺杂剂扣料计算"
           min-width="250"
           prop="dopantDeductionCalc"
-        ></el-table-column>
+        >
+          <template slot="header">
+            <el-tooltip class="item" effect="dark" placement="bottom">
+              <template slot="content">
+                <div>
+                  掺杂剂扣料首轮次：首轮次良品数 / 首轮次多晶硅投料 *
+                  首轮次掺杂剂投料
+                </div>
+                <div>
+                  掺杂剂扣料中间轮次：当前轮次良品数 / （多晶硅总投料量 -
+                  前置轮次总良品数）* （前置轮次掺杂剂总投料 -
+                  前置轮次掺杂剂总扣料 + 本轮次掺杂剂投料）
+                </div>
+                <div>
+                  掺杂剂扣料尾轮次：当前轮次良品数 / （多晶硅总投料量 -
+                  前置轮次总良品数）* （前置轮次掺杂剂总投料 -
+                  前置轮次掺杂剂总扣料）
+                </div>
+              </template>
+              <span> 掺杂剂扣料计算 <i class="el-icon-question"></i></span>
+            </el-tooltip>
+          </template>
+        </el-table-column>
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogCheckVisible = false">取 消</el-button>
