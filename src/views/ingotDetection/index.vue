@@ -423,7 +423,7 @@
               />
               <el-table-column
                 label="返切条码"
-                min-width="200"
+                min-width="240"
                 align="center"
                 prop="backCutNumber"
               />

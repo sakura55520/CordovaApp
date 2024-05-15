@@ -257,7 +257,7 @@
             >
               <el-table-column
                 label="晶锭编号/回收料编号"
-                min-width="220"
+                min-width="240"
                 align="center"
               >
                 <template slot-scope="scope">
@@ -618,65 +618,10 @@
                   <div
                     :class="selectedIndex === index ? 'bar-selected' : 'bar'"
                     @click="handleSegmentedBarClick(index)"
+                    :id="`bar_${index}`"
                   >
                     <div class="center">
                       {{ item.segmentNo }}
-                    </div>
-                  </div>
-                  <div class="detail">
-                    <div class="item">
-                      <div class="label">尺寸：</div>
-                      <div class="value">{{ item.diameter }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">直径：</div>
-                      <div class="value">{{ item.diametermm }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">晶锭长度：</div>
-                      <div class="value">{{ item.length }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">计划重量：</div>
-                      <div class="value">{{ item.planWeight }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">头部电阻率：</div>
-                      <div class="value">{{ item.headResistance }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">尾部电阻率：</div>
-                      <div class="value">{{ item.tailResistance }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">头部电阻率实测：</div>
-                      <div class="value">{{ item.headResistanceActual }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">尾部电阻率实测：</div>
-                      <div class="value">{{ item.tailResistanceActual }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">79oi头：</div>
-                      <div class="value">{{ item.head79oi }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">79oi尾：</div>
-                      <div class="value">{{ item.tail79oi }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">合格状态：</div>
-                      <div class="value">
-                        {{ item.status === 0 ? "合格" : "不合格" }}
-                      </div>
-                    </div>
-                    <div class="item">
-                      <div class="label">合格长度：</div>
-                      <div class="value">{{ item.qualifiedLength }}</div>
-                    </div>
-                    <div class="item">
-                      <div class="label">合格重量：</div>
-                      <div class="value">{{ item.qualifiedWeight }}</div>
                     </div>
                   </div>
                 </div>
@@ -693,6 +638,69 @@
                 <div class="left-number" v-if="index === 0">0</div>
                 <div class="right-number" v-if="index % 2 == 1">
                   {{ (index + 1) * 50 }}
+                </div>
+              </div>
+            </div>
+            <div class="detail-container">
+              <div
+                class="detail"
+                v-for="(item, index) in formData.segmentedInstructionDetailVos"
+                :key="index"
+                :id="`detail_${index}`"
+              >
+                <div class="item">
+                  <div class="label">尺寸：</div>
+                  <div class="value">{{ item.diameter }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">直径：</div>
+                  <div class="value">{{ item.diametermm }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">晶锭长度：</div>
+                  <div class="value">{{ item.length }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">计划重量：</div>
+                  <div class="value">{{ item.planWeight }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">头部电阻率：</div>
+                  <div class="value">{{ item.headResistance }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">尾部电阻率：</div>
+                  <div class="value">{{ item.tailResistance }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">头部电阻率实测：</div>
+                  <div class="value">{{ item.headResistanceActual }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">尾部电阻率实测：</div>
+                  <div class="value">{{ item.tailResistanceActual }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">79oi头：</div>
+                  <div class="value">{{ item.head79oi }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">79oi尾：</div>
+                  <div class="value">{{ item.tail79oi }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">合格状态：</div>
+                  <div class="value">
+                    {{ item.status === 0 ? "合格" : "不合格" }}
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="label">合格长度：</div>
+                  <div class="value">{{ item.qualifiedLength }}</div>
+                </div>
+                <div class="item">
+                  <div class="label">合格重量：</div>
+                  <div class="value">{{ item.qualifiedWeight }}</div>
                 </div>
               </div>
             </div>
@@ -908,6 +916,7 @@ import { cloneDeep, isEmpty } from "lodash-es";
 import { getSeleteData } from "@/utils/select";
 import overStation from "@/mixins/overStation";
 import PhotoNew from "@/views/components/photoNew";
+import LeaderLine from "@/plugins/leader-line.min.js";
 
 export default {
   mixins: [overStation],
@@ -956,6 +965,7 @@ export default {
       selectRollingDiameter: null,
       diameterList: [],
       kValueList: [],
+      lineList: [],
     };
   },
   computed: {
@@ -1000,6 +1010,40 @@ export default {
     this.init();
     getSeleteData("erpWorkOrderType", this.erpWorkOrderTypeList); // ERP工单类型 list
     getSeleteData("kValue", this.kValueList);
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeDestory() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  watch: {
+    "formData.segmentedInstructionDetailVos": {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        this.$nextTick(() => {
+          for (const line of this.lineList) {
+            line.remove();
+          }
+          this.lineList = [];
+          val.forEach((item, index) => {
+            if (!item.segmentNo) return;
+
+            let line = new LeaderLine(
+              document.getElementById(`bar_${index}`),
+              document.getElementById(`detail_${index}`),
+              {
+                startSocket: "bottom",
+                endSocket: "top",
+                color: "#409EFF",
+                size: 2,
+                positionByWindowResize: false,
+              }
+            );
+            this.lineList.push(line);
+          });
+        });
+      },
+    },
   },
   methods: {
     initKeyup() {
@@ -1018,6 +1062,11 @@ export default {
           direction.nextLine();
         }
       });
+    },
+    handleResize() {
+      for (const line of this.lineList) {
+        line.position();
+      }
     },
     rowClick(row) {
       this.selectedWorkOrder = row.workOrderNo;
@@ -1628,6 +1677,8 @@ export default {
         width: 100%;
         height: 100%;
         font-size: 12px;
+        word-break: break-all;
+        padding: 0px 10px;
       }
     }
     .bar-selected {
@@ -1668,12 +1719,26 @@ export default {
         width: 100%;
         height: 100%;
         font-size: 12px;
+        word-break: break-all;
       }
     }
+  }
+  .table {
+    margin-top: 50px;
+  }
+  .add-btn {
+    position: absolute;
+    left: 20px;
+  }
+  .detail-container {
+    display: flex;
+    margin-top: 70px;
+    width: 100%;
+    gap: 10px;
     .detail {
+      flex: 1;
       font-size: 12px;
       margin: 0 auto;
-      width: calc(100% - 30px);
       border: 1px solid rgba(0, 0, 0, 0.3);
       margin-top: 10px;
       text-align: center;
@@ -1694,13 +1759,6 @@ export default {
         }
       }
     }
-  }
-  .table {
-    margin-top: 50px;
-  }
-  .add-btn {
-    position: absolute;
-    left: 20px;
   }
 }
 .unit {
