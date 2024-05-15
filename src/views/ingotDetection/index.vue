@@ -458,13 +458,6 @@
               <el-table-column label="操作" align="center" min-width="250">
                 <template slot-scope="scope">
                   <el-button
-                    v-if="scope.row.status === 1"
-                    type="text"
-                    @click="handleUpdateStatus(scope.row)"
-                  >
-                    返切操作
-                  </el-button>
-                  <el-button
                     type="text"
                     @click="handleUpdateBackCuttings(scope.row, scope.$index)"
                   >
@@ -557,7 +550,6 @@
             v-model="backCuttingFormData.recycle"
             placeholder=""
             class="form-item-cover"
-            :disabled="backCuttingFormType === '编辑'"
           >
             <el-option
               :label="item.label"
