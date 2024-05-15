@@ -257,7 +257,7 @@
             >
               <el-table-column
                 label="晶锭编号/回收料编号"
-                min-width="200"
+                min-width="220"
                 align="center"
               >
                 <template slot-scope="scope">
@@ -282,10 +282,11 @@
                     v-model="scope.row.type"
                     placeholder=""
                     class="form-item-cover"
+                    :disabled="scope.row.type === 2"
                   >
                     <div v-for="item in segmentTypeList" :key="item.value">
                       <el-option
-                        v-if="Number(item.value) !== 2"
+                        :disabled="Number(item.value) === 2"
                         :label="item.label"
                         :value="Number(item.value)"
                       ></el-option>
@@ -1132,9 +1133,10 @@ export default {
         this.checkInfo = list[0].details;
       }
 
+      let cloneSegmentedInstructionDetailVos;
       if (isEmpty(this.formData.segmentedInstructionDetailVos)) {
         let oi = this.calcOi();
-        let cloneSegmentedInstructionDetailVos = (
+        cloneSegmentedInstructionDetailVos = (
           this.formData.wipCrystalCheckSampleRangeDtos || []
         ).map((item) => {
           let length = item.tail - item.head;
@@ -1162,7 +1164,7 @@ export default {
           cloneSegmentedInstructionDetailVos
         );
       } else {
-        let cloneSegmentedInstructionDetailVos =
+        cloneSegmentedInstructionDetailVos =
           this.formData.segmentedInstructionDetailVos.map((item) => {
             let length = item.tailPosition - item.headPosition;
             return {
@@ -1176,6 +1178,9 @@ export default {
           cloneSegmentedInstructionDetailVos
         );
       }
+
+      if (cloneSegmentedInstructionDetailVos.some((item) => !item.segmentNo))
+        this.handleCodeClick();
 
       this.formData._files = JSON.parse(this.formData.photo || "[]").map(
         (fileItem) => ({
