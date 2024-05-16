@@ -132,14 +132,19 @@
 
     <el-dialog title="退站" :visible.sync="exitStationDialogVisible">
       <el-radio-group v-model="selectProcessUuid" style="width: 100%">
-        <el-radio
+        <div 
           v-for="(item, index) in preStationList"
           :key="index"
-          class="list-radio"
-          border
-          :label="item.processUuid"
-          >{{ item.lastWipStorageName }}</el-radio
         >
+          <el-radio
+            v-if="item.lastWipStorageName"
+            class="list-radio"
+            border
+            :label="item.processUuid"
+          >
+            {{ item.lastWipStorageName }}
+          </el-radio>
+        </div>
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
         <el-button class="submit" @click="closeExitstationDialog"
