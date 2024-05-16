@@ -500,21 +500,21 @@ ul, li, ol {
   padding: 0 16px 16px 16px;
   margin-bottom: 16px;
   background: #FAFCFF;
-  .card-list{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
-    .card-list-title .el-tag{
-      height: 32px;
-      padding: 0 12px;
-      border-radius: 8px;
-      border: 1px solid #1283F9;
-      margin-right: 6px;
-      background: #EDF5FF;
-      font-weight: bold;
-      line-height: 32px;
-    }
+}
+.card-list{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  .card-list-title .el-tag{
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 8px;
+    border: 1px solid #1283F9;
+    margin-right: 6px;
+    background: #EDF5FF;
+    font-weight: bold;
+    line-height: 32px;
   }
 }
 .delete-icon {
