@@ -137,7 +137,6 @@ export default {
       this.detailForm = Object.assign({}, defaultForm, fromData);
       if (!this.detailForm.userCreate)
         this.$set(this.detailForm, "userCreate", this.realName);
-      this.handleQtyChange();
     },
     // 操作
     handle(typeName) {
@@ -183,10 +182,6 @@ export default {
       this.detailForm.lineWarehouseLocation = name;
       this.detailForm.lineWarehouseId = id;
       if (id) this.$refs.lineWarehouse.clearValidate();
-    },
-    handleQtyChange() {
-      let { totalQty, scrapQty } = this.detailForm;
-      this.detailForm.goodQty = (totalQty || 0) - (scrapQty || 0);
     },
   },
 };
