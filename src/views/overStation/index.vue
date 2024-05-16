@@ -12,7 +12,7 @@
         />
       </el-form-item>
       <el-form-item v-if="storage && storage.isNeedsDevice" label="设备" prop="deviceCode">
-        <CodeScanner
+        <DeviceCodeScanner
           ref="CodeScanner"
           v-model="temp.deviceCode"
           placeholder="请扫描或输入设备"
