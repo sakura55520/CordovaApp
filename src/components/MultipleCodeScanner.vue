@@ -133,6 +133,10 @@ export default {
                     this.$message.warning(`物料类型不是${this.type}`);
                     return;
                   }
+                  if (res.data.status === 10) {
+                    this.$message.warning(`该物料已使用`);
+                    return;
+                  }
                   if (this.codes.some((item) => item.code === res.data.code)) {
                     this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
                     return;
@@ -178,6 +182,10 @@ export default {
         }
         if (res.data.materialTypeName !== this.type) {
           this.$message.warning(`物料类型不是${this.type}`);
+          return;
+        }
+        if (res.data.status === 10) {
+          this.$message.warning(`该物料已使用`);
           return;
         }
         if (this.codes.some((item) => item.code === res.data.code)) {

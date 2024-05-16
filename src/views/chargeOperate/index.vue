@@ -563,18 +563,25 @@ export default {
       this.detailForm.seedCrystalLife = null;
       this.detailForm.seedCrystalTotalLife = null;
     },
+    clearQuartzCrucibleSerial() {
+      this.detailForm.quartzCrucible = null;
+      this.detailForm.quartzCrucibleQty = null;
+    },
     async handleQuartzCrucibleSerialCodeScan(val) {
       Api.findByCode({ code: val }).then((res) => {
         if (!res.data) {
           this.$message.warning(`物料不存在`);
-          this.detailForm.quartzCrucible = null;
-          this.detailForm.quartzCrucibleQty = null;
+          this.clearQuartzCrucibleSerial();
+          return;
+        }
+        if (res.data.status === 10) {
+          this.$message.warning(`该物料已使用`);
+          this.clearQuartzCrucibleSerial();
           return;
         }
         if (res.data.materialTypeName !== "石英坩埚") {
           this.$message.warning("物料类型不是石英坩埚");
-          this.detailForm.quartzCrucible = null;
-          this.detailForm.quartzCrucibleQty = null;
+          this.clearQuartzCrucibleSerial();
           return;
         }
         if (
@@ -589,8 +596,7 @@ export default {
               "、"
             )}`
           );
-          this.detailForm.quartzCrucible = null;
-          this.detailForm.quartzCrucibleQty = null;
+          this.clearQuartzCrucibleSerial();
           return;
         }
         this.detailForm.quartzCrucible = res.data;
