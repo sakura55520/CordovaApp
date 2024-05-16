@@ -407,7 +407,7 @@ export default {
                 sampleNumber: undefined,
               });
             }
-            if (this.needYH) {
+            if (this.calcNeedYH(fromData.osf)) {
               fromData.wipCuttingSampleInfos.push({
                 type: "氧化样片",
                 sampleIdentification: "H",
@@ -670,6 +670,9 @@ export default {
           );
         }
       });
+    },
+    calcNeedYH(val) {
+      return val === "≤10" || val === "≤100" || val === "无";
     },
   },
 };
