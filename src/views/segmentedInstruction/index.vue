@@ -903,7 +903,7 @@
           key="planFinishDate"
           prop="planFinishDate"
           label="预计完工时间"
-          width="140"
+          width="180"
         />
         <el-table-column
           key="description"
@@ -915,7 +915,7 @@
           key="gmtCreate"
           prop="gmtCreate"
           label="创建时间"
-          width="140"
+          width="180"
         />
         <el-table-column
           key="userCreate"
@@ -927,7 +927,7 @@
           key="gmtUpdate"
           prop="gmtUpdate"
           label="修改时间"
-          width="140"
+          width="180"
         />
         <el-table-column
           key="userUpdate"
@@ -1348,6 +1348,7 @@ export default {
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
       res.segmentedInstructionDetailVos.forEach((item, index) => {
         list[index].segmentNo = item.segmentNo;
+        list[index].segmentNum = item.segmentNum
       });
       this.formData.segmentedInstructionDetailVos = list;
     },
