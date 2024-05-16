@@ -5,13 +5,13 @@ import { getCurrentWipStorageData } from '@/api/overStation/overStation'
 import { inOrOutStation } from "@/api/inStation";
 
 // 根据加工工单查询站点
-export function fetchStorage(processingOrderCode, deviceCode) {
+export function fetchStorage(processingOrderCode) {
   getCurrentWipStorageData(processingOrderCode).then(res => {
     if (!res.data || !res.data.length) return Message.warning('未查询到过站信息!')
 
     const list = res.data
     if (list.length === 1 && !list[0].isNeedsDevice) {
-      handleInOrOutStation(list[0], processingOrderCode, deviceCode)
+      handleInOrOutStation(list[0], processingOrderCode)
     } else {
       store.dispatch('SetProcessingOrderCode', processingOrderCode)
       store.dispatch('SetStationList', list)
@@ -20,7 +20,7 @@ export function fetchStorage(processingOrderCode, deviceCode) {
 }
 
 // 进站/出站
-export async function handleInOrOutStation(storage, processingOrderCode, deviceCode) {
+export async function handleInOrOutStation(storage, processingOrderCode) {
   const { operationType, skipStatus, wipStorageStatus } = storage
   let skipType = getSkipType(skipStatus, wipStorageStatus)
   if(operationType !== 0 && skipType) {
@@ -35,13 +35,13 @@ export async function handleInOrOutStation(storage, processingOrderCode, deviceC
       else skipInOrOut(storage, processingOrderCode)
     }
     catch(action) {
-      if(action === 'cancel') inOrOutStationExecute(storage, processingOrderCode, deviceCode)
+      if(action === 'cancel') inOrOutStationExecute(storage, processingOrderCode)
     }
   }
-  else inOrOutStationExecute(storage, processingOrderCode, deviceCode)
+  else inOrOutStationExecute(storage, processingOrderCode)
 }
 
-function inOrOutStationExecute (storage, processingOrderCode, deviceCode) {
+function inOrOutStationExecute (storage, processingOrderCode) {
   switch (storage.operationType) {
     // operationType 0：直接出站/直接进站，1：自定义表单，2：定制化页面
     case 0:
@@ -51,7 +51,7 @@ function inOrOutStationExecute (storage, processingOrderCode, deviceCode) {
       trendsform(storage, processingOrderCode)
       break
     case 2:
-      goOperationPage(storage, processingOrderCode, deviceCode);
+      goOperationPage(storage, processingOrderCode);
       break
   }
 }
@@ -150,15 +150,15 @@ function getSkipType(skipStatus, wipStorageStatus) {
 }
 
 // 跳转到操作页面
-function goOperationPage(storage, processingOrderCode, deviceCode) {
+function goOperationPage(storage, processingOrderCode) {
   const go = router.app._route.query.routerReplace ? 'replace' : 'push'
   router[go]({
     path: storage.operationData,
     query: {
       ...storage,
-      deviceCode: storage.deviceCode || deviceCode,
       processingOrderCode,
-      fromData: JSON.stringify(storage.fromData)
+      fromData: JSON.stringify(storage.fromData),
+      orderInfo: JSON.stringify(storage.orderInfo)
     }
   })
   resetStationStore()

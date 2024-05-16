@@ -8,14 +8,13 @@
             <span class="grid-item-name">批次号：</span>
             <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           </div>
-          <div
-            class="grid-item"
-            v-if="formData.deviceCode || $route.query.deviceCode"
-          >
+          <div class="grid-item" v-if="productionEquipment">
             <span class="grid-item-name">生产设备：</span>
-            <span class="grid-item-value">{{
-              formData.deviceCode || $route.query.deviceCode
-            }}</span>
+            <span class="grid-item-value">{{ productionEquipment }}</span>
+          </div>
+          <div class="grid-item" v-if="executionEquipment">
+            <span class="grid-item-name">执行设备：</span>
+            <span class="grid-item-value">{{ executionEquipment }}</span>
           </div>
         </div>
       </div>
@@ -731,6 +730,13 @@ export default {
     buffParams() {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
+    },
+    productionEquipment() {
+      return JSON.parse(this.$route.query.orderInfo || "{}")
+        .productionEquipmentCode;
+    },
+    executionEquipment() {
+      return this.$route.query.deviceCode;
     },
     ...mapState({
       realName: (state) => state.user.realName,

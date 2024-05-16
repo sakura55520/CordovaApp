@@ -103,7 +103,7 @@
               v-if="item.wipStorageStatus === 0"
               type="primary"
               class="in-station"
-              @click="handleOverStationExecutionClick(item.code, item.extend2)"
+              @click="handleOverStationExecutionClick(item.code)"
             >
               进站执行
             </el-button>
@@ -111,7 +111,7 @@
               v-if="item.wipStorageStatus === 1"
               type="primary"
               class="out-station"
-              @click="handleOverStationExecutionClick(item.code, item.extend2)"
+              @click="handleOverStationExecutionClick(item.code)"
               >出站执行</el-button
             >
           </div>
@@ -218,9 +218,9 @@ export default {
         this.total = parseInt(res.data.total);
       });
     },
-    handleOverStationExecutionClick(code, deviceCode) {
+    handleOverStationExecutionClick(code) {
       this.processingOrderCode = code;
-      fetchStorage(code, deviceCode);
+      fetchStorage(code);
       this.$store.dispatch("SetStationCallback", this.fetchData);
     },
     async getCurrentWipStorageData() {
@@ -247,6 +247,7 @@ export default {
                 ...this.currentSite,
                 processingOrderCode: this.processingOrderCode,
                 fromData: JSON.stringify(this.currentSite.fromData),
+                orderInfo: JSON.stringify(this.currentSite.orderInfo)
               },
             });
             break;

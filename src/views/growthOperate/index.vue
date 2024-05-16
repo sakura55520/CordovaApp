@@ -8,14 +8,13 @@
           <span class="grid-item-name">批次号：</span>
           <span class="grid-item-value">{{ fromData.processOrderCode }}</span>
         </div>
-        <div
-          class="grid-item"
-          v-if="fromData.deviceCode || $route.query.deviceCode"
-        >
+        <div class="grid-item" v-if="productionEquipment">
           <span class="grid-item-name">生产设备：</span>
-          <span class="grid-item-value">{{
-            fromData.deviceCode || $route.query.deviceCode
-          }}</span>
+          <span class="grid-item-value">{{ productionEquipment }}</span>
+        </div>
+        <div class="grid-item" v-if="executionEquipment">
+          <span class="grid-item-name">执行设备：</span>
+          <span class="grid-item-value">{{ executionEquipment }}</span>
         </div>
       </div>
     </div>
@@ -195,6 +194,13 @@ export default {
         list.push(stepName);
       });
       return list;
+    },
+    productionEquipment() {
+      return JSON.parse(this.$route.query.orderInfo || "{}")
+        .productionEquipmentCode;
+    },
+    executionEquipment() {
+      return this.$route.query.deviceCode;
     },
   },
   created() {
