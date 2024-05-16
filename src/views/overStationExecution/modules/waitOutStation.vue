@@ -80,6 +80,7 @@
             min-width="100"
           />
           <el-table-column label="数量" prop="number" />
+          <el-table-column label="段位" prop="data.segmentNum" min-width="90" />
           <el-table-column label="轮编号" prop="extend1" min-width="90" />
           <el-table-column label="进站时间" prop="inTime" min-width="150" />
           <el-table-column label="操作者" prop="processUserCreate" />
