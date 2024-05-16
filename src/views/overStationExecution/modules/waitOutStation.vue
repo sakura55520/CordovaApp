@@ -1,6 +1,46 @@
 <template>
   <div>
     <div>
+      <el-form :model="formData">
+        <div class="form-columns">
+          <el-form-item label="">
+            <el-input
+              v-model="formData.search_LIKE_code"
+              placeholder="批次号"
+              @change="fetchData"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-input
+              v-model="formData.search_LIKE_extend2"
+              placeholder="生产设备"
+              @change="fetchData"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-input
+              v-model="formData.search_LIKE_equipmentCode"
+              placeholder="执行设备"
+              @change="fetchData"
+            ></el-input>
+          </el-form-item>
+        </div>
+        <div class="form-columns">
+          <el-form-item label="">
+            <el-date-picker
+              class="date-picker"
+              v-model="formData.startTimeRange"
+              type="datetimerange"
+              range-separator="至"
+              start-placeholder="进站开始时间"
+              end-placeholder="进站结束时间"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @change="fetchData"
+            >
+            </el-date-picker>
+          </el-form-item>
+        </div>
+      </el-form>
       <div
         v-if="list.length !== 0"
         class="card"
@@ -32,7 +72,7 @@
           <el-table-column
             label="产品料号"
             prop="materialCode"
-            min-width="100"
+            min-width="110"
           />
           <el-table-column label="产品类型" prop="orderType" min-width="100">
             <template slot-scope="scope">{{
@@ -40,8 +80,8 @@
             }}</template>
           </el-table-column>
           <el-table-column label="数量" prop="number" />
-          <el-table-column label="轮编号" prop="extend1" />
-          <el-table-column label="进站时间" prop="inTime" min-width="100" />
+          <el-table-column label="轮编号" prop="extend1" min-width="90" />
+          <el-table-column label="进站时间" prop="inTime" min-width="150" />
           <el-table-column label="操作者" prop="processUserCreate" />
         </el-table>
         <div class="tool">
@@ -127,6 +167,12 @@ export default {
       pageSize: 10,
       total: 0,
       list: [],
+      formData: {
+        search_LIKE_extend2: null,
+        search_LIKE_equipmentCode: null,
+        search_LIKE_code: null,
+        startTimeRange: "",
+      },
       selectRow: null,
       selectProcessUuid: null,
       preStationList: [],
@@ -144,12 +190,23 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      const {
+        search_LIKE_extend2,
+        search_LIKE_equipmentCode,
+        search_LIKE_code,
+        startTimeRange,
+      } = this.formData;
       Api.fetchWaitOutStationPage({
         search_EQ_status: 1, // 加工状态 0：待加工；1：加工中；2：加工完成；3：入库完成
         search_IN_wipStorageStatus: "0,1", // 站点状态 0：待进站；1：已经站；2：已出站
         search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
+        search_LIKE_extend2,
+        search_LIKE_equipmentCode,
+        search_LIKE_code,
+        search_GTE_inTime: !isEmpty(startTimeRange) ? startTimeRange[0] : null,
+        search_LT_inTime: !isEmpty(startTimeRange) ? startTimeRange[1] : null,
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);
@@ -252,6 +309,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.form-columns {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  > div {
+    flex: 1;
+  }
+}
+.date-picker {
+  width: 100%;
+}
 .card {
   padding: 12px;
   background-color: rgb(233, 243, 253);

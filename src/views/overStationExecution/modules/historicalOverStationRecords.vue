@@ -5,22 +5,22 @@
         <div class="form-columns">
           <el-form-item label="">
             <el-input
-              v-model="formData.search_LIKE_wheel"
-              placeholder="轮次号"
+              v-model="formData.search_LIKE_processingOrderCode"
+              placeholder="批次号"
               @change="fetchData"
             ></el-input>
           </el-form-item>
           <el-form-item label="">
             <el-input
               v-model="formData.search_LIKE_equipmentCode"
-              placeholder="单晶炉设备号"
+              placeholder="执行设备"
               @change="fetchData"
             ></el-input>
           </el-form-item>
           <el-form-item label="">
             <el-input
-              v-model="formData.search_LIKE_processingOrderCode"
-              placeholder="工单"
+              v-model="formData.search_LIKE_wheel"
+              placeholder="轮次号"
               @change="fetchData"
             ></el-input>
           </el-form-item>
@@ -183,27 +183,30 @@ export default {
       this.fetchData();
     },
     fetchData() {
+      const {
+        search_LIKE_wheel,
+        search_LIKE_equipmentCode,
+        search_LIKE_processingOrderCode,
+        startTimeRange,
+        endTimeRange,
+        search_EQ_status,
+      } = this.formData;
       Api.fetchHistoricalOverStationRecords({
         search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
-        search_Like_wheel: this.formData.search_LIKE_wheel,
-        search_LIKE_equipmentCode: this.formData.search_LIKE_equipmentCode,
-        search_LIKE_processingOrderCode:
-          this.formData.search_LIKE_processingOrderCode,
-        search_GTE_startTime: !isEmpty(this.formData.startTimeRange)
-          ? this.formData.startTimeRange[0]
+        search_LIKE_wheel,
+        search_LIKE_equipmentCode,
+        search_LIKE_processingOrderCode,
+        search_GTE_startTime: !isEmpty(startTimeRange)
+          ? startTimeRange[0]
           : null,
-        search_LT_startTime: !isEmpty(this.formData.startTimeRange)
-          ? this.formData.startTimeRange[1]
+        search_LT_startTime: !isEmpty(startTimeRange)
+          ? startTimeRange[1]
           : null,
-        search_GTE_endTime: !isEmpty(this.formData.endTimeRange)
-          ? this.formData.endTimeRange[0]
-          : null,
-        search_LT_endTime: !isEmpty(this.formData.endTimeRange)
-          ? this.formData.endTimeRange[1]
-          : null,
-        search_EQ_status: this.formData.search_EQ_status,
+        search_GTE_endTime: !isEmpty(endTimeRange) ? endTimeRange[0] : null,
+        search_LT_endTime: !isEmpty(endTimeRange) ? endTimeRange[1] : null,
+        search_EQ_status,
       }).then((res) => {
         this.list = res.data.rows;
         this.total = parseInt(res.data.total);
