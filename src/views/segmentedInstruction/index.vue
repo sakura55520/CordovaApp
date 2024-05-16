@@ -254,6 +254,7 @@
                 background: 'rgba(242, 242, 242)',
                 color: '#606266',
               }"
+              max-height="350px"
             >
               <el-table-column
                 label="晶锭编号/回收料编号"
@@ -261,13 +262,24 @@
                 align="center"
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.segmentNo">
-                    {{ scope.row.segmentNo }}
-                  </div>
-                  <div v-else>
-                    <el-button type="text" @click="handleCodeClick"
-                      >获取晶锭/回收料编号</el-button
-                    >
+                  <div class="segment-table">
+                    <div v-if="scope.row.segmentNo">
+                      {{ scope.row.segmentNo }}
+                    </div>
+                    <div v-else>
+                      <el-button type="text" @click="handleCodeClick"
+                        >获取晶锭/回收料编号</el-button
+                      >
+                    </div>
+                    <el-button
+                      class="segment-add-btn"
+                      v-if="scope.$index !== 0"
+                      type="primary"
+                      icon="el-icon-plus"
+                      circle
+                      size="small"
+                      @click="addSegmentedInfoByIndex(scope.$index)"
+                    ></el-button>
                   </div>
                 </template>
               </el-table-column>
@@ -457,25 +469,49 @@
                 min-width="100"
                 align="center"
                 prop="head79oi"
-              />
+              >
+                <template slot-scope="scope">
+                  <div v-if="scope.row.type !== 2">
+                    {{ scope.row.head79oi }}
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="79oi尾"
                 min-width="100"
                 align="center"
                 prop="tail79oi"
-              />
+              >
+                <template slot-scope="scope">
+                  <div v-if="scope.row.type !== 2">
+                    {{ scope.row.tail79oi }}
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="83oi头"
                 min-width="100"
                 align="center"
                 prop="head83oi"
-              />
+              >
+                <template slot-scope="scope">
+                  <div v-if="scope.row.type !== 2">
+                    {{ scope.row.head83oi }}
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="83oi尾"
                 min-width="100"
                 align="center"
                 prop="tail83oi"
-              />
+              >
+                <template slot-scope="scope">
+                  <div v-if="scope.row.type !== 2">
+                    {{ scope.row.tail83oi }}
+                  </div>
+                </template>
+              </el-table-column>
               <!-- <el-table-column
                 label="滚圆"
                 min-width="80"
@@ -624,7 +660,9 @@
                     :id="`bar_${index}`"
                   >
                     <div class="center">
-                      {{ item.segmentNo }}
+                      <span class="text">
+                        {{ item.segmentNo }}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -707,19 +745,19 @@
                   <div class="label">尾部电阻率实测：</div>
                   <div class="value">{{ item.tailResistanceActual }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">79oi头：</div>
                   <div class="value">{{ item.head79oi }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">79oi尾：</div>
                   <div class="value">{{ item.tail79oi }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">83oi头：</div>
                   <div class="value">{{ item.head83oi }}</div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="item.type !== 2">
                   <div class="label">83oi尾：</div>
                   <div class="value">{{ item.tail83oi }}</div>
                 </div>
@@ -1066,21 +1104,24 @@ export default {
             line.remove();
           }
           this.lineList = [];
-          val.forEach((item, index) => {
-            if (!item.segmentNo) return;
 
-            let line = new LeaderLine(
-              document.getElementById(`bar_${index}`),
-              document.getElementById(`detail_${index}`),
-              {
-                startSocket: "bottom",
-                endSocket: "top",
-                color: "#409EFF",
-                size: 2,
-                positionByWindowResize: false,
-              }
-            );
-            this.lineList.push(line);
+          this.$nextTick(() => {
+            val.forEach((item, index) => {
+              if (!item.segmentNo) return;
+
+              let line = new LeaderLine(
+                document.getElementById(`bar_${index}`),
+                document.getElementById(`detail_${index}`),
+                {
+                  startSocket: "bottom",
+                  endSocket: "top",
+                  color: "#409EFF",
+                  size: 2,
+                  positionByWindowResize: false,
+                }
+              );
+              this.lineList.push(line);
+            });
           });
         });
       },
@@ -1322,6 +1363,29 @@ export default {
         tail83oi: oi[3],
       };
       this.formData.segmentedInstructionDetailVos.push(item);
+    },
+    addSegmentedInfoByIndex(index) {
+      let list = this.formData.segmentedInstructionDetailVos;
+      let headPosition = list[index - 1].tailPosition || 0;
+      let tailPosition = list[index].headPosition || 0;
+      let length = tailPosition - headPosition;
+      let oi = this.calcOi();
+      let item = {
+        headPosition,
+        tailPosition,
+        length,
+        planWeight: this.calcPlanWeight(length),
+        type: 0,
+        headResistance: 0,
+        tailResistance: 0,
+        diameter: this.formData.diameter,
+        diametermm: this.formData.diametermm,
+        head79oi: oi[0],
+        head83oi: oi[1],
+        tail79oi: oi[2],
+        tail83oi: oi[3],
+      };
+      this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
     },
     deleteSegmentedInfo(index) {
       let list = [...this.formData.segmentedInstructionDetailVos];
@@ -1719,13 +1783,21 @@ export default {
         right: -10px;
       }
       .center {
+        padding: 1px 0px;
         background-color: #fff;
         z-index: 2;
-        font-size: 12px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        margin: 0px 10px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .text {
+          font-size: 12px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          margin: 0px 10px;
+        }
       }
     }
     .bar-selected {
@@ -1741,8 +1813,25 @@ export default {
       }
     }
   }
-  .table {
+  .table /deep/ {
     margin-top: 50px;
+    .segment-table {
+      position: relative;
+      overflow: visible;
+      .segment-add-btn {
+        position: absolute;
+        z-index: 999;
+        top: -40px;
+      }
+      .el-button {
+        font-size: 12px;
+      }
+    }
+    .el-table__cell {
+      div {
+        overflow: visible;
+      }
+    }
   }
   .add-btn {
     position: absolute;
