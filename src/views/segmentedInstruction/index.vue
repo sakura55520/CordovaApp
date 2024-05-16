@@ -616,7 +616,10 @@
                     </div>
                   </div>
                   <div
-                    :class="selectedIndex === index ? 'bar-selected' : 'bar'"
+                    :class="{
+                      bar: true,
+                      'bar-selected': selectedIndex === index,
+                    }"
                     @click="handleSegmentedBarClick(index)"
                     :id="`bar_${index}`"
                   >
@@ -641,12 +644,20 @@
                 </div>
               </div>
             </div>
-            <div class="detail-container">
+            <div class="detail-container" id="detail-container">
               <div
-                class="detail"
+                :class="{
+                  detail: true,
+                  'detail-selected': selectedIndex === index,
+                }"
+                :style="{
+                  marginLeft: index === 0 ? '0px' : detailMarginOffset + 'px',
+                  zIndex: selectedIndex === index ? 999 : index,
+                }"
                 v-for="(item, index) in formData.segmentedInstructionDetailVos"
                 :key="index"
                 :id="`detail_${index}`"
+                @click="handleSegmentedBarClick(index)"
               >
                 <div class="item" v-if="item.type === 2">
                   <div class="label">回收料编号：</div>
@@ -990,6 +1001,7 @@ export default {
       diameterList: [],
       kValueList: [],
       lineList: [],
+      detailMarginOffset: 0,
     };
   },
   computed: {
@@ -1048,6 +1060,8 @@ export default {
       deep: true,
       handler(val) {
         this.$nextTick(() => {
+          this.calcDetailMarginOffset();
+
           for (const line of this.lineList) {
             line.remove();
           }
@@ -1091,9 +1105,19 @@ export default {
       });
     },
     handleResize() {
+      this.calcDetailMarginOffset();
       for (const line of this.lineList) {
         line.position();
       }
+    },
+    calcDetailMarginOffset() {
+      let length = this.formData.segmentedInstructionDetailVos.length;
+      let minWidth = length * 240 + (length - 1) * 10;
+      let currentWidth =
+        document.getElementById("detail-container").offsetWidth;
+
+      if (currentWidth >= minWidth) this.detailMarginOffset = 0;
+      else this.detailMarginOffset = -(minWidth - currentWidth) / (length - 1);
     },
     rowClick(row) {
       this.selectedWorkOrder = row.workOrderNo;
@@ -1695,64 +1719,25 @@ export default {
         right: -10px;
       }
       .center {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background-color: #fff;
         z-index: 2;
-        width: 100%;
-        height: 100%;
         font-size: 12px;
         text-overflow: ellipsis;
         overflow: hidden;
-        word-break: break-all;
         white-space: nowrap;
-        padding: 0px 10px;
+        margin: 0px 10px;
       }
     }
     .bar-selected {
-      margin: 0 auto;
-      width: calc(100% - 25px);
-      height: 60px;
       border: 1px solid rgb(2, 104, 197);
       background-color: rgb(233, 243, 253);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
       &::before,
       &::after {
-        content: "";
-        position: absolute;
-        width: 20px;
-        height: 60px;
         border: 1px solid rgb(2, 104, 197);
         background-color: rgb(233, 243, 253);
-        border-radius: 50%;
-      }
-      &::before {
-        z-index: 1;
-        left: -10px;
-      }
-      &::after {
-        z-index: 3;
-        right: -10px;
       }
       .center {
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background-color: rgb(233, 243, 253);
-        z-index: 2;
-        width: 100%;
-        height: 100%;
-        font-size: 12px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        word-break: break-all;
-        white-space: nowrap;
-        padding: 0px 10px;
       }
     }
   }
@@ -1768,16 +1753,18 @@ export default {
     margin-top: 70px;
     width: 100%;
     gap: 10px;
-    flex-wrap: wrap;
     .detail {
+      cursor: pointer;
       flex: 1;
       font-size: 12px;
       margin: 0 auto;
       border: 1px solid rgba(0, 0, 0, 0.3);
+      background: white;
       margin-top: 10px;
       text-align: center;
       padding: 10px;
       border-radius: 10px;
+      min-width: 240px;
       .item {
         display: flex;
         justify-content: center;
@@ -1794,6 +1781,10 @@ export default {
           min-width: 70px;
         }
       }
+    }
+    .detail-selected {
+      border: 1px solid rgb(2, 104, 197);
+      background-color: rgb(233, 243, 253);
     }
   }
 }
