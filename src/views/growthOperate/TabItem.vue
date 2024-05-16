@@ -7,6 +7,13 @@
       :name="String(recordIdx)"
       :key="recordIdx"
     >
+      <div slot="title" class="card-list">
+        <div>{{ stepName }}记录{{ recordIdx + 1 }}</div>
+        <div v-if="canAddRecord" class="card-list-tip">
+          <i class="el-icon-error delete-icon" @click.stop="handleDelete(recordIdx)"/>
+        </div>
+      </div>
+
       <el-form
         ref="recordItem"
         :model="recordItem"
@@ -322,6 +329,13 @@ export default {
         `已添加【${this.stepName}记录${this.stepData.length}】! `
       );
     },
+    handleDelete(recordIdx) {
+      this.$confirm(`即将删除${ this.stepName }记录${ recordIdx + 1 }, 请确定!`, "删除", {
+        type: "warning",
+      }).then(() => {
+        this.stepData.splice(recordIdx, 1)
+      })
+    },
     async valid() {
       if (this.stepName === "冷却" && isEmpty(this.stepData)) {
         this.$message.warning(this.stepName + "记录不能为空")
@@ -354,3 +368,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.card-list {
+  width: 100%;
+}
+.card-list-tip {
+  margin-right: 6px;
+}
+</style>
