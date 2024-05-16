@@ -10,7 +10,9 @@
       <div slot="title" class="card-list">
         <div>{{ stepName }}记录{{ recordIdx + 1 }}</div>
         <div v-if="canAddRecord" class="card-list-tip">
-          <i class="el-icon-error delete-icon" @click.stop="handleDelete(recordIdx)"/>
+          <i class="el-icon-close" :style="{
+            color: 'rgb(16,140,250)',
+          }" @click.stop="handleDelete(recordIdx)"/>
         </div>
       </div>
 
