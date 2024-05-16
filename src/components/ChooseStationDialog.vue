@@ -8,7 +8,7 @@
   >
     <el-form ref="dataForm" :model="temp" :rules="rules" class="cs-form">
       <el-form-item v-show="storage && storage.isNeedsDevice" label="设备" prop="deviceCode">
-        <CodeScanner
+        <DeviceCodeScanner
           ref="CodeScanner"
           v-model="temp.deviceCode"
           placeholder="请扫描或输入设备"

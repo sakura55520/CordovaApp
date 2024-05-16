@@ -28,11 +28,13 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Treeselect from '@riophae/vue-treeselect'
 import SelectUserinfo from '@/components/select_userinfo.vue'
 import CodeScanner from '@/components/CodeScanner.vue'
+import DeviceCodeScanner from '@/components/DeviceCodeScanner.vue'
 import SelectAccessoryLife from '@/components/SelectAccessoryLife.vue'
 import SubTitle from '@/components/SubTitle.vue'
 Vue.component('Treeselect', Treeselect)
 Vue.component('SelectUserinfo', SelectUserinfo)
 Vue.component('CodeScanner', CodeScanner)
+Vue.component('DeviceCodeScanner', DeviceCodeScanner)
 Vue.component('SelectAccessoryLife', SelectAccessoryLife)
 Vue.component('SubTitle', SubTitle)
 
