@@ -532,13 +532,10 @@ export default {
         userCreate: fromData.userCreate || this.realName,
       };
 
-      let bottomMaterialDifferences = [];
-      await getSeleteData(
-        "bottomMaterialDifference",
-        bottomMaterialDifferences
-      );
-      this.bottomMaterialDifference = bottomMaterialDifferences.find(
-        (item) => item.name === "default"
+      let wipSwitches = [];
+      await getSeleteData("wipSwitches", wipSwitches);
+      this.bottomMaterialDifference = wipSwitches.find(
+        (item) => item.name === "bottomMaterialDifference"
       ).value;
 
       this.handleIngotWeightChange();
