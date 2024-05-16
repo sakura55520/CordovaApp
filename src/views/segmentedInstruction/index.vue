@@ -1124,6 +1124,8 @@ export default {
                   color: "#409EFF",
                   size: 2,
                   positionByWindowResize: false,
+                  path: "straight",
+                  color: "rgba(100,170,255)",
                 }
               );
               this.lineList.push(line);
