@@ -40,7 +40,7 @@
             </el-form-item>
             <el-form-item label="合格数量" prop="goodQty">
               <el-input v-model="detailForm.goodQty" disabled>
-                <template slot="append">kg</template>
+                <template slot="append">mm</template>
               </el-input>
             </el-form-item>
           </div>
