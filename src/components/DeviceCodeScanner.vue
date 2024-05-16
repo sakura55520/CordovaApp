@@ -60,6 +60,7 @@ export default {
       default: false,
       type: Boolean,
     },
+    deviceTypeIds: String || undefined || null,
   },
   data() {
     return {
@@ -79,15 +80,22 @@ export default {
   created() {
     this.debounceInput = debounce(this.emitHasDone, 1000);
   },
-  async mounted() {
-    let res = await fetchEqp({
-      search_EQ_del: false,
-      search_EQ_enableState: true,
-    });
-    this.devices = res.data.map((item) => ({
-      value: item.code,
-      name: item.name,
-    }));
+  watch: {
+    deviceTypeIds: {
+      immediate: true,
+      handler(val) {
+        fetchEqp({
+          search_EQ_del: false,
+          search_EQ_enableState: true,
+          search_IN_deviceTypeId: val,
+        }).then((res) => {
+          this.devices = res.data.map((item) => ({
+            value: item.code,
+            name: item.name,
+          }));
+        });
+      },
+    },
   },
   beforeDestory() {
     this.debounceInput = null;

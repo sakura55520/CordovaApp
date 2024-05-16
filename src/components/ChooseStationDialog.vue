@@ -12,6 +12,7 @@
           ref="CodeScanner"
           v-model="temp.deviceCode"
           placeholder="请扫描或输入设备"
+          :deviceTypeIds="temp.deviceTypeIds"
         />
       </el-form-item>
     </el-form>
@@ -47,7 +48,8 @@ import {mapState} from 'vuex'
 import {calcIsSkip, calcStationOperator, handleInOrOutStation} from '@/utils/overStation'
 
 const defaultForm = {
-  deviceCode: null
+  deviceCode: null,
+  deviceTypeIds: null
 }
 
 export default {
@@ -128,6 +130,7 @@ export default {
         index
       }
       if (row.deviceCode) this.temp.deviceCode = row.deviceCode
+      this.temp.deviceTypeIds = row.deviceTypeIds
     },
   }
 }
