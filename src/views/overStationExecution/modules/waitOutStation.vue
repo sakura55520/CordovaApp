@@ -74,11 +74,11 @@
             prop="materialCode"
             min-width="110"
           />
-          <el-table-column label="产品类型" prop="orderType" min-width="100">
-            <template slot-scope="scope">{{
-              JSON.parse(scope.row.data).productCategory
-            }}</template>
-          </el-table-column>
+          <el-table-column
+            label="产品类型"
+            prop="data.productCategory"
+            min-width="100"
+          />
           <el-table-column label="数量" prop="number" />
           <el-table-column label="轮编号" prop="extend1" min-width="90" />
           <el-table-column label="进站时间" prop="inTime" min-width="150" />
