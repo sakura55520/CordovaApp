@@ -239,13 +239,6 @@
         >
           <div class="form">
             <div class="form-title">分段信息</div>
-            <el-button
-              size="small"
-              type="primary"
-              class="add-btn"
-              @click="addSegmentedInfo"
-              >+ 新增</el-button
-            >
             <el-table
               :data="formData.segmentedInstructionDetailVos"
               class="table"
@@ -344,6 +337,18 @@
                   >
                     <template slot="append">mm</template>
                   </el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="段位"
+                min-width="100"
+                align="center"
+                prop="segmentNum"
+              >
+                <template slot-scope="scope">
+                  <div v-if="scope.row.type !== 2">
+                    {{ scope.row.segmentNum }}
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label="头部位置" min-width="150" align="center">
@@ -536,15 +541,36 @@
                 </template>
               </el-table-column>
               <el-table-column label="合格状态" min-width="120" align="center">
+                <template slot="header">
+                  <div class="form-table-header">合格状态</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-select
-                    v-if="scope.row.type !== 2"
-                    v-model="scope.row.status"
-                    @change="(val) => handleStatusChange(val, scope.$index)"
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'segmentedInstructionDetailVos.' +
+                      scope.$index +
+                      '.status'
+                    "
+                    :rules="[
+                      {
+                        required: scope.row.type !== 2,
+                        message: '合格状态不能为空',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
                   >
-                    <el-option label="合格" :value="1"></el-option>
-                    <el-option label="不合格" :value="0"></el-option>
-                  </el-select>
+                    <el-select
+                      v-if="scope.row.type !== 2"
+                      v-model="scope.row.status"
+                      @change="(val) => handleStatusChange(val, scope.$index)"
+                    >
+                      <el-option label="合格" :value="1"></el-option>
+                      <el-option label="不合格" :value="0"></el-option>
+                    </el-select>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1348,7 +1374,7 @@ export default {
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
       res.segmentedInstructionDetailVos.forEach((item, index) => {
         list[index].segmentNo = item.segmentNo;
-        list[index].segmentNum = item.segmentNum
+        list[index].segmentNum = item.segmentNum;
       });
       this.formData.segmentedInstructionDetailVos = list;
     },
@@ -1479,7 +1505,12 @@ export default {
       this.back(msg);
     },
     async confirm() {
-      const valid = await this.$refs.formRef.validate();
+      let valid;
+      try {
+        valid = await this.$refs.formRef.validate();
+      } catch (err) {
+        return this.$message.warning("分段的合格状态未填写完整");
+      }
       if (!valid) return;
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
@@ -1823,14 +1854,13 @@ export default {
     }
   }
   .table /deep/ {
-    margin-top: 50px;
     .segment-table {
       position: relative;
       overflow: visible;
       .segment-add-btn {
         position: absolute;
         z-index: 999;
-        top: -40px;
+        top: -48px;
       }
       .el-button {
         font-size: 12px;
@@ -1905,5 +1935,13 @@ export default {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0 10px;
   border-radius: 5px;
+}
+.form-table-header:before {
+  content: "* ";
+  color: red;
+}
+.form-input {
+  padding-top: 16px;
+  height: 58px;
 }
 </style>
