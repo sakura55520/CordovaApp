@@ -288,6 +288,7 @@
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.orderCode"
                     @focus="handleWorkOrderFocus(scope.$index)"
+                    clearable
                   />
                 </template>
               </el-table-column>
