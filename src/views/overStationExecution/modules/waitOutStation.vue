@@ -80,7 +80,15 @@
             min-width="100"
           />
           <el-table-column label="数量" prop="number" />
-          <el-table-column label="段位" prop="data.segmentNum" min-width="90" />
+          <el-table-column
+            label="晶锭段位"
+            min-width="100"
+            v-if="item.data.segmentNum && item.data.totalSegmentNum"
+          >
+            <template slot-scope="{ row }">
+              {{ row.data.segmentNum }}/{{ row.data.totalSegmentNum }}
+            </template>
+          </el-table-column>
           <el-table-column label="轮编号" prop="extend1" min-width="90" />
           <el-table-column label="进站时间" prop="inTime" min-width="150" />
           <el-table-column label="操作者" prop="processUserCreate" />
@@ -132,10 +140,7 @@
 
     <el-dialog title="退站" :visible.sync="exitStationDialogVisible">
       <el-radio-group v-model="selectProcessUuid" style="width: 100%">
-        <div 
-          v-for="(item, index) in preStationList"
-          :key="index"
-        >
+        <div v-for="(item, index) in preStationList" :key="index">
           <el-radio
             v-if="item.lastWipStorageName"
             class="list-radio"
@@ -247,7 +252,7 @@ export default {
                 ...this.currentSite,
                 processingOrderCode: this.processingOrderCode,
                 fromData: JSON.stringify(this.currentSite.fromData),
-                orderInfo: JSON.stringify(this.currentSite.orderInfo)
+                orderInfo: JSON.stringify(this.currentSite.orderInfo),
               },
             });
             break;

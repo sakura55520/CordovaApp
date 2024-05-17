@@ -340,8 +340,8 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="段位"
-                min-width="100"
+                label="晶锭段位"
+                min-width="120"
                 align="center"
                 prop="segmentNum"
               >
