@@ -37,8 +37,8 @@
             <el-form-item label="操作者">
               <el-input v-model="detailForm.userCreate" disabled />
             </el-form-item>
-            <el-form-item label="计划长度" prop="goodQty">
-              <el-input v-model="detailForm.goodQty" disabled>
+            <el-form-item label="计划长度" prop="planLength">
+              <el-input v-model="detailForm.planLength" disabled>
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
@@ -94,9 +94,6 @@ export default {
     return {
       detailForm: Object.assign({}, defaultForm), // 表单列表
       formRules: {
-        scrapQty: [
-          { required: true, message: "请输入报废数量", trigger: "change" },
-        ],
         lineWarehouseId: [
           { required: true, message: "请选择线边仓库位", trigger: "change" },
         ],
