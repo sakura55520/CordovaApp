@@ -1147,11 +1147,10 @@ export default {
                 {
                   startSocket: "bottom",
                   endSocket: "top",
-                  color: "#409EFF",
-                  size: 2,
+                  color: "#B0B0B0",
+                  size: 1.5,
                   positionByWindowResize: false,
                   path: "straight",
-                  color: "rgba(100,170,255)",
                 }
               );
               this.lineList.push(line);
@@ -1199,6 +1198,7 @@ export default {
       this.selectRollingDiameter = row.rollingDiameter;
     },
     async handleWorkOrderFocus(index) {
+      if (this.workOrderDialog) return;
       this.selectedSegmentWorkOrderIndex = index;
       this.workOrderDialog = true;
       this.selectedWorkOrder = null;
@@ -1224,7 +1224,7 @@ export default {
         this.formData.segmentedInstructionDetailVos[
           this.selectedSegmentWorkOrderIndex
         ],
-        "rollingDiameter",
+        "diametermm",
         this.selectRollingDiameter
       );
       this.$set(
