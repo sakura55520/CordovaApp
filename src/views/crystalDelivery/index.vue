@@ -181,6 +181,7 @@
                     trigger: 'change',
                   },
                 ]"
+                label-width="160px"
               >
                 <div class="input">
                   <el-input
@@ -203,6 +204,7 @@
                     trigger: 'change',
                   },
                 ]"
+                label-width="160px"
               >
                 <div class="input">
                   <el-input
