@@ -325,7 +325,7 @@
               </el-table-column>
               <el-table-column
                 label="直径"
-                min-width="150"
+                min-width="160"
                 align="center"
                 prop="diametermm"
               >
