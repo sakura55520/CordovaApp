@@ -37,7 +37,7 @@
             <el-form-item label="操作者">
               <el-input v-model="detailForm.userCreate" disabled />
             </el-form-item>
-            <el-form-item label="合格数量" prop="goodQty">
+            <el-form-item label="计划长度" prop="goodQty">
               <el-input v-model="detailForm.goodQty" disabled>
                 <template slot="append">mm</template>
               </el-input>
