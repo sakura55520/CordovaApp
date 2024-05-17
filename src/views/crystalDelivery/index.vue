@@ -170,6 +170,52 @@
             </div>
 
             <div class="row">
+              <el-form-item
+                label="拉晶实测最大直径"
+                prop="measuredDiameterMax"
+                class="item"
+                :rules="[
+                  {
+                    required: true,
+                    message: '拉晶实测最大直径不能为空',
+                    trigger: 'change',
+                  },
+                ]"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.measuredDiameterMax"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+
+              <el-form-item
+                label="拉晶实测最小直径"
+                prop="measuredDiameterMin"
+                class="item"
+                :rules="[
+                  {
+                    required: true,
+                    message: '拉晶实测最小直径不能为空',
+                    trigger: 'change',
+                  },
+                ]"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.measuredDiameterMin"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+
+            <div class="row">
               <el-form-item label="晶锭称重" prop="ingotWeight" class="item">
                 <div class="input">
                   <el-input
@@ -429,6 +475,8 @@ export default {
         bottomMaterialGrossWeight: null,
         bottomMaterialNetWeight: null,
         totalBottomMaterialGrossWeight: null,
+        measuredDiameterMax: null,
+        measuredDiameterMin: null,
         totalShoulderWeight: null,
         totalPolysiliconWeight: null,
         totalPreIngotWeight: null,
