@@ -1860,7 +1860,7 @@ export default {
       .segment-add-btn {
         position: absolute;
         z-index: 999;
-        top: -48px;
+        top: -52px;
       }
       .el-button {
         font-size: 12px;
