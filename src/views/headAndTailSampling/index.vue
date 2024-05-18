@@ -150,6 +150,7 @@
                 color: '#606266',
               }"
               :row-class-name="tableRowClassName"
+              max-height="350px"
             >
               <el-table-column
                 label="样片类型"
@@ -413,7 +414,7 @@ export default {
                 sampleNumber: undefined,
               });
             }
-            if (this.calcNeedYH(fromData.osf)) {
+            if (this.calcNeedYH(fromData.osf) && fromData.lengthQty > 300) {
               fromData.wipCuttingSampleInfos.push({
                 type: "氧化样片",
                 sampleIdentification: "H",
@@ -452,6 +453,12 @@ export default {
     async confirm() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+      if (
+        this.formData.wipCuttingSampleInfos.some(
+          (item) => item.samplePosition > this.formData.lengthQty
+        )
+      )
+        return this.$message.warning("样片位置不能大于晶体实测长度");
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
@@ -658,17 +665,41 @@ export default {
         this.fetchSampleCode();
       }
       if (mIndex > -1 && this.formData.lengthQty < 700) {
-        this.formData.wipCuttingSampleInfos.splice(mIndex, 1);
+        let list = this.formData.wipCuttingSampleInfos.filter(
+          (item) => item.type !== "中间样片"
+        );
+        this.$set(this.formData, "wipCuttingSampleInfos", list);
       }
+
+      let yhIndex = this.formData.wipCuttingSampleInfos.findIndex(
+        (item) => item.type === "氧化样片"
+      );
+      if (yhIndex === -1 && this.needYH && this.formData.lengthQty > 300) {
+        this.formData.wipCuttingSampleInfos.push({
+          type: "氧化样片",
+          sampleIdentification: "H",
+          samplePosition: 300,
+          valid: true,
+          sampleNumber: undefined,
+        });
+        this.fetchSampleCode();
+      }
+      if (yhIndex > -1 && this.formData.lengthQty <= 300) {
+        let list = this.formData.wipCuttingSampleInfos.filter(
+          (item) => item.type !== "氧化样片"
+        );
+        this.$set(this.formData, "wipCuttingSampleInfos", list);
+      }
+
       this.formData.wipCuttingSampleInfos.forEach((item, index) => {
-        if (item.sampleIdentification === "T") {
+        if (item.type === "头尾样片" && item.sampleIdentification === "T") {
           this.$set(
             this.formData.wipCuttingSampleInfos[index],
             "samplePosition",
             this.formData.lengthQty
           );
         }
-        if (item.sampleIdentification === "M") {
+        if (item.type === "中间样片" && item.sampleIdentification === "M") {
           this.$set(
             this.formData.wipCuttingSampleInfos[index],
             "samplePosition",
