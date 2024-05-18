@@ -39,7 +39,7 @@
                 size="small"
                 class="print-btn"
                 @click="handlePrint(formData.processOrderCode)"
-                >标签打印</el-button
+                >小标签打印</el-button
               >
             </el-form-item>
           </div>
