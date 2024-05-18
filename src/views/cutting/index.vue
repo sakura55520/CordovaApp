@@ -33,6 +33,15 @@
             <el-form-item label="操作者" prop="userCreate" class="item">
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
+            <el-form-item label="" class="item">
+              <el-button
+                type="primary"
+                size="small"
+                class="print-btn"
+                @click="handlePrint(formData.processOrderCode)"
+                >标签打印</el-button
+              >
+            </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">分段信息</div>
@@ -109,6 +118,12 @@
         >出站确认</el-button
       >
     </div>
+    <!--弹窗: 打印组件-->
+    <PrintDialog
+      :visible.sync="printVisible"
+      :print-data="printData"
+      document-mould="小标签"
+    />
   </div>
 </template>
 
@@ -116,9 +131,13 @@
 import * as Api from "@/api/inStation";
 import { isEmpty } from "lodash-es";
 import overStation from "@/mixins/overStation";
+import PrintDialog from "@/components/PrintDialog/index.vue";
 
 export default {
   mixins: [overStation],
+  components: {
+    PrintDialog,
+  },
   data() {
     return {
       formData: {
@@ -153,6 +172,8 @@ export default {
           { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
       },
+      printVisible: false,
+      printData: {},
     };
   },
   computed: {
@@ -243,6 +264,10 @@ export default {
         "qualifiedLength",
         (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0)
       );
+    },
+    handlePrint(code) {
+      this.printData.data = code;
+      this.printVisible = true;
     },
   },
 };
@@ -363,5 +388,8 @@ export default {
       padding: 0 5px;
     }
   }
+}
+.print-btn {
+  float: right;
 }
 </style>

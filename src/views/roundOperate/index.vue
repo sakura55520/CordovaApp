@@ -36,6 +36,15 @@
             <el-form-item label="操作者">
               <el-input v-model="detailForm.userCreate" disabled />
             </el-form-item>
+            <el-form-item label="" class="item">
+              <el-button
+                type="primary"
+                size="small"
+                class="print-btn"
+                @click="handlePrint(detailForm.processOrderCode)"
+                >标签打印</el-button
+              >
+            </el-form-item>
           </div>
 
           <div class="headLine">
@@ -303,6 +312,13 @@
         >{{ storageLabel }}确认</el-button
       >
     </div>
+
+    <!--弹窗: 打印组件-->
+    <PrintDialog
+      :visible.sync="printVisible"
+      :print-data="printData"
+      document-mould="小标签"
+    />
   </div>
 </template>
 
@@ -313,6 +329,7 @@ import * as Api from "@/api/inStation";
 import { cloneDeep, round } from "lodash-es";
 import moment from "moment";
 import overStation from "@/mixins/overStation";
+import PrintDialog from "@/components/PrintDialog/index.vue";
 
 const defaultForm = {
   planLength: null, // 计划长度
@@ -343,6 +360,7 @@ export default {
   components: {
     CodeScanner,
     SelectUserinfo,
+    PrintDialog,
   },
   data() {
     return {
@@ -402,6 +420,8 @@ export default {
           { required: true, message: "请输入D点晶向(分)", trigger: "change" },
         ],
       },
+      printVisible: false,
+      printData: {},
     };
   },
   computed: {
@@ -589,6 +609,10 @@ export default {
     handleNext(val) {
       if ((val + "").length >= 2) this.$getDirection().next();
     },
+    handlePrint(code) {
+      this.printData.data = code;
+      this.printVisible = true;
+    },
   },
 };
 </script>
@@ -667,5 +691,8 @@ export default {
       padding: 0 5px;
     }
   }
+}
+.print-btn {
+  float: right;
 }
 </style>
