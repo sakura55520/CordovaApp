@@ -1615,7 +1615,9 @@ export default {
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
         "calculatedResistivity",
-        isNaN(calculatedResistivity) ? null : calculatedResistivity
+        isNaN(calculatedResistivity) || !Number.isFinite(calculatedResistivity)
+          ? null
+          : calculatedResistivity
       );
     },
     calcPosition(x, index) {
@@ -1628,7 +1630,9 @@ export default {
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
         "calculatedPosition",
-        isNaN(calculatedPosition) ? null : calculatedPosition
+        isNaN(calculatedPosition) || !Number.isFinite(calculatedResistivity)
+          ? null
+          : calculatedPosition
       );
     },
     formatSegmentType(row, column, type) {
