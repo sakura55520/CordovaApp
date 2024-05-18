@@ -90,6 +90,16 @@
             </template>
           </el-table-column>
           <el-table-column label="轮编号" prop="extend1" min-width="90" />
+          <el-table-column
+            label="是否为最后一轮"
+            prop="data.isEnd"
+            min-width="140"
+          >
+            <template slot-scope="{ row }">
+              <div v-if="row.data.isEnd">是</div>
+              <div v-else-if="row.data.isEnd === false">否</div>
+            </template>
+          </el-table-column>
           <el-table-column label="进站时间" prop="inTime" min-width="150" />
           <el-table-column label="操作者" prop="processUserCreate" />
         </el-table>
