@@ -240,9 +240,23 @@
         >
           <div class="form">
             <div class="form-title">分段信息</div>
+            <el-button
+              class="segment-add-btn-single"
+              v-if="formData.segmentedInstructionDetailVos.length <= 1"
+              type="primary"
+              size="small"
+              @click="addSegmentedInfo"
+              >+ 新增</el-button
+            >
             <el-table
               :data="formData.segmentedInstructionDetailVos"
               class="table"
+              :style="{
+                marginTop:
+                  formData.segmentedInstructionDetailVos.length <= 1
+                    ? '50px'
+                    : '0px',
+              }"
               :header-cell-style="{
                 background: 'rgba(242, 242, 242)',
                 color: '#606266',
@@ -1880,6 +1894,11 @@ export default {
   }
   .add-btn {
     position: absolute;
+    left: 20px;
+  }
+  .segment-add-btn-single {
+    position: absolute;
+    top: 20px;
     left: 20px;
   }
   .detail-container {
