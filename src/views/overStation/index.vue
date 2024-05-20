@@ -2,16 +2,20 @@
 <template>
   <div v-show="visible" class="detailBox">
     <el-form ref="dataForm" :model="temp" :rules="rules" class="topInfoCard">
-      <el-form-item label="编号" prop="processingOrderCode">
+      <el-form-item label="晶编" prop="processingOrderCode">
         <CodeScanner
           ref="CodeScanner"
           v-model="temp.processingOrderCode"
-          placeholder="请扫描或输入编号"
+          placeholder="请扫描或输入晶编"
           @has-done="codeScannerCallBack"
           @clear="onCodeScannerClear"
         />
       </el-form-item>
-      <el-form-item v-if="storage && storage.isNeedsDevice" label="设备" prop="deviceCode">
+      <el-form-item
+        v-if="storage && storage.isNeedsDevice"
+        label="设备"
+        prop="deviceCode"
+      >
         <DeviceCodeScanner
           ref="CodeScanner"
           v-model="temp.deviceCode"
@@ -27,12 +31,12 @@
       </div>
       <el-radio-group v-model="wipStorageName" class="over-station-list">
         <el-radio
-          v-for="(item,index) in stationList"
+          v-for="(item, index) in stationList"
           :key="index"
           :label="item.wipStorageName"
           class="list-radio"
           border
-          @click.native="handleClickSite(item,index)"
+          @click.native="handleClickSite(item, index)"
         >
           {{ item.wipStorageName }}
         </el-radio>
@@ -53,119 +57,145 @@
 </template>
 
 <script>
-import * as Api from '@/api/overStation/overStation.js'
-import CodeScanner from '@/components/CodeScanner';
-import {calcIsSkip, calcStationOperator, handleInOrOutStation} from '@/utils/overStation'
+import * as Api from "@/api/overStation/overStation.js";
+import CodeScanner from "@/components/CodeScanner";
+import {
+  calcIsSkip,
+  calcStationOperator,
+  handleInOrOutStation,
+} from "@/utils/overStation";
 
 const defaultForm = {
   processingOrderCode: null,
   deviceCode: null,
-  deviceTypeIds: null
-}
+  deviceTypeIds: null,
+};
 
 export default {
   components: {
-    CodeScanner
+    CodeScanner,
   },
   data() {
     return {
       temp: Object.assign({}, defaultForm),
       visible: false,
-      wipStorageName: null,//工序绑定项
-      storage: null,//当前选中工序数据
-      stationList: [],//工序列表
-    }
+      wipStorageName: null, //工序绑定项
+      storage: null, //当前选中工序数据
+      stationList: [], //工序列表
+    };
   },
   computed: {
     calcStationOperator() {
-      const {skipStatus, wipStorageStatus} = this.storage
-      return calcStationOperator(skipStatus, wipStorageStatus)
+      const { skipStatus, wipStorageStatus } = this.storage;
+      return calcStationOperator(skipStatus, wipStorageStatus);
     },
     calcIsSkip() {
-      return calcIsSkip(this.storage.skipStatus)
+      return calcIsSkip(this.storage.skipStatus);
     },
     // 尝试立即跳转到表单页
     routerReplace() {
-      return this.$route.query.routerReplace
+      return this.$route.query.routerReplace;
     },
     rules() {
       return {
-        processingOrderCode: [{ required: true, message: '请输入编号', trigger: 'change' }],
-        deviceCode: [{ required: this.storage && this.storage.isNeedsDevice, message: '请输入设备', trigger: 'change' }]
-      }
-    }
+        processingOrderCode: [
+          { required: true, message: "请输入编号", trigger: "change" },
+        ],
+        deviceCode: [
+          {
+            required: this.storage && this.storage.isNeedsDevice,
+            message: "请输入设备",
+            trigger: "change",
+          },
+        ],
+      };
+    },
   },
   mounted() {
-    this.init()
+    this.init();
   },
   methods: {
     // 初始化逻辑
     init() {
-      this.visible = !this.routerReplace
+      this.visible = !this.routerReplace;
 
       // 判断是否直接扫码
       if (this.$route.query.isScanner) {
-        this.$refs.CodeScanner.sweepCode()
+        this.$refs.CodeScanner.sweepCode();
       }
 
       if (this.$route.query.processingOrderCode) {
-        this.temp.processingOrderCode = this.$route.query.processingOrderCode
-        this.codeScannerCallBack()
+        this.temp.processingOrderCode = this.$route.query.processingOrderCode;
+        this.codeScannerCallBack();
       }
     },
     handleInOrOutStation() {
-      this.$refs.dataForm.validate(valid => {
+      this.$refs.dataForm.validate((valid) => {
         if (valid) {
-          const {deviceCode} = this.temp
-          handleInOrOutStation({
-            ...this.storage,
-            equipmentCode: deviceCode,
-            deviceCode,
-          }, this.temp.processingOrderCode)
+          const { deviceCode } = this.temp;
+          handleInOrOutStation(
+            {
+              ...this.storage,
+              equipmentCode: deviceCode,
+              deviceCode,
+            },
+            this.temp.processingOrderCode
+          );
         }
-      })
+      });
     },
     // 当选中工序时
     handleClickSite(row, index) {
       this.storage = {
         ...row,
-        index
-      }
-      if (row.deviceCode) this.temp.deviceCode = row.deviceCode
-      this.temp.deviceTypeIds = row.deviceTypeIds
+        index,
+      };
+      if (row.deviceCode) this.temp.deviceCode = row.deviceCode;
+      this.temp.deviceTypeIds = row.deviceTypeIds;
     },
     // 扫码回调
     codeScannerCallBack() {
-      Api.getCurrentWipStorageData(this.temp.processingOrderCode).then(res => {
-        if (!res.data || !res.data.length) return Message.warning('未查询到过站信息!')
-        const list = res.data
-        this.stationList = list
-        if (this.routerReplace && list.length === 1 && !list[0].isNeedsDevice) {
-          this.storage = list[0]
-          this.handleInOrOutStation()
-        } else {
-          this.visible = true
-        }
-      }).catch(err => {
-        this.resetData()
-      })
+      Api.getCurrentWipStorageData(this.temp.processingOrderCode)
+        .then((res) => {
+          if (!res.data || !res.data.length)
+            return Message.warning("未查询到过站信息!");
+          const list = res.data;
+          this.stationList = list;
+          if (
+            this.routerReplace &&
+            list.length === 1 &&
+            !list[0].isNeedsDevice
+          ) {
+            this.storage = list[0];
+            this.handleInOrOutStation();
+          } else {
+            if (list.length > 0) {
+              this.wipStorageName = list[0].wipStorageName;
+              this.handleClickSite(list[0], 0);
+            }
+            this.visible = true;
+          }
+        })
+        .catch((err) => {
+          this.resetData();
+        });
     },
     // 当扫码框清空时
     onCodeScannerClear() {
-      this.resetData()
+      this.resetData();
     },
     // 重置页面数据
     resetData() {
-      this.temp = Object.assign({}, defaultForm)
-      this.wipStorageName = null
-      this.storage = null
-      this.stationList = []
+      this.temp = Object.assign({}, defaultForm);
+      this.wipStorageName = null;
+      this.storage = null;
+      this.stationList = [];
       this.$nextTick(() => {
-        this.$refs.dataForm.clearValidate()
-      })
-    }
-  }
-}
+        this.$refs.dataForm.clearValidate();
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

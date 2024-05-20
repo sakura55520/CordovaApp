@@ -41,7 +41,10 @@ export const constantRouterMap = [
     path: '/overStation',
     component: () => import('@/views/overStation/index'),
     hidden: true,
-    meta: {text: '过站操作'},
+    meta: {
+      text: '过站操作',
+      returnPath: '/'
+    },
   },
   {
     name: 'shiftChange',

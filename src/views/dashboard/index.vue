@@ -47,6 +47,12 @@ export default {
     groupedList() {
       const groupedList = [
         {
+          group: '',
+          children: [
+            { name: '过站操作', href: '/overStation', key: null, icon: 'guozhan' }
+          ]
+        },
+        {
           group: "单晶车间",
           children: [
             {
