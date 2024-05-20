@@ -279,7 +279,19 @@ export default {
       this.selectProcessUuid = this.storage.processUuid;
     },
     handleOverStationExecutionClick() {
-      fetchStorage(this.temp.processingOrderCode);
+      this.$refs.dataForm.validate((valid) => {
+        if (valid) {
+          const { deviceCode } = this.temp;
+          handleInOrOutStation(
+            {
+              ...this.storage,
+              equipmentCode: deviceCode,
+              deviceCode,
+            },
+            this.temp.processingOrderCode
+          );
+        }
+      });
       this.$store.dispatch("SetStationCallback", this.codeScannerCallBack);
     },
   },
