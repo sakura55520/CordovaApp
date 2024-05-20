@@ -348,7 +348,7 @@
           prop="batch"
         ></el-table-column>
         <el-table-column
-          label="轮次号"
+          label="单晶顺序"
           min-width="100"
           prop="wheel"
         ></el-table-column>
