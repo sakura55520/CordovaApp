@@ -7,6 +7,7 @@
           <div class="grid-item">
             <span class="grid-item-name">批次号：</span>
             <span class="grid-item-value">{{ formData.processOrderCode }}</span>
+            <span class="end" v-if="isEnd">END</span>
           </div>
           <div class="grid-item" v-if="productionEquipment">
             <span class="grid-item-name">生产设备：</span>

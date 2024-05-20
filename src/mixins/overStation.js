@@ -7,6 +7,11 @@ export default {
       enableMap: {} // 字段是否允许编辑
     }
   },
+  computed: {
+    isEnd() {
+      return JSON.parse(this.$route.query.orderInfo || "{}").isEnd;
+    }
+  },
   methods: {
     async back(msg, operator) {
       if (operator === 'confirm') {
