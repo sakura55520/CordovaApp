@@ -185,12 +185,11 @@ export default {
         this.codeScannerCallBack();
       }
 
-      let processingOrderCodeScan =
-        this.$store.state.station.processingOrderCodeScan;
+      let processingOrderCodeScan = this.global.processingOrderCodeScan;
       if (processingOrderCodeScan) {
         this.temp.processingOrderCode = processingOrderCodeScan;
         this.codeScannerCallBack();
-        this.$store.dispatch("SetProcessingOrderCodeScan", "");
+        this.global.setProcessingOrderCodeScan("");
       }
     },
     handleInOrOutStation() {

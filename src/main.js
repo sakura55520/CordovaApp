@@ -31,6 +31,10 @@ import CodeScanner from '@/components/CodeScanner.vue'
 import DeviceCodeScanner from '@/components/DeviceCodeScanner.vue'
 import SelectAccessoryLife from '@/components/SelectAccessoryLife.vue'
 import SubTitle from '@/components/SubTitle.vue'
+import global from '@/constants/global.js'
+
+Vue.prototype.global = global
+
 Vue.component('Treeselect', Treeselect)
 Vue.component('SelectUserinfo', SelectUserinfo)
 Vue.component('CodeScanner', CodeScanner)
@@ -48,6 +52,12 @@ Vue.use(Direction)
 Vue.config.productionTip = false
 Vue.prototype.$fabric = fabric;
 Vue.prototype.$hoursFromNow = hoursFromNow;
+
+router.beforeEach((to, from, next)=>{
+  let processingOrderCodeScan = from.query.processingOrderCode
+  if(to.path === '/overStation' && processingOrderCodeScan) Vue.prototype.global.setProcessingOrderCodeScan(processingOrderCodeScan)
+  next()
+})
 
 /* eslint-disable no-new */
 new Vue({

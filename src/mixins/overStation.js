@@ -1,6 +1,5 @@
 import {postMessage} from "@/utils/overStation";
 import {getSeleteData} from "@/utils/select";
-import store from '@/store'
 
 export default {
   data() {
@@ -19,7 +18,6 @@ export default {
         postMessage(msg)
         return
       }
-      store.dispatch('SetProcessingOrderCodeScan', this.$route.query.processingOrderCode)
       this.$router.back()
     },
     fetchSwitchDict() {
