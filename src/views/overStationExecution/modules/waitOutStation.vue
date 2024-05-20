@@ -104,12 +104,7 @@
           <el-table-column label="操作者" prop="processUserCreate" />
         </el-table>
         <div class="tool">
-          <div v-if="item.status === 2" class="btn">
-            <el-button disabled type="primary" class="in-station">
-              加工完成
-            </el-button>
-          </div>
-          <div v-else class="btn">
+          <div class="btn">
             <el-button
               type="warning"
               plain
@@ -149,7 +144,11 @@
     </div>
 
     <el-dialog title="退站" :visible.sync="exitStationDialogVisible">
-      <el-radio-group v-model="selectProcessUuid" style="width: 100%">
+      <el-radio-group
+        v-if="existLastWipStorage"
+        v-model="selectProcessUuid"
+        style="width: 100%"
+      >
         <div v-for="(item, index) in preStationList" :key="index">
           <el-radio
             v-if="item.lastWipStorageName"
@@ -161,11 +160,16 @@
           </el-radio>
         </div>
       </el-radio-group>
+      <el-empty v-else description="无上一站点" :image-size="100"></el-empty>
       <span slot="footer" class="dialog-footer">
         <el-button class="submit" @click="closeExitstationDialog"
           >取 消</el-button
         >
-        <el-button class="submit" type="primary" @click="handleExitStation"
+        <el-button
+          class="submit"
+          type="primary"
+          @click="handleExitStation"
+          v-if="existLastWipStorage"
           >确 定</el-button
         >
       </span>
@@ -201,6 +205,11 @@ export default {
       siteList: [],
       currentSite: {},
     };
+  },
+  computed: {
+    existLastWipStorage() {
+      return this.preStationList.some((item) => item.lastWipStorageName);
+    },
   },
   mounted() {
     this.fetchData();
@@ -292,9 +301,7 @@ export default {
       });
     },
     closeExitstationDialog() {
-      this.preStationList = [];
       this.exitStationDialogVisible = false;
-      this.selectRow = null;
       this.selectProcessUuid = null;
     },
     async handleExitStationClick(row) {
