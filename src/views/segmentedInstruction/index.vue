@@ -1302,7 +1302,8 @@ export default {
         url: "/wipcrystalcheck",
         page: 1,
         rows: 10,
-        search_EQ_processOrderCode: this.formData.processOrderCode,
+        search_EQ_processOrderCode:
+          this.formData.crystalNo || this.formData.processOrderCode,
       });
       let list = ingotDetectionRes.data.rows;
       if (!isEmpty(list)) {
