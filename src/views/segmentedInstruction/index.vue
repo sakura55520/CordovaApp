@@ -240,23 +240,9 @@
         >
           <div class="form">
             <div class="form-title">分段信息</div>
-            <el-button
-              class="segment-add-btn-single"
-              v-if="formData.segmentedInstructionDetailVos.length <= 1"
-              type="primary"
-              size="small"
-              @click="addSegmentedInfo"
-              >+ 新增</el-button
-            >
             <el-table
               :data="formData.segmentedInstructionDetailVos"
               class="table"
-              :style="{
-                marginTop:
-                  formData.segmentedInstructionDetailVos.length <= 1
-                    ? '50px'
-                    : '0px',
-              }"
               :header-cell-style="{
                 background: 'rgba(242, 242, 242)',
                 color: '#606266',
@@ -268,6 +254,16 @@
                 min-width="240"
                 align="center"
               >
+                <template slot="header">
+                  <el-button
+                    type="text"
+                    icon="el-icon-plus"
+                    circle
+                    size="small"
+                    @click="addSegmentedInfo"
+                  ></el-button>
+                  <span>晶锭编号/回收料编号</span>
+                </template>
                 <template slot-scope="scope">
                   <div class="segment-table">
                     <div v-if="scope.row.segmentNo">
@@ -1895,11 +1891,6 @@ export default {
   }
   .add-btn {
     position: absolute;
-    left: 20px;
-  }
-  .segment-add-btn-single {
-    position: absolute;
-    top: 20px;
     left: 20px;
   }
   .detail-container {
