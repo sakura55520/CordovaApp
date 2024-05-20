@@ -1611,7 +1611,7 @@ export default {
           Math.log(b / a) / Math.log((1 - h / j) / (1 - (g - i) / j))
         );
 
-      let calculatedResistivity = ((p1 + x1) / 2).toFixed(3);
+      let calculatedResistivity = ((p1 + x1) / 2).toFixed(5);
 
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
