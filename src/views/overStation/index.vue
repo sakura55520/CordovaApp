@@ -184,6 +184,14 @@ export default {
         this.temp.processingOrderCode = this.$route.query.processingOrderCode;
         this.codeScannerCallBack();
       }
+
+      let processingOrderCodeScan =
+        this.$store.state.station.processingOrderCodeScan;
+      if (processingOrderCodeScan) {
+        this.temp.processingOrderCode = processingOrderCodeScan;
+        this.codeScannerCallBack();
+        this.$store.dispatch("SetProcessingOrderCodeScan", "");
+      }
     },
     handleInOrOutStation() {
       this.$refs.dataForm.validate((valid) => {

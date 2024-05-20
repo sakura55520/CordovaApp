@@ -5,6 +5,7 @@ const station = {
     stationList: [], // 站点集合
     stationPostData: null, // inOrOutStation接口的传参
     stationCallback: '', // 过站后的回调
+    processingOrderCodeScan: '', // 过站执行-晶编扫码
   },
   mutations: {
     SET_PROCESSING_ORDER_CODE: (state, processingOrderCode) => {
@@ -21,6 +22,9 @@ const station = {
     },
     SET_STATION_CALLBACK: (state, stationCallback) => {
       state.stationCallback = stationCallback
+    },
+    SET_PROCESSING_ORDER_CODE_SCAN: (state, processingOrderCodeScan) => {
+      state.processingOrderCodeScan = processingOrderCodeScan
     },
   },
   actions: {
@@ -39,6 +43,9 @@ const station = {
     },
     SetStationCallback({ commit }, stationCallback) {
       commit('SET_STATION_CALLBACK', stationCallback)
+    },
+    SetProcessingOrderCodeScan({ commit }, processingOrderCodeScan) {
+      commit('SET_PROCESSING_ORDER_CODE_SCAN', processingOrderCodeScan)
     },
   }
 }
