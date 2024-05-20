@@ -110,15 +110,6 @@ async function skipStation(storage, processingOrderCode) {
     processingOrderCode,
     wipStorageStatus: 0,
     skipStatus
-  }, true)
-
-  await inOrOutStation({
-    param: {},
-    equipmentCode: storage.deviceCode,
-    processUuid: storage.processUuid,
-    processingOrderCode,
-    wipStorageStatus: 1,
-    skipStatus
   })
 
   const msg = `【跳过站点】操作成功!`
