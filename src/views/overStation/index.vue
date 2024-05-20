@@ -43,16 +43,64 @@
       </el-radio-group>
     </div>
 
-    <div class="page-handle-box">
-      <el-button
-        v-if="storage"
-        :type="calcIsSkip ? 'warning' : 'primary'"
-        class="submit"
-        @click="handleInOrOutStation"
-      >
-        {{ calcStationOperator }}
-      </el-button>
+    <div class="page-handle-box tool" v-if="storage">
+      <div class="btn">
+        <el-button
+          type="warning"
+          plain
+          class="back-station"
+          @click="handleExitStationClick"
+          >退站操作</el-button
+        >
+        <el-button
+          v-if="storage.wipStorageStatus === 0"
+          type="primary"
+          class="in-station"
+          @click="handleOverStationExecutionClick"
+        >
+          进站执行
+        </el-button>
+        <el-button
+          v-if="storage.wipStorageStatus === 1"
+          type="primary"
+          class="out-station"
+          @click="handleOverStationExecutionClick"
+          >出站执行</el-button
+        >
+      </div>
     </div>
+
+    <el-dialog title="退站" :visible.sync="exitStationDialogVisible">
+      <el-radio-group
+        v-if="existLastWipStorage"
+        v-model="selectProcessUuid"
+        style="width: 100%"
+      >
+        <div v-for="(item, index) in stationList" :key="index">
+          <el-radio
+            v-if="item.lastWipStorageName"
+            class="list-radio"
+            border
+            :label="item.processUuid"
+          >
+            {{ item.lastWipStorageName }}
+          </el-radio>
+        </div>
+      </el-radio-group>
+      <el-empty v-else description="无上一站点" :image-size="100"></el-empty>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="submit" @click="closeExitstationDialog"
+          >取 消</el-button
+        >
+        <el-button
+          class="submit"
+          type="primary"
+          @click="handleExitStation"
+          v-if="existLastWipStorage"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,6 +112,9 @@ import {
   calcStationOperator,
   handleInOrOutStation,
 } from "@/utils/overStation";
+import { isEmpty } from "lodash-es";
+import { fetchStorage } from "@/utils/overStation";
+import { exitStation } from "@/api/overStationExecution/overStation.js";
 
 const defaultForm = {
   processingOrderCode: null,
@@ -82,6 +133,8 @@ export default {
       wipStorageName: null, //工序绑定项
       storage: null, //当前选中工序数据
       stationList: [], //工序列表
+      selectProcessUuid: null,
+      exitStationDialogVisible: false,
     };
   },
   computed: {
@@ -109,6 +162,9 @@ export default {
           },
         ],
       };
+    },
+    existLastWipStorage() {
+      return this.stationList.some((item) => item.lastWipStorageName);
     },
   },
   mounted() {
@@ -169,7 +225,7 @@ export default {
             this.storage = list[0];
             this.handleInOrOutStation();
           } else {
-            if (list.length > 0) {
+            if (!isEmpty(list)) {
               this.wipStorageName = list[0].wipStorageName;
               this.handleClickSite(list[0], 0);
             }
@@ -193,6 +249,31 @@ export default {
       this.$nextTick(() => {
         this.$refs.dataForm.clearValidate();
       });
+    },
+    closeExitstationDialog() {
+      this.exitStationDialogVisible = false;
+      this.selectProcessUuid = null;
+    },
+    async handleExitStation() {
+      if (!this.selectProcessUuid) {
+        this.$message.warning("请选择站点");
+        return;
+      }
+      await exitStation({
+        processingOrderCode: this.temp.processingOrderCode,
+        processUuid: this.selectProcessUuid,
+      });
+      this.$message({ type: "success", message: "退站成功" });
+      this.codeScannerCallBack();
+      this.closeExitstationDialog();
+    },
+    async handleExitStationClick() {
+      this.exitStationDialogVisible = true;
+      this.selectProcessUuid = this.storage.processUuid;
+    },
+    handleOverStationExecutionClick() {
+      fetchStorage(this.temp.processingOrderCode);
+      this.$store.dispatch("SetStationCallback", this.codeScannerCallBack);
     },
   },
 };
@@ -218,5 +299,24 @@ export default {
 .over-station-list {
   width: 100%;
   padding: 0 16px;
+}
+
+.tool {
+  width: 100%;
+  .btn {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    margin-top: 12px;
+    .in-station {
+      flex: 2;
+    }
+    .back-station {
+      flex: 1;
+    }
+    .out-station {
+      flex: 2;
+    }
+  }
 }
 </style>
