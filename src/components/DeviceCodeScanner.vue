@@ -142,14 +142,14 @@ export default {
             // alert(resultCode)
             if (resultCode === 1) {
               this.codeText = result;
-              this.emitHasDone(codeText);
+              this.emitHasDone(result);
             } else {
               this.$message.info("请重新扫码!");
             }
           },
           (error) => {
             console.log(error); // 原因
-            this.$message.info("请在客户端使用扫码功能");
+            // this.$message.info("请在客户端使用扫码功能");
             // alert(JSON.stringify(error))
           }
         );
