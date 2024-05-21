@@ -122,12 +122,12 @@ export default {
       fetchAccessory({
         search_EQ_uniqueCode: code
       }).then(res => {
-        let number
+        let usefulLife
         let ratedLife
         const { data } = res
         if (data && data[0]) {
-          number = data[0].number
           ratedLife = data[0].ratedLife
+          usefulLife = data[0].usefulLife
           this.warnStatus = data[0].warnStatus
           if (this.warnStatus) {
             this.$message.warning(`【${code}】寿命达到预警值!`)
@@ -137,7 +137,7 @@ export default {
         } else {
           this.$message.warning(`【${code}】未查询到寿命信息!`)
         }
-        this.valueLife = (number || '') + '/' + (ratedLife || '')
+        this.valueLife = (usefulLife || '') + '/' + (ratedLife || '')
       })
     },
   },
