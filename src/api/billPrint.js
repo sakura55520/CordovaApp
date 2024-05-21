@@ -48,3 +48,12 @@ export function fetchDocumentMould(params) {
     params,
   });
 }
+
+/* 获取全部打印模板 */
+export function fetchAllDocumentMould(params) {
+  return request({
+    url: "/documentPrint/listAll",
+    method: "get",
+    params,
+  });
+}

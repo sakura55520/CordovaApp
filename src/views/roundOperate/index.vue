@@ -318,7 +318,7 @@
     <PrintDialog
       :visible.sync="printVisible"
       :print-data="printData"
-      document-mould="小标签"
+      print-type="小标签"
     />
   </div>
 </template>

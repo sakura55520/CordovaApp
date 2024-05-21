@@ -287,7 +287,7 @@
     <PrintDialog
       :visible.sync="printVisible"
       :print-data="printData"
-      document-mould="切头尾取样-回收料编码"
+      print-type="切头尾取样-回收料编码"
     />
   </div>
 </template>
@@ -456,7 +456,7 @@ export default {
       if (!valid) return;
       if (
         this.formData.wipCuttingSampleInfos.some(
-          (item) => item.samplePosition > this.formData.lengthQty
+          (item) => item.samplePosition > Number(this.formData.lengthQty)
         )
       )
         return this.$message.warning("样片位置不能大于晶体实测长度");

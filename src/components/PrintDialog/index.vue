@@ -17,6 +17,21 @@
 
     <div slot="footer" class="dialog-footer">
       <el-form>
+        <el-form-item label="打印模板">
+          <el-select
+            v-model="documentMould"
+            filterable
+            @change="preview"
+            clearable
+          >
+            <el-option
+              v-for="(item, index) in documentMoulds"
+              :key="index"
+              :label="item.documentMould"
+              :value="item.documentMould"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="打印份数">
           <el-input-number
             v-model="printNum"
@@ -27,7 +42,11 @@
         </el-form-item>
       </el-form>
       <el-button class="save" @click="dialogVisible = false">取 消</el-button>
-      <el-button class="submit" type="primary" @click="confirmPrint"
+      <el-button
+        class="submit"
+        type="primary"
+        @click="confirmPrint"
+        v-if="documentMould"
         >打印标签</el-button
       >
     </div>
@@ -43,8 +62,8 @@ export default {
       type: Boolean,
       required: true,
     },
-    // 打印模板名
-    documentMould: String,
+    // 打印类型
+    printType: String,
     // 调用打印接口的传参
     // 如果是数组, 则循环调用打印接口
     printData: {
@@ -56,6 +75,8 @@ export default {
     return {
       imgList: [],
       printNum: 1,
+      documentMould: null,
+      documentMoulds: [],
     };
   },
   computed: {
@@ -80,10 +101,18 @@ export default {
   methods: {
     init() {
       this.printNum = this.printData.printNum || 1;
-      this.preview();
+      this.fetchDocumentMoulds();
+    },
+    fetchDocumentMoulds() {
+      Api.fetchAllDocumentMould({
+        search_EQ_printType: this.printType,
+      }).then((res) => {
+        this.documentMoulds = res.data;
+      });
     },
     async preview() {
       this.imgList = [];
+      if (!this.documentMould) return;
       if (Array.isArray(this.printData)) {
         for (let i = 0; i < this.printData.length; i++) {
           await this.postPreview(this.printData[i]);
