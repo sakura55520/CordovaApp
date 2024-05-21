@@ -141,7 +141,7 @@ export default {
             {
               name: "交接班管理",
               href: "/shiftChange",
-              icon: "guozhan",
+              icon: "shift",
             },
           ],
         },
