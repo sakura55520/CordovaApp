@@ -240,7 +240,7 @@ export default {
           url: "/wip/segmentedInstructionDetail",
           page: 1,
           rows: 100,
-          search_LIKE_segmentNo: row.processingOrderCode,
+          search_EQ_segmentedInstructionId: fromData.id,
         });
         fromData.segmentedInstructionDetailVos = resFDZL.data.rows.sort(
           (a, b) => a.headPosition - b.headPosition
