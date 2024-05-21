@@ -653,53 +653,49 @@
           </div>
           <div class="form">
             <div class="form-title">分段示意图</div>
-            <div
-              class="chart"
-              :style="{
-                width: `${
-                  (totalLength / (Math.ceil(totalLength / 50) * 50)) * 100
-                }%`,
-              }"
-            >
+            <div class="chart">
               <div
-                class="chart-box"
+                class="chart-item"
                 v-for="(item, index) in formData.segmentedInstructionDetailVos"
                 :key="index"
                 :style="{
-                  width: `${
-                    ((item.tailPosition - item.headPosition) * 100) /
-                    totalLength
-                  }%`,
+                  width: getChartWidth(item.headPosition, item.tailPosition),
+                  left: getChartLeft(item.headPosition),
                 }"
               >
                 <div
-                  v-if="
-                    (item.headPosition || item.headPosition === 0) &&
-                    (item.tailPosition || item.tailPosition === 0)
-                  "
+                  class="chart-box"
+                  v-if="!segmentError(item.headPosition, item.tailPosition)"
                 >
-                  <div class="number">
-                    <div v-if="index === 0" class="headPosition">
-                      <div>{{ item.headPosition }}</div>
-                      <div><i class="el-icon-caret-bottom"></i></div>
-                    </div>
-                    <div class="tailPosition">
-                      <div>{{ item.tailPosition }}</div>
-                      <div><i class="el-icon-caret-bottom"></i></div>
-                    </div>
-                  </div>
                   <div
-                    :class="{
-                      bar: true,
-                      'bar-selected': selectedIndex === index,
-                    }"
-                    @click="handleSegmentedBarClick(index)"
-                    :id="`bar_${index}`"
+                    v-if="
+                      (item.headPosition || item.headPosition === 0) &&
+                      (item.tailPosition || item.tailPosition === 0)
+                    "
                   >
-                    <div class="center">
-                      <span class="text">
-                        {{ item.segmentNo }}
-                      </span>
+                    <div class="number">
+                      <div v-if="index === 0" class="headPosition">
+                        <div>{{ item.headPosition }}</div>
+                        <div><i class="el-icon-caret-bottom"></i></div>
+                      </div>
+                      <div class="tailPosition">
+                        <div>{{ item.tailPosition }}</div>
+                        <div><i class="el-icon-caret-bottom"></i></div>
+                      </div>
+                    </div>
+                    <div
+                      :class="{
+                        bar: true,
+                        'bar-selected': selectedIndex === index,
+                      }"
+                      @click="handleSegmentedBarClick(index)"
+                      :id="`bar_${index}`"
+                    >
+                      <div class="center">
+                        <span class="text">
+                          {{ item.segmentNo }}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -709,13 +705,15 @@
               <div
                 class="ceil"
                 :key="item"
-                v-for="(item, index) in this.measurements"
+                v-for="(item, index) in measurements"
                 :style="{ borderLeft: index === 0 ? '1px solid' : 'none' }"
               >
                 <div>{{ item }}</div>
-                <div class="left-number" v-if="index === 0">0</div>
+                <div class="left-number" v-if="index === 0">
+                  {{ measurementHeadIndex * 50 }}
+                </div>
                 <div class="right-number" v-if="index % 2 == 1">
-                  {{ (index + 1) * 50 }}
+                  {{ (measurementHeadIndex + index + 1) * 50 }}
                 </div>
               </div>
             </div>
@@ -1035,13 +1033,6 @@ export default {
   },
   data() {
     return {
-      batchNumber: "Z0116504581",
-      grownCrystalFurnace: "A21",
-      furnaceNumber: "A2010504581",
-      recipe: "Reczl20240310v1",
-      processPath: "X0010101",
-      dataOrderCode: "",
-      productName: "",
       formData: {
         userCreate: null,
         length: null,
@@ -1092,17 +1083,30 @@ export default {
       return this.$route.query.deviceCode;
     },
     totalLength() {
+      return (this.measurementTailIndex - this.measurementHeadIndex) * 50;
+    },
+    measurementHeadIndex() {
       let list = this.formData.segmentedInstructionDetailVos;
       if (list.length === 0) return 0;
-      return (
-        (list[list.length - 1].tailPosition ||
-          list[list.length - 1].headPosition) - list[0].headPosition
-      );
+      let headPosition = list[0].headPosition || 0;
+      return Math.floor(headPosition / 50);
+    },
+    measurementTailIndex() {
+      let list = this.formData.segmentedInstructionDetailVos;
+      if (list.length === 0) return 0;
+      let headPosition = Number(list[list.length - 1].headPosition || 0);
+      let tailPosition = Number(list[list.length - 1].tailPosition || 0);
+      let currentPosition =
+        tailPosition > headPosition ? tailPosition : headPosition;
+      return Math.ceil(currentPosition / 50);
     },
     measurements() {
-      let number = Math.ceil(this.totalLength / 50);
       let list = [];
-      for (let index = 0; index < number; index++) {
+      for (
+        let index = this.measurementHeadIndex;
+        index < this.measurementTailIndex;
+        index++
+      ) {
         let charIndex = index % 20;
         list.push(String.fromCharCode(65 + charIndex));
       }
@@ -1490,7 +1494,7 @@ export default {
       let density = this.diameterList.find(
         (item) => item.value == this.formData.diameter
       ).extendValue;
-      return ((length * density) / 1000).toFixed(5);
+      return ((length * density) / 1000).toFixed(3);
     },
     calcOi() {
       let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
@@ -1651,6 +1655,27 @@ export default {
       const matched = this.segmentTypeList.find((item) => item.value == type);
       return matched ? matched.name : "";
     },
+    getChartWidth(headPosition, tailPosition) {
+      let width = 0;
+      if (this.totalLength > 0)
+        width = ((tailPosition - headPosition) * 100) / this.totalLength;
+      return width + "%";
+    },
+    getChartLeft(headPosition) {
+      let left = 0;
+      if (this.totalLength > 0)
+        left =
+          ((headPosition - this.measurementHeadIndex * 50) * 100) /
+          this.totalLength;
+      return left + "%";
+    },
+    segmentError(headPosition, tailPosition) {
+      return (
+        ["", undefined, null].includes(headPosition) ||
+        ["", undefined, null].includes(tailPosition) ||
+        Number(headPosition) > Number(tailPosition)
+      );
+    },
   },
 };
 </script>
@@ -1786,23 +1811,27 @@ export default {
     padding: 0px 6px;
   }
   .chart {
-    display: flex;
-    .chart-box {
-      position: relative;
-    }
-    .number {
-      height: 100px;
-      .headPosition {
-        text-align: center;
-        position: absolute;
-        left: 0;
-        transform: translateX(-50%);
-      }
-      .tailPosition {
-        text-align: center;
-        position: absolute;
-        right: 0;
-        transform: translateX(50%);
+    width: 100%;
+    position: relative;
+    .chart-item {
+      position: absolute;
+      .chart-box {
+        position: relative;
+        .number {
+          height: 100px;
+          .headPosition {
+            text-align: center;
+            position: absolute;
+            left: 0;
+            transform: translateX(-50%);
+          }
+          .tailPosition {
+            text-align: center;
+            position: absolute;
+            right: 0;
+            transform: translateX(50%);
+          }
+        }
       }
     }
     .line {
@@ -1895,7 +1924,7 @@ export default {
   }
   .detail-container {
     display: flex;
-    margin-top: 70px;
+    margin-top: 200px;
     width: 100%;
     gap: 10px;
     .detail {
