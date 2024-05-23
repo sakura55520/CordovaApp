@@ -103,7 +103,7 @@ export default {
       this.printNum = this.printData.printNum || 1;
       this.fetchDocumentMoulds();
       this.imgList = [];
-      this.documentMould = [];
+      this.documentMould = null;
     },
     fetchDocumentMoulds() {
       Api.fetchAllDocumentMould({
