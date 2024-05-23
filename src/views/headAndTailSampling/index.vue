@@ -287,7 +287,7 @@
     <PrintDialog
       :visible.sync="printVisible"
       :print-data="printData"
-      print-type="切头尾取样-回收料编码"
+      print-type="切头尾取样回收料编码"
     />
   </div>
 </template>

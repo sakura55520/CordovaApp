@@ -17,7 +17,7 @@
 
     <div slot="footer" class="dialog-footer">
       <el-form>
-        <el-form-item label="打印模板">
+        <el-form-item label="打印机区域">
           <el-select
             v-model="documentMould"
             filterable
