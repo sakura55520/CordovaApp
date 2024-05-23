@@ -148,7 +148,6 @@ export default {
       if (typeName === "保存") {
         Api.upldateBuffer(this.buffParams, this.detailForm).then((res) => {
           const msg = "保存成功!";
-          this.$message.success(msg);
           this.back(msg);
         });
       } else if (typeName === "提交") {
@@ -173,7 +172,6 @@ export default {
                 wipStorageStatus, // 进出站状态
               }).then(() => {
                 const msg = `【${this.storageLabel}】操作成功`;
-                this.$message.success(msg);
                 Api.deleteBuffer(this.buffParams);
                 this.back(msg);
               });

@@ -21,9 +21,11 @@ export default {
       }
       if (window._pc_window) {
         postMessage(msg)
-        return
       }
-      this.$router.back()
+      else {
+        this.$message.success(msg)
+        this.$router.back()
+      }
     },
     fetchSwitchDict() {
       const nameSpace = this.$route.query.wipStorageCode

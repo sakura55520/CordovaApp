@@ -290,9 +290,9 @@ export default {
             },
             this.temp.processingOrderCode
           );
+          this.$store.dispatch("SetStationCallback", this.codeScannerCallBack);
         }
       });
-      this.$store.dispatch("SetStationCallback", this.codeScannerCallBack);
     },
   },
 };

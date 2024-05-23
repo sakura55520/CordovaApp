@@ -625,7 +625,6 @@ export default {
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
       const msg = "保存成功!";
-      this.$message.success(msg);
       this.back(msg);
     },
     async confirm() {
@@ -650,7 +649,6 @@ export default {
       });
       this.dialogCheckVisible = false;
       const msg = "出站成功";
-      this.$message.success(msg);
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
     },

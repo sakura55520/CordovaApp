@@ -193,7 +193,6 @@ export default {
             const form = this.transform()
             Api.createData(form).then(() => {
               const msg = '【交接班】新增成功'
-              this.$message.success(msg);
               this.back(msg);
             });
           });
@@ -209,7 +208,6 @@ export default {
             const form = this.transform()
             Api.editData(form).then(() => {
               const msg = '【交接班】修改成功'
-              this.$message.success(msg);
               this.back(msg);
             });
           });
