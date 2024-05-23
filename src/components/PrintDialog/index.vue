@@ -100,8 +100,8 @@ export default {
   },
   methods: {
     init() {
-      this.printNum = this.printData.printNum || 1;
       this.fetchDocumentMoulds();
+      this.printNum = this.printData.printNum || 1;
       this.imgList = [];
       this.documentMould = null;
     },
