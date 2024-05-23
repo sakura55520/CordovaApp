@@ -216,10 +216,11 @@ export default {
       this.formData.originLength = originLength || planLength || 0;
       this.formData.chippingLength = chippingLength || 0;
       this.formData.ellipticLength = ellipticLength || 0;
-      this.formData.qualifiedLength =
+      this.formData.qualifiedLength = (
         this.formData.originLength -
         this.formData.chippingLength -
-        this.formData.ellipticLength;
+        this.formData.ellipticLength
+      ).toFixed(2);
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -263,7 +264,11 @@ export default {
       this.$set(
         this.formData,
         "qualifiedLength",
-        (originLength || 0) - (chippingLength || 0) - (ellipticLength || 0)
+        (
+          (originLength || 0) -
+          (chippingLength || 0) -
+          (ellipticLength || 0)
+        ).toFixed(2)
       );
     },
     handlePrint(code) {

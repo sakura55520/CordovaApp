@@ -489,10 +489,11 @@ export default {
       this.detailForm.originLength = originLength || planLength || 0;
       this.detailForm.chippingLength = chippingLength || 0;
       this.detailForm.ellipticLength = ellipticLength || 0;
-      this.detailForm.qualifiedLength =
+      this.detailForm.qualifiedLength = (
         this.detailForm.originLength -
         this.detailForm.chippingLength -
-        this.detailForm.ellipticLength;
+        this.detailForm.ellipticLength
+      ).toFixed(2);
     },
     calcDegreesMinute() {
       const {
@@ -604,7 +605,7 @@ export default {
       let qualifiedLength = this.detailForm.originLength; // 检测实测长度
       qualifiedLength -= this.detailForm.chippingLength || 0; // 崩边长度
       qualifiedLength -= this.detailForm.ellipticLength || 0; // 椭圆长度
-      this.detailForm.qualifiedLength = round(qualifiedLength, 2);
+      this.detailForm.qualifiedLength = qualifiedLength.toFixed(2);
     },
     calcCrystalDeviation() {},
     handleNext(val) {
