@@ -55,6 +55,7 @@
 
 <script>
 import * as Api from "@/api/billPrint";
+import { isEmpty } from "lodash-es";
 
 export default {
   props: {
@@ -100,17 +101,16 @@ export default {
   },
   methods: {
     init() {
-      this.fetchDocumentMoulds();
       this.printNum = this.printData.printNum || 1;
-      this.imgList = [];
-      this.documentMould = null;
+      this.fetchDocumentMoulds();
     },
-    fetchDocumentMoulds() {
-      Api.fetchAllDocumentMould({
+    async fetchDocumentMoulds() {
+      let res = await Api.fetchAllDocumentMould({
         search_EQ_printType: this.printType,
-      }).then((res) => {
-        this.documentMoulds = res.data;
       });
+      this.documentMoulds = res.data;
+      this.documentMould = isEmpty(res.data) ? null : res.data[0].documentMould;
+      this.preview();
     },
     async preview() {
       this.imgList = [];
