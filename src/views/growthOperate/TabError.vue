@@ -28,7 +28,7 @@
             <el-form-item label="单晶异常" class="error-form">
               <el-select v-model="formItem._errors" multiple filterable allow-create default-first-option clearable placeholder="填写或选择" @change="updateErrors">
                 <span class="tip">填写后按下回车键即可添加</span>
-                <el-option v-for="item in crystalGrowthErrList" :key="item.id" :value="item.value" :label="item.label"/>
+                <el-option v-for="item in crystalGrowthErrList" :key="item.id" :value="item.value" :label="item.value"/>
               </el-select>
             </el-form-item>
           </div>

@@ -64,7 +64,7 @@
                   v-for="item in crystalGrowthErrList"
                   :key="item.id"
                   :value="item.value"
-                  :label="item.label"
+                  :label="item.value"
                 />
               </el-select>
             </el-form-item>

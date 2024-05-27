@@ -42,7 +42,7 @@
             :step-data="steps[stepName]"
             :step-name="stepName"
             :can-add-record="calcAddRecordMap[stepName]"
-            :crystal-growth-err-list="crystalGrowthErrList"
+            :crystal-growth-err-list="getStepErrList(stepName)"
           />
         </el-tab-pane>
         <el-tab-pane name="单晶异常">
@@ -616,6 +616,9 @@ export default {
         });
       });
       return notFilled;
+    },
+    getStepErrList(step) {
+      return this.crystalGrowthErrList.filter((item) => item.name === step);
     },
   },
 };
