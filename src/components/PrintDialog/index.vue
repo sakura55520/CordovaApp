@@ -107,6 +107,7 @@ export default {
     async fetchDocumentMoulds() {
       let res = await Api.fetchAllDocumentMould({
         search_EQ_printType: this.printType,
+        search_EQ_documentType: 1,
       });
       this.documentMoulds = res.data;
       this.documentMould = isEmpty(res.data) ? null : res.data[0].documentMould;
