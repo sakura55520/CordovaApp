@@ -616,18 +616,20 @@ export default {
       Api.getWarehouseInventory({ search_EQ_uniqueCode: val }).then((res) => {
         let list = res.data.rows;
         if (isEmpty(list)) {
-          this.detailForm.chargePipeSerial = null;
-          this.detailForm.chargePipeType = null;
-          this.detailForm.chargePipeModel = null;
-          this.$message.warning("未找到加料管!");
-        } else {
-          let data = list[0];
-          this.detailForm.chargePipeType = data.materialTypeName;
-          this.detailForm.chargePipeModel = data.materialXh;
+          this.handleChargePipeSerialClear();
+          return this.$message.warning("物料不存在");
         }
+        let data = list[0];
+        if (data.materialTypeName !== "加料管") {
+          this.handleChargePipeSerialClear();
+          return this.$message.warning("物料类型不是加料管");
+        }
+        this.detailForm.chargePipeType = data.materialTypeName;
+        this.detailForm.chargePipeModel = data.materialXh;
       });
     },
     handleChargePipeSerialClear() {
+      this.detailForm.chargePipeSerial = null;
       this.detailForm.chargePipeType = null;
       this.detailForm.chargePipeModel = null;
     },
