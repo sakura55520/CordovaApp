@@ -613,11 +613,19 @@ export default {
       this.detailForm.quartzCrucibleQty = null;
     },
     async handleChargePipeSerialCodeScan(val) {
-      let feedContainer = [];
-      await getSeleteData("feedContainer", feedContainer);
-      let feed = feedContainer.find((item) => item.name === val);
-      this.detailForm.chargePipeType = feed.value;
-      this.detailForm.chargePipeModel = feed.extendValue;
+      Api.getWarehouseInventory({ search_EQ_uniqueCode: val }).then((res) => {
+        let list = res.data.rows;
+        if (isEmpty(list)) {
+          this.detailForm.chargePipeSerial = null;
+          this.detailForm.chargePipeType = null;
+          this.detailForm.chargePipeModel = null;
+          this.$message.warning("未找到加料管!");
+        } else {
+          let data = list[0];
+          this.detailForm.chargePipeType = data.materialTypeName;
+          this.detailForm.chargePipeModel = data.materialXh;
+        }
+      });
     },
     handleChargePipeSerialClear() {
       this.detailForm.chargePipeType = null;
