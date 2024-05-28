@@ -1,20 +1,21 @@
 <!--辅料寿命-->
 <template>
-  <el-row :gutter="9">
+  <el-row :gutter="8">
     <el-col v-if="!disabled" :span="12">
       <el-form-item :label="calcScanLabel" class="pre-label">
-        <CodeScanner v-model="valueScan" @has-done="findByCode"/>
+        <CodeScanner v-model="valueScan" @has-done="fetchOne"/>
       </el-form-item>
     </el-col>
     <el-col :span="12">
       <el-form-item :label="`钟罩类型`" class="pre-label">
-        <el-input :value="coverType" disabled/>
+        <el-input :value="valueType" disabled/>
       </el-form-item>
     </el-col>
   </el-row>
 </template>
 
 <script>
+
 import {findInventoryByCode} from "@/api/inStation";
 
 export default {
@@ -28,19 +29,14 @@ export default {
       type: Object,
       default() {
         return {
-          // 编号
-          objCode: {
-            extKey: this.label,
-            extValue: ''
-          },
           // 编号(扫码)
           objScan: {
             extKey: this.fieldScan,
             extValue: ''
           },
           // 已使用寿命/额定寿命
-          coverType: {
-            extKey: this.fieldLife,
+          objType: {
+            extKey: this.fieldType,
             extValue: ''
           },
         }
@@ -50,7 +46,7 @@ export default {
       type: String,
       default: ''
     },
-    fieldLife: {
+    fieldType: {
       type: String,
       default: ''
     },
@@ -65,11 +61,6 @@ export default {
     }
   },
   computed: {
-    // 编号
-    valueCode() {
-      const { objCode } = this.value || {}
-      return objCode ? objCode.extValue : ''
-    },
     // 扫码value
     valueScan: {
       get() {
@@ -87,17 +78,17 @@ export default {
         })
       }
     },
-    coverType: {
+    valueType: {
       get() {
-        const { coverType } = this.value || {}
-        return coverType ? coverType.extValue : ''
+        const { objType } = this.value || {}
+        return objType ? objType.extValue : ''
       },
       set(extValue) {
         this.$emit('input', {
           ...this.value,
-          coverType: {
-            ...this.value.coverType,
-            extKey: this.fieldLife,
+          objType: {
+            ...this.value.objType,
+            extKey: this.fieldType,
             extValue
           }
         })
@@ -107,24 +98,24 @@ export default {
       return this.fieldScan.replace(/[（(]/, match => '\n' + match)
     },
     calcLifeLabel() {
-      return this.fieldLife.replace(/\//, match => '\n' + match)
+      return this.fieldType.replace(/\//, match => '\n' + match)
     }
   },
   methods: {
-    findByCode(code) {
+    fetchOne(code) {
       if (!code) return
-      if (this.valueCode && code !== this.valueCode) return this.$message.warning(`扫描编号必须为${this.valueCode}`)
       findInventoryByCode({
         search_EQ_uniqueCode: code
       }).then(res => {
-        let coverType
+        let materialTypeName
         const { data } = res
         if (data && data.rows && data.rows[0]) {
-          coverType = data.rows[0].materialTypeName
+          materialTypeName = data.rows[0].materialTypeName
+          this.$message.success(`【${code}】钟罩库存查询成功!`)
         } else {
-          this.$message.warning(`【${code}】未查询到库存信息!`)
+          this.$message.warning(`【${code}】未查询到钟罩库存信息!`)
         }
-        this.coverType = (coverType || '')
+        this.valueType = (materialTypeName || '')
       })
     },
   },
