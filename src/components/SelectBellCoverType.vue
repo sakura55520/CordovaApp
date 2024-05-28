@@ -1,12 +1,12 @@
 <!--辅料寿命-->
 <template>
-  <el-row :gutter="8">
-    <el-col v-if="!disabled" :span="9">
+  <el-row :gutter="9">
+    <el-col v-if="!disabled" :span="12">
       <el-form-item :label="calcScanLabel" class="pre-label">
-        <CodeScanner v-model="valueScan" @has-done="findInventoryByCode"/>
+        <CodeScanner v-model="valueScan" @has-done="findByCode"/>
       </el-form-item>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="12">
       <el-form-item :label="`钟罩类型`" class="pre-label">
         <el-input :value="coverType" disabled/>
       </el-form-item>
@@ -39,7 +39,7 @@ export default {
             extValue: ''
           },
           // 已使用寿命/额定寿命
-          objLife: {
+          coverType: {
             extKey: this.fieldLife,
             extValue: ''
           },
@@ -89,14 +89,14 @@ export default {
     },
     coverType: {
       get() {
-        const { objLife } = this.value || {}
-        return objLife ? objLife.extValue : ''
+        const { coverType } = this.value || {}
+        return coverType ? coverType.extValue : ''
       },
       set(extValue) {
         this.$emit('input', {
           ...this.value,
-          objLife: {
-            ...this.value.objLife,
+          coverType: {
+            ...this.value.coverType,
             extKey: this.fieldLife,
             extValue
           }
@@ -111,7 +111,7 @@ export default {
     }
   },
   methods: {
-    findInventoryByCode(code) {
+    findByCode(code) {
       if (!code) return
       if (this.valueCode && code !== this.valueCode) return this.$message.warning(`扫描编号必须为${this.valueCode}`)
       findInventoryByCode({
@@ -119,16 +119,10 @@ export default {
       }).then(res => {
         let coverType
         const { data } = res
-        if (data && data[0]) {
-          coverType = data[0].materialTypeName
-          this.warnStatus = data[0].warnStatus
-          if (this.warnStatus) {
-            this.$message.warning(`【${code}】寿命达到预警值!`)
-          } else {
-            this.$message.success(`【${code}】寿命查询成功!`)
-          }
+        if (data && data.rows && data.rows[0]) {
+          coverType = data.rows[0].materialTypeName
         } else {
-          this.$message.warning(`【${code}】未查询到寿命信息!`)
+          this.$message.warning(`【${code}】未查询到库存信息!`)
         }
         this.coverType = (coverType || '')
       })
