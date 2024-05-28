@@ -10,9 +10,13 @@
       <div slot="title" class="card-list">
         <div>{{ stepName }}记录{{ recordIdx + 1 }}</div>
         <div v-if="canAddRecord" class="card-list-tip">
-          <i class="el-icon-close" :style="{
-            color: 'rgb(16,140,250)',
-          }" @click.stop="handleDelete(recordIdx)"/>
+          <i
+            class="el-icon-close"
+            :style="{
+              color: 'rgb(16,140,250)',
+            }"
+            @click.stop="handleDelete(recordIdx)"
+          />
         </div>
       </div>
 
@@ -58,7 +62,15 @@
               class="block-form-item"
               label="单晶异常"
             >
-              <el-select v-model="recordItem._errors" multiple filterable allow-create default-first-option clearable placeholder="填写或选择">
+              <el-select
+                v-model="recordItem._errors"
+                multiple
+                filterable
+                allow-create
+                default-first-option
+                clearable
+                placeholder="填写或选择"
+              >
                 <span class="tip">填写后按下回车键即可添加</span>
                 <el-option
                   v-for="item in crystalGrowthErrList"
@@ -79,7 +91,10 @@
             <div class="headLine-title">点检项确认</div>
           </div>
           <div class="growth-section">
-            <div v-for="(formItem, formItemIdx) in recordItem.checks" :key="formItemIdx">
+            <div
+              v-for="(formItem, formItemIdx) in recordItem.checks"
+              :key="formItemIdx"
+            >
               <el-form-item :label="formItem.label" class="check-item">
                 <el-radio-group v-model="formItem.isError">
                   <el-radio :label="false">正常</el-radio>
@@ -123,12 +138,12 @@
                 :key="formItemIdx"
                 :label="formItem.label"
                 :rules="[
-                {
-                  required: formItem.required,
-                  message: formItem.label + '不能为空',
-                  trigger: 'change',
-                },
-              ]"
+                  {
+                    required: formItem.required,
+                    message: formItem.label + '不能为空',
+                    trigger: 'change',
+                  },
+                ]"
                 :prop="'techs.' + formItemIdx + '.extValue'"
               >
                 <Render
@@ -139,12 +154,17 @@
                 />
               </component>
             </template>
-
           </div>
 
           <!--    等径记录      -->
-          <div v-if="recordItem.equivalentCrystalVariables && recordItem.equivalentCrystalVariables.length" class="growth-section">
-            <SubTitle label="等径记录"/>
+          <div
+            v-if="
+              recordItem.equivalentCrystalVariables &&
+              recordItem.equivalentCrystalVariables.length
+            "
+            class="growth-section"
+          >
+            <SubTitle label="等径记录" />
             <el-table
               :data="recordItem.equivalentCrystalVariables"
               max-height="666"
@@ -154,7 +174,8 @@
               class="admin_table"
             >
               <el-table-column
-                v-for="(item, index) in recordItem.equivalentCrystalVariables[0]"
+                v-for="(item, index) in recordItem
+                  .equivalentCrystalVariables[0]"
                 :key="index"
                 :label="Object.keys(item)[0]"
                 :prop="String(index)"
@@ -182,7 +203,7 @@
 import Render from "@/components/renderForm/render.vue";
 import { isEmpty } from "lodash-es";
 import * as Api from "@/api/inStation";
-import moment from "moment"
+import moment from "moment";
 
 export default {
   name: "TabItem",
@@ -214,11 +235,12 @@ export default {
   },
   computed: {
     addVisible() {
-      if (!this.canAddRecord) return false
-      const { recordMax } = this.canAddRecord
-      if (typeof recordMax === 'number' && recordMax <= this.stepData.length) return false
-      return true
-    }
+      if (!this.canAddRecord) return false;
+      const { recordMax } = this.canAddRecord;
+      if (typeof recordMax === "number" && recordMax <= this.stepData.length)
+        return false;
+      return true;
+    },
   },
   created() {
     this.activeCollapse = ["0"];
@@ -238,88 +260,62 @@ export default {
     handleTechsInput(event, recordIdx, formItemIdx) {
       this.$set(this.stepData[recordIdx].techs[formItemIdx], "extValue", event);
 
-      const { techs } = this.stepData[recordIdx]
-      const { extKey } = techs[formItemIdx]
+      const { techs } = this.stepData[recordIdx];
+      const { extKey } = techs[formItemIdx];
       switch (extKey) {
-        case '籽晶编号':
-          this.handleSeedChange(event, techs)
-          break
-        case '掺杂剂编号':
-          this.handleDopantChange(event, techs)
-          break
-        case '冷却开始时间':
-        case '冷却结束时间':
-          this.handleCoolTimeChange(techs)
-          break
-        case '吊单晶开始时间':
-        case '吊单晶结束时间':
-          this.handleHangUpTimeChange(techs)
-          break
+        case "籽晶编号":
+          this.handleSeedChange(event, techs);
+          break;
+        case "掺杂剂编号":
+          this.handleDopantChange(event, techs);
+          break;
+        case "冷却开始时间":
+        case "冷却结束时间":
+          this.handleCoolTimeChange(techs);
+          break;
+        case "吊单晶开始时间":
+        case "吊单晶结束时间":
+          this.handleHangUpTimeChange(techs);
+          break;
       }
     },
     // 补掺-籽晶编号 change
     handleSeedChange(event, techs) {
-      Api.getSeed({uniqueCode: event}).then((res) => {
-        let index = techs.findIndex(
-          (item) => item.extKey === "籽晶寿命"
-        );
-        this.$set(
-          techs[index],
-          "extValue",
-          res.data.usefulLife
-        );
+      Api.getSeed({ uniqueCode: event }).then((res) => {
+        let index = techs.findIndex((item) => item.extKey === "籽晶寿命");
+        this.$set(techs[index], "extValue", res.data.usefulLife);
       });
     },
     // 补掺-掺杂剂编号 change
     handleDopantChange(event, techs) {
-      Api.findByCode({code: event}).then((res) => {
-        let typeIndex = techs.findIndex(
-          (item) => item.extKey === "掺杂剂类型"
-        );
-        let dosageIndex = techs.findIndex(
-          (item) => item.extKey === "补掺量"
-        );
-        this.$set(
-          techs[typeIndex],
-          "extValue",
-          res.data.materialTypeName
-        );
-        this.$set(
-          techs[dosageIndex],
-          "extValue",
-          res.data.qty
-        );
+      Api.findByCode({ code: event }).then((res) => {
+        let typeIndex = techs.findIndex((item) => item.extKey === "掺杂剂类型");
+        let dosageIndex = techs.findIndex((item) => item.extKey === "补掺量");
+        this.$set(techs[typeIndex], "extValue", res.data.materialTypeName);
+        this.$set(techs[dosageIndex], "extValue", res.data.qty);
       });
     },
     // 冷却-冷却开始时间 冷却结束时间
     handleCoolTimeChange(techs) {
-      const startItem = techs.find((item) => item.extKey === "冷却开始时间")
-      if (!startItem) return
-      const start = startItem.extValue
-      const endItem = techs.find((item) => item.extKey === "冷却结束时间")
-      if (!endItem) return
-      const end = endItem.extValue
-      const durationItem = techs.find(item => item.extKey === "冷却时长")
-      this.$set(
-        durationItem,
-        "extValue",
-        moment(end).diff(start, "hours")
-      )
+      const startItem = techs.find((item) => item.extKey === "冷却开始时间");
+      if (!startItem) return;
+      const start = startItem.extValue;
+      const endItem = techs.find((item) => item.extKey === "冷却结束时间");
+      if (!endItem) return;
+      const end = endItem.extValue;
+      const durationItem = techs.find((item) => item.extKey === "冷却时长");
+      this.$set(durationItem, "extValue", moment(end).diff(start, "hours"));
     },
     // 吊单晶-吊单晶开始时间 吊单晶结束时间
     handleHangUpTimeChange(techs) {
-      const startItem = techs.find((item) => item.extKey === "吊单晶开始时间")
-      if (!startItem) return
-      const start = startItem.extValue
-      const endItem = techs.find((item) => item.extKey === "吊单晶结束时间")
-      if (!endItem) return
-      const end = endItem.extValue
-      const durationItem = techs.find(item => item.extKey === "吊单晶时长")
-      this.$set(
-        durationItem,
-        "extValue",
-        moment(end).diff(start, "hours")
-      )
+      const startItem = techs.find((item) => item.extKey === "吊单晶开始时间");
+      if (!startItem) return;
+      const start = startItem.extValue;
+      const endItem = techs.find((item) => item.extKey === "吊单晶结束时间");
+      if (!endItem) return;
+      const end = endItem.extValue;
+      const durationItem = techs.find((item) => item.extKey === "吊单晶时长");
+      this.$set(durationItem, "extValue", moment(end).diff(start, "hours"));
     },
     handleIncrease() {
       const stepData = JSON.parse(
@@ -332,16 +328,20 @@ export default {
       );
     },
     handleDelete(recordIdx) {
-      this.$confirm(`即将删除${ this.stepName }记录${ recordIdx + 1 }, 请确定!`, "删除", {
-        type: "warning",
-      }).then(() => {
-        this.stepData.splice(recordIdx, 1)
-      })
+      this.$confirm(
+        `即将删除${this.stepName}记录${recordIdx + 1}, 请确定!`,
+        "删除",
+        {
+          type: "warning",
+        }
+      ).then(() => {
+        this.stepData.splice(recordIdx, 1);
+      });
     },
     async valid() {
       if (this.stepName === "冷却" && isEmpty(this.stepData)) {
-        this.$message.warning(this.stepName + "记录不能为空")
-        return false
+        this.$message.warning(this.stepName + "记录不能为空");
+        return false;
       }
       if (isEmpty(this.$refs.recordItem)) return true;
       let allValid = true;
@@ -356,17 +356,17 @@ export default {
       return allValid;
     },
     calcComponentName(noFormItem) {
-      return noFormItem ? 'div' : 'elFormItem'
+      return noFormItem ? "div" : "elFormItem";
     },
     formatCol(row, column, cellValue) {
-      if (!cellValue || JSON.stringify(cellValue) === '{}') return
-      const prop = Object.keys(cellValue)[0]
-      const val = cellValue[prop]
-      if (val && typeof val === 'object') {
-        return (val.value || '') + (val.unit || '')
+      if (!cellValue || JSON.stringify(cellValue) === "{}") return;
+      const prop = Object.keys(cellValue)[0];
+      const val = cellValue[prop];
+      if (val && typeof val === "object") {
+        return (val.value || "") + (val.unit || "");
       }
-      return val
-    }
+      return val;
+    },
   },
 };
 </script>

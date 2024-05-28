@@ -10,7 +10,8 @@ export function inOrOutStation(data, noCallback) {
     data,
   })
     .then((res) => {
-      store.state.station.stationCallback && !noCallback &&
+      store.state.station.stationCallback &&
+        !noCallback &&
         store.state.station.stationCallback();
       !noCallback && resetStationStore();
       return res;
@@ -92,6 +93,14 @@ export function getBranchRoutes(params) {
 export function fetchDetail(params) {
   return request({
     url: `${params.url}/listByPage`,
+    method: "get",
+    params,
+  });
+}
+
+export function getWarehouseInventory(params) {
+  return request({
+    url: "/warehouse/inventory/listByPage",
     method: "get",
     params,
   });
