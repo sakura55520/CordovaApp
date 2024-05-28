@@ -150,7 +150,9 @@
                   :key="formItem.renderKey"
                   :conf="formItem"
                   :prop-value="formItem.extValue"
-                  @input="handleTechsInput($event, recordIdx, formItemIdx)"
+                  @input="
+                    handleDebounceTechsInput($event, recordIdx, formItemIdx)
+                  "
                 />
               </component>
             </template>
@@ -201,7 +203,7 @@
 
 <script>
 import Render from "@/components/renderForm/render.vue";
-import { isEmpty } from "lodash-es";
+import { isEmpty, debounce } from "lodash-es";
 import * as Api from "@/api/inStation";
 import moment from "moment";
 
@@ -269,6 +271,9 @@ export default {
         case "掺杂剂编号":
           this.handleDopantChange(event, techs);
           break;
+        case "钟罩编号":
+          this.handleBellChange(event, techs);
+          break;
         case "冷却开始时间":
         case "冷却结束时间":
           this.handleCoolTimeChange(techs);
@@ -279,6 +284,16 @@ export default {
           break;
       }
     },
+    handleDebounceTechsInput: debounce(
+      function (event, recordIdx, formItemIdx) {
+        this.handleTechsInput(event, recordIdx, formItemIdx);
+      },
+      100,
+      {
+        leading: true,
+        trailing: false,
+      }
+    ),
     // 补掺-籽晶编号 change
     handleSeedChange(event, techs) {
       Api.getSeed({ uniqueCode: event }).then((res) => {
@@ -293,6 +308,16 @@ export default {
         let dosageIndex = techs.findIndex((item) => item.extKey === "补掺量");
         this.$set(techs[typeIndex], "extValue", res.data.materialTypeName);
         this.$set(techs[dosageIndex], "extValue", res.data.qty);
+      });
+    },
+    handleBellChange(event, techs) {
+      Api.getWarehouseInventory({ search_EQ_uniqueCode: event }).then((res) => {
+        let list = res.data.rows;
+        if (isEmpty(list)) {
+          let index = techs.findIndex((item) => item.extKey === "钟罩编号");
+          this.$set(techs[index], "extValue", null);
+          this.$message.warning("未找到钟罩!");
+        }
       });
     },
     // 冷却-冷却开始时间 冷却结束时间
