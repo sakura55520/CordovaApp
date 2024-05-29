@@ -59,25 +59,25 @@ export default {
               name: "辅材更换",
               href: "/accessory",
               icon: "accessory",
-              permission: "pda_accessory_menu"
+              permission: "pad_accessory_menu"
             },
             {
               name: "装料",
               href: "/overStationExecution?station=ZL",
               icon: "charge",
-              permission: "pda_charge_menu"
+              permission: "pad_charge_menu"
             },
             {
               name: "长晶",
               href: "/overStationExecution?station=ZJ",
               icon: "growth",
-              permission: "pda_growth_menu"
+              permission: "pad_growth_menu"
             },
             {
               name: "单晶送付",
               href: "/overStationExecution?station=DJSF",
               icon: "send",
-              permission: "pda_sendInspect_menu"
+              permission: "pad_sendInspect_menu"
             },
           ],
 
@@ -89,49 +89,49 @@ export default {
               name: "切头尾取样",
               href: "/overStationExecution?station=QTWQY",
               icon: "head",
-              permission: "pda_headAndTailSampling_menu"
+              permission: "pad_headAndTailSampling_menu"
             },
             {
               name: "晶锭检验",
               href: "/overStationExecution?station=JDJY",
               icon: "detection",
-              permission: "pda_ingotDetection_menu"
+              permission: "pad_ingotDetection_menu"
             },
             {
               name: "分段指令",
               href: "/overStationExecution?station=FDZL",
               icon: "segmented",
-              permission: "pda_segmentedInstruction_menu"
+              permission: "pad_segmentedInstruction_menu"
             },
             {
               name: "割断",
               href: "/overStationExecution?station=GD",
               icon: "cutting",
-              permission: "pda_cutting_menu"
+              permission: "pad_cutting_menu"
             },
             {
               name: "滚圆中转",
               href: "/overStationExecution?station=GYZZ",
               icon: "transfer",
-              permission: "pda_roundTransfer_menu"
+              permission: "pad_roundTransfer_menu"
             },
             {
               name: "滚圆",
               href: "/overStationExecution?station=GY",
               icon: "round",
-              permission: "pda_round_menu"
+              permission: "pad_round_menu"
             },
             {
               name: "加参",
               href: "/overStationExecution?station=JC",
               icon: "add_parameter",
-              permission: "pda_addParameter_menu"
+              permission: "pad_addParameter_menu"
             },
             {
               name: "入库检测",
               href: "/overStationExecution?station=RKJC",
               icon: "warehouse",
-              permission: "pda_warehouseDetection_menu"
+              permission: "pad_warehouseDetection_menu"
             },
           ],
         },

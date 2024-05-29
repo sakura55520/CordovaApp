@@ -23,8 +23,8 @@ const mutations = {
 const actions = {
   getPermission({ commit }, id) {
     return getPermission(id).then(res => {
-      const menu = res.data.filter(item => item.type === 'menu' && item.code.includes('pda_')).map(item => item.code)
-      const buttons = res.data.filter(item => item.type === 'button' && item.code.includes('pda_')).map(item => item.code)
+      const menu = res.data.filter(item => item.type === 'menu' && item.code.includes('pad_')).map(item => item.code)
+      const buttons = res.data.filter(item => item.type === 'button' && item.code.includes('pad_')).map(item => item.code)
       const notification =  res.data.filter(item => item.type === 'notification').map(ele => ele.code)
       commit('SET_ARRBUTTON', buttons)
       commit('SET_ARRMENU', menu)
