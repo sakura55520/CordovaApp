@@ -30,6 +30,7 @@ import SelectUserinfo from '@/components/select_userinfo.vue'
 import CodeScanner from '@/components/CodeScanner.vue'
 import DeviceCodeScanner from '@/components/DeviceCodeScanner.vue'
 import SelectAccessoryLife from '@/components/SelectAccessoryLife.vue'
+import SelectBellCoverType from "@/components/SelectBellCoverType.vue";
 import SubTitle from '@/components/SubTitle.vue'
 import global from '@/constants/global.js'
 
@@ -40,6 +41,7 @@ Vue.component('SelectUserinfo', SelectUserinfo)
 Vue.component('CodeScanner', CodeScanner)
 Vue.component('DeviceCodeScanner', DeviceCodeScanner)
 Vue.component('SelectAccessoryLife', SelectAccessoryLife)
+Vue.component('SelectBellCoverType', SelectBellCoverType)
 Vue.component('SubTitle', SubTitle)
 
 // 全局修改默认配置，点击空白处不能关闭弹窗

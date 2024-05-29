@@ -271,9 +271,6 @@ export default {
         case "掺杂剂编号":
           this.handleDopantChange(event, techs);
           break;
-        case "钟罩编号":
-          this.handleBellChange(event, techs);
-          break;
         case "冷却开始时间":
         case "冷却结束时间":
           this.handleCoolTimeChange(techs);

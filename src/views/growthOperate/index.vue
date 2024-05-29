@@ -329,12 +329,19 @@ export default {
     transformAccessoryLife(arr, index) {
       const formItem = arr[index];
       const { extValue, tag, disabled } = formItem;
-      if (tag === "SelectAccessoryLife" && typeof extValue === "object") {
+      if ((tag === "SelectAccessoryLife") && typeof extValue === "object") {
         const { objScan, objCode, objLife } = extValue;
         if (disabled) {
           arr.splice(index, 1, objCode, objLife);
         } else {
           arr.splice(index, 1, objScan, objCode, objLife);
+        }
+      }else if (( tag === "SelectBellCoverType") && typeof extValue === "object") {
+        const { objScan, objType } = extValue;
+        if (disabled) {
+          arr.splice(index, 1, objType);
+        } else {
+          arr.splice(index, 1, objScan, objType);
         }
       }
     },
@@ -469,6 +476,15 @@ export default {
         objLife: label2value[fieldLife] || defaultItem, // 已使用寿命/额定寿命
       };
     },
+    //钟罩类型
+    initBellCoverType(formItem, label2value) {
+      const { fieldScan, fieldType, label } = formItem;
+      return {
+        objCode: label2value[label] || defaultItem, // 编号
+        objScan: label2value[fieldScan] || defaultItem, // 编号(扫码)
+        objType: label2value[fieldType] || defaultItem, // 已使用寿命/额定寿命
+      };
+    },
     // 工艺参数
     initTech(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-工艺参数`];
@@ -502,6 +518,9 @@ export default {
           let { extValue } = label2value[vModel] || {};
           if (tag === "SelectAccessoryLife") {
             extValue = this.initAccessoryLife(formItem, label2value);
+          }
+          if (tag === "SelectBellCoverType") {
+            extValue = this.initBellCoverType(formItem, label2value);
           }
           return {
             ...formItem,
