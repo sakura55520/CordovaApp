@@ -71,47 +71,17 @@
             <el-form-item label="已用寿命/额定寿命" prop="seedCrystalLife">
               <el-input v-model="seedCrystalLifeAndTotalLife" disabled />
             </el-form-item>
-            <el-form-item
-              label="加料管编号"
-              prop="chargePipeSerial"
-              :rules="[
-                {
-                  required: detailForm.crystalOrder == 1,
-                  message: '请输入加料管编号',
-                  trigger: 'change',
-                },
-              ]"
-            >
+            <el-form-item label="加料管编号" prop="chargePipeSerial">
               <CodeScanner
                 v-model="detailForm.chargePipeSerial"
                 @has-done="handleChargePipeSerialCodeScan"
                 @clear="handleChargePipeSerialClear"
               />
             </el-form-item>
-            <el-form-item
-              label="加料管类型"
-              prop="chargePipeType"
-              :rules="[
-                {
-                  required: detailForm.crystalOrder == 1,
-                  message: '请输入加料管类型',
-                  trigger: 'change',
-                },
-              ]"
-            >
+            <el-form-item label="加料管类型" prop="chargePipeType">
               <el-input v-model="detailForm.chargePipeType" />
             </el-form-item>
-            <el-form-item
-              label="加料管型号"
-              prop="chargePipeModel"
-              :rules="[
-                {
-                  required: detailForm.crystalOrder == 1,
-                  message: '请输入加料管型号',
-                  trigger: 'change',
-                },
-              ]"
-            >
+            <el-form-item label="加料管型号" prop="chargePipeModel">
               <el-input v-model="detailForm.chargePipeModel" />
             </el-form-item>
             <el-form-item
@@ -227,11 +197,6 @@
               prop="_dopants"
               class="multipleCodeScan-form-item"
               :rules="[
-                {
-                  required: detailForm.crystalOrder == 1,
-                  message: '请输入掺杂剂用量',
-                  trigger: 'change',
-                },
                 { validator: this.validTotalDopantAmount, trigger: 'change' },
               ]"
             >
@@ -347,15 +312,6 @@ export default {
         ],
         _dopants: [
           { required: true, message: "请输入掺杂剂用量", trigger: "change" },
-        ],
-        chargePipeType: [
-          { required: true, message: "请选择加料管类型", trigger: "change" },
-        ],
-        chargePipeModel: [
-          { required: true, message: "请选择加料管型号", trigger: "change" },
-        ],
-        chargePipeSerial: [
-          { required: true, message: "请选择加料管编号", trigger: "change" },
         ],
         feedingTime: [
           { required: true, message: "请选择装料时间", trigger: "change" },
