@@ -401,7 +401,7 @@ ul, li, ol {
 
   .save, .cancel {
     flex: 1;
-    max-width: 140px;
+    min-width: 140px;
   }
 
   .detail-cancel {
