@@ -23,7 +23,7 @@ export default {
         postMessage(msg)
       }
       else {
-        this.$message.success(msg)
+        msg && this.$message.success(msg)
         this.$router.back()
       }
     },
