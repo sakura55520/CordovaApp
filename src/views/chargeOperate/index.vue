@@ -332,6 +332,7 @@ export default {
           return time.getTime() > Date.now();
         },
       },
+      timer: null,
     };
   },
   computed: {
@@ -400,6 +401,9 @@ export default {
   mounted() {
     this.init();
   },
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
   methods: {
     async init() {
       let fromData = {};
@@ -423,7 +427,12 @@ export default {
 
       this.getProcessNo();
 
-      console.log(JSON.parse(JSON.stringify(this.detailForm)));
+      if (!this.$route.query.view) {
+        this.refreshFeedingDuration();
+        this.timer = setInterval(() => {
+          this.refreshFeedingDuration();
+        }, 5000);
+      }
     },
     // 操作
     handle(typeName) {
@@ -485,6 +494,14 @@ export default {
       this.detailForm.feedingDuration = moment(
         this.$store.getters.NowServerDate
       ).diff(time, "minutes");
+    },
+    refreshFeedingDuration() {
+      let nowTime = this.$store.getters.NowServerDate;
+      let feedingTime = this.detailForm.feedingTime;
+      let feedingDuration = null;
+      if (feedingTime)
+        feedingDuration = moment(nowTime).diff(feedingTime, "minutes");
+      this.detailForm.feedingDuration = feedingDuration;
     },
     validPolysiliconsAmount(rule, value, callback) {
       if (this.totalFeedingAmount !== this.detailForm.feedingTotal)
