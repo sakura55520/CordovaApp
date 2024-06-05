@@ -67,6 +67,13 @@
                 ></el-input>
               </el-form-item>
             </div>
+            <el-form-item
+              label="生产备注"
+              class="form-item-cover"
+              label-width="90px"
+            >
+              <el-input class="value" v-model="formData.productionRemark" />
+            </el-form-item>
           </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
@@ -467,6 +474,7 @@ export default {
         feedbackQty: null,
         defectQty: null,
         scrapQty: null,
+        productionRemark: null,
         numberConsistence: null,
         endSitutation: null,
         dislocationIdentification: null,

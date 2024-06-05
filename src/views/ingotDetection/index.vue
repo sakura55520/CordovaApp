@@ -1229,11 +1229,4 @@ export default {
 .table {
   margin-top: 50px;
 }
-.form-item-cover {
-  width: 100% !important;
-  .input {
-    display: flex;
-    gap: 8px;
-  }
-}
 </style>

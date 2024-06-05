@@ -583,3 +583,11 @@ ul, li, ol {
     display: none;
   }
 }
+
+.form-item-cover {
+  width: 100% !important;
+  .input {
+    display: flex;
+    gap: 8px;
+  }
+}

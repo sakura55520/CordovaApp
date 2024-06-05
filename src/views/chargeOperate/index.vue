@@ -54,6 +54,13 @@
                 />
               </el-select>
             </el-form-item>
+            <el-form-item
+              label="生产备注"
+              class="form-item-cover"
+              style="width: 98.5% !important"
+            >
+              <el-input class="value" v-model="detailForm.productionRemark" />
+            </el-form-item>
           </div>
 
           <div class="headLine">
@@ -262,6 +269,7 @@ const defaultForm = {
   goodQty: null, // 合格数量
   scrapQty: null, // 报废数量
   technologyNumber: null, // 工艺编号
+  productionRemark: null,
   seedCrystalNumber: null, // 籽晶编号
   seedCrystalLife: null, // 籽晶已用寿命
   seedCrystalTotalLife: null, // 籽晶总寿命

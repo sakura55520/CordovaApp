@@ -20,6 +20,14 @@
       </div>
     </div>
 
+    <div class="fromCard remark">
+      <el-form>
+        <el-form-item label="生产备注" class="form-item-cover">
+          <el-input class="value" v-model="fromData.productionRemark" />
+        </el-form-item>
+      </el-form>
+    </div>
+
     <div v-loading="loading" class="fromCard growth-main">
       <el-tabs
         v-if="tabsVisible"
@@ -329,14 +337,17 @@ export default {
     transformAccessoryLife(arr, index) {
       const formItem = arr[index];
       const { extValue, tag, disabled } = formItem;
-      if ((tag === "SelectAccessoryLife") && typeof extValue === "object") {
+      if (tag === "SelectAccessoryLife" && typeof extValue === "object") {
         const { objScan, objCode, objLife } = extValue;
         if (disabled) {
           arr.splice(index, 1, objCode, objLife);
         } else {
           arr.splice(index, 1, objScan, objCode, objLife);
         }
-      }else if (( tag === "SelectBellCoverType") && typeof extValue === "object") {
+      } else if (
+        tag === "SelectBellCoverType" &&
+        typeof extValue === "object"
+      ) {
         const { objScan, objType } = extValue;
         if (disabled) {
           arr.splice(index, 1, objType);
@@ -722,5 +733,9 @@ export default {
   z-index: 1000;
   left: -10px;
   top: 6px;
+}
+
+.remark {
+  padding: 20px 20px 0px 20px;
 }
 </style>
