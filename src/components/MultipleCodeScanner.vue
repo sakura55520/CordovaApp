@@ -71,6 +71,7 @@ export default {
     },
     unit: String,
     materialCodes: Array,
+    allCodes: Array,
   },
   data() {
     return {
@@ -137,7 +138,11 @@ export default {
                     this.$message.warning(`该物料已使用`);
                     return;
                   }
-                  if (this.codes.some((item) => item.code === res.data.code)) {
+                  if (
+                    this.allCodes
+                      .flat()
+                      .some((item) => item.code === res.data.code)
+                  ) {
                     this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
                     return;
                   }
@@ -188,7 +193,7 @@ export default {
           this.$message.warning(`该物料已使用`);
           return;
         }
-        if (this.codes.some((item) => item.code === res.data.code)) {
+        if (this.allCodes.flat().some((item) => item.code === res.data.code)) {
           this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
           return;
         }

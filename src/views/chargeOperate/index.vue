@@ -174,6 +174,7 @@
                     type="多晶硅"
                     unit="kg"
                     :materialCodes="detailForm.polysiliconMaterialCodes"
+                    :allCodes="detailForm._polysilicons"
                   />
                   <el-button
                     type="text"
@@ -219,6 +220,7 @@
                     type="掺杂剂"
                     unit="g"
                     :materialCodes="detailForm.dopantMaterialCodes"
+                    :allCodes="detailForm._dopants"
                   />
                   <el-button
                     type="text"
