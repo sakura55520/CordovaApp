@@ -15,7 +15,7 @@
     >
       <el-option
         v-for="item in codes"
-        :label="`${item.materialTypeName}：${item.materialCode}(${item.qty}${unit})`"
+        :label="`${item.materialTypeName}：${item.code}(${item.qty}${unit})`"
         :key="item.id"
         :value="item"
       ></el-option>
