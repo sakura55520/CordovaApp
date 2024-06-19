@@ -321,14 +321,14 @@
               }}
               kg） - 晶锭称量的值（{{ formData.ingotWeight }} kg） -
               前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
-              吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）<br />
+              吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）
             </div>
+            <br />
             <div class="row">
-              反馈重量（{{
-                formData.feedbackQty
-              }}
-              kg）：来源于长晶过站中，最后一条晶体重量的值<br />
+              反馈重量（{{ formData.feedbackQty }}
+              kg）：来源于长晶过站中，最后一条晶体重量的值
             </div>
+            <br />
             <div class="row"><b>埚底料毛重</b>：称重，可能包含坩埚碎片</div>
           </div>
         </el-form>
