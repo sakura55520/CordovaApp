@@ -238,13 +238,13 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="埚底料毛重"
+                label="埚底料净重"
                 prop="totalBottomMaterialGrossWeight"
                 class="item"
                 :rules="[
                   {
                     required: true,
-                    message: '埚底料毛重不能为空',
+                    message: '埚底料净重不能为空',
                     trigger: 'change',
                   },
                 ]"
@@ -260,13 +260,13 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="埚底料净重"
+                label="埚底料毛重"
                 prop="bottomMaterialNetWeight"
                 class="item"
                 :rules="[
                   {
                     required: true,
-                    message: '埚底料净重不能为空',
+                    message: '埚底料毛重不能为空',
                     trigger: 'change',
                   },
                 ]"
@@ -287,12 +287,12 @@
 
           <div class="form">
             <div class="form-title">参数说明</div>
-            <div class="row">埚底料毛重计算公式：<br /></div>
+            <div class="row">埚底料净重计算公式：<br /></div>
             <div
               class="row"
               v-if="!formData.ingotWeight && formData.ingotWeight !== 0"
             >
-              <b>晶锭称量没有值</b>：埚底料毛重 （{{
+              <b>晶锭称量没有值</b>：埚底料净重 （{{
                 (
                   (formData.totalPolysiliconWeight || 0) -
                   (formData.feedbackQty || 0) -
@@ -308,7 +308,7 @@
               吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）<br />
             </div>
             <div class="row" v-else>
-              <b>晶锭称量有值</b>：埚底料毛重（{{
+              <b>晶锭称量有值</b>：埚底料净重（{{
                 (
                   (formData.totalPolysiliconWeight || 0) -
                   (formData.ingotWeight || 0) -
@@ -329,6 +329,7 @@
               }}
               kg）：来源于长晶过站中，最后一条晶体重量的值<br />
             </div>
+            <div class="row"><b>埚底料毛重</b>：称重，可能包含坩埚碎片</div>
           </div>
         </el-form>
       </div>
