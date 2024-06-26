@@ -186,6 +186,11 @@
               />
             </el-table>
           </div>
+
+          <!--    回收料编号      -->
+          <el-form-item v-if="recordItem.code" label="回收料编号">
+            <el-input v-model="recordItem.code" disabled />
+          </el-form-item>
         </el-card>
       </el-form>
     </el-collapse-item>
