@@ -106,7 +106,7 @@
                 v-model="detailForm.feedingTime"
                 type="datetime"
                 value-format="yyyy-MM-dd HH:mm:ss"
-                @change="handleFeedingTimeChange"
+                @change="refreshFeedingDuration"
                 :picker-options="pickerOptions"
               />
             </el-form-item>
@@ -114,6 +114,14 @@
               <el-input v-model="detailForm.feedingDuration" disabled>
                 <template slot="append">min</template>
               </el-input>
+            </el-form-item>
+            <el-form-item label="装料结束时间" prop="feedingEndTime">
+              <el-date-picker
+                v-model="detailForm.feedingEndTime"
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                @change="refreshFeedingDuration"
+              />
             </el-form-item>
           </div>
           <div>
@@ -284,6 +292,7 @@ const defaultForm = {
   chargePipeModel: null, // 加料管型号
   chargePipeSerial: null, // 加料管编号
   feedingTime: null, // 装料时间
+  feedingEndTime: null, // 装料结束时间
   crystalPullingError: null, // 拉晶异常
   feedingDuration: null, // 装料时长(min)
   quartzCrucible: null,
@@ -438,6 +447,7 @@ export default {
       this.getProcessNo();
 
       if (!this.$route.query.view) {
+        console.log(222)
         this.refreshFeedingDuration();
         this.timer = setInterval(() => {
           this.refreshFeedingDuration();
@@ -500,17 +510,13 @@ export default {
         });
       }
     },
-    handleFeedingTimeChange(time) {
-      this.detailForm.feedingDuration = moment(
-        this.$store.getters.NowServerDate
-      ).diff(time, "minutes");
-    },
     refreshFeedingDuration() {
-      let nowTime = this.$store.getters.NowServerDate;
+      let endTime =
+        this.detailForm.feedingEndTime || this.$store.getters.NowServerDate;
       let feedingTime = this.detailForm.feedingTime;
       let feedingDuration = null;
       if (feedingTime)
-        feedingDuration = moment(nowTime).diff(feedingTime, "minutes");
+        feedingDuration = moment(endTime).diff(feedingTime, "minutes");
       this.detailForm.feedingDuration = feedingDuration;
     },
     validPolysiliconsAmount(rule, value, callback) {
