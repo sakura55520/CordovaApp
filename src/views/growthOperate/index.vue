@@ -221,7 +221,7 @@ export default {
 
       let formData = {};
       try {
-        formData = JSON.parse(this.$route.query.formData);
+        formData = JSON.parse(this.$route.query.fromData);
       } catch (e) {
         console.log(e);
       }
