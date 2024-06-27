@@ -504,13 +504,6 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
-    productionEquipment() {
-      return JSON.parse(this.$route.query.orderInfo || "{}")
-        .productionEquipmentCode;
-    },
-    executionEquipment() {
-      return this.$route.query.deviceCode;
-    },
   },
   created() {
     this.initKeyup();

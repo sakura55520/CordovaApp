@@ -10,7 +10,14 @@ export default {
   computed: {
     isEnd() {
       return JSON.parse(this.$route.query.orderInfo || "{}").isEnd;
-    }
+    },
+    productionEquipment() {
+      return JSON.parse(this.$route.query.orderInfo || "{}")
+        .productionEquipmentCode;
+    },
+    executionEquipment() {
+      return this.$route.query.deviceCode;
+    },
   },
   methods: {
     async back(msg, operator) {

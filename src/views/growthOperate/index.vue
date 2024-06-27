@@ -204,13 +204,6 @@ export default {
       });
       return list;
     },
-    productionEquipment() {
-      return JSON.parse(this.$route.query.orderInfo || "{}")
-        .productionEquipmentCode;
-    },
-    executionEquipment() {
-      return this.$route.query.deviceCode;
-    },
   },
   created() {
     this.init();

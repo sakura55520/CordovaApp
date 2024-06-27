@@ -368,13 +368,6 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
-    productionEquipment() {
-      return JSON.parse(this.$route.query.orderInfo || "{}")
-        .productionEquipmentCode;
-    },
-    executionEquipment() {
-      return this.$route.query.deviceCode;
-    },
     totalFeedingAmount() {
       let total = 0;
       if (isEmpty(this.detailForm._polysilicons)) return 0;
@@ -447,7 +440,7 @@ export default {
       this.getProcessNo();
 
       if (!this.$route.query.view) {
-        console.log(222)
+        console.log(222);
         this.refreshFeedingDuration();
         this.timer = setInterval(() => {
           this.refreshFeedingDuration();
