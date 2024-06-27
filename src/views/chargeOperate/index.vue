@@ -6,7 +6,7 @@
       <div class="grid-container">
         <div class="grid-item">
           <span class="grid-item-name">批次号：</span>
-          <span class="grid-item-value">{{ detailForm.processOrderCode }}</span>
+          <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           <span class="end" v-if="isEnd">END</span>
         </div>
         <div class="grid-item" v-if="productionEquipment">
@@ -26,8 +26,8 @@
           <div class="headLine-title">{{ storageLabel }}数据录入</div>
         </div>
         <el-form
-          ref="detailForm"
-          :model="detailForm"
+          ref="formData"
+          :model="formData"
           label-width="150px"
           :rules="formRules"
           inline
@@ -35,18 +35,18 @@
         >
           <div>
             <el-form-item label="操作者">
-              <el-input v-model="detailForm.userCreate" disabled />
+              <el-input v-model="formData.userCreate" disabled />
             </el-form-item>
             <el-form-item label="掺杂剂确认者" prop="userConfirm">
-              <SelectUserinfo v-model="detailForm.userConfirm" />
+              <SelectUserinfo v-model="formData.userConfirm" />
             </el-form-item>
             <el-form-item label="连尾重量" prop="goodQty">
-              <el-input v-model="detailForm.goodQty" disabled>
+              <el-input v-model="formData.goodQty" disabled>
                 <template slot="append">kg</template>
               </el-input>
             </el-form-item>
             <el-form-item label="工艺编号" prop="technologyNumber">
-              <el-select v-model="detailForm.technologyNumber" filterable>
+              <el-select v-model="formData.technologyNumber" filterable>
                 <el-option
                   v-for="(item, index) in technologyList"
                   :key="index"
@@ -59,7 +59,7 @@
               class="form-item-cover"
               style="width: 98.5% !important"
             >
-              <el-input class="value" v-model="detailForm.productionRemark" />
+              <el-input class="value" v-model="formData.productionRemark" />
             </el-form-item>
           </div>
 
@@ -70,7 +70,7 @@
           <div>
             <el-form-item label="籽晶编号" prop="seedCrystalNumber">
               <CodeScanner
-                v-model="detailForm.seedCrystalNumber"
+                v-model="formData.seedCrystalNumber"
                 @has-done="handleSeedCrystalNumberCodeScan"
                 @clear="handleSeedCrystalNumberClear"
               />
@@ -80,30 +80,30 @@
             </el-form-item>
             <el-form-item label="加料管编号" prop="chargePipeSerial">
               <CodeScanner
-                v-model="detailForm.chargePipeSerial"
+                v-model="formData.chargePipeSerial"
                 @has-done="handleChargePipeSerialCodeScan"
                 @clear="handleChargePipeSerialClear"
               />
             </el-form-item>
             <el-form-item label="加料管类型" prop="chargePipeType">
-              <el-input v-model="detailForm.chargePipeType" />
+              <el-input v-model="formData.chargePipeType" />
             </el-form-item>
             <el-form-item label="加料管型号" prop="chargePipeModel">
-              <el-input v-model="detailForm.chargePipeModel" />
+              <el-input v-model="formData.chargePipeModel" />
             </el-form-item>
             <el-form-item
               label="装料开始时间"
               prop="feedingTime"
               :rules="[
                 {
-                  required: detailForm.crystalOrder == 1,
+                  required: formData.crystalOrder == 1,
                   message: '请输入装料开始时间',
                   trigger: 'change',
                 },
               ]"
             >
               <el-date-picker
-                v-model="detailForm.feedingTime"
+                v-model="formData.feedingTime"
                 type="datetime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 @change="refreshFeedingDuration"
@@ -111,13 +111,13 @@
               />
             </el-form-item>
             <el-form-item label="装料时长" prop="feedingDuration">
-              <el-input v-model="detailForm.feedingDuration" disabled>
+              <el-input v-model="formData.feedingDuration" disabled>
                 <template slot="append">min</template>
               </el-input>
             </el-form-item>
             <el-form-item label="装料结束时间" prop="feedingEndTime">
               <el-date-picker
-                v-model="detailForm.feedingEndTime"
+                v-model="formData.feedingEndTime"
                 type="datetime"
                 value-format="yyyy-MM-dd HH:mm:ss"
                 @change="refreshFeedingDuration"
@@ -126,7 +126,7 @@
           </div>
           <div>
             <div class="progress">
-              石英坩埚用量:{{ detailForm.quartzCrucibleQty || 0 }}只
+              石英坩埚用量:{{ formData.quartzCrucibleQty || 0 }}只
               <el-progress :percentage="quartzCruciblePercent" />
             </div>
             <el-form-item
@@ -135,7 +135,7 @@
               class="codeScan-form-item"
               :rules="[
                 {
-                  required: detailForm.crystalOrder == 1,
+                  required: formData.crystalOrder == 1,
                   message: '请输入石英坩埚编号',
                   trigger: 'change',
                 },
@@ -143,7 +143,7 @@
             >
               <CodeScanner
                 class="codeScan-input"
-                v-model="detailForm.quartzCrucibleSerial"
+                v-model="formData.quartzCrucibleSerial"
                 @has-done="handleQuartzCrucibleSerialCodeScan"
                 @clear="handleQuartzCrucibleSerialClear"
               />
@@ -160,7 +160,7 @@
               class="multipleCodeScan-form-item"
               :rules="[
                 {
-                  required: detailForm.crystalOrder == 1,
+                  required: formData.crystalOrder == 1,
                   message: '请输入多晶硅编号',
                   trigger: 'change',
                 },
@@ -173,16 +173,16 @@
               <div class="multipleCodeScan-container">
                 <div
                   class="multipleCodeScan-item"
-                  v-for="(item, index) in detailForm._polysilicons"
+                  v-for="(item, index) in formData._polysilicons"
                   :key="index"
                 >
                   <MultipleCodeScanner
                     value-key="id"
-                    v-model="detailForm._polysilicons[index]"
+                    v-model="formData._polysilicons[index]"
                     type="多晶硅"
                     unit="kg"
-                    :materialCodes="detailForm.polysiliconMaterialCodes"
-                    :allCodes="detailForm._polysilicons"
+                    :materialCodes="formData.polysiliconMaterialCodes"
+                    :allCodes="formData._polysilicons"
                   />
                   <el-button
                     type="text"
@@ -219,16 +219,16 @@
               <div class="multipleCodeScan-container">
                 <div
                   class="multipleCodeScan-item"
-                  v-for="(item, index) in detailForm._dopants"
+                  v-for="(item, index) in formData._dopants"
                   :key="index"
                 >
                   <MultipleCodeScanner
                     value-key="id"
-                    v-model="detailForm._dopants[index]"
+                    v-model="formData._dopants[index]"
                     type="掺杂剂"
                     unit="g"
-                    :materialCodes="detailForm.dopantMaterialCodes"
-                    :allCodes="detailForm._dopants"
+                    :materialCodes="formData.dopantMaterialCodes"
+                    :allCodes="formData._dopants"
                   />
                   <el-button
                     type="text"
@@ -312,7 +312,7 @@ export default {
   data() {
     return {
       detailInfo: {}, // 描述信息
-      detailForm: Object.assign({}, cloneDeep(defaultForm)), // 表单列表
+      formData: Object.assign({}, cloneDeep(defaultForm)), // 表单列表
       formRules: {
         userConfirm: [
           { required: true, message: "请输入掺杂剂确认者", trigger: "change" },
@@ -360,8 +360,7 @@ export default {
     },
     feedPercent() {
       return (
-        floor((this.totalFeedingAmount / this.detailForm.feedingTotal) * 100) ||
-        0
+        floor((this.totalFeedingAmount / this.formData.feedingTotal) * 100) || 0
       );
     },
     buffParams() {
@@ -370,8 +369,8 @@ export default {
     },
     totalFeedingAmount() {
       let total = 0;
-      if (isEmpty(this.detailForm._polysilicons)) return 0;
-      this.detailForm._polysilicons.forEach((item) => {
+      if (isEmpty(this.formData._polysilicons)) return 0;
+      this.formData._polysilicons.forEach((item) => {
         if (!isEmpty(item)) {
           item.forEach((ele) => {
             total += ele.qty;
@@ -381,16 +380,16 @@ export default {
       return total;
     },
     dopantPercent() {
-      if (!this.totalDopantAmount || !this.detailForm.feedingDopantTotal)
+      if (!this.totalDopantAmount || !this.formData.feedingDopantTotal)
         return 0;
       return floor(
-        (this.totalDopantAmount / this.detailForm.feedingDopantTotal) * 100
+        (this.totalDopantAmount / this.formData.feedingDopantTotal) * 100
       );
     },
     totalDopantAmount() {
       let total = 0;
-      if (isEmpty(this.detailForm._dopants)) return 0;
-      this.detailForm._dopants.forEach((item) => {
+      if (isEmpty(this.formData._dopants)) return 0;
+      this.formData._dopants.forEach((item) => {
         if (!isEmpty(item)) {
           item.forEach((ele) => {
             total += ele.qty;
@@ -400,13 +399,13 @@ export default {
       return total;
     },
     quartzCruciblePercent() {
-      return this.detailForm.quartzCrucibleQty ? 100 : 0;
+      return this.formData.quartzCrucibleQty ? 100 : 0;
     },
     seedCrystalLifeAndTotalLife() {
       return (
-        (this.detailForm.seedCrystalLife || 0) +
+        (this.formData.seedCrystalLife || 0) +
         "/" +
-        (this.detailForm.seedCrystalTotalLife || 0)
+        (this.formData.seedCrystalTotalLife || 0)
       );
     },
   },
@@ -431,16 +430,15 @@ export default {
         }
       }
 
-      this.detailForm = Object.assign({}, cloneDeep(defaultForm), fromData);
-      let _polysilicons = Object.values(this.detailForm.polysilicons);
-      let _dopants = Object.values(this.detailForm.dopants);
-      this.$set(this.detailForm, "_polysilicons", _polysilicons);
-      this.$set(this.detailForm, "_dopants", _dopants);
+      this.formData = Object.assign({}, cloneDeep(defaultForm), fromData);
+      let _polysilicons = Object.values(this.formData.polysilicons);
+      let _dopants = Object.values(this.formData.dopants);
+      this.$set(this.formData, "_polysilicons", _polysilicons);
+      this.$set(this.formData, "_dopants", _dopants);
 
       this.getProcessNo();
 
       if (!this.$route.query.view) {
-        console.log(222);
         this.refreshFeedingDuration();
         this.timer = setInterval(() => {
           this.refreshFeedingDuration();
@@ -449,7 +447,7 @@ export default {
     },
     // 操作
     handle(typeName) {
-      const { _polysilicons, _dopants, ...form } = this.detailForm;
+      const { _polysilicons, _dopants, ...form } = this.formData;
 
       let polysilicons = {};
       _polysilicons.forEach((item, index) => {
@@ -474,7 +472,7 @@ export default {
           this.back(msg);
         });
       } else if (typeName === "提交") {
-        this.$refs.detailForm.validate((valid) => {
+        this.$refs.formData.validate((valid) => {
           if (valid) {
             this.$confirm("确认提交当前操作数据?", "提示", {
               type: "warning",
@@ -505,24 +503,24 @@ export default {
     },
     refreshFeedingDuration() {
       let endTime =
-        this.detailForm.feedingEndTime || this.$store.getters.NowServerDate;
-      let feedingTime = this.detailForm.feedingTime;
+        this.formData.feedingEndTime || this.$store.getters.NowServerDate;
+      let feedingTime = this.formData.feedingTime;
       let feedingDuration = null;
       if (feedingTime)
         feedingDuration = moment(endTime).diff(feedingTime, "minutes");
-      this.detailForm.feedingDuration = feedingDuration;
+      this.formData.feedingDuration = feedingDuration;
     },
     validPolysiliconsAmount(rule, value, callback) {
-      if (this.totalFeedingAmount !== this.detailForm.feedingTotal)
+      if (this.totalFeedingAmount !== this.formData.feedingTotal)
         return callback(
           new Error(
-            `加料量[${this.totalFeedingAmount}]必须等于总量[${this.detailForm.feedingTotal}]`
+            `加料量[${this.totalFeedingAmount}]必须等于总量[${this.formData.feedingTotal}]`
           )
         );
       callback();
     },
     validTotalDopantAmount(rule, value, callback) {
-      let feedingDopantTotal = this.detailForm.feedingDopantTotal || 0;
+      let feedingDopantTotal = this.formData.feedingDopantTotal || 0;
       if (this.totalDopantAmount !== feedingDopantTotal)
         return callback(
           new Error(
@@ -534,7 +532,7 @@ export default {
     getProcessNo() {
       getProcessNo({
         search_EQ_equipmentCode:
-          this.detailForm.deviceCode || this.$route.query.deviceCode,
+          this.formData.deviceCode || this.$route.query.deviceCode,
         page: 1,
         rows: 1000,
       }).then((res) => {
@@ -543,16 +541,16 @@ export default {
     },
     async handleSeedCrystalNumberCodeScan(val) {
       let res = await Api.getSeed({ uniqueCode: val });
-      this.detailForm.seedCrystalLife = res.data.usefulLife;
-      this.detailForm.seedCrystalTotalLife = res.data.ratedLife;
+      this.formData.seedCrystalLife = res.data.usefulLife;
+      this.formData.seedCrystalTotalLife = res.data.ratedLife;
     },
     handleSeedCrystalNumberClear() {
-      this.detailForm.seedCrystalLife = null;
-      this.detailForm.seedCrystalTotalLife = null;
+      this.formData.seedCrystalLife = null;
+      this.formData.seedCrystalTotalLife = null;
     },
     clearQuartzCrucibleSerial() {
-      this.detailForm.quartzCrucible = null;
-      this.detailForm.quartzCrucibleQty = null;
+      this.formData.quartzCrucible = null;
+      this.formData.quartzCrucibleQty = null;
     },
     async handleQuartzCrucibleSerialCodeScan(val) {
       Api.findByCode({ code: val }).then((res) => {
@@ -572,27 +570,27 @@ export default {
           return;
         }
         if (
-          this.detailForm.quartzCrucibleMaterialCodes.every(
+          this.formData.quartzCrucibleMaterialCodes.every(
             (item) => item !== res.data.materialCode
           )
         ) {
           this.$message.warning(
             `该物料不是当前批次所需的物料，该料号：${
               res.data.materialCode
-            }，所需料号：${this.detailForm.quartzCrucibleMaterialCodes.join(
+            }，所需料号：${this.formData.quartzCrucibleMaterialCodes.join(
               "、"
             )}`
           );
           this.clearQuartzCrucibleSerial();
           return;
         }
-        this.detailForm.quartzCrucible = res.data;
-        this.detailForm.quartzCrucibleQty = res.data.qty;
+        this.formData.quartzCrucible = res.data;
+        this.formData.quartzCrucibleQty = res.data.qty;
       });
     },
     handleQuartzCrucibleSerialClear() {
-      this.detailForm.quartzCrucible = null;
-      this.detailForm.quartzCrucibleQty = null;
+      this.formData.quartzCrucible = null;
+      this.formData.quartzCrucibleQty = null;
     },
     async handleChargePipeSerialCodeScan(val) {
       Api.getWarehouseInventory({ search_EQ_uniqueCode: val }).then((res) => {
@@ -606,26 +604,26 @@ export default {
           this.handleChargePipeSerialClear();
           return this.$message.warning("物料类型不是加料管");
         }
-        this.detailForm.chargePipeType = data.materialTypeName;
-        this.detailForm.chargePipeModel = data.materialXh;
+        this.formData.chargePipeType = data.materialTypeName;
+        this.formData.chargePipeModel = data.materialXh;
       });
     },
     handleChargePipeSerialClear() {
-      this.detailForm.chargePipeSerial = null;
-      this.detailForm.chargePipeType = null;
-      this.detailForm.chargePipeModel = null;
+      this.formData.chargePipeSerial = null;
+      this.formData.chargePipeType = null;
+      this.formData.chargePipeModel = null;
     },
     addPolysilicon() {
-      this.detailForm._polysilicons.push([]);
+      this.formData._polysilicons.push([]);
     },
     deletePolysilicon(index) {
-      this.detailForm._polysilicons.splice(index, 1);
+      this.formData._polysilicons.splice(index, 1);
     },
     addDopant() {
-      this.detailForm._dopants.push([]);
+      this.formData._dopants.push([]);
     },
     deleteDopant(index) {
-      this.detailForm._dopants.splice(index, 1);
+      this.formData._dopants.splice(index, 1);
     },
   },
 };

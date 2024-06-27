@@ -6,7 +6,7 @@
       <div class="grid-container">
         <div class="grid-item">
           <span class="grid-item-name">批次号：</span>
-          <span class="grid-item-value">{{ detailForm.processOrderCode }}</span>
+          <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           <span class="end" v-if="isEnd">END</span>
         </div>
         <div class="grid-item" v-if="productionEquipment">
@@ -26,8 +26,8 @@
           <div class="headLine-title">{{ storageLabel }}数据录入</div>
         </div>
         <el-form
-          ref="detailForm"
-          :model="detailForm"
+          ref="formData"
+          :model="formData"
           label-width="120px"
           :rules="formRules"
           inline
@@ -36,10 +36,10 @@
         >
           <div>
             <el-form-item label="操作者">
-              <el-input v-model="detailForm.userCreate" disabled />
+              <el-input v-model="formData.userCreate" disabled />
             </el-form-item>
             <el-form-item label="计划长度" prop="planLength">
-              <el-input v-model="detailForm.planLength" disabled>
+              <el-input v-model="formData.planLength" disabled>
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
@@ -51,7 +51,7 @@
               prop="lineWarehouseId"
             >
               <SelectLinesideTree
-                v-model="detailForm.lineWarehouseId"
+                v-model="formData.lineWarehouseId"
                 @select="handleWhouseSelect"
               />
             </el-form-item>
@@ -93,7 +93,7 @@ export default {
   },
   data() {
     return {
-      detailForm: Object.assign({}, defaultForm), // 表单列表
+      formData: Object.assign({}, defaultForm), // 表单列表
       formRules: {
         lineWarehouseId: [
           { required: true, message: "请选择线边仓库位", trigger: "change" },
@@ -131,20 +131,20 @@ export default {
         }
       }
 
-      this.detailForm = Object.assign({}, defaultForm, fromData);
-      if (!this.detailForm.userCreate)
-        this.$set(this.detailForm, "userCreate", this.realName);
+      this.formData = Object.assign({}, defaultForm, fromData);
+      if (!this.formData.userCreate)
+        this.$set(this.formData, "userCreate", this.realName);
     },
     // 操作
     handle(typeName) {
-      const FormData = JSON.stringify(this.detailForm);
+      const FormData = JSON.stringify(this.formData);
       if (typeName === "保存") {
-        Api.upldateBuffer(this.buffParams, this.detailForm).then((res) => {
+        Api.upldateBuffer(this.buffParams, this.formData).then((res) => {
           const msg = "保存成功!";
           this.back(msg);
         });
       } else if (typeName === "提交") {
-        this.$refs.detailForm.validate((valid) => {
+        this.$refs.formData.validate((valid) => {
           if (valid) {
             this.$confirm("确认提交当前操作数据?", "提示", {
               type: "warning",
@@ -174,8 +174,8 @@ export default {
       }
     },
     handleWhouseSelect({ id, name }) {
-      this.detailForm.lineWarehouseLocation = name;
-      this.detailForm.lineWarehouseId = id;
+      this.formData.lineWarehouseLocation = name;
+      this.formData.lineWarehouseId = id;
       if (id) this.$refs.lineWarehouse.clearValidate();
     },
   },

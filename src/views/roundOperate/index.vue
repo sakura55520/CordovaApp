@@ -6,7 +6,7 @@
       <div class="grid-container">
         <div class="grid-item">
           <span class="grid-item-name">批次号：</span>
-          <span class="grid-item-value">{{ detailForm.processOrderCode }}</span>
+          <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           <span class="end" v-if="isEnd">END</span>
         </div>
         <div class="grid-item" v-if="productionEquipment">
@@ -26,8 +26,8 @@
           <div class="headLine-title">{{ storageLabel }}数据录入</div>
         </div>
         <el-form
-          ref="detailForm"
-          :model="detailForm"
+          ref="formData"
+          :model="formData"
           label-width="150px"
           :rules="formRules"
           inline
@@ -35,14 +35,14 @@
         >
           <div>
             <el-form-item label="操作者">
-              <el-input v-model="detailForm.userCreate" disabled />
+              <el-input v-model="formData.userCreate" disabled />
             </el-form-item>
             <el-form-item label="" class="item">
               <el-button
                 type="primary"
                 size="small"
                 class="print-btn"
-                @click="handlePrint(detailForm.processOrderCode)"
+                @click="handlePrint(formData.processOrderCode)"
                 >小标签打印</el-button
               >
             </el-form-item>
@@ -58,11 +58,7 @@
                 prop="planLength"
                 label-width="90px"
               >
-                <el-input
-                  v-model="detailForm.planLength"
-                  type="number"
-                  disabled
-                >
+                <el-input v-model="formData.planLength" type="number" disabled>
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
@@ -72,7 +68,7 @@
                 label-width="120px"
               >
                 <el-input
-                  v-model="detailForm.originLength"
+                  v-model="formData.originLength"
                   type="number"
                   @input="calcQualifLength"
                   v-direction="{ x: 1, y: 1 }"
@@ -86,7 +82,7 @@
                 label-width="90px"
               >
                 <el-input
-                  v-model="detailForm.chippingLength"
+                  v-model="formData.chippingLength"
                   type="number"
                   @input="calcQualifLength"
                   v-direction="{ x: 2, y: 1 }"
@@ -100,7 +96,7 @@
                 label-width="90px"
               >
                 <el-input
-                  v-model="detailForm.ellipticLength"
+                  v-model="formData.ellipticLength"
                   type="number"
                   @input="calcQualifLength"
                   v-direction="{ x: 3, y: 1 }"
@@ -114,7 +110,7 @@
                 label-width="90px"
               >
                 <el-input
-                  v-model="detailForm.qualifiedLength"
+                  v-model="formData.qualifiedLength"
                   type="number"
                   disabled
                 >
@@ -134,7 +130,7 @@
                 <div class="inputs">
                   <el-form-item label="" prop="aDegrees">
                     <el-input
-                      v-model="detailForm.aDegrees"
+                      v-model="formData.aDegrees"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 1, y: 2 }"
                       @input="handleNext"
@@ -144,7 +140,7 @@
                   </el-form-item>
                   <el-form-item label="" prop="aMinute">
                     <el-input
-                      v-model="detailForm.aMinute"
+                      v-model="formData.aMinute"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 2, y: 2 }"
                       @input="handleNext"
@@ -166,7 +162,7 @@
                 <div class="inputs">
                   <el-form-item label="" prop="bDegrees">
                     <el-input
-                      v-model="detailForm.bDegrees"
+                      v-model="formData.bDegrees"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 3, y: 2 }"
                       @input="handleNext"
@@ -176,7 +172,7 @@
                   </el-form-item>
                   <el-form-item label="" prop="bMinute">
                     <el-input
-                      v-model="detailForm.bMinute"
+                      v-model="formData.bMinute"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 4, y: 2 }"
                       @input="handleNext"
@@ -198,7 +194,7 @@
                 <div class="inputs">
                   <el-form-item label="" prop="cDegrees">
                     <el-input
-                      v-model="detailForm.cDegrees"
+                      v-model="formData.cDegrees"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 5, y: 2 }"
                       @input="handleNext"
@@ -208,7 +204,7 @@
                   </el-form-item>
                   <el-form-item label="" prop="cMinute">
                     <el-input
-                      v-model="detailForm.cMinute"
+                      v-model="formData.cMinute"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 6, y: 2 }"
                       @input="handleNext"
@@ -230,7 +226,7 @@
                 <div class="inputs">
                   <el-form-item label="" prop="dDegrees">
                     <el-input
-                      v-model="detailForm.dDegrees"
+                      v-model="formData.dDegrees"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 7, y: 2 }"
                       @input="handleNext"
@@ -240,7 +236,7 @@
                   </el-form-item>
                   <el-form-item label="" prop="dMinute">
                     <el-input
-                      v-model="detailForm.dMinute"
+                      v-model="formData.dMinute"
                       @change="calcCrystallinePhase"
                       v-direction="{ x: 8, y: 2 }"
                       @input="handleNext"
@@ -256,7 +252,7 @@
                 label-width="90px"
                 class="item"
               >
-                <el-input v-model="detailForm.crystalDeviation" disabled>
+                <el-input v-model="formData.crystalDeviation" disabled>
                   <template slot="append">°</template>
                 </el-input>
               </el-form-item>
@@ -268,7 +264,7 @@
                 label-width="140px"
               >
                 <el-input
-                  v-model="detailForm.circleDiameterHead"
+                  v-model="formData.circleDiameterHead"
                   type="number"
                   v-direction="{ x: 1, y: 3 }"
                 >
@@ -281,7 +277,7 @@
                 label-width="140px"
               >
                 <el-input
-                  v-model="detailForm.circleDiameterTail"
+                  v-model="formData.circleDiameterTail"
                   type="number"
                   v-direction="{ x: 2, y: 3 }"
                 >
@@ -293,11 +289,11 @@
               <div class="form-title">参数说明</div>
               <div class="row">合格长度计算公式：<br /></div>
               <div class="row">
-                合格长度（{{ detailForm.qualifiedLength }} mm） =
-                检测实测长度（{{ detailForm.originLength }} mm） - 崩边长度（{{
-                  detailForm.chippingLength
+                合格长度（{{ formData.qualifiedLength }} mm） = 检测实测长度（{{
+                  formData.originLength
                 }}
-                mm） - 椭圆长度（{{ detailForm.ellipticLength }} mm）<br />
+                mm） - 崩边长度（{{ formData.chippingLength }} mm） -
+                椭圆长度（{{ formData.ellipticLength }} mm）<br />
               </div>
             </div>
           </div>
@@ -365,7 +361,7 @@ export default {
   },
   data() {
     return {
-      detailForm: Object.assign({}, defaultForm), // 表单列表
+      formData: Object.assign({}, defaultForm), // 表单列表
       formRules: {
         planLength: [
           { required: true, message: "请输入计划长度", trigger: "change" },
@@ -455,7 +451,7 @@ export default {
         }
       }
 
-      this.detailForm = Object.assign({}, defaultForm, fromData);
+      this.formData = Object.assign({}, defaultForm, fromData);
       this.initLength();
       this.calcDegreesMinute();
     },
@@ -478,14 +474,14 @@ export default {
     },
     initLength() {
       const { originLength, planLength, chippingLength, ellipticLength } =
-        this.detailForm;
-      this.detailForm.originLength = originLength || planLength || 0;
-      this.detailForm.chippingLength = chippingLength || 0;
-      this.detailForm.ellipticLength = ellipticLength || 0;
-      this.detailForm.qualifiedLength = (
-        this.detailForm.originLength -
-        this.detailForm.chippingLength -
-        this.detailForm.ellipticLength
+        this.formData;
+      this.formData.originLength = originLength || planLength || 0;
+      this.formData.chippingLength = chippingLength || 0;
+      this.formData.ellipticLength = ellipticLength || 0;
+      this.formData.qualifiedLength = (
+        this.formData.originLength -
+        this.formData.chippingLength -
+        this.formData.ellipticLength
       ).toFixed(2);
     },
     calcDegreesMinute() {
@@ -494,20 +490,20 @@ export default {
         crystallinePhaseB,
         crystallinePhaseC,
         crystallinePhaseD,
-      } = this.detailForm;
+      } = this.formData;
       let aDegreesMinute = this.formatDegree(crystallinePhaseA);
       let bDegreesMinute = this.formatDegree(crystallinePhaseB);
       let cDegreesMinute = this.formatDegree(crystallinePhaseC);
       let dDegreesMinute = this.formatDegree(crystallinePhaseD);
-      this.detailForm.aDegrees = aDegreesMinute[0];
-      this.detailForm.aMinute = aDegreesMinute[1];
-      this.detailForm.bDegrees = bDegreesMinute[0];
-      this.detailForm.bMinute = bDegreesMinute[1];
-      this.detailForm.cDegrees = cDegreesMinute[0];
-      this.detailForm.cMinute = cDegreesMinute[1];
-      this.detailForm.dDegrees = dDegreesMinute[0];
-      this.detailForm.dMinute = dDegreesMinute[1];
-      this.detailForm.crystalDeviation = (
+      this.formData.aDegrees = aDegreesMinute[0];
+      this.formData.aMinute = aDegreesMinute[1];
+      this.formData.bDegrees = bDegreesMinute[0];
+      this.formData.bMinute = bDegreesMinute[1];
+      this.formData.cDegrees = cDegreesMinute[0];
+      this.formData.cMinute = cDegreesMinute[1];
+      this.formData.dDegrees = dDegreesMinute[0];
+      this.formData.dMinute = dDegreesMinute[1];
+      this.formData.crystalDeviation = (
         Math.sqrt(
           Math.pow(crystallinePhaseA - crystallinePhaseC, 2) +
             Math.pow(crystallinePhaseB - crystallinePhaseD, 2)
@@ -524,18 +520,18 @@ export default {
         cMinute,
         dDegrees,
         dMinute,
-      } = this.detailForm;
+      } = this.formData;
 
       let crystallinePhaseA = this.formatCrystallinePhase(aDegrees, aMinute);
       let crystallinePhaseB = this.formatCrystallinePhase(bDegrees, bMinute);
       let crystallinePhaseC = this.formatCrystallinePhase(cDegrees, cMinute);
       let crystallinePhaseD = this.formatCrystallinePhase(dDegrees, dMinute);
-      this.detailForm.crystallinePhaseA = crystallinePhaseA;
-      this.detailForm.crystallinePhaseB = crystallinePhaseB;
-      this.detailForm.crystallinePhaseC = crystallinePhaseC;
-      this.detailForm.crystallinePhaseD = crystallinePhaseD;
+      this.formData.crystallinePhaseA = crystallinePhaseA;
+      this.formData.crystallinePhaseB = crystallinePhaseB;
+      this.formData.crystallinePhaseC = crystallinePhaseC;
+      this.formData.crystallinePhaseD = crystallinePhaseD;
 
-      this.detailForm.crystalDeviation = (
+      this.formData.crystalDeviation = (
         Math.sqrt(
           Math.pow(crystallinePhaseA - crystallinePhaseC, 2) +
             Math.pow(crystallinePhaseB - crystallinePhaseD, 2)
@@ -553,17 +549,17 @@ export default {
     },
     // 操作
     handle(typeName) {
-      const { ...form } = this.detailForm;
+      const { ...form } = this.formData;
       const FormData = JSON.stringify({
         ...form,
       });
       if (typeName === "保存") {
-        Api.upldateBuffer(this.buffParams, this.detailForm).then((res) => {
+        Api.upldateBuffer(this.buffParams, this.formData).then((res) => {
           const msg = "保存成功!";
           this.back(msg);
         });
       } else if (typeName === "提交") {
-        this.$refs.detailForm.validate((valid) => {
+        this.$refs.formData.validate((valid) => {
           if (valid) {
             this.$confirm("确认提交当前操作数据?", "提示", {
               type: "warning",
@@ -593,10 +589,10 @@ export default {
       }
     },
     calcQualifLength() {
-      let qualifiedLength = this.detailForm.originLength; // 检测实测长度
-      qualifiedLength -= this.detailForm.chippingLength || 0; // 崩边长度
-      qualifiedLength -= this.detailForm.ellipticLength || 0; // 椭圆长度
-      this.detailForm.qualifiedLength = qualifiedLength.toFixed(2);
+      let qualifiedLength = this.formData.originLength; // 检测实测长度
+      qualifiedLength -= this.formData.chippingLength || 0; // 崩边长度
+      qualifiedLength -= this.formData.ellipticLength || 0; // 椭圆长度
+      this.formData.qualifiedLength = qualifiedLength.toFixed(2);
     },
     calcCrystalDeviation() {},
     handleNext(val) {

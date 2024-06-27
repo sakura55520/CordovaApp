@@ -12,8 +12,10 @@ export default {
       return JSON.parse(this.$route.query.orderInfo || "{}").isEnd;
     },
     productionEquipment() {
-      return JSON.parse(this.$route.query.orderInfo || "{}")
-        .productionEquipmentCode;
+      return (
+        JSON.parse(this.$route.query.orderInfo || "{}")
+          .productionEquipmentCode || this.formData.productionEquipmentCode
+      );
     },
     executionEquipment() {
       return this.$route.query.deviceCode || this.$route.query.equipmentCode;

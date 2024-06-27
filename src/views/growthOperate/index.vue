@@ -6,7 +6,7 @@
       <div class="grid-container">
         <div class="grid-item">
           <span class="grid-item-name">批次号：</span>
-          <span class="grid-item-value">{{ fromData.processOrderCode }}</span>
+          <span class="grid-item-value">{{ formData.processOrderCode }}</span>
           <span class="end" v-if="isEnd">END</span>
         </div>
         <div class="grid-item" v-if="productionEquipment">
@@ -23,7 +23,7 @@
     <div class="fromCard remark">
       <el-form>
         <el-form-item label="生产备注" class="form-item-cover">
-          <el-input class="value" v-model="fromData.productionRemark" />
+          <el-input class="value" v-model="formData.productionRemark" />
         </el-form-item>
       </el-form>
     </div>
@@ -106,7 +106,7 @@ export default {
     return {
       currentStepName: "",
       name2form: {},
-      fromData: {},
+      formData: {},
       steps: {},
       rules: {},
       loading: true,
@@ -219,20 +219,20 @@ export default {
       // 拉晶异常list
       await getSeleteData("crystalGrowthErr", this.crystalGrowthErrList);
 
-      let fromData = {};
+      let formData = {};
       try {
-        fromData = JSON.parse(this.$route.query.fromData);
+        formData = JSON.parse(this.$route.query.formData);
       } catch (e) {
         console.log(e);
       }
 
-      const { steps, ...rest } = fromData;
+      const { steps, ...rest } = formData;
       this.steps = Object.assign({}, steps);
       this.originalSteps = Object.assign({}, steps);
       if (!this.steps["留档文档"]) {
         this.$set(this.steps, "留档文档", [{ fiels: [] }]);
       }
-      this.fromData = rest;
+      this.formData = rest;
 
       // 查询动态表单配置
       await this.initFormContent();
@@ -293,7 +293,7 @@ export default {
         });
       });
       return {
-        ...this.fromData,
+        ...this.formData,
         steps,
       };
     },
