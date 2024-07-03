@@ -300,6 +300,7 @@
                     v-model="scope.row.orderCode"
                     @focus="handleWorkOrderFocus(scope.$index)"
                     clearable
+                    readonly
                   />
                 </template>
               </el-table-column>
