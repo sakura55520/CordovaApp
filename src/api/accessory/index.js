@@ -82,3 +82,20 @@ export function fetchAccessory(params) {
     params
   })
 }
+
+// 批量上机
+export function batchUpperByEQP(data) {
+  return request({
+    url: `/equipmentAccessory/upper`,
+    method: 'post',
+    data
+  })
+}
+
+export function batchBack(data) {
+  return request({
+    url: `/equipmentAccessory/stockReturnBatch`,
+    method: 'post',
+    data
+  })
+}

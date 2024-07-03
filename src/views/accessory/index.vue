@@ -59,6 +59,22 @@
               <!-- <el-checkbox-button v-if="listType === 'apply'" style="margin-left: 1px;" label="待出库"></el-checkbox-button> -->
             </el-checkbox-group>
           </el-form-item>
+
+          <el-button
+            @click="handle('批量退库')"
+            icon="el-icon-back"
+            type="primary"
+            size="small"
+            >批量退库</el-button
+          >
+          <el-button
+            @click="handle('批量上机')"
+            icon="el-icon-top"
+            type="primary"
+            size="small"
+            >批量上机</el-button
+          >
+
           <el-form-item label="使用状态" v-if="listType === 'apply'">
             <el-checkbox-group v-model="dialogForm.status" size="">
               <el-checkbox-button
@@ -79,7 +95,10 @@
         fit
         highlight-current-row
         class="admin_table"
+        @selection-change="handleSelectionChange"
+        row-key="id"
       >
+        <el-table-column type="selection" width="55" fixed reserve-selection />
         <el-table-column
           prop="materialCode"
           key="materialCode"
@@ -234,7 +253,28 @@
       :visible.sync="dialogVisible"
       :row-data="row"
       :accessories-status-map="accessoriesStatusMap"
-      @has-down="fetchData"
+      @has-down="hasDone"
+    />
+
+    <!-- 批量退库弹窗 -->
+    <BatchBackDialog
+      ref="BatchBackDialog"
+      v-if="batchBackDialogVisible"
+      :dialogVisible="batchBackDialogVisible"
+      :dialogState="batchBackDialogState"
+      :changeParentData="changeParentData"
+      :thatRefs="thatRefs"
+      :dialogForm="batchBackDialogForm"
+      :has-done="hasDone"
+    />
+
+    <!-- 批量上机弹窗 -->
+    <BatchUpperDialog
+      v-if="batchUpperVisible"
+      :visible.sync="batchUpperVisible"
+      :changeParentData="changeParentData"
+      :dialogForm="batchUpperForm"
+      :has-done="hasDone"
     />
   </div>
 </template>
@@ -245,6 +285,8 @@ import { getSeleteData, getEnumDatas } from "@/utils/select";
 import ReturnDialog from "./ReturnDialog";
 import ApplyDialog from "./ApplyDialog";
 import DownDialog from "./DownDialog";
+import BatchBackDialog from "./BatchBackDialog.vue";
+import BatchUpperDialog from "./BatchUpperDialog.vue";
 
 const defaultSearchList = {
   search_EQ_equipmentCode: null,
@@ -253,6 +295,10 @@ const defaultSearchList = {
 
 export default {
   name: "Accessory",
+  components: {
+    BatchBackDialog,
+    BatchUpperDialog,
+  },
   data() {
     return {
       listType: "accessory",
@@ -275,6 +321,15 @@ export default {
         warnStatus: [""],
         status: [""],
       },
+
+      batchBackDialogVisible: false,
+      batchBackDialogState: "批量退库",
+      batchBackDialogForm: {}, //批量退库表单
+
+      batchUpperVisible: false, // 批量上机
+      batchUpperForm: {},
+
+      multipleSelection: [],
     };
   },
   watch: {
@@ -365,6 +420,7 @@ export default {
         .then(() => {
           Api.upComputer(id).then((res) => {
             this.$message({ type: "success", message: "已上机!" });
+            this.$refs["table"].clearSelection();
             this.fetchData();
           });
         })
@@ -384,6 +440,7 @@ export default {
         .then(() => {
           Api.cancelStockReturn(id).then((res) => {
             this.$message({ type: "success", message: "已取消退库!" });
+            this.$refs["table"].clearSelection();
             this.fetchData();
           });
         })
@@ -409,6 +466,7 @@ export default {
         .then(() => {
           Api.cancelApplyAccessory(id).then((res) => {
             this.$message({ type: "success", message: "已取消申请!" });
+            this.$refs["table"].clearSelection();
             this.fetchData();
           });
         })
@@ -441,6 +499,40 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
+      this.fetchData();
+    },
+    // 改变当前页面数据，供子组件调用
+    changeParentData(key, value) {
+      this[key] = JSON.parse(JSON.stringify(value));
+    },
+    handle(state) {
+      if (state === "批量退库") {
+        if (this.multipleSelection.length < 1)
+          return this.$message.warning("请选择物料");
+        this.changeParentData("batchBackDialogVisible", true);
+        this.changeParentData("batchBackDialogState", state);
+        this.changeParentData("batchBackDialogForm", {
+          list: this.multipleSelection.filter(
+            (item) => item.status == 0 || item.status == 1
+          ),
+        });
+        return;
+      }
+      if (state === "批量上机") {
+        if (this.multipleSelection.length < 1)
+          return this.$message.warning("请选择物料");
+        this.changeParentData("batchUpperVisible", true);
+        this.changeParentData("batchUpperForm", {
+          list: this.multipleSelection.filter((item) => item.status == 0),
+        });
+        return;
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    hasDone() {
+      this.$refs["table"].clearSelection();
       this.fetchData();
     },
   },
