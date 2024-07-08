@@ -147,6 +147,7 @@ export default {
                     return;
                   }
                   if (
+                    this.materialCodes &&
                     this.materialCodes.every(
                       (item) => item !== res.data.materialCode
                     )
@@ -198,6 +199,7 @@ export default {
           return;
         }
         if (
+          this.materialCodes &&
           this.materialCodes.every((item) => item !== res.data.materialCode)
         ) {
           this.$message.warning(

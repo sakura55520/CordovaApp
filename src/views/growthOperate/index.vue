@@ -347,6 +347,13 @@ export default {
         } else {
           arr.splice(index, 1, objScan, objType);
         }
+      } else if (tag === "SelectDopantCode" && typeof extValue === "object") {
+        const { objScan, objDosage } = extValue;
+        if (disabled) {
+          arr.splice(index, 1, objDosage);
+        } else {
+          arr.splice(index, 1, objScan, objDosage);
+        }
       }
     },
     transformTechs(arr) {
@@ -489,6 +496,15 @@ export default {
         objType: label2value[fieldType] || defaultItem, // 已使用寿命/额定寿命
       };
     },
+    //掺杂剂编号
+    initDopantCode(formItem, label2value) {
+      const { fieldScan, fieldDosage, label } = formItem;
+      return {
+        objCode: label2value[label] || defaultItem, // 编号
+        objScan: label2value[fieldScan] || defaultItem, // 编号(扫码)
+        objDosage: label2value[fieldDosage] || defaultItem, // 补掺量
+      };
+    },
     // 工艺参数
     initTech(stepName, recordIdx) {
       const form = this.name2form[`长晶-${stepName}-工艺参数`];
@@ -525,6 +541,9 @@ export default {
           }
           if (tag === "SelectBellCoverType") {
             extValue = this.initBellCoverType(formItem, label2value);
+          }
+          if (tag === "SelectDopantCode") {
+            extValue = this.initDopantCode(formItem, label2value);
           }
           return {
             ...formItem,
