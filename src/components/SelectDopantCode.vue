@@ -103,7 +103,9 @@ export default {
     addDosage(dosage) {
       if (!dosage) return;
       setTimeout(() => {
-        this.valueDosage = Number(this.valueDosage || 0) + dosage;
+        this.valueDosage = (
+          Number(this.valueDosage || 0) + Number(dosage || 0)
+        ).toFixed(3);
       }, 100);
     },
     clear() {
