@@ -137,7 +137,7 @@ export default {
         } else {
           this.$message.warning(`【${code}】未查询到寿命信息!`)
         }
-        this.valueLife = (usefulLife || '') + '/' + (ratedLife || '')
+        this.valueLife = (usefulLife || 0) + '/' + (ratedLife || 0)
       })
     },
   },
