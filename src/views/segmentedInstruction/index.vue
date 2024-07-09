@@ -35,28 +35,31 @@
                 :row-class-name="tableRowClassName"
               >
                 <el-table-column
-                  label="样片类型"
-                  min-width="120"
-                  align="center"
-                  prop="type"
-                />
-                <el-table-column
                   label="样片编号"
                   min-width="200"
                   align="center"
                   prop="sampleNumber"
+                  fixed="left"
                 />
                 <el-table-column
                   label="样片标识"
                   min-width="100"
                   align="center"
                   prop="sampleIdentification"
+                  fixed="left"
                 />
                 <el-table-column
                   label="样片位置"
                   min-width="100"
                   align="center"
                   prop="samplePosition"
+                  fixed="left"
+                />
+                <el-table-column
+                  label="样片类型"
+                  min-width="120"
+                  align="center"
+                  prop="type"
                 />
                 <el-table-column
                   label="产品类型"
