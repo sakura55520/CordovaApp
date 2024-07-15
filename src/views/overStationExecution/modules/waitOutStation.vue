@@ -58,12 +58,7 @@
           }"
         >
           <el-table-column label="轮编号" prop="extend1" min-width="90" />
-          <el-table-column
-            v-if="item.extend2"
-            label="生产设备"
-            prop="extend2"
-            min-width="100"
-          />
+          <el-table-column label="生产设备" prop="extend2" min-width="100" />
           <el-table-column
             label="执行设备"
             prop="equipmentCode"
@@ -80,19 +75,46 @@
             min-width="100"
           />
           <el-table-column label="数量(kg)" prop="number" min-width="100" />
-          <el-table-column
-            label="晶锭段位"
-            min-width="100"
-            v-if="item.data.segmentNum && item.data.totalSegmentNum"
-          >
+          <el-table-column label="晶锭段位" min-width="100">
             <template slot-scope="{ row }">
-              {{ row.data.segmentNum }}/{{ row.data.totalSegmentNum }}
+              <div v-if="row.data.segmentNum && row.data.totalSegmentNum">
+                {{ row.data.segmentNum }}/{{ row.data.totalSegmentNum }}
+              </div>
             </template>
           </el-table-column>
-          <el-table-column label="是否为end" prop="data.isEnd" min-width="140">
+          <el-table-column label="是否为end" prop="data.isEnd" min-width="100">
             <template slot-scope="{ row }">
               <div v-if="row.data.isEnd">是</div>
               <div v-else-if="row.data.isEnd === false">否</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="加工状态" prop="status" width="100">
+            <template slot-scope="{ row }">
+              <!-- 加工状态（0：待加工；1：加工中；2：加工完成；3：入库完成）-->
+              <span v-if="row.status === 0"
+                ><i
+                  class="icon-dot"
+                  style="background-color: #909399"
+                />待加工</span
+              >
+              <span v-else-if="row.status === 1"
+                ><i
+                  class="icon-dot"
+                  style="background-color: #409eff"
+                />加工中</span
+              >
+              <span v-else-if="row.status === 2"
+                ><i
+                  class="icon-dot"
+                  style="background-color: #67c23a"
+                />加工完成</span
+              >
+              <span v-else-if="row.status === 3"
+                ><i
+                  class="icon-dot"
+                  style="background-color: #67c23a"
+                />入库完成</span
+              >
             </template>
           </el-table-column>
           <el-table-column label="进站时间" prop="inTime" min-width="150" />

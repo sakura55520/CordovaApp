@@ -72,14 +72,93 @@
               color: '#606266',
             }"
           >
-            <!-- <el-table-column label="产品料号" prop="number" min-width="100" />
-          <el-table-column label="产品类型" prop="type" min-width="100" /> -->
+            <el-table-column
+              label="轮编号"
+              prop="planProcessingOrderDto.extend1"
+              min-width="90"
+            />
+            <el-table-column
+              label="生产设备"
+              prop="planProcessingOrderDto.extend2"
+              min-width="100"
+            />
             <el-table-column
               label="执行设备"
               prop="equipmentCode"
               min-width="100"
             />
+            <el-table-column
+              label="产品料号"
+              prop="planProcessingOrderDto.materialCode"
+              min-width="110"
+            />
+            <el-table-column label="产品类型" min-width="100">
+              <template slot-scope="{ row }">
+                {{
+                  JSON.parse(row.planProcessingOrderDto.data).productCategory
+                }}
+              </template>
+            </el-table-column>
             <el-table-column label="数量(kg)" prop="number" min-width="100" />
+            <el-table-column label="晶锭段位" min-width="100">
+              <template slot-scope="{ row }">
+                <div
+                  v-if="
+                    JSON.parse(row.planProcessingOrderDto.data).segmentNum &&
+                    JSON.parse(row.planProcessingOrderDto.data).totalSegmentNum
+                  "
+                >
+                  {{
+                    JSON.parse(row.planProcessingOrderDto.data).segmentNum
+                  }}/{{
+                    JSON.parse(row.planProcessingOrderDto.data).totalSegmentNum
+                  }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="是否为end" min-width="100">
+              <template slot-scope="{ row }">
+                <div v-if="JSON.parse(row.planProcessingOrderDto.data).isEnd">
+                  是
+                </div>
+                <div
+                  v-else-if="
+                    JSON.parse(row.planProcessingOrderDto.data).isEnd === false
+                  "
+                >
+                  否
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="加工状态" prop="status" width="100">
+              <template slot-scope="{ row }">
+                <!-- 加工状态（0：待加工；1：加工中；2：加工完成；3：入库完成）-->
+                <span v-if="row.planProcessingOrderDto.status === 0"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #909399"
+                  />待加工</span
+                >
+                <span v-else-if="row.planProcessingOrderDto.status === 1"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #409eff"
+                  />加工中</span
+                >
+                <span v-else-if="row.planProcessingOrderDto.status === 2"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #67c23a"
+                  />加工完成</span
+                >
+                <span v-else-if="row.planProcessingOrderDto.status === 3"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #67c23a"
+                  />入库完成</span
+                >
+              </template>
+            </el-table-column>
             <el-table-column
               label="进站时间"
               prop="startTime"
