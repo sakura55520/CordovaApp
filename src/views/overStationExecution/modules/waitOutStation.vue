@@ -57,6 +57,7 @@
             color: '#606266',
           }"
         >
+          <el-table-column label="轮编号" prop="extend1" min-width="90" />
           <el-table-column
             v-if="item.extend2"
             label="生产设备"
@@ -64,7 +65,6 @@
             min-width="100"
           />
           <el-table-column
-            v-if="item.equipmentCode"
             label="执行设备"
             prop="equipmentCode"
             min-width="100"
@@ -79,7 +79,7 @@
             prop="data.productCategory"
             min-width="100"
           />
-          <el-table-column label="数量" prop="number" />
+          <el-table-column label="数量(kg)" prop="number" min-width="100" />
           <el-table-column
             label="晶锭段位"
             min-width="100"
@@ -89,12 +89,7 @@
               {{ row.data.segmentNum }}/{{ row.data.totalSegmentNum }}
             </template>
           </el-table-column>
-          <el-table-column label="轮编号" prop="extend1" min-width="90" />
-          <el-table-column
-            label="是否为最后一轮"
-            prop="data.isEnd"
-            min-width="140"
-          >
+          <el-table-column label="是否为end" prop="data.isEnd" min-width="140">
             <template slot-scope="{ row }">
               <div v-if="row.data.isEnd">是</div>
               <div v-else-if="row.data.isEnd === false">否</div>

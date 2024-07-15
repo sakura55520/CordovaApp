@@ -75,19 +75,27 @@
             <!-- <el-table-column label="产品料号" prop="number" min-width="100" />
           <el-table-column label="产品类型" prop="type" min-width="100" /> -->
             <el-table-column
-              v-if="item.equipmentCode"
               label="执行设备"
               prop="equipmentCode"
               min-width="100"
             />
-            <el-table-column label="数量" prop="number" min-width="80" />
+            <el-table-column label="数量(kg)" prop="number" min-width="100" />
             <el-table-column
               label="进站时间"
               prop="startTime"
+              min-width="180"
+            />
+            <el-table-column
+              label="进站操作人"
+              prop="inUserName"
               min-width="100"
             />
-            <el-table-column label="出站时间" prop="endTime" min-width="100" />
-            <el-table-column label="创建人" prop="createUserName" />
+            <el-table-column label="出站时间" prop="endTime" min-width="180" />
+            <el-table-column
+              label="出站操作人"
+              prop="outUserName"
+              min-width="100"
+            />
           </el-table>
         </div>
       </div>
