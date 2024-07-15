@@ -74,6 +74,7 @@
             prop="data.productCategory"
             min-width="100"
           />
+          <el-table-column label="掺杂剂" prop="extend3" min-width="100" />
           <el-table-column label="数量(kg)" prop="number" min-width="100" />
           <el-table-column label="晶锭段位" min-width="100">
             <template slot-scope="{ row }">
