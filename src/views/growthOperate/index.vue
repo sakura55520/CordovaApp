@@ -534,7 +534,7 @@ export default {
         stepData[recordIdx],
         "techs",
         form.content.map((formItem) => {
-          const { vModel, tag } = formItem;
+          const { vModel, tag, label } = formItem;
           let { extValue } = label2value[vModel] || {};
           if (tag === "SelectAccessoryLife") {
             extValue = this.initAccessoryLife(formItem, label2value);
@@ -545,6 +545,9 @@ export default {
           if (tag === "SelectDopantCode") {
             extValue = this.initDopantCode(formItem, label2value);
           }
+          if ((label == "热炉漏率" || label == "热炉极限真空") && this.isEnd)
+            formItem.required = true;
+
           return {
             ...formItem,
             ...label2value[vModel],
