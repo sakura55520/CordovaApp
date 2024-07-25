@@ -1233,20 +1233,22 @@ export default {
       this.workOrderDialog = false;
     },
     handleConfirm() {
-      this.$set(
-        this.formData.segmentedInstructionDetailVos[
-          this.selectedSegmentWorkOrderIndex
-        ],
-        "diametermm",
-        this.selectRollingDiameter
-      );
-      this.$set(
-        this.formData.segmentedInstructionDetailVos[
-          this.selectedSegmentWorkOrderIndex
-        ],
-        "orderCode",
-        this.selectedWorkOrder
-      );
+      if (this.selectRollingDiameter)
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[
+            this.selectedSegmentWorkOrderIndex
+          ],
+          "diametermm",
+          this.selectRollingDiameter
+        );
+      if (this.selectedWorkOrder)
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[
+            this.selectedSegmentWorkOrderIndex
+          ],
+          "orderCode",
+          this.selectedWorkOrder
+        );
       this.workOrderDialog = false;
     },
     async handleProcessCodeVisibleChange(visible, index) {
