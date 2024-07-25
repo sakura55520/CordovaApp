@@ -125,6 +125,7 @@ export default {
     },
     remove(index) {
       this.imageList.splice(index, 1)
+      this.$emit('input', this.imageList)
     }
   },
   watch: {
