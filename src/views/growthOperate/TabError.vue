@@ -12,55 +12,66 @@
         <div class="headLine-title">异常记录录入</div>
       </div>
       <div class="growth-section">
-        <div
-          v-for="(formItem, formItemIdx) in detailForm.list"
-          :key="formItemIdx"
-          class="card-list-wrap"
-        >
-          <div class="card-list">
-            <div class="card-list-title">
-              <el-tag size="mini">{{ formItemIdx + 1 }}</el-tag>
-              <el-select
-                v-model="formItem.stepAndRecord"
-                style="width: 200px"
-                @change="handleStepRecordChange($event, formItemIdx)"
-              >
-                <el-option
-                  v-for="item in stepRecordList"
-                  :key="item.id"
-                  :value="item.stepAndRecord"
-                  :disabled="selectedRecord[item.stepAndRecord]"
+        <div class="card-list-container">
+          <div
+            v-for="(formItem, formItemIdx) in detailForm.list"
+            :key="formItemIdx"
+            class="card-list-wrap"
+            :style="{ order: recordIndexMap[formItem.stepAndRecord] }"
+          >
+            <div class="card-list">
+              <div class="card-list-title card-list-header">
+                <el-tag size="mini">{{
+                  recordIndexMap[formItem.stepAndRecord] + 1
+                }}</el-tag>
+                <el-select
+                  v-model="formItem.stepAndRecord"
+                  style="width: 200px"
+                  @change="handleStepRecordChange($event, formItemIdx)"
+                >
+                  <el-option
+                    v-for="item in stepRecordList"
+                    :key="item.id"
+                    :value="item.stepAndRecord"
+                    :disabled="selectedRecord[item.stepAndRecord]"
+                  />
+                </el-select>
+                <el-date-picker
+                  v-model="formItem.errorTime"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  @change="updateErrorTime($event, formItemIdx)"
                 />
-              </el-select>
-            </div>
-            <div class="card-list-tip">
-              <i
-                class="el-icon-error delete-icon"
-                @click="handleDelete(formItemIdx)"
-              />
-            </div>
-          </div>
-          <div>
-            <el-form-item label="单晶异常" class="error-form">
-              <el-select
-                v-model="formItem._errors"
-                multiple
-                filterable
-                allow-create
-                default-first-option
-                clearable
-                placeholder="填写或选择"
-                @change="updateErrors"
-              >
-                <span class="tip">填写后按下回车键即可添加</span>
-                <el-option
-                  v-for="item in crystalGrowthErrList"
-                  :key="item.id"
-                  :value="item.value"
-                  :label="item.value"
+              </div>
+              <div class="card-list-tip">
+                <i
+                  class="el-icon-error delete-icon"
+                  @click="handleDelete(formItemIdx)"
                 />
-              </el-select>
-            </el-form-item>
+              </div>
+            </div>
+            <div>
+              <el-form-item label="单晶异常" class="error-form">
+                <el-select
+                  v-model="formItem._errors"
+                  multiple
+                  filterable
+                  allow-create
+                  default-first-option
+                  clearable
+                  placeholder="填写或选择"
+                  @change="updateErrors"
+                >
+                  <span class="tip">填写后按下回车键即可添加</span>
+                  <el-option
+                    v-for="item in crystalGrowthErrList"
+                    :key="item.id"
+                    :value="item.value"
+                    :label="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </div>
           </div>
         </div>
 
@@ -77,6 +88,9 @@
 </template>
 
 <script>
+import moment from "moment";
+import { cloneDeep } from "lodash-es";
+
 export default {
   name: "TabError",
   props: {
@@ -104,6 +118,22 @@ export default {
         ({ stepAndRecord }) => (selected[stepAndRecord] = true)
       );
       return selected;
+    },
+    recordIndexMap() {
+      let map = {};
+      let list = cloneDeep(this.detailForm.list);
+      list
+        .sort((a, b) => {
+          if (!a.errorTime) return 1;
+          if (!b.errorTime) return -1;
+          let aTime = moment(a.errorTime).valueOf();
+          let bTime = moment(b.errorTime).valueOf();
+          return aTime - bTime;
+        })
+        .forEach((item, index) => {
+          map[item.stepAndRecord] = index;
+        });
+      return map;
     },
   },
   created() {
@@ -137,6 +167,7 @@ export default {
       this.detailForm.list.push({
         stepName: null,
         recordIdx: null,
+        errorTime: null,
         _errors: [],
       });
     },
@@ -145,9 +176,9 @@ export default {
         (item) => item.stepAndRecord === stepAndRecord
       );
       if (!matched) return;
-      console.log(matched);
       this.detailForm.list[formItemIdx].recordIdx = matched.recordIdx;
       this.detailForm.list[formItemIdx].stepName = matched.stepName;
+      this.detailForm.list[formItemIdx].errorTime = matched.errorTime;
     },
     handleDelete(formItemIdx) {
       const { stepName, recordIdx } = this.detailForm.list[formItemIdx];
@@ -163,6 +194,12 @@ export default {
         this.$set(this.steps[stepName][recordIdx], "_showErrors", true);
       });
     },
+    updateErrorTime() {
+      this.detailForm.list.forEach(({ stepName, recordIdx, errorTime }) => {
+        if (!stepName) return;
+        this.$set(this.steps[stepName][recordIdx], "errorTime", errorTime);
+      });
+    },
   },
 };
 </script>
@@ -171,5 +208,16 @@ export default {
 .error-form {
   width: 100% !important;
   margin-bottom: 0;
+}
+
+.card-list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-list-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 </style>
