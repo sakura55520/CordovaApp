@@ -305,6 +305,7 @@ export default {
           [
             "userCreate",
             "userOperate2",
+            "errorTime",
             "totalQty",
             "goodQty",
             "scrapQty",
