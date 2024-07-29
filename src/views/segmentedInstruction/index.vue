@@ -1482,7 +1482,7 @@ export default {
       if (index !== 0) {
         list[index - 1].tailPosition = value;
 
-        let headOi = this.calcOi(val);
+        let headOi = this.calcOi(value);
         list[index].head79oi = headOi[0];
         list[index].head83oi = headOi[1];
       }
@@ -1509,7 +1509,7 @@ export default {
       if (index !== this.formData.segmentedInstructionDetailVos.length - 1) {
         list[index + 1].headPosition = value;
 
-        let tailOi = this.calcOi(val);
+        let tailOi = this.calcOi(value);
         list[index].tail79oi = tailOi[0];
         list[index].tail83oi = tailOi[1];
       }
