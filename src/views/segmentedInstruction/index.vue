@@ -486,26 +486,28 @@
               ></el-table-column> -->
               <el-table-column
                 label="79oi头"
-                min-width="100"
+                min-width="120"
                 align="center"
                 prop="head79oi"
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.type !== 2">
-                    {{ scope.row.head79oi }}
-                  </div>
+                  <el-input
+                    v-model="scope.row.head79oi"
+                    @change="(val) => handleOiChange('head', scope.$index, val)"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
                 label="79oi尾"
-                min-width="100"
+                min-width="120"
                 align="center"
                 prop="tail79oi"
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.type !== 2">
-                    {{ scope.row.tail79oi }}
-                  </div>
+                  <el-input
+                    v-model="scope.row.tail79oi"
+                    @change="(val) => handleOiChange('tail', scope.$index, val)"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -515,7 +517,7 @@
                 prop="head83oi"
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.type !== 2">
+                  <div>
                     {{ scope.row.head83oi }}
                   </div>
                 </template>
@@ -527,7 +529,7 @@
                 prop="tail83oi"
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.type !== 2">
+                  <div>
                     {{ scope.row.tail83oi }}
                   </div>
                 </template>
@@ -1072,6 +1074,12 @@ export default {
       kValueList: [],
       lineList: [],
       detailMarginOffset: 0,
+      headAndTailOi: {
+        head79oi: null,
+        head83oi: null,
+        tail79oi: null,
+        tail83oi: null,
+      },
     };
   },
   computed: {
@@ -1309,13 +1317,35 @@ export default {
         this.checkInfo = list[0].details;
       }
 
+      this.initOi();
+
       let cloneSegmentedInstructionDetailVos;
       if (isEmpty(this.formData.segmentedInstructionDetailVos)) {
-        let oi = this.calcOi();
         cloneSegmentedInstructionDetailVos = (
           this.formData.wipCrystalCheckSampleRangeDtos || []
-        ).map((item) => {
+        ).map((item, index) => {
           let length = item.tail - item.head;
+
+          let headOi = this.calcOi(item.head);
+          let tailOi = this.calcOi(item.tail);
+
+          let head79oi = headOi[0];
+          let head83oi = headOi[1];
+          let tail79oi = tailOi[0];
+          let tail83oi = tailOi[1];
+
+          if (index === 0) {
+            head79oi = this.headAndTailOi.head79oi;
+            head83oi = this.headAndTailOi.head83oi;
+          }
+          if (
+            index ===
+            this.formData.wipCrystalCheckSampleRangeDtos.length - 1
+          ) {
+            tail79oi = this.headAndTailOi.tail79oi;
+            tail83oi = this.headAndTailOi.tail83oi;
+          }
+
           return {
             segmentNo: item.sampleNumber,
             type: item.type,
@@ -1327,10 +1357,10 @@ export default {
             diameter: this.formData.diameter,
             diametermm: this.formData.diametermm,
             planWeight: this.calcPlanWeight(length),
-            head79oi: oi[0],
-            head83oi: oi[1],
-            tail79oi: oi[2],
-            tail83oi: oi[3],
+            head79oi,
+            head83oi,
+            tail79oi,
+            tail83oi,
           };
         });
 
@@ -1399,7 +1429,7 @@ export default {
       let headPosition;
       if (list.length === 0) headPosition = 0;
       else headPosition = list[list.length - 1].tailPosition;
-      let oi = this.calcOi();
+      let headOi = this.calcOi(headPosition);
       let item = {
         headPosition,
         type: 0,
@@ -1408,10 +1438,10 @@ export default {
         diameter: this.formData.diameter,
         diametermm: this.formData.diametermm,
         planWeight: 0,
-        head79oi: oi[0],
-        head83oi: oi[1],
-        tail79oi: oi[2],
-        tail83oi: oi[3],
+        head79oi: headOi[0],
+        head83oi: headOi[1],
+        tail79oi: null,
+        tail83oi: null,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -1420,7 +1450,8 @@ export default {
       let headPosition = list[index - 1].tailPosition || 0;
       let tailPosition = list[index].headPosition || 0;
       let length = tailPosition - headPosition;
-      let oi = this.calcOi();
+      let headOi = this.calcOi(headPosition);
+      let tailOi = this.calcOi(tailPosition);
       let item = {
         headPosition,
         tailPosition,
@@ -1431,10 +1462,10 @@ export default {
         tailResistance: 0,
         diameter: this.formData.diameter,
         diametermm: this.formData.diametermm,
-        head79oi: oi[0],
-        head83oi: oi[1],
-        tail79oi: oi[2],
-        tail83oi: oi[3],
+        head79oi: headOi[0],
+        head83oi: headOi[1],
+        tail79oi: tailOi[0],
+        tail83oi: tailOi[1],
       };
       this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
     },
@@ -1448,7 +1479,13 @@ export default {
     },
     handleHeadChange(value, index) {
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
-      if (index !== 0) list[index - 1].tailPosition = value;
+      if (index !== 0) {
+        list[index - 1].tailPosition = value;
+
+        let headOi = this.calcOi(val);
+        list[index].head79oi = headOi[0];
+        list[index].head83oi = headOi[1];
+      }
 
       for (const item of list) {
         if (item.type !== 2) item.segmentNo = null;
@@ -1469,8 +1506,13 @@ export default {
     },
     handleTailChange(value, index) {
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
-      if (index !== this.formData.segmentedInstructionDetailVos.length - 1)
+      if (index !== this.formData.segmentedInstructionDetailVos.length - 1) {
         list[index + 1].headPosition = value;
+
+        let tailOi = this.calcOi(val);
+        list[index].tail79oi = tailOi[0];
+        list[index].tail83oi = tailOi[1];
+      }
 
       for (const item of list) {
         if (item.type !== 2) item.segmentNo = null;
@@ -1494,25 +1536,6 @@ export default {
         (item) => item.value == this.formData.diameter
       ).extendValue;
       return ((length * density) / 1000).toFixed(3);
-    },
-    calcOi() {
-      let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
-      let reverseHeadIndex = reverseDetails.findIndex(
-        (item) => item.type === "头尾样片" && item.sampleIdentification === "H"
-      );
-      let reverseTailIndex = reverseDetails.findIndex(
-        (item) => item.type === "头尾样片" && item.sampleIdentification === "T"
-      );
-      let headIndex = reverseDetails.length - reverseHeadIndex - 1;
-      let tailIndex = reverseDetails.length - reverseTailIndex - 1;
-
-      if (reverseHeadIndex === -1 || reverseTailIndex === -1) return [];
-
-      let head79oi = (this.checkInfo[headIndex] || {}).oiC;
-      let head83oi = (head79oi * 0.509).toFixed(3);
-      let tail79oi = (this.checkInfo[tailIndex] || {}).oiC;
-      let tail83oi = (tail79oi * 0.509).toFixed(3);
-      return [head79oi, head83oi, tail79oi, tail83oi];
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -1676,6 +1699,106 @@ export default {
         ["", undefined, null].includes(tailPosition) ||
         Number(headPosition) > Number(tailPosition)
       );
+    },
+    calcOi(position) {
+      const { head79oi, tail79oi } = this.headAndTailOi;
+      const { length } = this.formData;
+      if (
+        (!head79oi && head79oi !== 0) ||
+        (!tail79oi && tail79oi !== 0) ||
+        (!position && position !== 0)
+      )
+        return [null, null];
+
+      let oi_79 = Number(
+        head79oi - ((head79oi - tail79oi) * position) / length
+      ).toFixed(3);
+      let oi_83 = (oi_79 * 0.509).toFixed(3);
+      return [oi_79, oi_83];
+    },
+    handleOiChange(type, index, val) {
+      if (type === "head") {
+        let oi_83 = (val * 0.509).toFixed(3);
+        if (index == 0) {
+          this.headAndTailOi.head79oi = val;
+          this.headAndTailOi.head83oi = oi_83;
+          this.refreshSegmentsOi();
+        } else {
+          this.$set(
+            this.formData.segmentedInstructionDetailVos[index],
+            "head83oi",
+            oi_83
+          );
+        }
+      }
+      if (type === "tail") {
+        let oi_83 = (val * 0.509).toFixed(3);
+        if (index === this.formData.segmentedInstructionDetailVos.length - 1) {
+          this.headAndTailOi.tail79oi = val;
+          this.headAndTailOi.tail83oi = oi_83;
+          this.refreshSegmentsOi();
+        } else {
+          this.$set(
+            this.formData.segmentedInstructionDetailVos[index],
+            "tail83oi",
+            oi_83
+          );
+        }
+      }
+    },
+    refreshSegmentsOi() {
+      let cloneSegmentedInstructionDetailVos =
+        this.formData.segmentedInstructionDetailVos.map((item, index) => {
+          let headOi = this.calcOi(item.headPosition);
+          let tailOi = this.calcOi(item.tailPosition);
+
+          let head79oi = headOi[0];
+          let head83oi = headOi[1];
+          let tail79oi = tailOi[0];
+          let tail83oi = tailOi[1];
+
+          if (index == 0) {
+            head79oi = this.headAndTailOi.head79oi;
+            head83oi = this.headAndTailOi.head83oi;
+          }
+          if (index == this.formData.segmentedInstructionDetailVos.length - 1) {
+            tail79oi = this.headAndTailOi.tail79oi;
+            tail83oi = this.headAndTailOi.tail83oi;
+          }
+
+          return {
+            ...item,
+            head79oi,
+            head83oi,
+            tail79oi,
+            tail83oi,
+          };
+        });
+
+      this.$set(
+        this.formData,
+        "segmentedInstructionDetailVos",
+        cloneSegmentedInstructionDetailVos
+      );
+    },
+    initOi() {
+      let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
+      let reverseHeadIndex = reverseDetails.findIndex(
+        (item) => item.type === "头尾样片" && item.sampleIdentification === "H"
+      );
+      let reverseTailIndex = reverseDetails.findIndex(
+        (item) => item.type === "头尾样片" && item.sampleIdentification === "T"
+      );
+      let headIndex = reverseDetails.length - reverseHeadIndex - 1;
+      let tailIndex = reverseDetails.length - reverseTailIndex - 1;
+
+      if (reverseHeadIndex === -1 || reverseTailIndex === -1) return;
+
+      let head79oi = (this.checkInfo[headIndex] || {}).oiC;
+      let head83oi = (head79oi * 0.509).toFixed(3);
+      let tail79oi = (this.checkInfo[tailIndex] || {}).oiC;
+      let tail83oi = (tail79oi * 0.509).toFixed(3);
+      this.headAndTailOi = { head79oi, head83oi, tail79oi, tail83oi };
     },
   },
 };
