@@ -156,7 +156,7 @@
                 ></el-input>
               </el-form-item>
               <el-form-item
-                label="滚圆直径头"
+                label="最小直径"
                 prop="circleDiameterHead"
                 class="item"
                 label-width="100px"
@@ -176,7 +176,7 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="滚圆直径尾"
+                label="最大直径"
                 prop="circleDiameterTail"
                 class="item"
                 label-width="100px"
@@ -491,10 +491,10 @@ export default {
         ],
         // !!formData.needRollingCircle,
         circleDiameterHead: [
-          { required: true, message: "滚圆直径头不能为空", trigger: "change" },
+          { required: true, message: "最小直径不能为空", trigger: "change" },
         ],
         circleDiameterTail: [
-          { required: true, message: "滚圆直径尾不能为空", trigger: "change" },
+          { required: true, message: "最大直径不能为空", trigger: "change" },
         ],
       },
     };
