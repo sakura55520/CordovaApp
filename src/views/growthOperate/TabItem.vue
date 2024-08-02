@@ -208,7 +208,7 @@
 
 <script>
 import Render from "@/components/renderForm/render.vue";
-import { isEmpty, debounce } from "lodash-es";
+import { isEmpty, debounce, get } from "lodash-es";
 import * as Api from "@/api/inStation";
 import moment from "moment";
 
@@ -233,6 +233,10 @@ export default {
       required: true,
     },
     crystalGrowthErrList: Array,
+    allStepData: {
+      type: Object | null,
+      required: true,
+    },
   },
   data() {
     return {
@@ -349,6 +353,14 @@ export default {
         JSON.stringify(this.stepData._defaultStepData)
       );
       stepData.userCreate = this.$store.getters.realName;
+      if (this.stepName === "冷却") {
+        let techs = get(this.allStepData, "收尾.[0].techs", []);
+        let ext = techs.find((item) => item.extKey === "收尾结束时间");
+        const index = stepData.techs.findIndex(
+          (item) => item.extKey === "工艺结束时间"
+        );
+        stepData.techs[index].extValue = (ext || {}).extValue;
+      }
       this.stepData.push(stepData);
       this.$message.success(
         `已添加【${this.stepName}记录${this.stepData.length}】! `
