@@ -490,11 +490,34 @@
                 align="center"
                 prop="head79oi"
               >
+                <template slot="header">
+                  <div class="form-table-header">79oi头</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.head79oi"
-                    @change="(val) => handleOiChange('head', scope.$index, val)"
-                  ></el-input>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'segmentedInstructionDetailVos.' +
+                      scope.$index +
+                      '.head79oi'
+                    "
+                    :rules="[
+                      {
+                        required: true,
+                        message: '79oi头不能为空',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      v-model="scope.row.head79oi"
+                      @change="
+                        (val) => handleOiChange('head', scope.$index, val)
+                      "
+                    ></el-input>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column
@@ -503,11 +526,34 @@
                 align="center"
                 prop="tail79oi"
               >
+                <template slot="header">
+                  <div class="form-table-header">79oi尾</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    v-model="scope.row.tail79oi"
-                    @change="(val) => handleOiChange('tail', scope.$index, val)"
-                  ></el-input>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'segmentedInstructionDetailVos.' +
+                      scope.$index +
+                      '.tail79oi'
+                    "
+                    :rules="[
+                      {
+                        required: true,
+                        message: '79oi尾不能为空',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      v-model="scope.row.tail79oi"
+                      @change="
+                        (val) => handleOiChange('tail', scope.$index, val)
+                      "
+                    ></el-input>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column
