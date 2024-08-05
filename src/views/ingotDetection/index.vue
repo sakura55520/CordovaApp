@@ -481,7 +481,7 @@
       </div>
     </div>
     <el-dialog
-      :title="`${backCuttingFormType}}返切样片`"
+      :title="`${backCuttingFormType}返切样片`"
       :visible.sync="backCuttingDialogVisible"
     >
       <el-form
@@ -528,7 +528,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="返切样片厚度" prop="tall">
-          <el-input v-model="backCuttingFormData.tall"></el-input>
+          <el-input
+            v-model="backCuttingFormData.tall"
+            :disabled="backCuttingFormType === '编辑' && originalTall === 0"
+          ></el-input>
         </el-form-item>
         <el-form-item label="返切位置" prop="samplePosition">
           <el-input
@@ -728,6 +731,7 @@ export default {
       backCuttingDialogVisible: false,
       backCuttingFormType: undefined,
       selectIndex: undefined,
+      originalTall: undefined,
     };
   },
   computed: {
@@ -916,6 +920,7 @@ export default {
     },
     async handleUpdateBackCuttings(row, index) {
       this.backCuttingFormData = cloneDeep(row);
+      this.originalTall = row.tall;
       this.backCuttingFormType = "编辑";
       this.backCuttingDialogVisible = true;
       this.selectIndex = index;
