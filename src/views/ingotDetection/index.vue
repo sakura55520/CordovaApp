@@ -165,8 +165,9 @@
                     class="form-input"
                   >
                     <el-input
+                      :id="'input-1-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 1, scope.$index)"
                       v-model="scope.row.crystalDensity"
-                      v-direction="{ x: 1, y: scope.$index }"
                     >
                       <template slot="append">%</template>
                     </el-input>
@@ -182,8 +183,9 @@
               <el-table-column label="RES_C" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-2-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 2, scope.$index)"
                     v-model="scope.row.resC"
-                    v-direction="{ x: 3, y: scope.$index }"
                     @input="
                       () => {
                         calcHalfRrg(scope.$index);
@@ -198,16 +200,18 @@
               <el-table-column label="RES_E" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-3-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 3, scope.$index)"
                     v-model="scope.row.resE"
-                    v-direction="{ x: 4, y: scope.$index }"
                     @input="calcRrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="1/2RES" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-4-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 4, scope.$index)"
                     v-model="scope.row.halfRes"
-                    v-direction="{ x: 5, y: scope.$index }"
                     @input="calcHalfRrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
@@ -246,16 +250,18 @@
               <el-table-column label="OI_C" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-5-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
                     v-model="scope.row.oiC"
-                    v-direction="{ x: 10, y: scope.$index }"
                     @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="OI_E" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-6-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 6, scope.$index)"
                     v-model="scope.row.oiE"
-                    v-direction="{ x: 11, y: scope.$index }"
                     @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
@@ -263,8 +269,9 @@
                 <template slot-scope="scope">
                   <div :class="getInternalControlColor('cs', scope.row.cs)">
                     <el-input
+                      :id="'input-7-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
                       v-model="scope.row.cs"
-                      v-direction="{ x: 12, y: scope.$index }"
                     ></el-input>
                   </div> </template
               ></el-table-column>
@@ -281,8 +288,9 @@
               <el-table-column label="少子寿命" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-8-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
                     v-model="scope.row.minorityCarrierLifetime"
-                    v-direction="{ x: 14, y: scope.$index }"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="常规缺陷" min-width="140" align="center">
@@ -310,8 +318,9 @@
               <el-table-column label="基磷" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-9-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
                     v-model="scope.row.phosphorus"
-                    v-direction="{ x: 15, y: scope.$index }"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'phosphorus')
                     "
@@ -320,16 +329,18 @@
               <el-table-column label="基硼" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-10-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
                     v-model="scope.row.boron"
-                    v-direction="{ x: 16, y: scope.$index }"
                     @change="(val) => handleToFixed(val, scope.$index, 'boron')"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="基砷" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-11-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
                     v-model="scope.row.arsenic"
-                    v-direction="{ x: 17, y: scope.$index }"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'arsenic')
                     "
@@ -338,8 +349,9 @@
               <el-table-column label="基锑" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :id="'input-12-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
                     v-model="scope.row.antimony"
-                    v-direction="{ x: 18, y: scope.$index }"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'antimony')
                     "
@@ -743,9 +755,6 @@ export default {
       realName: (state) => state.user.realName,
     }),
   },
-  created() {
-    this.initKeyup();
-  },
   mounted() {
     this.init();
   },
@@ -784,23 +793,6 @@ export default {
       }));
 
       this.fetchBackCuttingSampleRecord();
-    },
-    initKeyup() {
-      let direction = this.$getDirection();
-      direction.on("keyup", function (e, val) {
-        if (e.keyCode === 39) {
-          direction.next();
-        }
-        if (e.keyCode === 37) {
-          direction.previous();
-        }
-        if (e.keyCode === 38) {
-          direction.previousLine();
-        }
-        if (e.keyCode === 40) {
-          direction.nextLine();
-        }
-      });
     },
     async updateDetails() {
       const { processingOrderCode } = this.$route.query;
@@ -1117,6 +1109,24 @@ export default {
       this.backCuttingFormData.cutDistanceStart = val;
       this.backCuttingFormData.cutDistanceEnd =
         (this.formData.lengthQty || 0) - val;
+    },
+    handleKeyup(e, x, y) {
+      if (e.keyCode === 39) {
+        let dom = document.getElementById(`input-${x + 1}-${y}`);
+        dom && dom.focus();
+      }
+      if (e.keyCode === 37) {
+        let dom = document.getElementById(`input-${x - 1}-${y}`);
+        dom && dom.focus();
+      }
+      if (e.keyCode === 38) {
+        let dom = document.getElementById(`input-${x}-${y - 1}`);
+        dom && dom.focus();
+      }
+      if (e.keyCode === 40) {
+        let dom = document.getElementById(`input-${x}-${y + 1}`);
+        dom && dom.focus();
+      }
     },
   },
 };
