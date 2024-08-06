@@ -460,9 +460,19 @@ export default {
         )
       )
         return this.$message.warning("样片位置不能大于晶体实测长度");
-      await this.$confirm("确认提交当前操作数据?", "提示", {
-        type: "warning",
-      });
+      if (this.formData.lengthQty == 0)
+        await this.$confirm(
+          "晶体实测长度为0mm时整根报废，确认是否报废?",
+          "提示",
+          {
+            type: "warning",
+          }
+        );
+      else
+        await this.$confirm("确认提交当前操作数据?", "提示", {
+          type: "warning",
+        });
+
       const {
         equipmentCode,
         processUuid,
