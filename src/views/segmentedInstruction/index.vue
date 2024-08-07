@@ -596,8 +596,29 @@
                 align="center"
                 prop="tailCarbonRate"
               >
+                <template slot="header">
+                  <div class="form-table-header">尾碳含量</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.tailCarbonRate"></el-input>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'segmentedInstructionDetailVos.' +
+                      scope.$index +
+                      '.tailCarbonRate'
+                    "
+                    :rules="[
+                      {
+                        required: true,
+                        message: '尾碳含量不能为空',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input v-model="scope.row.tailCarbonRate"></el-input>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <!-- <el-table-column
