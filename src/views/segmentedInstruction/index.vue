@@ -580,6 +580,26 @@
                   </div>
                 </template>
               </el-table-column>
+              <el-table-column
+                label="头碳含量"
+                min-width="120"
+                align="center"
+                prop="headCarbonRate"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.headCarbonRate"></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="尾碳含量"
+                min-width="120"
+                align="center"
+                prop="tailCarbonRate"
+              >
+                <template slot-scope="scope">
+                  <el-input v-model="scope.row.tailCarbonRate"></el-input>
+                </template>
+              </el-table-column>
               <!-- <el-table-column
                 label="滚圆"
                 min-width="80"
