@@ -587,7 +587,10 @@
                 prop="headCarbonRate"
               >
                 <template slot-scope="scope">
-                  <el-input v-model="scope.row.headCarbonRate"></el-input>
+                  <el-input
+                    v-if="scope.row.type !== 2"
+                    v-model="scope.row.headCarbonRate"
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -610,27 +613,46 @@
                     "
                     :rules="[
                       {
-                        required: true,
+                        required: scope.row.type !== 2,
                         message: '尾碳含量不能为空',
                         trigger: 'change',
                       },
                     ]"
                     class="form-input"
                   >
-                    <el-input v-model="scope.row.tailCarbonRate"></el-input>
+                    <el-input
+                      v-if="scope.row.type !== 2"
+                      v-model="scope.row.tailCarbonRate"
+                    ></el-input>
                   </el-form-item>
                 </template>
               </el-table-column>
-              <!-- <el-table-column
-                label="滚圆"
-                min-width="80"
-                align="center"
-              ></el-table-column>
               <el-table-column
-                label="参考面"
-                min-width="100"
+                label="RRV头"
+                min-width="120"
                 align="center"
-              ></el-table-column> -->
+                prop="headRrv"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type !== 2"
+                    v-model="scope.row.headRrv"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="RRV尾"
+                min-width="120"
+                align="center"
+                prop="tailRrv"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type !== 2"
+                    v-model="scope.row.tailRrv"
+                  ></el-input>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="说明"
                 min-width="250"
@@ -1167,6 +1189,10 @@ export default {
         tail79oi: null,
         tail83oi: null,
       },
+      headAndTailRrv: {
+        headRrv: null,
+        tailRrv: null,
+      },
     };
   },
   computed: {
@@ -1404,7 +1430,7 @@ export default {
         this.checkInfo = list[0].details;
       }
 
-      this.initOi();
+      this.initOiAndRrv();
 
       let cloneSegmentedInstructionDetailVos;
       if (isEmpty(this.formData.segmentedInstructionDetailVos)) {
@@ -1448,6 +1474,8 @@ export default {
             head83oi,
             tail79oi,
             tail83oi,
+            headRrv: this.headAndTailRrv.headRrv,
+            tailRrv: this.headAndTailRrv.tailRrv,
           };
         });
 
@@ -1529,6 +1557,8 @@ export default {
         head83oi: headOi[1],
         tail79oi: null,
         tail83oi: null,
+        headRrv: this.headAndTailRrv.headRrv,
+        tailRrv: this.headAndTailRrv.tailRrv,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -1553,6 +1583,8 @@ export default {
         head83oi: headOi[1],
         tail79oi: tailOi[0],
         tail83oi: tailOi[1],
+        headRrv: this.headAndTailRrv.headRrv,
+        tailRrv: this.headAndTailRrv.tailRrv,
       };
       this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
     },
@@ -1868,7 +1900,7 @@ export default {
         cloneSegmentedInstructionDetailVos
       );
     },
-    initOi() {
+    initOiAndRrv() {
       let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
       let reverseHeadIndex = reverseDetails.findIndex(
         (item) => item.type === "头尾样片" && item.sampleIdentification === "H"
@@ -1881,11 +1913,15 @@ export default {
 
       if (reverseHeadIndex === -1 || reverseTailIndex === -1) return;
 
-      let head79oi = (this.checkInfo[headIndex] || {}).oiC;
+      let head79oi = this.checkInfo[headIndex].oiC;
       let head83oi = (head79oi * 0.509).toFixed(3);
-      let tail79oi = (this.checkInfo[tailIndex] || {}).oiC;
+      let tail79oi = this.checkInfo[tailIndex].oiC;
       let tail83oi = (tail79oi * 0.509).toFixed(3);
       this.headAndTailOi = { head79oi, head83oi, tail79oi, tail83oi };
+
+      let headRrv = Math.abs(this.checkInfo[headIndex].rrg || 0).toFixed(2);
+      let tailRrv = Math.abs(this.checkInfo[tailIndex].rrg || 0).toFixed(2);
+      this.headAndTailRrv = { headRrv, tailRrv };
     },
   },
 };
