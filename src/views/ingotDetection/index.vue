@@ -95,7 +95,7 @@
             >
               <el-table-column
                 label="样片编号"
-                min-width="180"
+                width="170"
                 align="center"
                 prop="sampleNumber"
                 fixed="left"
@@ -103,48 +103,48 @@
               </el-table-column>
               <el-table-column
                 label="样片标识"
-                min-width="100"
+                width="90"
                 align="center"
                 prop="sampleIdentification"
                 fixed="left"
               />
               <el-table-column
                 label="样片位置"
-                min-width="120"
+                width="90"
                 align="center"
                 prop="samplePosition"
                 fixed="left"
               />
               <el-table-column
                 label="样片类型"
-                min-width="150"
+                width="90"
                 align="center"
                 prop="type"
               />
               <el-table-column
                 label="产品类型"
-                min-width="100"
+                width="90"
                 align="center"
                 prop="productCategory"
               >
               </el-table-column>
               <el-table-column
                 label="晶向"
-                min-width="100"
+                width="60"
                 align="center"
                 prop="orientation"
               >
               </el-table-column>
               <el-table-column
                 label="尺寸"
-                min-width="100"
+                width="60"
                 align="center"
                 prop="size"
               >
               </el-table-column>
               <el-table-column
                 label="结晶比重"
-                min-width="180"
+                width="160"
                 align="center"
                 prop="crystalDensity"
                 ><template slot="header">
@@ -176,7 +176,7 @@
               </el-table-column>
               <el-table-column
                 label="RES"
-                min-width="120"
+                width="110"
                 align="center"
                 prop="res"
               />
@@ -217,13 +217,13 @@
               ></el-table-column>
               <el-table-column
                 label="目标偏差"
-                min-width="140"
+                min-width="120"
                 align="center"
                 prop="targetDeviation"
               />
               <el-table-column
                 label="RRG"
-                min-width="140"
+                min-width="120"
                 align="center"
                 prop="rrg"
               >
@@ -233,7 +233,7 @@
               </el-table-column>
               <el-table-column
                 label="1/2 RRG"
-                min-width="140"
+                min-width="120"
                 align="center"
                 prop="halfRrg"
               >
@@ -243,11 +243,11 @@
               </el-table-column>
               <el-table-column
                 label="头尾电阻比"
-                min-width="140"
+                min-width="120"
                 align="center"
                 prop="headTailResistivityRatio"
               />
-              <el-table-column label="OI_C" min-width="140" align="center">
+              <el-table-column label="OI_C" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-5-' + scope.$index"
@@ -256,7 +256,7 @@
                     @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="OI_E" min-width="140" align="center">
+              <el-table-column label="OI_E" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-6-' + scope.$index"
@@ -265,7 +265,7 @@
                     @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="CS" min-width="140" align="center">
+              <el-table-column label="CS" min-width="120" align="center">
                 <template slot-scope="scope">
                   <div :class="getInternalControlColor('cs', scope.row.cs)">
                     <el-input
@@ -277,7 +277,7 @@
               ></el-table-column>
               <el-table-column
                 label="ORG"
-                min-width="140"
+                min-width="120"
                 align="center"
                 prop="org"
               >
@@ -285,7 +285,7 @@
                   <div v-if="scope.row.org">{{ scope.row.org }}%</div>
                 </template>
               </el-table-column>
-              <el-table-column label="少子寿命" min-width="140" align="center">
+              <el-table-column label="少子寿命" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-8-' + scope.$index"
@@ -315,7 +315,7 @@
                     ></el-option>
                   </el-select> </template
               ></el-table-column>
-              <el-table-column label="基磷" min-width="140" align="center">
+              <el-table-column label="基磷" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-9-' + scope.$index"
@@ -326,7 +326,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基硼" min-width="140" align="center">
+              <el-table-column label="基硼" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-10-' + scope.$index"
@@ -335,7 +335,7 @@
                     @change="(val) => handleToFixed(val, scope.$index, 'boron')"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基砷" min-width="140" align="center">
+              <el-table-column label="基砷" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-11-' + scope.$index"
@@ -346,7 +346,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基锑" min-width="140" align="center">
+              <el-table-column label="基锑" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-12-' + scope.$index"
@@ -1238,7 +1238,7 @@ export default {
   width: 60px;
 }
 .form-input {
-  padding-top: 16px;
+  margin-bottom: 0px;
 }
 .form-table-header:before {
   content: "* ";
