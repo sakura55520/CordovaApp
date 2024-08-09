@@ -1039,7 +1039,7 @@ export default {
     calcTargetDeviation(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.res) data = ((item.resC - item.res) / item.res).toFixed(3);
+      if (item.res) data = ((item.resC - item.res) / item.res).toFixed(6);
       this.$set(this.formData.details[index], "targetDeviation", data);
     },
     calcOrg(index) {
