@@ -228,22 +228,24 @@
                   <div class="form-table-header">样片位置</div>
                 </template>
                 <template slot-scope="scope">
-                  <el-form-item
-                    label=""
-                    label-width="0px"
-                    :prop="
-                      'wipCuttingSampleInfos.' +
-                      scope.$index +
-                      '.samplePosition'
-                    "
-                    :rules="formRules.samplePosition"
-                    class="form-input"
-                  >
-                    <el-input
-                      v-model="scope.row.samplePosition"
-                      @change="handleSamplePositionChange"
-                    ></el-input>
-                  </el-form-item>
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'wipCuttingSampleInfos.' +
+                        scope.$index +
+                        '.samplePosition'
+                      "
+                      :rules="formRules.samplePosition"
+                      class="form-input"
+                    >
+                      <el-input
+                        v-model="scope.row.samplePosition"
+                        @change="handleSamplePositionChange"
+                      ></el-input>
+                    </el-form-item>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -836,8 +838,14 @@ export default {
   position: absolute;
   left: 12px;
 }
-.form-input {
-  padding-top: 16px;
+.form-custom-verify {
+  .form-input {
+    margin-bottom: 0px;
+  }
+  /deep/ .el-form-item .el-form-item__content .el-form-item__error {
+    top: 25%;
+    left: 20px;
+  }
 }
 .form-table-header:before {
   content: "* ";

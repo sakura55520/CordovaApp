@@ -36,52 +36,52 @@
               >
                 <el-table-column
                   label="样片编号"
-                  min-width="200"
+                  width="180"
                   align="center"
                   prop="sampleNumber"
                   fixed="left"
                 />
                 <el-table-column
                   label="样片标识"
-                  min-width="100"
+                  width="90"
                   align="center"
                   prop="sampleIdentification"
                   fixed="left"
                 />
                 <el-table-column
                   label="样片位置"
-                  min-width="100"
+                  width="90"
                   align="center"
                   prop="samplePosition"
                   fixed="left"
                 />
                 <el-table-column
                   label="样片类型"
-                  min-width="120"
+                  width="90"
                   align="center"
                   prop="type"
                 />
                 <el-table-column
                   label="产品类型"
-                  min-width="100"
+                  width="90"
                   align="center"
                   prop="productCategory"
                 />
                 <el-table-column
                   label="晶向"
-                  min-width="100"
+                  width="70"
                   align="center"
                   prop="orientation"
                 />
                 <el-table-column
                   label="尺寸"
-                  min-width="100"
+                  width="70"
                   align="center"
                   prop="size"
                 />
                 <el-table-column
                   label="结晶比重"
-                  min-width="180"
+                  width="110"
                   align="center"
                   prop="crystalDensity"
                 >
@@ -195,25 +195,25 @@
                 />
                 <el-table-column
                   label="基磷"
-                  min-width="120"
+                  min-width="70"
                   align="center"
                   prop="phosphorus"
                 />
                 <el-table-column
                   label="基硼"
-                  min-width="120"
+                  min-width="70"
                   align="center"
                   prop="boron"
                 />
                 <el-table-column
                   label="基砷"
-                  min-width="120"
+                  min-width="70"
                   align="center"
                   prop="arsenic"
                 />
                 <el-table-column
                   label="基锑"
-                  min-width="120"
+                  min-width="70"
                   align="center"
                   prop="antimony"
                 />
@@ -254,7 +254,7 @@
             >
               <el-table-column
                 label="晶锭编号/回收料编号"
-                min-width="240"
+                min-width="220"
                 align="center"
               >
                 <template slot="header">
@@ -291,12 +291,12 @@
               </el-table-column>
               <el-table-column
                 label="类型"
-                min-width="150"
+                min-width="80"
                 align="center"
                 prop="type"
                 :formatter="formatSegmentType"
               />
-              <el-table-column label="下发工单" min-width="300" align="center">
+              <el-table-column label="下发工单" min-width="160" align="center">
                 <template slot-scope="scope">
                   <el-input
                     v-if="scope.row.type !== 2"
@@ -307,7 +307,7 @@
                   />
                 </template>
               </el-table-column>
-              <el-table-column label="流程编号" min-width="300" align="center">
+              <el-table-column label="流程编号" min-width="160" align="center">
                 <template slot-scope="scope">
                   <el-select
                     v-if="scope.row.type !== 2"
@@ -331,7 +331,7 @@
               </el-table-column>
               <el-table-column
                 label="尺寸"
-                min-width="150"
+                min-width="80"
                 align="center"
                 prop="diameter"
               >
@@ -357,7 +357,7 @@
               </el-table-column>
               <el-table-column
                 label="晶锭段位"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="segmentNum"
               >
@@ -367,7 +367,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="头部位置" min-width="150" align="center">
+              <el-table-column label="头部位置" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :disabled="scope.row.type === 2"
@@ -377,7 +377,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="尾部位置" min-width="150" align="center">
+              <el-table-column label="尾部位置" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :disabled="scope.row.type === 2"
@@ -389,13 +389,13 @@
               </el-table-column>
               <el-table-column
                 label="晶锭长度"
-                min-width="150"
+                min-width="100"
                 align="center"
                 prop="length"
               />
               <el-table-column
                 label="计划重量"
-                min-width="200"
+                min-width="100"
                 align="center"
                 prop="planWeight"
               />
@@ -411,7 +411,7 @@
               </el-table-column> -->
               <el-table-column
                 label="计算位置"
-                min-width="150"
+                min-width="120"
                 align="center"
                 prop="calculatedPosition"
               >
@@ -426,7 +426,7 @@
               </el-table-column>
               <el-table-column
                 label="计算电阻率"
-                min-width="150"
+                min-width="120"
                 align="center"
                 prop="calculatedResistivity"
               >
@@ -469,13 +469,13 @@
               </el-table-column>
               <el-table-column
                 label="头部电阻率实测"
-                min-width="150"
+                min-width="140"
                 align="center"
                 prop="headResistanceActual"
               />
               <el-table-column
                 label="尾部电阻率实测"
-                min-width="150"
+                min-width="140"
                 align="center"
                 prop="tailResistanceActual"
               />
@@ -494,30 +494,32 @@
                   <div class="form-table-header">79oi头</div>
                 </template>
                 <template slot-scope="scope">
-                  <el-form-item
-                    label=""
-                    label-width="0px"
-                    :prop="
-                      'segmentedInstructionDetailVos.' +
-                      scope.$index +
-                      '.head79oi'
-                    "
-                    :rules="[
-                      {
-                        required: true,
-                        message: '79oi头不能为空',
-                        trigger: 'change',
-                      },
-                    ]"
-                    class="form-input"
-                  >
-                    <el-input
-                      v-model="scope.row.head79oi"
-                      @change="
-                        (val) => handleOiChange('head', scope.$index, val)
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.head79oi'
                       "
-                    ></el-input>
-                  </el-form-item>
+                      :rules="[
+                        {
+                          required: true,
+                          message: '请输入',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        v-model="scope.row.head79oi"
+                        @change="
+                          (val) => handleOiChange('head', scope.$index, val)
+                        "
+                      ></el-input>
+                    </el-form-item>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -530,30 +532,32 @@
                   <div class="form-table-header">79oi尾</div>
                 </template>
                 <template slot-scope="scope">
-                  <el-form-item
-                    label=""
-                    label-width="0px"
-                    :prop="
-                      'segmentedInstructionDetailVos.' +
-                      scope.$index +
-                      '.tail79oi'
-                    "
-                    :rules="[
-                      {
-                        required: true,
-                        message: '79oi尾不能为空',
-                        trigger: 'change',
-                      },
-                    ]"
-                    class="form-input"
-                  >
-                    <el-input
-                      v-model="scope.row.tail79oi"
-                      @change="
-                        (val) => handleOiChange('tail', scope.$index, val)
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.tail79oi'
                       "
-                    ></el-input>
-                  </el-form-item>
+                      :rules="[
+                        {
+                          required: true,
+                          message: '请输入',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        v-model="scope.row.tail79oi"
+                        @change="
+                          (val) => handleOiChange('tail', scope.$index, val)
+                        "
+                      ></el-input>
+                    </el-form-item>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -603,28 +607,30 @@
                   <div class="form-table-header">尾碳含量</div>
                 </template>
                 <template slot-scope="scope">
-                  <el-form-item
-                    label=""
-                    label-width="0px"
-                    :prop="
-                      'segmentedInstructionDetailVos.' +
-                      scope.$index +
-                      '.tailCarbonRate'
-                    "
-                    :rules="[
-                      {
-                        required: scope.row.type !== 2,
-                        message: '尾碳含量不能为空',
-                        trigger: 'change',
-                      },
-                    ]"
-                    class="form-input"
-                  >
-                    <el-input
-                      v-if="scope.row.type !== 2"
-                      v-model="scope.row.tailCarbonRate"
-                    ></el-input>
-                  </el-form-item>
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.tailCarbonRate'
+                      "
+                      :rules="[
+                        {
+                          required: scope.row.type !== 2,
+                          message: '请输入',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        v-if="scope.row.type !== 2"
+                        v-model="scope.row.tailCarbonRate"
+                      ></el-input>
+                    </el-form-item>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -672,43 +678,45 @@
                   <div class="form-table-header">合格状态</div>
                 </template>
                 <template slot-scope="scope">
-                  <el-form-item
-                    label=""
-                    label-width="0px"
-                    :prop="
-                      'segmentedInstructionDetailVos.' +
-                      scope.$index +
-                      '.status'
-                    "
-                    :rules="[
-                      {
-                        required: scope.row.type !== 2,
-                        message: '合格状态不能为空',
-                        trigger: 'change',
-                      },
-                    ]"
-                    class="form-input"
-                  >
-                    <el-select
-                      v-if="scope.row.type !== 2"
-                      v-model="scope.row.status"
-                      @change="(val) => handleStatusChange(val, scope.$index)"
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.status'
+                      "
+                      :rules="[
+                        {
+                          required: scope.row.type !== 2,
+                          message: ' ',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
                     >
-                      <el-option label="合格" :value="1"></el-option>
-                      <el-option label="不合格" :value="0"></el-option>
-                    </el-select>
-                  </el-form-item>
+                      <el-select
+                        v-if="scope.row.type !== 2"
+                        v-model="scope.row.status"
+                        @change="(val) => handleStatusChange(val, scope.$index)"
+                      >
+                        <el-option label="合格" :value="1"></el-option>
+                        <el-option label="不合格" :value="0"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
                 label="合格长度"
-                min-width="150"
+                min-width="100"
                 align="center"
                 prop="qualifiedLength"
               />
               <el-table-column
                 label="合格重量"
-                min-width="150"
+                min-width="100"
                 align="center"
                 prop="qualifiedWeight"
               />
@@ -1666,7 +1674,7 @@ export default {
       try {
         valid = await this.$refs.formRef.validate();
       } catch (err) {
-        return this.$message.warning("分段的合格状态未填写完整");
+        return this.$message.warning("分段信息未填写完整");
       }
       if (!valid) return;
       await this.$confirm("确认提交当前操作数据?", "提示", {
@@ -2150,10 +2158,14 @@ export default {
     .segment-table {
       position: relative;
       overflow: visible;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       .segment-add-btn {
         position: absolute;
         z-index: 999;
-        top: -52px;
+        top: -32px;
       }
       .el-button {
         font-size: 12px;
@@ -2233,8 +2245,13 @@ export default {
   content: "* ";
   color: red;
 }
-.form-input {
-  padding-top: 16px;
-  height: 58px;
+.form-custom-verify {
+  .form-input {
+    margin-bottom: 0px;
+  }
+  /deep/ .el-form-item .el-form-item__content .el-form-item__error {
+    top: 25%;
+    left: 20px;
+  }
 }
 </style>

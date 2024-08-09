@@ -95,7 +95,7 @@
             >
               <el-table-column
                 label="样片编号"
-                width="170"
+                width="180"
                 align="center"
                 prop="sampleNumber"
                 fixed="left"
@@ -151,27 +151,29 @@
                   <div class="form-table-header">结晶比重</div>
                 </template>
                 <template slot-scope="scope">
-                  <el-form-item
-                    label=""
-                    label-width="0px"
-                    :prop="'details.' + scope.$index + '.crystalDensity'"
-                    :rules="[
-                      {
-                        required: scope.row.valid,
-                        message: '结晶比重不能为空',
-                        trigger: 'change',
-                      },
-                    ]"
-                    class="form-input"
-                  >
-                    <el-input
-                      :id="'input-1-' + scope.$index"
-                      @keyup.native="(e) => handleKeyup(e, 1, scope.$index)"
-                      v-model="scope.row.crystalDensity"
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="'details.' + scope.$index + '.crystalDensity'"
+                      :rules="[
+                        {
+                          required: scope.row.valid,
+                          message: '请输入',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
                     >
-                      <template slot="append">%</template>
-                    </el-input>
-                  </el-form-item>
+                      <el-input
+                        :id="'input-1-' + scope.$index"
+                        @keyup.native="(e) => handleKeyup(e, 1, scope.$index)"
+                        v-model="scope.row.crystalDensity"
+                      >
+                        <template slot="append">%</template>
+                      </el-input>
+                    </el-form-item>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1237,8 +1239,14 @@ export default {
 .unit {
   width: 60px;
 }
-.form-input {
-  margin-bottom: 0px;
+.form-custom-verify {
+  .form-input {
+    margin-bottom: 0px;
+  }
+  /deep/ .el-form-item .el-form-item__content .el-form-item__error {
+    top: 25%;
+    left: 20px;
+  }
 }
 .form-table-header:before {
   content: "* ";
