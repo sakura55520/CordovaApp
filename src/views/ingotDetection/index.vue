@@ -1007,16 +1007,17 @@ export default {
       let info = this.formData;
       if (!value || value === "NaN" || !info.weight || !info.lengthQty)
         crystalDensity = "0";
-      else
+      else {
+        let goodWeight = info.goodWeight || 0;
+        let headWeight = info.headWeight || 0;
+        let tailWeight = info.tailWeight || 0;
         crystalDensity = (
-          ((((info.goodWeight || 0) -
-            (info.tailWeight || 0) -
-            (info.headWeight || 0)) *
-            info.lengthQty) /
-            value /
+          ((((goodWeight - headWeight - tailWeight) * value) / info.lengthQty +
+            headWeight) /
             info.weight) *
           100
         ).toFixed(2);
+      }
       return crystalDensity;
     },
     tableRowClassName({ row }) {
