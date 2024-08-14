@@ -605,21 +605,30 @@ export default {
         ({ label }) => label === "单晶异常"
       );
       let _showErrors = false;
+      let _requiredErrors = false;
       if (errFormItemIdx > -1) {
         _showErrors = true;
+        _requiredErrors = form.content[errFormItemIdx].required;
         form.content.splice(errFormItemIdx, 1);
       }
       if (_showErrors) stepData._showErrors = _showErrors;
+      if (_requiredErrors) stepData._requiredErrors = _requiredErrors;
       if (this.calcAddRecordMap[stepName]) {
         if (!stepData._defaultStepData) stepData._defaultStepData = {};
         if (!stepData._defaultStepData._errors) {
           stepData._defaultStepData._errors = [];
           stepData._defaultStepData._showErrors = _showErrors;
+          stepData._defaultStepData._requiredErrors = _requiredErrors;
         }
       }
 
       if (typeof recordIdx !== "number") return;
       this.$set(stepData[recordIdx], "_showErrors", stepData._showErrors);
+      this.$set(
+        stepData[recordIdx],
+        "_requiredErrors",
+        stepData._requiredErrors
+      );
       this.$set(
         stepData[recordIdx],
         "_errors",

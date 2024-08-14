@@ -37,6 +37,18 @@
               v-for="(formItem, formItemIdx) in recordItem.exts"
               :key="formItemIdx"
               :label="formItem.label"
+              :rules="[
+                {
+                  required: formItem.required,
+                  message: formItem.label + '不能为空',
+                  trigger: 'change',
+                },
+              ]"
+              :prop="
+                /^field/.test(formItem.vModel)
+                  ? 'exts.' + formItemIdx + '.extValue'
+                  : formItem.vModel
+              "
             >
               <Render
                 :key="formItem.renderKey"
@@ -61,6 +73,14 @@
               v-if="recordItem._showErrors"
               class="block-form-item"
               label="单晶异常"
+              :rules="[
+                {
+                  required: recordItem._requiredErrors,
+                  message: '单晶异常不能为空',
+                  trigger: 'change',
+                },
+              ]"
+              prop="_errors"
             >
               <el-select
                 v-model="recordItem._errors"

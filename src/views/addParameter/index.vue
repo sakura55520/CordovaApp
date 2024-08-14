@@ -511,8 +511,8 @@ export default {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
       let { originLength, planLength } = this.formData;
-      if (originLength - planLength > 5) {
-        this.$message.warning("检测实测长度与计划长度的差值不能超过5mm");
+      if (Math.abs(originLength - planLength) > 10) {
+        this.$message.warning("检测实测长度与计划长度的差值不能超过10mm");
         return;
       }
       await this.$confirm("确认提交当前操作数据?", "提示", {
