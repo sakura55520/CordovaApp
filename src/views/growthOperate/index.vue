@@ -657,6 +657,8 @@ export default {
         let valid = await ref.valid();
         if (!valid) return false;
       }
+      let fileValid = await this.$refs.TabFile.valid();
+      if (!fileValid) return false;
       return true;
     },
     checkNotFilled(stepName) {

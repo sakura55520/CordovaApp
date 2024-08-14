@@ -9,31 +9,42 @@
   >
     <el-card>
       <div class="headLine">
-        <div class="headLine-title">留档文档记录</div>
+        <div class="headLine-title required">留档文档记录</div>
       </div>
       <div class="growth-section">
-        <PhotoNew
-          v-model="detailForm._files"
-          :componentDisabled="false"
-          :name="'CHECK_DEVICE'"
-          @input="handleFileChange"
-        />
+        <el-form-item
+          :rules="[
+            {
+              required: true,
+              message: '留档文档记录不能为空',
+              trigger: 'change',
+            },
+          ]"
+          prop="_files"
+        >
+          <PhotoNew
+            v-model="detailForm._files"
+            :componentDisabled="false"
+            :name="'CHECK_DEVICE'"
+            @input="handleFileChange"
+          />
+        </el-form-item>
       </div>
     </el-card>
   </el-form>
 </template>
 
 <script>
-import PhotoNew from '@/views/components/photoNew'
+import PhotoNew from "@/views/components/photoNew";
 
 export default {
-  name: 'TabFile',
+  name: "TabFile",
   props: {
     stepData: {
       type: Array | null,
       default() {
-        return []
-      }
+        return [];
+      },
     },
   },
   components: {
@@ -42,32 +53,48 @@ export default {
   data() {
     return {
       detailForm: {
-        _files: []
+        _files: [],
       },
-    }
+    };
   },
   created() {
     this.init();
   },
   methods: {
     init() {
-      this.detailForm._files = this.stepData[0].files.map(fileItem => ({
+      this.detailForm._files = this.stepData[0].files.map((fileItem) => ({
         ...fileItem,
         big_url: fileItem.fileUrl,
         thumb_url: fileItem.fileUrl,
-      }))
+      }));
     },
     handleFileChange() {
-      const files = (this.detailForm._files || []).map(({ big_url, thumb_url, ...item }) => ({
-        ...item,
-        fileUrl: big_url
-      }))
-      this.$set(this.stepData[0], 'files', files)
-    }
-  }
-}
+      const files = (this.detailForm._files || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.$set(this.stepData[0], "files", files);
+    },
+    async valid() {
+      let allValid = true;
+      try {
+        await this.$refs.detailForm.validate();
+      } catch (err) {
+        this.$message.warning("留档文档未填写完整");
+        allValid = false;
+      }
+      return allValid;
+    },
+  },
+};
 </script>
 
 <style scoped>
-
+.required::before {
+  content: "*";
+  color: red;
+  margin-right: 5px;
+}
 </style>
