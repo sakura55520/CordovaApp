@@ -95,56 +95,57 @@
             >
               <el-table-column
                 label="样片编号"
-                width="180"
+                width="170"
                 align="center"
                 prop="sampleNumber"
                 fixed="left"
+                show-overflow-tooltip
               >
               </el-table-column>
               <el-table-column
                 label="样片标识"
-                width="90"
+                width="85"
                 align="center"
                 prop="sampleIdentification"
                 fixed="left"
               />
               <el-table-column
                 label="样片位置"
-                width="90"
+                width="85"
                 align="center"
                 prop="samplePosition"
                 fixed="left"
               />
               <el-table-column
                 label="样片类型"
-                width="90"
+                width="85"
                 align="center"
                 prop="type"
               />
               <el-table-column
                 label="产品类型"
-                width="90"
+                width="85"
                 align="center"
                 prop="productCategory"
               >
               </el-table-column>
               <el-table-column
                 label="晶向"
-                width="60"
+                width="55"
                 align="center"
                 prop="orientation"
               >
               </el-table-column>
               <el-table-column
                 label="尺寸"
-                width="60"
+                width="55"
                 align="center"
                 prop="size"
               >
               </el-table-column>
               <el-table-column
                 label="结晶比重"
-                width="160"
+                width="110"
                 align="center"
                 prop="crystalDensity"
                 ><template slot="header">
@@ -178,11 +179,12 @@
               </el-table-column>
               <el-table-column
                 label="RES"
-                width="110"
+                width="60"
                 align="center"
                 prop="res"
+                show-overflow-tooltip
               />
-              <el-table-column label="RES_C" min-width="120" align="center">
+              <el-table-column label="RES_C" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-2-' + scope.$index"
@@ -199,7 +201,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_E" min-width="120" align="center">
+              <el-table-column label="RES_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-3-' + scope.$index"
@@ -208,7 +210,7 @@
                     @input="calcRrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="1/2RES" min-width="120" align="center">
+              <el-table-column label="1/2RES" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-4-' + scope.$index"
@@ -219,15 +221,17 @@
               ></el-table-column>
               <el-table-column
                 label="目标偏差"
-                min-width="120"
+                min-width="90"
                 align="center"
                 prop="targetDeviation"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="RRG"
-                min-width="120"
+                min-width="60"
                 align="center"
                 prop="rrg"
+                show-overflow-tooltip
               >
                 <template slot-scope="scope">
                   <div v-if="scope.row.rrg">{{ scope.row.rrg }}%</div>
@@ -235,9 +239,10 @@
               </el-table-column>
               <el-table-column
                 label="1/2 RRG"
-                min-width="120"
+                min-width="90"
                 align="center"
                 prop="halfRrg"
+                show-overflow-tooltip
               >
                 <template slot-scope="scope">
                   <div v-if="scope.row.halfRrg">{{ scope.row.halfRrg }}%</div>
@@ -245,11 +250,12 @@
               </el-table-column>
               <el-table-column
                 label="头尾电阻比"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="headTailResistivityRatio"
+                show-overflow-tooltip
               />
-              <el-table-column label="OI_C" min-width="120" align="center">
+              <el-table-column label="OI_C" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-5-' + scope.$index"
@@ -258,7 +264,7 @@
                     @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="OI_E" min-width="120" align="center">
+              <el-table-column label="OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-6-' + scope.$index"
@@ -267,7 +273,7 @@
                     @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="CS" min-width="120" align="center">
+              <el-table-column label="CS" min-width="80" align="center">
                 <template slot-scope="scope">
                   <div :class="getInternalControlColor('cs', scope.row.cs)">
                     <el-input
@@ -279,15 +285,16 @@
               ></el-table-column>
               <el-table-column
                 label="ORG"
-                min-width="120"
+                min-width="80"
                 align="center"
                 prop="org"
+                show-overflow-tooltip
               >
                 <template slot-scope="scope">
                   <div v-if="scope.row.org">{{ scope.row.org }}%</div>
                 </template>
               </el-table-column>
-              <el-table-column label="少子寿命" min-width="120" align="center">
+              <el-table-column label="少子寿命" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-8-' + scope.$index"
@@ -306,7 +313,7 @@
                     ></el-option>
                   </el-select> </template
               ></el-table-column>
-              <el-table-column label="OSF密度" min-width="140" align="center">
+              <el-table-column label="OSF密度" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.osf" placeholder="">
                     <el-option
@@ -317,7 +324,7 @@
                     ></el-option>
                   </el-select> </template
               ></el-table-column>
-              <el-table-column label="基磷" min-width="120" align="center">
+              <el-table-column label="基磷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-9-' + scope.$index"
@@ -328,7 +335,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基硼" min-width="120" align="center">
+              <el-table-column label="基硼" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-10-' + scope.$index"
@@ -337,7 +344,7 @@
                     @change="(val) => handleToFixed(val, scope.$index, 'boron')"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基砷" min-width="120" align="center">
+              <el-table-column label="基砷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-11-' + scope.$index"
@@ -348,7 +355,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基锑" min-width="120" align="center">
+              <el-table-column label="基锑" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-12-' + scope.$index"
@@ -359,7 +366,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="检测人员" min-width="150" align="center">
+              <el-table-column label="检测人员" min-width="120" align="center">
                 <template slot-scope="scope">
                   <SelectUserinfo
                     v-model="scope.row.inspector"
@@ -397,13 +404,14 @@
             >
               <el-table-column
                 label="返切类型"
-                min-width="150"
+                min-width="85"
                 align="center"
                 prop="type"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="返切标识"
-                min-width="100"
+                min-width="85"
                 align="center"
                 prop="sampleIdentification"
               />
@@ -415,7 +423,7 @@
               />
               <el-table-column
                 label="返切位置"
-                min-width="120"
+                min-width="85"
                 align="center"
                 prop="samplePosition"
               />
@@ -433,26 +441,28 @@
               />
               <el-table-column
                 label="是否返切再利用"
-                min-width="150"
+                min-width="140"
                 align="center"
                 prop="recycle"
                 :formatter="formRecycle"
               />
               <el-table-column
                 label="返切条码"
-                min-width="240"
+                min-width="230"
                 align="center"
                 prop="backCutNumber"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="样片编码"
-                min-width="200"
+                min-width="180"
                 align="center"
                 prop="sampleNumber"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="状态"
-                min-width="100"
+                min-width="60"
                 align="center"
                 prop="status"
               >
@@ -462,17 +472,17 @@
               </el-table-column>
               <el-table-column
                 label="创建人"
-                min-width="100"
+                min-width="70"
                 align="center"
                 prop="userCreate"
               />
               <el-table-column
                 label="创建时间"
-                min-width="300"
+                min-width="160"
                 align="center"
                 prop="gmtCreate"
               />
-              <el-table-column label="操作" align="center" min-width="250">
+              <el-table-column label="操作" align="center" min-width="150">
                 <template slot-scope="scope">
                   <el-button
                     type="text"
@@ -1255,5 +1265,19 @@ export default {
 }
 .table {
   margin-top: 50px;
+}
+
+.el-table {
+  /deep/ .el-table__cell {
+    padding: 0px;
+  }
+
+  /deep/ .el-input-group__append {
+    padding: 0 5px;
+  }
+
+  /deep/ .el-input__inner {
+    padding: 0px 3px;
+  }
 }
 </style>

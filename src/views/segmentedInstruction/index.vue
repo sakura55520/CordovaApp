@@ -40,50 +40,53 @@
                   align="center"
                   prop="sampleNumber"
                   fixed="left"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="样片标识"
-                  width="90"
+                  width="85"
                   align="center"
                   prop="sampleIdentification"
                   fixed="left"
                 />
                 <el-table-column
                   label="样片位置"
-                  width="90"
+                  width="85"
                   align="center"
                   prop="samplePosition"
                   fixed="left"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="样片类型"
-                  width="90"
+                  width="85"
                   align="center"
                   prop="type"
                 />
                 <el-table-column
                   label="产品类型"
-                  width="90"
+                  width="85"
                   align="center"
                   prop="productCategory"
                 />
                 <el-table-column
                   label="晶向"
-                  width="70"
+                  width="60"
                   align="center"
                   prop="orientation"
                 />
                 <el-table-column
                   label="尺寸"
-                  width="70"
+                  width="60"
                   align="center"
                   prop="size"
                 />
                 <el-table-column
                   label="结晶比重"
-                  width="110"
+                  width="90"
                   align="center"
                   prop="crystalDensity"
+                  show-overflow-tooltip
                 >
                   <template slot-scope="scope">
                     <div v-if="scope.row.crystalDensity">
@@ -93,39 +96,45 @@
                 </el-table-column>
                 <el-table-column
                   label="RES"
-                  min-width="80"
+                  min-width="60"
                   align="center"
                   prop="res"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="RES_C"
                   min-width="80"
                   align="center"
                   prop="resC"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="RES_E"
                   min-width="80"
                   align="center"
                   prop="resE"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="1/2RES"
-                  min-width="100"
+                  min-width="80"
                   align="center"
                   prop="halfRes"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="目标偏差"
-                  min-width="100"
+                  min-width="90"
                   align="center"
                   prop="targetDeviation"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="RRG"
-                  min-width="80"
+                  min-width="60"
                   align="center"
                   prop="rrg"
+                  show-overflow-tooltip
                 >
                   <template slot-scope="scope">
                     <div v-if="scope.row.rrg">{{ scope.row.rrg }}%</div>
@@ -133,9 +142,10 @@
                 </el-table-column>
                 <el-table-column
                   label="1/2 RRG"
-                  min-width="100"
+                  min-width="90"
                   align="center"
                   prop="halfRrg"
+                  show-overflow-tooltip
                 >
                   <template slot-scope="scope">
                     <div v-if="scope.row.halfRrg">{{ scope.row.halfRrg }}%</div>
@@ -146,30 +156,35 @@
                   min-width="100"
                   align="center"
                   prop="headTailResistivityRatio"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="OI_C"
-                  min-width="80"
+                  min-width="60"
                   align="center"
                   prop="oiC"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="OI_E"
-                  min-width="80"
+                  min-width="60"
                   align="center"
                   prop="oiE"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="CS"
-                  min-width="80"
+                  min-width="60"
                   align="center"
                   prop="cs"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="ORG"
-                  min-width="80"
+                  min-width="60"
                   align="center"
                   prop="org"
+                  show-overflow-tooltip
                 >
                   <template slot-scope="scope">
                     <div v-if="scope.row.org">{{ scope.row.org }}%</div>
@@ -177,57 +192,66 @@
                 </el-table-column>
                 <el-table-column
                   label="少子寿命"
-                  min-width="100"
+                  min-width="90"
                   align="center"
                   prop="minorityCarrierLifetime"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="常规缺陷"
-                  min-width="120"
+                  min-width="100"
                   align="center"
                   prop="flaw"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="OSF密度"
-                  min-width="120"
+                  min-width="90"
                   align="center"
                   prop="osf"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="基磷"
                   min-width="70"
                   align="center"
                   prop="phosphorus"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="基硼"
                   min-width="70"
                   align="center"
                   prop="boron"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="基砷"
                   min-width="70"
                   align="center"
                   prop="arsenic"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="基锑"
                   min-width="70"
                   align="center"
                   prop="antimony"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="检测人员"
-                  min-width="120"
+                  min-width="90"
                   align="center"
                   prop="inspector"
+                  show-overflow-tooltip
                 />
                 <el-table-column
                   label="检测日期"
-                  min-width="200"
+                  min-width="150"
                   align="center"
                   prop="checkDate"
+                  show-overflow-tooltip
                 />
               </el-table>
             </div>
@@ -256,6 +280,7 @@
                 label="晶锭编号/回收料编号"
                 min-width="220"
                 align="center"
+                show-overflow-tooltip
               >
                 <template slot="header">
                   <el-button
@@ -277,26 +302,30 @@
                         >获取晶锭/回收料编号</el-button
                       >
                     </div>
-                    <el-button
+                    <div
                       class="segment-add-btn"
                       v-if="scope.$index !== 0"
-                      type="primary"
-                      icon="el-icon-plus"
-                      circle
-                      size="small"
                       @click="addSegmentedInfoByIndex(scope.$index)"
-                    ></el-button>
+                    >
+                      +
+                    </div>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column
                 label="类型"
-                min-width="80"
+                min-width="65"
                 align="center"
                 prop="type"
                 :formatter="formatSegmentType"
+                show-overflow-tooltip
               />
-              <el-table-column label="下发工单" min-width="160" align="center">
+              <el-table-column
+                label="下发工单"
+                min-width="120"
+                align="center"
+                show-overflow-tooltip
+              >
                 <template slot-scope="scope">
                   <el-input
                     v-if="scope.row.type !== 2"
@@ -307,7 +336,12 @@
                   />
                 </template>
               </el-table-column>
-              <el-table-column label="流程编号" min-width="160" align="center">
+              <el-table-column
+                label="流程编号"
+                min-width="120"
+                align="center"
+                show-overflow-tooltip
+              >
                 <template slot-scope="scope">
                   <el-select
                     v-if="scope.row.type !== 2"
@@ -331,9 +365,10 @@
               </el-table-column>
               <el-table-column
                 label="尺寸"
-                min-width="80"
+                min-width="60"
                 align="center"
                 prop="diameter"
+                show-overflow-tooltip
               >
                 <template slot-scope="scope">
                   {{ scope.row.diameter }}寸
@@ -341,7 +376,7 @@
               </el-table-column>
               <el-table-column
                 label="直径"
-                min-width="160"
+                min-width="100"
                 align="center"
                 prop="diametermm"
               >
@@ -357,7 +392,7 @@
               </el-table-column>
               <el-table-column
                 label="晶锭段位"
-                min-width="100"
+                min-width="90"
                 align="center"
                 prop="segmentNum"
               >
@@ -367,7 +402,7 @@
                   </div>
                 </template>
               </el-table-column>
-              <el-table-column label="头部位置" min-width="120" align="center">
+              <el-table-column label="头部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :disabled="scope.row.type === 2"
@@ -377,7 +412,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="尾部位置" min-width="120" align="center">
+              <el-table-column label="尾部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :disabled="scope.row.type === 2"
@@ -392,12 +427,14 @@
                 min-width="100"
                 align="center"
                 prop="length"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="计划重量"
                 min-width="100"
                 align="center"
                 prop="planWeight"
+                show-overflow-tooltip
               />
               <!-- <el-table-column
                 label="晶段类型"
@@ -411,7 +448,7 @@
               </el-table-column> -->
               <el-table-column
                 label="计算位置"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="calculatedPosition"
               >
@@ -426,7 +463,7 @@
               </el-table-column>
               <el-table-column
                 label="计算电阻率"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="calculatedResistivity"
               >
@@ -441,7 +478,7 @@
               </el-table-column>
               <el-table-column
                 label="头部电阻率"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="headResistance"
               >
@@ -455,7 +492,7 @@
               </el-table-column>
               <el-table-column
                 label="尾部电阻率"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="tailResistance"
               >
@@ -486,7 +523,7 @@
               ></el-table-column> -->
               <el-table-column
                 label="79oi头"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="head79oi"
               >
@@ -524,7 +561,7 @@
               </el-table-column>
               <el-table-column
                 label="79oi尾"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="tail79oi"
               >
@@ -562,9 +599,10 @@
               </el-table-column>
               <el-table-column
                 label="83oi头"
-                min-width="100"
+                min-width="90"
                 align="center"
                 prop="head83oi"
+                show-overflow-tooltip
               >
                 <template slot-scope="scope">
                   <div>
@@ -574,9 +612,10 @@
               </el-table-column>
               <el-table-column
                 label="83oi尾"
-                min-width="100"
+                min-width="90"
                 align="center"
                 prop="tail83oi"
+                show-overflow-tooltip
               >
                 <template slot-scope="scope">
                   <div>
@@ -586,7 +625,7 @@
               </el-table-column>
               <el-table-column
                 label="头碳含量"
-                min-width="120"
+                min-width="90"
                 align="center"
                 prop="headCarbonRate"
               >
@@ -599,7 +638,7 @@
               </el-table-column>
               <el-table-column
                 label="尾碳含量"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="tailCarbonRate"
               >
@@ -635,7 +674,7 @@
               </el-table-column>
               <el-table-column
                 label="RRV头"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="headRrv"
               >
@@ -648,7 +687,7 @@
               </el-table-column>
               <el-table-column
                 label="RRV尾"
-                min-width="120"
+                min-width="100"
                 align="center"
                 prop="tailRrv"
               >
@@ -661,7 +700,7 @@
               </el-table-column>
               <el-table-column
                 label="说明"
-                min-width="250"
+                min-width="180"
                 align="center"
                 prop="remarks"
               >
@@ -673,7 +712,7 @@
                   ></el-input>
                 </template>
               </el-table-column>
-              <el-table-column label="合格状态" min-width="120" align="center">
+              <el-table-column label="合格状态" min-width="100" align="center">
                 <template slot="header">
                   <div class="form-table-header">合格状态</div>
                 </template>
@@ -710,19 +749,21 @@
               </el-table-column>
               <el-table-column
                 label="合格长度"
-                min-width="100"
+                min-width="90"
                 align="center"
                 prop="qualifiedLength"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="合格重量"
-                min-width="100"
+                min-width="90"
                 align="center"
                 prop="qualifiedWeight"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="不合格原因"
-                min-width="150"
+                min-width="120"
                 align="center"
                 prop="reason"
               >
@@ -743,7 +784,7 @@
               </el-table-column>
               <el-table-column
                 label="入库原因"
-                min-width="150"
+                min-width="120"
                 align="center"
                 prop="reasonIn"
               >
@@ -2163,9 +2204,15 @@ export default {
       align-items: center;
       justify-content: center;
       .segment-add-btn {
+        border-radius: 10px;
+        width: 20px;
+        height: 20px;
+        background: rgb(41, 152, 255);
+        color: white;
         position: absolute;
         z-index: 999;
-        top: -32px;
+        top: -16px;
+        cursor: pointer;
       }
       .el-button {
         font-size: 12px;
@@ -2252,6 +2299,20 @@ export default {
   /deep/ .el-form-item .el-form-item__content .el-form-item__error {
     top: 25%;
     left: 20px;
+  }
+}
+
+.el-table {
+  /deep/ .el-table__cell {
+    padding: 0px;
+  }
+
+  /deep/ .el-input-group__append {
+    padding: 0 5px;
+  }
+
+  /deep/ .el-input__inner {
+    padding: 0px 3px;
   }
 }
 </style>
