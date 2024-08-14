@@ -30,39 +30,43 @@
           :rules="formRules"
           :disabled="$route.query.view"
         >
-          <div class="form">
+          <div class="form" style="margin-top: 0px">
             <div class="form-title">单晶信息</div>
-            <el-form-item label="进站数量" prop="pullQty" class="item">
-              <div class="input">
-                <el-input class="value" v-model="formData.pullQty" disabled>
-                  <template slot="append">kg</template>
+            <div class="row">
+              <el-form-item label="进站数量" prop="pullQty" class="item">
+                <div class="input">
+                  <el-input class="value" v-model="formData.pullQty" disabled>
+                    <template slot="append">kg</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item label="接收长度" prop="lengthQty" class="item">
+                <el-input v-model="formData.lengthQty" disabled>
+                  <template slot="append">mm</template>
                 </el-input>
-              </div>
-            </el-form-item>
-            <el-form-item label="接收长度" prop="lengthQty" class="item">
-              <el-input v-model="formData.lengthQty" disabled>
-                <template slot="append">mm</template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="型号" prop="model" class="item">
-              <el-input v-model="formData.model" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="尺寸" prop="size" class="item">
-              <el-input v-model="formData.size" disabled></el-input>
-            </el-form-item>
-            <el-form-item label="晶向" prop="orientation" class="item">
-              <el-input v-model="formData.orientation" disabled></el-input>
-            </el-form-item>
-            <el-form-item
-              label="目标电阻率"
-              prop="targetResistivity"
-              class="item"
-            >
-              <el-input
-                v-model="formData.targetResistivity"
-                disabled
-              ></el-input>
-            </el-form-item>
+              </el-form-item>
+              <el-form-item label="型号" prop="model" class="item">
+                <el-input v-model="formData.model" disabled></el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item label="尺寸" prop="size" class="item">
+                <el-input v-model="formData.size" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="晶向" prop="test" class="item">
+                <el-input v-model="formData.test" disabled></el-input>
+              </el-form-item>
+              <el-form-item
+                label="目标电阻率"
+                prop="targetResistivity"
+                class="item"
+              >
+                <el-input
+                  v-model="formData.targetResistivity"
+                  disabled
+                ></el-input>
+              </el-form-item>
+            </div>
 
             <el-form-item label="生产备注" class="form-item-cover">
               <el-input
@@ -179,38 +183,73 @@
               </el-table-column>
               <el-table-column
                 label="RES"
-                width="60"
+                width="90"
                 align="center"
                 prop="res"
                 show-overflow-tooltip
               />
-              <el-table-column label="RES_C" min-width="80" align="center">
+              <el-table-column label="RES_C" min-width="100" align="center">
+                <template slot="header">
+                  <div class="form-table-header">RES_C</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    :id="'input-2-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 2, scope.$index)"
-                    v-model="scope.row.resC"
-                    @input="
-                      () => {
-                        calcHalfRrg(scope.$index);
-                        calcRrg(scope.$index);
-                        calcTargetDeviation(scope.$index);
-                        calcHeadTailResistivityRatio(scope.row, scope.$index);
-                      }
-                    "
-                  ></el-input>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="'details.' + scope.$index + '.resC'"
+                    :rules="[
+                      {
+                        required: scope.row.valid,
+                        message: '请输入',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      :id="'input-2-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 2, scope.$index)"
+                      v-model="scope.row.resC"
+                      @input="
+                        () => {
+                          calcHalfRrg(scope.$index);
+                          calcRrg(scope.$index);
+                          calcTargetDeviation(scope.$index);
+                          calcHeadTailResistivityRatio(scope.row, scope.$index);
+                        }
+                      "
+                    ></el-input>
+                  </el-form-item>
                 </template>
               </el-table-column>
-              <el-table-column label="RES_E" min-width="80" align="center">
+              <el-table-column label="RES_E" min-width="100" align="center">
+                <template slot="header">
+                  <div class="form-table-header">RES_E</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    :id="'input-3-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 3, scope.$index)"
-                    v-model="scope.row.resE"
-                    @input="calcRrg(scope.$index)"
-                  ></el-input> </template
-              ></el-table-column>
-              <el-table-column label="1/2RES" min-width="80" align="center">
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="'details.' + scope.$index + '.resE'"
+                    :rules="[
+                      {
+                        required: scope.row.valid,
+                        message: '请输入',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      :id="'input-3-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 3, scope.$index)"
+                      v-model="scope.row.resE"
+                      @input="calcRrg(scope.$index)"
+                    ></el-input>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="1/2RES" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-4-' + scope.$index"
@@ -472,9 +511,10 @@
               </el-table-column>
               <el-table-column
                 label="创建人"
-                min-width="70"
+                min-width="100"
                 align="center"
                 prop="userCreate"
+                show-overflow-tooltip
               />
               <el-table-column
                 label="创建时间"
@@ -485,12 +525,14 @@
               <el-table-column label="操作" align="center" min-width="150">
                 <template slot-scope="scope">
                   <el-button
+                    class="table-btn"
                     type="text"
                     @click="handleUpdateBackCuttings(scope.row, scope.$index)"
                   >
                     编辑
                   </el-button>
                   <el-button
+                    class="table-btn"
                     type="text"
                     style="color: red"
                     @click="handleDeleteBackCuttings(scope.row)"
@@ -691,6 +733,7 @@ export default {
         crystalDensity: [
           { required: true, message: "结晶比重不能为空", trigger: "change" },
         ],
+        test: [{ required: true, message: "晶向不能为空", trigger: "change" }],
       },
       sampleTypeList: [],
       backCutTypeList: [],
@@ -1218,7 +1261,7 @@ export default {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   min-height: 100px;
-  padding: 20px 12px 12px;
+  padding: 10px 5px 0px;
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -1245,19 +1288,18 @@ export default {
   .add-btn {
     position: absolute;
     left: 12px;
+    font-size: 14px;
   }
 }
 .unit {
   width: 60px;
 }
-.form-custom-verify {
-  .form-input {
-    margin-bottom: 0px;
-  }
-  /deep/ .el-form-item .el-form-item__content .el-form-item__error {
-    top: 25%;
-    left: 20px;
-  }
+/deep/ .el-form-item .el-form-item__content .el-form-item__error {
+  top: 25%;
+  left: 20px;
+}
+.form-input {
+  margin-bottom: 0px;
 }
 .form-table-header:before {
   content: "* ";
@@ -1279,5 +1321,35 @@ export default {
   /deep/ .el-input__inner {
     padding: 0px 3px;
   }
+}
+
+/deep/ .el-input__inner {
+  height: 25px;
+}
+
+/deep/ .el-form-item__content {
+  line-height: 25px;
+}
+
+/deep/ .el-form-item__label {
+  line-height: 25px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  .item /deep/ {
+    flex: 1;
+    margin-bottom: 3px;
+    .el-input-group__append {
+      padding: 0 10px;
+    }
+  }
+}
+
+.table-btn {
+  font-size: 12px;
+  padding: 0px;
 }
 </style>

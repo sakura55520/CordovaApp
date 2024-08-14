@@ -96,7 +96,7 @@
                 </el-table-column>
                 <el-table-column
                   label="RES"
-                  min-width="60"
+                  min-width="80"
                   align="center"
                   prop="res"
                   show-overflow-tooltip
@@ -298,9 +298,9 @@
                       {{ scope.row.segmentNo }}
                     </div>
                     <div v-else>
-                      <el-button type="text" @click="handleCodeClick"
-                        >获取晶锭/回收料编号</el-button
-                      >
+                      <div class="get-btn" @click="handleCodeClick">
+                        获取晶锭/回收料编号
+                      </div>
                     </div>
                     <div
                       class="segment-add-btn"
@@ -808,7 +808,7 @@
                   <el-button
                     type="text"
                     style="color: red"
-                    class="el-icon-delete"
+                    class="el-icon-delete table-btn"
                     @click="deleteSegmentedInfo(scope.$index)"
                   />
                 </template>
@@ -1122,6 +1122,7 @@
           prop="userCreate"
           label="创建人"
           width="140"
+          show-overflow-tooltip
         />
         <el-table-column
           key="gmtUpdate"
@@ -2045,11 +2046,11 @@ export default {
   }
 }
 .form {
-  margin-top: 20px;
+  margin-top: 10px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   min-height: 100px;
-  padding: 20px 20px 20px;
+  padding: 10px 15px 10px;
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -2199,19 +2200,18 @@ export default {
     .segment-table {
       position: relative;
       overflow: visible;
-      height: 38px;
       display: flex;
       align-items: center;
       justify-content: center;
       .segment-add-btn {
-        border-radius: 10px;
-        width: 20px;
-        height: 20px;
+        border-radius: 9px;
+        width: 18px;
+        height: 18px;
         background: rgb(41, 152, 255);
         color: white;
         position: absolute;
         z-index: 999;
-        top: -16px;
+        top: -15px;
         cursor: pointer;
       }
       .el-button {
@@ -2302,17 +2302,37 @@ export default {
   }
 }
 
-.el-table {
-  /deep/ .el-table__cell {
-    padding: 0px;
-  }
+/deep/ .el-table__cell {
+  padding: 0px;
+}
 
-  /deep/ .el-input-group__append {
-    padding: 0 5px;
-  }
+/deep/ .el-input-group__append {
+  padding: 0 5px;
+}
 
-  /deep/ .el-input__inner {
-    padding: 0px 3px;
-  }
+/deep/ .el-input__inner {
+  padding: 0px 3px;
+}
+
+/deep/ .el-input__inner {
+  height: 25px;
+}
+
+/deep/ .el-form-item__content {
+  line-height: 25px;
+}
+
+/deep/ .el-form-item__label {
+  line-height: 25px;
+}
+
+.table-btn {
+  font-size: 14px;
+  padding: 8px;
+}
+
+.get-btn {
+  cursor: pointer;
+  color: rgb(41, 152, 255);
 }
 </style>
