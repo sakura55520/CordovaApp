@@ -285,6 +285,187 @@
                 </el-input>
               </el-form-item>
             </div>
+            <div class="row">
+              <el-form-item
+                label="工单编号"
+                prop="workOrderNo"
+                label-width="90px"
+              >
+                <el-input v-model="formData.workOrderNo" disabled> </el-input>
+              </el-form-item>
+              <el-form-item
+                label="产品类别"
+                prop="productCategory"
+                label-width="90px"
+              >
+                <el-input v-model="formData.productCategory" disabled>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="mm直径" prop="diametermm" label-width="90px">
+                <el-input v-model="formData.diametermm" disabled>
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="主参"
+                prop="mainReferenceSurfaceLength"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="formData.mainReferenceSurfaceLength"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="主参考面偏差"
+                prop="mainReferenceSurfaceOffset"
+                label-width="120px"
+              >
+                <el-input
+                  v-model="formData.mainReferenceSurfaceOffset"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="主参考面位置"
+                prop="mainReferenceSurfaceSite"
+                label-width="120px"
+              >
+                <el-input v-model="formData.mainReferenceSurfaceSite" disabled>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="副参"
+                prop="secondReferenceSurfaceLength"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="formData.secondReferenceSurfaceLength"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="副参考面偏差"
+                prop="secondReferenceSurfaceOffset"
+                label-width="120px"
+              >
+                <el-input
+                  v-model="formData.secondReferenceSurfaceOffset"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="副参考面位置"
+                prop="secondReferenceSurfaceSite"
+                label-width="120px"
+              >
+                <el-input
+                  v-model="formData.secondReferenceSurfaceSite"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="三参"
+                prop="thirdReferenceSurfaceLength"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="formData.thirdReferenceSurfaceLength"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="三参考面偏差"
+                prop="thirdReferenceSurfaceOffset"
+                label-width="120px"
+              >
+                <el-input
+                  v-model="formData.thirdReferenceSurfaceOffset"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="三参考面位置"
+                prop="thirdReferenceSurfaceSite"
+                label-width="120px"
+              >
+                <el-input v-model="formData.thirdReferenceSurfaceSite" disabled>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="四参"
+                prop="fourthReferenceSurfaceLength"
+                label-width="90px"
+              >
+                <el-input
+                  v-model="formData.fourthReferenceSurfaceLength"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="四参考面偏差"
+                prop="fourthReferenceSurfaceOffset"
+                label-width="120px"
+              >
+                <el-input
+                  v-model="formData.fourthReferenceSurfaceOffset"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="四参考面位置"
+                prop="fourthReferenceSurfaceSite"
+                label-width="120px"
+              >
+                <el-input
+                  v-model="formData.fourthReferenceSurfaceSite"
+                  disabled
+                >
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="籽晶类型"
+                prop="seedCrystal"
+                label-width="90px"
+              >
+                <el-input v-model="formData.seedCrystal" disabled> </el-input>
+              </el-form-item>
+              <el-form-item
+                label="晶向偏离"
+                prop="crystalOrientationOffset"
+                label-width="90px"
+              >
+                <el-input v-model="formData.crystalOrientationOffset" disabled>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="参考面类型"
+                prop="referenceSurfaceType"
+                label-width="120px"
+              >
+                <el-input v-model="formData.referenceSurfaceType" disabled>
+                </el-input>
+              </el-form-item>
+            </div>
             <div class="form">
               <div class="form-title">参数说明</div>
               <div class="row">合格长度计算公式：<br /></div>
