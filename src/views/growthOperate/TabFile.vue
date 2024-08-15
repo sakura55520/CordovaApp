@@ -22,7 +22,7 @@
           ]"
           prop="_files"
         >
-          <PhotoNew
+          <PhotoRemarkNew
             v-model="detailForm._files"
             :componentDisabled="false"
             :name="'CHECK_DEVICE'"
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import PhotoNew from "@/views/components/photoNew";
+import PhotoRemarkNew from "@/views/components/photoRemarkNew";
 
 export default {
   name: "TabFile",
@@ -48,7 +48,7 @@ export default {
     },
   },
   components: {
-    PhotoNew,
+    PhotoRemarkNew,
   },
   data() {
     return {
