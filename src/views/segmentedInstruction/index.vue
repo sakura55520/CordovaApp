@@ -131,7 +131,7 @@
                 />
                 <el-table-column
                   label="RRG"
-                  min-width="60"
+                  min-width="90"
                   align="center"
                   prop="rrg"
                   show-overflow-tooltip
@@ -2323,6 +2323,10 @@ export default {
 }
 
 /deep/ .el-form-item__label {
+  line-height: 25px;
+}
+
+/deep/ .el-input__icon {
   line-height: 25px;
 }
 

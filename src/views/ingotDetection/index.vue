@@ -267,7 +267,7 @@
               />
               <el-table-column
                 label="RRG"
-                min-width="60"
+                min-width="90"
                 align="center"
                 prop="rrg"
                 show-overflow-tooltip
@@ -417,6 +417,7 @@
               <el-table-column label="检测日期" min-width="250" align="center">
                 <template slot-scope="scope">
                   <el-date-picker
+                    class="time"
                     v-model="scope.row.checkDate"
                     type="datetime"
                     value-format="yyyy-MM-dd HH:mm:ss"
@@ -1320,6 +1321,16 @@ export default {
 
   /deep/ .el-input__inner {
     padding: 0px 3px;
+  }
+
+  /deep/ .el-input__icon {
+    line-height: 25px;
+  }
+
+  .time {
+    /deep/ .el-input__inner {
+      padding: 0px 30px;
+    }
   }
 }
 
