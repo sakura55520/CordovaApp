@@ -17,7 +17,7 @@ export const constantRouterMap = [
     name: 'root',
     redirect: '/dashboard',
     hidden: true,
-    meta: {text: '工作中心'}
+    meta: { text: '工作中心' }
   },
 
   {
@@ -25,7 +25,7 @@ export const constantRouterMap = [
     path: '/dashboard',
     component: () => import('@/views/dashboard/index'),
     hidden: true,
-    meta: {text: '工作中心', btnReturnHide: true}
+    meta: { text: '工作中心', btnReturnHide: true }
   },
   {
     path: '/login',
@@ -33,7 +33,7 @@ export const constantRouterMap = [
     text: 'login',
     component: () => import('@/views/login/index'),
     hidden: true,
-    meta: {text: '登录', HeadsHide: true, btnReturnHide: true, UserHide: true}
+    meta: { text: '登录', HeadsHide: true, btnReturnHide: true, UserHide: true }
   },
   // ------菜单栏------
   {
@@ -51,14 +51,14 @@ export const constantRouterMap = [
     path: '/shiftChange',
     component: () => import('@/views/shiftChange/index'),
     hidden: true,
-    meta: {text: '交接班管理'},
+    meta: { text: '交接班管理' },
   },
   {
     name: 'shiftChangeOperate',
     path: '/shiftChangeOperate',
     component: () => import('@/views/shiftChange/shiftChangeOperate'),
     hidden: true,
-    meta: {text: '交接班'},
+    meta: { text: '交接班' },
   },
 
   {
@@ -77,21 +77,21 @@ export const constantRouterMap = [
     path: '/accessory',
     component: () => import('@/views/accessory/index'),
     hidden: true,
-    meta: {text: '辅材更换'}
+    meta: { text: '辅材更换' }
   },
 
   {
     name: 'chargeOperate',
     path: '/chargeOperate',
     component: () => import('@/views/chargeOperate'),
-    meta: {text: '装料'},
+    meta: { text: '装料' },
   },
 
   {
     name: 'growthOperate',
     path: '/growthOperate',
     component: () => import('@/views/growthOperate'),
-    meta: {text: '长晶'},
+    meta: { text: '长晶' },
   },
 
 
@@ -99,7 +99,7 @@ export const constantRouterMap = [
     name: 'crystalDelivery',
     path: '/crystalDelivery',
     component: () => import('@/views/crystalDelivery'),
-    meta: {text: '单晶送付'},
+    meta: { text: '单晶送付' },
   },
 
   {
@@ -107,7 +107,7 @@ export const constantRouterMap = [
     path: '/headAndTailSampling',
     component: () => import('@/views/headAndTailSampling/index'),
     hidden: true,
-    meta: {text: '切头尾取样'},
+    meta: { text: '切头尾取样' },
     props: true
   },
 
@@ -116,7 +116,7 @@ export const constantRouterMap = [
     path: '/ingotDetection',
     component: () => import('@/views/ingotDetection/index'),
     hidden: true,
-    meta: {text: '晶锭检验'},
+    meta: { text: '晶锭检验' },
     props: true
   },
 
@@ -125,7 +125,7 @@ export const constantRouterMap = [
     path: '/segmentedInstruction',
     component: () => import('@/views/segmentedInstruction/index'),
     hidden: true,
-    meta: {text: '分段指令'},
+    meta: { text: '分段指令' },
     props: true
   },
 
@@ -134,8 +134,15 @@ export const constantRouterMap = [
     path: '/cutting',
     component: () => import('@/views/cutting/index'),
     hidden: true,
-    meta: {text: '割断'},
+    meta: { text: '割断' },
     props: true
+  },
+
+  {
+    name: 'visualInspection',
+    path: '/visualInspection',
+    component: () => import('@/views/visualInspection'),
+    meta: { text: '外观检测' },
   },
 
 
@@ -143,28 +150,28 @@ export const constantRouterMap = [
     name: 'roundTransferOperate',
     path: '/roundTransferOperate',
     component: () => import('@/views/roundTransferOperate'),
-    meta: {text: '滚圆中转'},
+    meta: { text: '滚圆中转' },
   },
 
   {
     name: 'roundOperate',
     path: '/roundOperate',
     component: () => import('@/views/roundOperate'),
-    meta: {text: '滚圆'},
+    meta: { text: '滚圆' },
   },
 
   {
     name: 'addParameter',
     path: '/addParameter',
     component: () => import('@/views/addParameter/index'),
-    meta: {text: '加参'},
+    meta: { text: '加参' },
   },
 
   {
     name: 'warehouseDetection',
     path: '/warehouseDetection',
     component: () => import('@/views/warehouseDetection/index'),
-    meta: {text: '入库检测'},
+    meta: { text: '入库检测' },
   }
 ]
 

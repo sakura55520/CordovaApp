@@ -39,6 +39,7 @@ export default {
         JDJY: "晶锭检验",
         FDZL: "分段指令",
         GD: "割断",
+        WGJC: "外观检测",
         GYZZ: "滚圆中转",
         GY: "滚圆",
         JC: "加参",
@@ -65,9 +66,9 @@ export default {
     },
     back() {
       if (this.$route.meta.returnPath) {
-        this.$router.replace(this.$route.meta.returnPath)
+        this.$router.replace(this.$route.meta.returnPath);
       } else {
-        this.$router.back()
+        this.$router.back();
       }
     },
   },

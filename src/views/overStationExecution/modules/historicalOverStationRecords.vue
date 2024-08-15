@@ -247,6 +247,10 @@ export default {
           path: "/cutting",
           url: "/wipSlicingOut",
         },
+        WGJC: {
+          path: "/visualInspection",
+          url: "/wipVisualInspection",
+        },
         GYZZ: {
           path: "/roundTransferOperate",
           url: "/wipTransferOut",
