@@ -69,7 +69,7 @@
                     v-model="formData.minLength"
                     :disabled="!enableMap.minLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 1, y: 1 }"
+                    v-direction="{ x: 2, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -369,6 +369,7 @@ export default {
         this.formData.chippingLength -
         this.formData.ellipticLength
       ).toFixed(2);
+      this.calcPlanWeight();
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -407,6 +408,14 @@ export default {
         (chippingLength || 0) -
         (ellipticLength || 0)
       ).toFixed(2);
+      this.calcPlanWeight();
+    },
+    calcPlanWeight() {
+      const { qualifiedLength, theoryQtyCoefficient } = this.formData;
+      this.formData.theoryQty = (
+        ((qualifiedLength || 0) * (theoryQtyCoefficient || 0)) /
+        1000
+      ).toFixed(3);
     },
   },
 };
