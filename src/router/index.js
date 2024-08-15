@@ -141,7 +141,7 @@ export const constantRouterMap = [
   {
     name: 'visualInspection',
     path: '/visualInspection',
-    component: () => import('@/views/visualInspection'),
+    component: () => import('@/views/visualInspection/index'),
     meta: { text: '外观检测' },
   },
 
