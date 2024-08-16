@@ -649,9 +649,6 @@
                 align="center"
                 prop="tailCarbonRate"
               >
-                <template slot="header">
-                  <div class="form-table-header">尾碳含量</div>
-                </template>
                 <template slot-scope="scope">
                   <div class="form-custom-verify">
                     <el-form-item
@@ -664,7 +661,10 @@
                       "
                       :rules="[
                         {
-                          required: scope.row.type !== 2,
+                          required:
+                            scope.row.type !== 2 &&
+                            scope.$index ===
+                              formData.segmentedInstructionDetailVos.length - 1,
                           message: '请输入',
                           trigger: 'change',
                         },
