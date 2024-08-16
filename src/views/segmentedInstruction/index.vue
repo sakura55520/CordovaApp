@@ -58,6 +58,13 @@
                   show-overflow-tooltip
                 />
                 <el-table-column
+                  label="样片重量"
+                  width="85"
+                  align="center"
+                  prop="sampleWeight"
+                  show-overflow-tooltip
+                />
+                <el-table-column
                   label="样片类型"
                   width="85"
                   align="center"
@@ -763,15 +770,18 @@
               />
               <el-table-column
                 label="不合格原因"
-                min-width="120"
+                min-width="200"
                 align="center"
-                prop="reason"
+                prop="_reason"
               >
                 <template slot-scope="scope">
                   <el-select
-                    v-model="scope.row.reason"
+                    v-model="scope.row._reason"
                     clearable
                     v-if="scope.row.type !== 2"
+                    multiple
+                    collapse-tags
+                    @change="(val) => handleReasonChange(val, scope.$index)"
                   >
                     <el-option
                       :label="item.label"
@@ -784,7 +794,7 @@
               </el-table-column>
               <el-table-column
                 label="入库原因"
-                min-width="120"
+                min-width="150"
                 align="center"
                 prop="reasonIn"
               >
@@ -1526,6 +1536,7 @@ export default {
             tail83oi,
             headRrv: this.headAndTailRrv.headRrv,
             tailRrv: this.headAndTailRrv.tailRrv,
+            _reason: [],
           };
         });
 
@@ -1537,10 +1548,12 @@ export default {
       } else {
         cloneSegmentedInstructionDetailVos =
           this.formData.segmentedInstructionDetailVos.map((item) => {
-            let length = item.tailPosition - item.headPosition;
+            const { reason, tailPosition, headPosition } = item;
+            let length = tailPosition - headPosition;
             return {
               ...item,
               planWeight: this.calcPlanWeight(length),
+              _reason: reason ? reason.split(",") : [],
             };
           });
         this.$set(
@@ -1973,6 +1986,13 @@ export default {
       let tailRrv = Math.abs(this.checkInfo[tailIndex].rrg || 0).toFixed(2);
       this.headAndTailRrv = { headRrv, tailRrv };
     },
+    handleReasonChange(val, index) {
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[index],
+        "reason",
+        val.join(",")
+      );
+    },
   },
 };
 </script>
@@ -2328,6 +2348,10 @@ export default {
 
 /deep/ .el-input__icon {
   line-height: 25px;
+}
+
+/deep/ .el-select .el-tag {
+  margin: 0px 0px 0px 6px;
 }
 
 .table-btn {
