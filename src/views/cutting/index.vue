@@ -26,7 +26,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="100px"
+          label-width="120px"
           :rules="formRules"
           :disabled="$route.query.view"
         >
@@ -56,7 +56,6 @@
                 label="检测实测长度"
                 prop="originLength"
                 class="item"
-                label-width="120px"
               >
                 <el-input
                   v-model="formData.originLength"
@@ -65,6 +64,17 @@
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
+              <el-form-item
+                label="合格长度"
+                prop="qualifiedLength"
+                class="item"
+              >
+                <el-input v-model="formData.qualifiedLength" disabled>
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
               <el-form-item label="崩边长度" prop="chippingLength" class="item">
                 <el-input
                   v-model="formData.chippingLength"
@@ -81,14 +91,8 @@
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
-              <el-form-item
-                label="合格长度"
-                prop="qualifiedLength"
-                class="item"
-              >
-                <el-input v-model="formData.qualifiedLength" disabled>
-                  <template slot="append">mm</template>
-                </el-input>
+              <el-form-item label="切割次数" prop="sliceCount" class="item">
+                <el-input v-model="formData.sliceCount" disabled> </el-input>
               </el-form-item>
             </div>
           </div>
