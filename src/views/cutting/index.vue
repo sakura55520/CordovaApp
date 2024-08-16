@@ -92,7 +92,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item label="切割次数" prop="sliceCount" class="item">
-                <el-input v-model="formData.sliceCount" disabled> </el-input>
+                <el-input v-model="formData.sliceCount"> </el-input>
               </el-form-item>
             </div>
           </div>
@@ -175,6 +175,9 @@ export default {
         ],
         qualifiedLength: [
           { required: true, message: "合格长度不能为空", trigger: "change" },
+        ],
+        sliceCount: [
+          { required: true, message: "切割次数不能为空", trigger: "change" },
         ],
       },
       printVisible: false,

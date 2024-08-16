@@ -102,6 +102,13 @@
                 </el-input>
               </div>
             </el-form-item>
+            <el-form-item label="切割次数" prop="sliceCount" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.sliceCount">
+                </el-input>
+              </div>
+            </el-form-item>
+            <div class="item"></div>
             <el-form-item
               label="头部回收料编码"
               prop="headReclaimedMaterialCode"
@@ -249,6 +256,33 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="样片重量"
+                min-width="120"
+                align="center"
+                prop="sampleWeight"
+              >
+                <template slot="header">
+                  <div class="form-table-header">样片重量</div>
+                </template>
+                <template slot-scope="scope">
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'wipCuttingSampleInfos.' +
+                        scope.$index +
+                        '.sampleWeight'
+                      "
+                      :rules="formRules.sampleWeight"
+                      class="form-input"
+                    >
+                      <el-input v-model="scope.row.sampleWeight"></el-input>
+                    </el-form-item>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="样片编号"
                 min-width="180"
                 align="center"
@@ -326,6 +360,7 @@ export default {
         productionRemark: null,
         headWeight: null,
         tailWeight: null,
+        sliceCount: null,
         lengthQty: null,
         _files: [],
         wipCuttingSampleInfos: [],
@@ -353,11 +388,17 @@ export default {
         tailWeight: [
           { required: true, message: "尾部重量不能为空", trigger: "change" },
         ],
+        sliceCount: [
+          { required: true, message: "切割次数不能为空", trigger: "change" },
+        ],
         lengthQty: [
           { required: true, message: "当前长度不能为空", trigger: "change" },
         ],
         samplePosition: [
           { required: true, message: "样片位置不能为空", trigger: "change" },
+        ],
+        sampleWeight: [
+          { required: true, message: "样片重量不能为空", trigger: "change" },
         ],
       },
       sampleTypeList: [],
@@ -841,10 +882,6 @@ export default {
 .form-custom-verify {
   .form-input {
     margin-bottom: 0px;
-  }
-  /deep/ .el-form-item .el-form-item__content .el-form-item__error {
-    top: 25%;
-    left: 20px;
   }
 }
 .form-table-header:before {

@@ -121,6 +121,12 @@
                 fixed="left"
               />
               <el-table-column
+                label="样片重量"
+                width="85"
+                align="center"
+                prop="sampleWeight"
+              />
+              <el-table-column
                 label="样片类型"
                 width="85"
                 align="center"
@@ -164,7 +170,7 @@
                       :rules="[
                         {
                           required: scope.row.valid,
-                          message: '请输入',
+                          message: ' ',
                           trigger: 'change',
                         },
                       ]"
@@ -200,7 +206,7 @@
                     :rules="[
                       {
                         required: scope.row.valid,
-                        message: '请输入',
+                        message: ' ',
                         trigger: 'change',
                       },
                     ]"
@@ -234,7 +240,7 @@
                     :rules="[
                       {
                         required: scope.row.valid,
-                        message: '请输入',
+                        message: ' ',
                         trigger: 'change',
                       },
                     ]"
@@ -480,11 +486,23 @@
                 prop="cutDistanceEnd"
               />
               <el-table-column
+                label="样片重量"
+                min-width="85"
+                align="center"
+                prop="sampleWeight"
+              />
+              <el-table-column
                 label="是否返切再利用"
                 min-width="140"
                 align="center"
                 prop="recycle"
                 :formatter="formRecycle"
+              />
+              <el-table-column
+                label="切割次数"
+                min-width="85"
+                align="center"
+                prop="sliceCount"
               />
               <el-table-column
                 label="返切条码"

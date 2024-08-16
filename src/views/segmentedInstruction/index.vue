@@ -550,7 +550,7 @@
                       :rules="[
                         {
                           required: true,
-                          message: '请输入',
+                          message: ' ',
                           trigger: 'change',
                         },
                       ]"
@@ -588,7 +588,7 @@
                       :rules="[
                         {
                           required: true,
-                          message: '请输入',
+                          message: ' ',
                           trigger: 'change',
                         },
                       ]"
@@ -665,7 +665,7 @@
                             scope.row.type !== 2 &&
                             scope.$index ===
                               formData.segmentedInstructionDetailVos.length - 1,
-                          message: '请输入',
+                          message: ' ',
                           trigger: 'change',
                         },
                       ]"
@@ -1732,6 +1732,14 @@ export default {
         return this.$message.warning("分段信息未填写完整");
       }
       if (!valid) return;
+
+      if (
+        this.formData.segmentedInstructionDetailVos.some(
+          (item) => !item.segmentNo
+        )
+      )
+        return this.$message.warning("分段编号不能为空");
+
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
