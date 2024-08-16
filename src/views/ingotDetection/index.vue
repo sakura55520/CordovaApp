@@ -121,8 +121,8 @@
                 fixed="left"
               />
               <el-table-column
-                label="样片重量"
-                width="85"
+                label="样片重量(kg)"
+                width="120"
                 align="center"
                 prop="sampleWeight"
               />
@@ -486,8 +486,8 @@
                 prop="cutDistanceEnd"
               />
               <el-table-column
-                label="样片重量"
-                min-width="85"
+                label="样片重量(kg)"
+                min-width="120"
                 align="center"
                 prop="sampleWeight"
               />

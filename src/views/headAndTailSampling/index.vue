@@ -277,7 +277,9 @@
                       :rules="formRules.sampleWeight"
                       class="form-input"
                     >
-                      <el-input v-model="scope.row.sampleWeight"></el-input>
+                      <el-input v-model="scope.row.sampleWeight">
+                        <template slot="append">kg</template>
+                      </el-input>
                     </el-form-item>
                   </div>
                 </template>

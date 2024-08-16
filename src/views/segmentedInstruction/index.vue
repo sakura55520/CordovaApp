@@ -58,8 +58,8 @@
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="样片重量"
-                  width="85"
+                  label="样片重量(kg)"
+                  width="120"
                   align="center"
                   prop="sampleWeight"
                   show-overflow-tooltip
