@@ -377,7 +377,7 @@ export default {
           });
         }
       });
-      return total;
+      return floor(total, 5);
     },
     dopantPercent() {
       if (!this.totalDopantAmount || !this.formData.feedingDopantTotal)
