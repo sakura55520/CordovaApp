@@ -53,8 +53,8 @@
               <el-form-item label="尺寸" prop="size" class="item">
                 <el-input v-model="formData.size" disabled></el-input>
               </el-form-item>
-              <el-form-item label="晶向" prop="test" class="item">
-                <el-input v-model="formData.test" disabled></el-input>
+              <el-form-item label="晶向" prop="orientation" class="item">
+                <el-input v-model="formData.orientation" disabled></el-input>
               </el-form-item>
               <el-form-item
                 label="目标电阻率"
@@ -752,7 +752,9 @@ export default {
         crystalDensity: [
           { required: true, message: "结晶比重不能为空", trigger: "change" },
         ],
-        test: [{ required: true, message: "晶向不能为空", trigger: "change" }],
+        orientation: [
+          { required: true, message: "晶向不能为空", trigger: "change" },
+        ],
       },
       sampleTypeList: [],
       backCutTypeList: [],
