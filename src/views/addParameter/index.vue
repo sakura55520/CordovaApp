@@ -334,6 +334,7 @@
 import * as Api from "@/api/inStation";
 import overStation from "@/mixins/overStation";
 import PrintDialog from "@/components/PrintDialog/index.vue";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -396,6 +397,7 @@ export default {
       },
       printVisible: false,
       printData: {},
+      wipSwitches: [],
     };
   },
   computed: {
@@ -427,6 +429,7 @@ export default {
       this.formData = { ...this.formData, ...fromData };
       this.initLength();
       this.calcDegreesMinute();
+      getSeleteData("wipSwitches", this.wipSwitches);
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -510,10 +513,19 @@ export default {
       this.calcAngle();
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
-      let { originLength, planLength } = this.formData;
-      if (Math.abs(originLength - planLength) > 10) {
-        this.$message.warning("检测实测长度与计划长度的差值不能超过10mm");
-        return;
+
+      let wipSwitch = this.wipSwitches.find(
+        (item) => item.name === "validateLengthSwitchSlicing"
+      );
+      if (wipSwitch && wipSwitch.value === "打开") {
+        let { originLength, planLength } = this.formData;
+        let value = wipSwitch.extendValue;
+        if (Math.abs(originLength - planLength) > value) {
+          this.$message.warning(
+            `检测实测长度与计划长度的差值不能超过${value}mm`
+          );
+          return;
+        }
       }
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",

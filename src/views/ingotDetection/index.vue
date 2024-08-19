@@ -26,7 +26,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="120px"
+          label-width="105px"
           :rules="formRules"
           :disabled="$route.query.view"
         >

@@ -396,7 +396,7 @@ export default {
           });
         }
       });
-      return total;
+      return floor(total, 5);
     },
     quartzCruciblePercent() {
       return this.formData.quartzCrucibleQty ? 100 : 0;

@@ -508,6 +508,7 @@ import { cloneDeep, round } from "lodash-es";
 import moment from "moment";
 import overStation from "@/mixins/overStation";
 import PrintDialog from "@/components/PrintDialog/index.vue";
+import { getSeleteData } from "@/utils/select";
 
 const defaultForm = {
   planLength: null, // 计划长度
@@ -600,6 +601,7 @@ export default {
       },
       printVisible: false,
       printData: {},
+      wipSwitches: [],
     };
   },
   computed: {
@@ -635,6 +637,7 @@ export default {
       this.formData = Object.assign({}, defaultForm, fromData);
       this.initLength();
       this.calcDegreesMinute();
+      getSeleteData("wipSwitches", this.wipSwitches);
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -729,7 +732,7 @@ export default {
       return (Number(degrees) + Number(minute) / 60).toFixed(4);
     },
     // 操作
-    handle(typeName) {
+    async handle(typeName) {
       const { ...form } = this.formData;
       const FormData = JSON.stringify({
         ...form,
@@ -740,32 +743,44 @@ export default {
           this.back(msg);
         });
       } else if (typeName === "提交") {
-        this.$refs.formData.validate((valid) => {
-          if (valid) {
-            this.$confirm("确认提交当前操作数据?", "提示", {
-              type: "warning",
-            }).then(() => {
-              const {
-                equipmentCode,
-                processUuid,
-                processingOrderCode,
-                wipStorageStatus,
-              } = this.$route.query;
-              Api.inOrOutStation({
-                param: {
-                  FormData,
-                },
-                equipmentCode, // 设备
-                processUuid, // 当前工序唯一标识
-                processingOrderCode, // 工单号
-                wipStorageStatus, // 进出站状态
-              }).then(() => {
-                const msg = `【${this.storageLabel}】操作成功`;
-                Api.deleteBuffer(this.buffParams);
-                this.back(msg);
-              });
-            });
+        const valid = await this.$refs.formData.validate();
+        if (!valid) return;
+
+        let wipSwitch = this.wipSwitches.find(
+          (item) => item.name === "validateLengthSwitchRounding"
+        );
+        if (wipSwitch && wipSwitch.value === "打开") {
+          let { originLength, planLength } = this.formData;
+          let value = wipSwitch.extendValue;
+          if (Math.abs(originLength - planLength) > value) {
+            this.$message.warning(
+              `检测实测长度与计划长度的差值不能超过${value}mm`
+            );
+            return;
           }
+        }
+        this.$confirm("确认提交当前操作数据?", "提示", {
+          type: "warning",
+        }).then(() => {
+          const {
+            equipmentCode,
+            processUuid,
+            processingOrderCode,
+            wipStorageStatus,
+          } = this.$route.query;
+          Api.inOrOutStation({
+            param: {
+              FormData,
+            },
+            equipmentCode, // 设备
+            processUuid, // 当前工序唯一标识
+            processingOrderCode, // 工单号
+            wipStorageStatus, // 进出站状态
+          }).then(() => {
+            const msg = `【${this.storageLabel}】操作成功`;
+            Api.deleteBuffer(this.buffParams);
+            this.back(msg);
+          });
         });
       }
     },
