@@ -78,6 +78,47 @@
         >{{ storageLabel }}确认</el-button
       >
     </div>
+
+    <el-dialog title="请确认时长" :visible.sync="dialogVisible">
+      <el-form
+        ref="dialogForm"
+        :model="dialogForm"
+        :rules="dialogRules"
+        label-width="130px"
+      >
+        <el-form-item label="化料开始时间" prop="startTime">
+          <el-date-picker
+            style="width: 100%"
+            v-model="dialogForm.startTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            @change="(val) => handleStartTimeChange(val)"
+          />
+        </el-form-item>
+        <el-form-item label="工艺结束时间" prop="endTime">
+          <el-date-picker
+            style="width: 100%"
+            v-model="dialogForm.endTime"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            @change="(val) => handleEndTimeChange(val)"
+          />
+        </el-form-item>
+        <el-form-item label="时长">
+          <el-input style="width: 100%" v-model="duration" disabled>
+            <template slot="append">H</template>
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="submit" @click="dialogVisible = false"
+          >取 消</el-button
+        >
+        <el-button class="submit" type="primary" @click="handleConfirm"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -89,6 +130,8 @@ import TabFile from "./TabFile";
 import { fetchModelForm } from "@/api/modelform";
 import { getSeleteData } from "@/utils/select";
 import overStation from "@/mixins/overStation";
+import moment from "moment";
+import { get } from "lodash-es";
 
 const defaultItem = {
   extKey: null,
@@ -127,6 +170,27 @@ export default {
         "收尾",
         "升温",
       ],
+      dialogVisible: false,
+      dialogForm: {
+        startTime: null,
+        endTime: null,
+      },
+      dialogRules: {
+        startTime: [
+          {
+            required: true,
+            message: "化料开始时间不能为空",
+            trigger: "blur",
+          },
+        ],
+        endTime: [
+          {
+            required: true,
+            message: "工艺结束时间不能为空",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   computed: {
@@ -205,6 +269,11 @@ export default {
       });
       return list;
     },
+    duration() {
+      const { startTime, endTime } = this.dialogForm;
+      if (!startTime || !endTime) return 0;
+      return moment(endTime).diff(startTime, "hours");
+    },
   },
   created() {
     this.init();
@@ -243,38 +312,64 @@ export default {
     },
     // 操作
     async handle(typeName) {
-      const form = this.transform();
       if (typeName === "保存") {
-        Api.updateGrowthBuffer(form).then((res) => {
+        Api.updateGrowthBuffer(this.transform()).then((res) => {
           const msg = "保存成功!";
           this.back(msg);
         });
       } else if (typeName === "提交") {
         let allValid = await this.validAll();
         if (!allValid) return;
-        this.$confirm("确认提交当前操作数据?", "提示", {
-          type: "warning",
-        }).then(() => {
-          const {
-            equipmentCode,
-            processUuid,
-            processingOrderCode,
-            wipStorageStatus,
-          } = this.$route.query;
-          Api.inOrOutStation({
-            param: {
-              FormData: JSON.stringify(form),
-            },
-            equipmentCode, // 设备
-            processUuid, // 当前工序唯一标识
-            processingOrderCode, // 工单号
-            wipStorageStatus, // 进出站状态
-          }).then(() => {
-            const msg = `【${this.storageLabel}】操作成功`;
-            this.back(msg);
-          });
-        });
+
+        this.dialogVisible = true;
+
+        let startTechs = get(this.steps, "化料.[0].techs", []);
+        let endTechs = get(this.steps, "冷却.[0].techs", []);
+
+        let startObj =
+          startTechs.find((item) => item.extKey === "化料开始时间") || {};
+        let endObj =
+          endTechs.find((item) => item.extKey === "工艺结束时间") || {};
+
+        this.dialogForm.startTime = startObj.extValue;
+        this.dialogForm.endTime = endObj.extValue;
       }
+    },
+    handleStartTimeChange(val) {
+      let techs = get(this.steps, "化料.[0].techs", []);
+      let index = techs.findIndex((item) => item.extKey === "化料开始时间");
+      if (index > -1)
+        this.$set(this.steps["化料"][0].techs[index], "extValue", val);
+    },
+    handleEndTimeChange(val) {
+      let techs = get(this.steps, "冷却.[0].techs", []);
+      let index = techs.findIndex((item) => item.extKey === "工艺结束时间");
+      if (index > -1)
+        this.$set(this.steps["冷却"][0].techs[index], "extValue", val);
+    },
+    async handleConfirm() {
+      const valid = await this.$refs.dialogForm.validate();
+      if (!valid) return;
+
+      const {
+        equipmentCode,
+        processUuid,
+        processingOrderCode,
+        wipStorageStatus,
+      } = this.$route.query;
+      Api.inOrOutStation({
+        param: {
+          FormData: JSON.stringify(this.transform()),
+        },
+        equipmentCode, // 设备
+        processUuid, // 当前工序唯一标识
+        processingOrderCode, // 工单号
+        wipStorageStatus, // 进出站状态
+      }).then(() => {
+        this.dialogVisible = false;
+        const msg = `【${this.storageLabel}】操作成功`;
+        this.back(msg);
+      });
     },
     transform() {
       const steps = JSON.parse(JSON.stringify(this.steps));
