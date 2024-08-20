@@ -69,6 +69,7 @@ export default {
       }));
     },
     handleFileChange() {
+      this.$refs.detailForm.validate();
       const files = (this.detailForm._files || []).map(
         ({ big_url, thumb_url, ...item }) => ({
           ...item,
