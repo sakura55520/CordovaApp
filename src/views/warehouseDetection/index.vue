@@ -69,43 +69,7 @@
                     v-model="formData.originLength"
                     :disabled="!enableMap.originLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 1, y: 1 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="崩边长度"
-                prop="chippingLength"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.chippingLength"
-                    :disabled="!enableMap.chippingLength"
-                    @input="handleLengthChange"
                     v-direction="{ x: 2, y: 1 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="椭圆长度"
-                prop="ellipticLength"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.ellipticLength"
-                    :disabled="!enableMap.ellipticLength"
-                    @input="handleLengthChange"
-                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -130,6 +94,61 @@
             </div>
             <div class="row">
               <el-form-item
+                label="崩边长度"
+                prop="chippingLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.chippingLength"
+                    :disabled="!enableMap.chippingLength"
+                    @input="handleLengthChange"
+                    v-direction="{ x: 1, y: 2 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="椭圆长度"
+                prop="ellipticLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.ellipticLength"
+                    :disabled="!enableMap.ellipticLength"
+                    @input="handleLengthChange"
+                    v-direction="{ x: 2, y: 2 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实际称重"
+                prop="weighingQty"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.weighingQty"
+                    :disabled="!enableMap.weighingQty"
+                    v-direction="{ x: 3, y: 2 }"
+                  >
+                    <template slot="append">kg</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
                 label="头部实测电阻率"
                 prop="resHead"
                 class="item"
@@ -139,7 +158,7 @@
                   class="value"
                   v-model="formData.resHead"
                   :disabled="!enableMap.resHead"
-                  v-direction="{ x: 1, y: 2 }"
+                  v-direction="{ x: 1, y: 3 }"
                 ></el-input>
               </el-form-item>
               <el-form-item
@@ -152,7 +171,7 @@
                   class="value"
                   v-model="formData.resTail"
                   :disabled="!enableMap.resTail"
-                  v-direction="{ x: 2, y: 2 }"
+                  v-direction="{ x: 2, y: 3 }"
                 ></el-input>
               </el-form-item>
               <el-form-item
@@ -169,7 +188,7 @@
                       !enableMap.circleDiameterHead &&
                       !formData.needRollingCircle
                     "
-                    v-direction="{ x: 3, y: 2 }"
+                    v-direction="{ x: 3, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -189,7 +208,7 @@
                       !enableMap.circleDiameterTail &&
                       !formData.needRollingCircle
                     "
-                    v-direction="{ x: 4, y: 2 }"
+                    v-direction="{ x: 4, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -215,7 +234,7 @@
                       :disabled="
                         !enableMap.mainReferenceSurfaceCrystalOrientationDegrees
                       "
-                      v-direction="{ x: 1, y: 3 }"
+                      v-direction="{ x: 1, y: 4 }"
                       @input="handleNext"
                     >
                       <template slot="append">°</template>
@@ -232,7 +251,7 @@
                       :disabled="
                         !enableMap.mainReferenceSurfaceCrystalOrientationMinute
                       "
-                      v-direction="{ x: 2, y: 3 }"
+                      v-direction="{ x: 2, y: 4 }"
                       @input="handleNext"
                     >
                       <template slot="append">'</template>
@@ -251,7 +270,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceLength"
                     :disabled="!enableMap.mainReferenceSurfaceLength"
-                    v-direction="{ x: 3, y: 3 }"
+                    v-direction="{ x: 3, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -268,7 +287,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceLength"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceLength"
-                    v-direction="{ x: 4, y: 3 }"
+                    v-direction="{ x: 4, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -285,7 +304,7 @@
                     <el-input
                       v-model="formData.mainAuxiliaryAngleDegrees"
                       :disabled="!enableMap.mainAuxiliaryAngleDegrees"
-                      v-direction="{ x: 5, y: 3 }"
+                      v-direction="{ x: 5, y: 4 }"
                       @input="handleNext"
                     >
                       <template slot="append">°</template>
@@ -295,7 +314,7 @@
                     <el-input
                       v-model="formData.mainAuxiliaryAngleMinute"
                       :disabled="!enableMap.mainAuxiliaryAngleMinute"
-                      v-direction="{ x: 6, y: 3 }"
+                      v-direction="{ x: 6, y: 4 }"
                       @input="handleNext"
                     >
                       <template slot="append">'</template>
@@ -316,7 +335,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthHead"
                     :disabled="!enableMap.mainReferenceSurfaceWidthHead"
-                    v-direction="{ x: 1, y: 4 }"
+                    v-direction="{ x: 1, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -333,7 +352,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthTail"
                     :disabled="!enableMap.mainReferenceSurfaceWidthTail"
-                    v-direction="{ x: 2, y: 4 }"
+                    v-direction="{ x: 2, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -350,7 +369,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceHead"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceHead"
-                    v-direction="{ x: 3, y: 4 }"
+                    v-direction="{ x: 3, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -367,7 +386,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceTail"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceTail"
-                    v-direction="{ x: 4, y: 4 }"
+                    v-direction="{ x: 4, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -442,6 +461,7 @@ export default {
         chippingLength: null,
         ellipticLength: null,
         qualifiedLength: null,
+        weighingQty: null,
         resHead: null,
         resTail: null,
         circleDiameterHead: null,
@@ -488,6 +508,9 @@ export default {
         ],
         qualifiedLength: [
           { required: true, message: "合格长度不能为空", trigger: "change" },
+        ],
+        weighingQty: [
+          { required: true, message: "实际称重不能为空", trigger: "change" },
         ],
         // !!formData.needRollingCircle,
         circleDiameterHead: [
