@@ -118,21 +118,21 @@
                 />
                 <el-table-column
                   label="RES_C"
-                  min-width="80"
+                  min-width="90"
                   align="center"
                   prop="resC"
                   show-overflow-tooltip
                 />
                 <el-table-column
                   label="RES_E"
-                  min-width="80"
+                  min-width="90"
                   align="center"
                   prop="resE"
                   show-overflow-tooltip
                 />
                 <el-table-column
                   label="1/2RES"
-                  min-width="80"
+                  min-width="90"
                   align="center"
                   prop="halfRes"
                   show-overflow-tooltip
