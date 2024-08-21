@@ -268,7 +268,7 @@ import MultipleCodeScanner from "@/components/MultipleCodeScanner";
 import CodeScanner from "@/components/CodeScanner";
 import SelectUserinfo from "@/components/select_userinfo";
 import * as Api from "@/api/inStation";
-import { cloneDeep, floor, last, isEmpty } from "lodash-es";
+import { cloneDeep, round, isEmpty } from "lodash-es";
 import moment from "moment";
 import { getProcessNo } from "@/api/tool";
 import overStation from "@/mixins/overStation";
@@ -360,7 +360,7 @@ export default {
     },
     feedPercent() {
       return (
-        floor((this.totalFeedingAmount / this.formData.feedingTotal) * 100) || 0
+        round((this.totalFeedingAmount / this.formData.feedingTotal) * 100) || 0
       );
     },
     buffParams() {
@@ -377,12 +377,12 @@ export default {
           });
         }
       });
-      return floor(total, 5);
+      return round(total, 5);
     },
     dopantPercent() {
       if (!this.totalDopantAmount || !this.formData.feedingDopantTotal)
         return 0;
-      return floor(
+      return round(
         (this.totalDopantAmount / this.formData.feedingDopantTotal) * 100
       );
     },
@@ -396,7 +396,7 @@ export default {
           });
         }
       });
-      return floor(total, 5);
+      return round(total, 5);
     },
     quartzCruciblePercent() {
       return this.formData.quartzCrucibleQty ? 100 : 0;

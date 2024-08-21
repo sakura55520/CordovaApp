@@ -272,7 +272,7 @@ export default {
     duration() {
       const { startTime, endTime } = this.dialogForm;
       if (!startTime || !endTime) return 0;
-      return moment(endTime).diff(startTime, "hours");
+      return moment(endTime).diff(startTime, "hours", true).toFixed(1);
     },
   },
   created() {

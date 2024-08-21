@@ -96,7 +96,12 @@
                   show-overflow-tooltip
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.crystalDensity">
+                    <div
+                      v-if="
+                        scope.row.crystalDensity ||
+                        scope.row.crystalDensity == 0
+                      "
+                    >
                       {{ scope.row.crystalDensity }}%
                     </div>
                   </template>
@@ -144,7 +149,9 @@
                   show-overflow-tooltip
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.rrg">{{ scope.row.rrg }}%</div>
+                    <div v-if="scope.row.rrg || scope.row.rrg == 0">
+                      {{ scope.row.rrg }}%
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -155,7 +162,9 @@
                   show-overflow-tooltip
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.halfRrg">{{ scope.row.halfRrg }}%</div>
+                    <div v-if="scope.row.halfRrg || scope.row.halfRrg == 0">
+                      {{ scope.row.halfRrg }}%
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -194,7 +203,9 @@
                   show-overflow-tooltip
                 >
                   <template slot-scope="scope">
-                    <div v-if="scope.row.org">{{ scope.row.org }}%</div>
+                    <div v-if="scope.row.org || scope.row.org == 0">
+                      {{ scope.row.org }}%
+                    </div>
                   </template>
                 </el-table-column>
                 <el-table-column
