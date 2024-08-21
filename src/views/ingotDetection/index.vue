@@ -687,6 +687,7 @@ import { cloneDeep, isEmpty } from "lodash-es";
 import PhotoNew from "@/views/components/photoNew";
 import moment from "moment";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation";
+import { getMateralModelExtras } from "@/api/factory/materialModel";
 
 export default {
   mixins: [overStation],
@@ -869,6 +870,7 @@ export default {
       }));
 
       this.fetchBackCuttingSampleRecord();
+      // this.getMateralModelExtras();
     },
     async updateDetails() {
       const { processingOrderCode } = this.$route.query;
@@ -1079,7 +1081,12 @@ export default {
       let crystalDensity;
       let value = Number(val);
       let info = this.formData;
-      if (!value || value === "NaN" || !info.weight || !info.lengthQty)
+      if (
+        (!value && value !== 0) ||
+        value === "NaN" ||
+        !info.weight ||
+        !info.lengthQty
+      )
         crystalDensity = "0";
       else {
         let goodWeight = info.goodWeight || 0;
@@ -1204,6 +1211,13 @@ export default {
         let dom = document.getElementById(`input-${x}-${y + 1}`);
         dom && dom.focus();
       }
+    },
+    getMateralModelExtras() {
+      getMateralModelExtras({
+        processOrderCode: this.formData.processOrderCode,
+      }).then((res) => {
+        console.log(res);
+      });
     },
   },
 };
