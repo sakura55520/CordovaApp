@@ -99,26 +99,29 @@
             >
               <el-table-column
                 label="样片编号"
-                width="170"
+                width="175"
                 align="center"
                 prop="sampleNumber"
                 fixed="left"
                 show-overflow-tooltip
+                sortable
               >
               </el-table-column>
               <el-table-column
                 label="样片标识"
-                width="85"
+                width="110"
                 align="center"
                 prop="sampleIdentification"
                 fixed="left"
+                sortable
               />
               <el-table-column
                 label="样片位置"
-                width="85"
+                width="110"
                 align="center"
                 prop="samplePosition"
                 fixed="left"
+                sortable
               />
               <el-table-column
                 label="样片重量(kg)"

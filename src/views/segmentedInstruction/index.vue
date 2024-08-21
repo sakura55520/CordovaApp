@@ -41,21 +41,24 @@
                   prop="sampleNumber"
                   fixed="left"
                   show-overflow-tooltip
+                  sortable
                 />
                 <el-table-column
                   label="样片标识"
-                  width="85"
+                  width="110"
                   align="center"
                   prop="sampleIdentification"
                   fixed="left"
+                  sortable
                 />
                 <el-table-column
                   label="样片位置"
-                  width="85"
+                  width="110"
                   align="center"
                   prop="samplePosition"
                   fixed="left"
                   show-overflow-tooltip
+                  sortable
                 />
                 <el-table-column
                   label="样片重量(kg)"
@@ -2252,6 +2255,7 @@ export default {
         z-index: 999;
         top: -15px;
         cursor: pointer;
+        line-height: 18px;
       }
       .el-button {
         font-size: 12px;
