@@ -273,7 +273,24 @@
                 align="center"
                 prop="targetDeviation"
                 show-overflow-tooltip
-              />
+              >
+                <template slot-scope="scope">
+                  <div
+                    v-if="
+                      scope.row.targetDeviation ||
+                      scope.row.targetDeviation == 0
+                    "
+                    :style="{
+                      color: getControlColor(
+                        '目标偏差',
+                        scope.row.targetDeviation
+                      ),
+                    }"
+                  >
+                    {{ scope.row.targetDeviation }}%
+                  </div>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="RRG"
                 min-width="90"
@@ -282,7 +299,14 @@
                 show-overflow-tooltip
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.rrg">{{ scope.row.rrg }}%</div>
+                  <div
+                    v-if="scope.row.rrg || scope.row.rrg == 0"
+                    :style="{
+                      color: getControlColor('RRG', scope.row.rrg),
+                    }"
+                  >
+                    {{ scope.row.rrg }}%
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -293,7 +317,9 @@
                 show-overflow-tooltip
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.halfRrg">{{ scope.row.halfRrg }}%</div>
+                  <div v-if="scope.row.halfRrg || scope.row.halfRrg == 0">
+                    {{ scope.row.halfRrg }}%
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -306,6 +332,9 @@
               <el-table-column label="OI_C" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor('OI_C', scope.row.oiC),
+                    }"
                     :id="'input-5-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
                     v-model="scope.row.oiC"
@@ -315,6 +344,9 @@
               <el-table-column label="OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor('OI_E', scope.row.oiE),
+                    }"
                     :id="'input-6-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 6, scope.$index)"
                     v-model="scope.row.oiE"
@@ -323,13 +355,14 @@
               ></el-table-column>
               <el-table-column label="CS" min-width="80" align="center">
                 <template slot-scope="scope">
-                  <div :class="getInternalControlColor('cs', scope.row.cs)">
-                    <el-input
-                      :id="'input-7-' + scope.$index"
-                      @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
-                      v-model="scope.row.cs"
-                    ></el-input>
-                  </div> </template
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor('CS', scope.row.cs),
+                    }"
+                    :id="'input-7-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
+                    v-model="scope.row.cs"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column
                 label="ORG"
@@ -339,12 +372,20 @@
                 show-overflow-tooltip
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.org">{{ scope.row.org }}%</div>
+                  <div v-if="scope.row.org || scope.row.org == 0">
+                    {{ scope.row.org }}%
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label="少子寿命" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '少子寿命',
+                        scope.row.minorityCarrierLifetime
+                      ),
+                    }"
                     :id="'input-8-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
                     v-model="scope.row.minorityCarrierLifetime"
@@ -766,9 +807,6 @@ export default {
       osfDensityList: [],
       sampleIdentificationList: [],
       backCuttingAndReuseList: [],
-      internalControlRules: {
-        cs: 0.4,
-      },
       backCuttingFormData: {
         type: undefined,
         sampleIdentification: undefined,
@@ -824,6 +862,15 @@ export default {
       backCuttingFormType: undefined,
       selectIndex: undefined,
       originalTall: undefined,
+      controlList: [
+        { key: "targetDeviation", name: "目标偏差" },
+        { key: "rrg", name: "RRG" },
+        { key: "cs", name: "CS" },
+        { key: "minorityCarrierLifetime", name: "少子寿命" },
+        { key: "oiC", name: "OI_C" },
+        { key: "oiE", name: "OI_E" },
+      ],
+      controlMap: {},
     };
   },
   computed: {
@@ -873,7 +920,7 @@ export default {
       }));
 
       this.fetchBackCuttingSampleRecord();
-      // this.getMateralModelExtras();
+      this.getMateralModelExtras();
     },
     async updateDetails() {
       const { processingOrderCode } = this.$route.query;
@@ -1055,8 +1102,26 @@ export default {
         return;
       }
 
-      await this.$confirm("确认提交当前操作数据?", "提示", {
+      let outControlList = [];
+      this.controlList.forEach((control) => {
+        if (
+          this.formData.details.some(
+            (item) => !this.checkControl(control.name, item[control.key])
+          )
+        )
+          outControlList.push(control.name);
+      });
+
+      let message = "确认提交当前操作数据?";
+      if (!isEmpty(outControlList))
+        message =
+          "<div>以下数据超限：</div>" +
+          outControlList.join("、") +
+          "<div>请确认是否继续提交当前操作数据?</div>";
+
+      await this.$confirm(message, "提示", {
         type: "warning",
+        dangerouslyUseHTMLString: true,
       });
       const {
         equipmentCode,
@@ -1126,7 +1191,8 @@ export default {
     calcTargetDeviation(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.res) data = ((item.resC - item.res) / item.res).toFixed(6);
+      if (item.res)
+        data = (((item.resC - item.res) / item.res) * 100).toFixed(3);
       this.$set(this.formData.details[index], "targetDeviation", data);
     },
     calcOrg(index) {
@@ -1173,9 +1239,27 @@ export default {
     handleInspectorSelect(val, index) {
       this.$set(this.formData.details[index], "checkDate", new Date());
     },
-    getInternalControlColor(key, val) {
-      let target = this.internalControlRules[key];
-      return "";
+    getControlColor(key, val) {
+      let item = this.controlMap[key] || {};
+      let maxItem = item["上限"] || {};
+      let minItem = item["下限"] || {};
+
+      if (maxItem.control && maxItem.value && val > maxItem.value)
+        return maxItem.controlColor;
+      if (minItem.control && minItem.value && val < minItem.value)
+        return minItem.controlColor;
+
+      return null;
+    },
+    checkControl(key, val) {
+      let item = this.controlMap[key] || {};
+      let maxItem = item["上限"] || {};
+      let minItem = item["下限"] || {};
+
+      if (maxItem.control && maxItem.value && val > maxItem.value) return false;
+      if (minItem.control && minItem.value && val < minItem.value) return false;
+
+      return true;
     },
     formRecycle(row, column, recycle) {
       const matched = this.backCuttingAndReuseList.find(
@@ -1215,11 +1299,30 @@ export default {
         dom && dom.focus();
       }
     },
-    getMateralModelExtras() {
-      getMateralModelExtras({
+    async getMateralModelExtras() {
+      let list = await getMateralModelExtras({
         processOrderCode: this.formData.processOrderCode,
-      }).then((res) => {
-        console.log(res);
+      });
+
+      this.controlList.forEach((control) => {
+        let name = control.name;
+        let maxName = name + "上限";
+        let minName = name + "下限";
+        let maxItem = list.find((ele) => ele.displayName == maxName) || {};
+        let minItem = list.find((ele) => ele.displayName == minName) || {};
+
+        this.controlMap[name] = {
+          上限: {
+            control: maxItem.control,
+            controlColor: maxItem.controlColor,
+            value: maxItem.value,
+          },
+          下限: {
+            control: minItem.control,
+            controlColor: minItem.controlColor,
+            value: minItem.value,
+          },
+        };
       });
     },
   },
@@ -1373,6 +1476,7 @@ export default {
 
 /deep/ .el-input__inner {
   height: 25px;
+  color: var(--controlColor);
 }
 
 /deep/ .el-form-item__content {

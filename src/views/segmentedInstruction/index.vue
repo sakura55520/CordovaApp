@@ -217,7 +217,20 @@
                   align="center"
                   prop="minorityCarrierLifetime"
                   show-overflow-tooltip
-                />
+                >
+                  <template slot-scope="scope">
+                    <div
+                      :style="{
+                        color: getControlColor(
+                          '少子寿命',
+                          scope.row.minorityCarrierLifetime
+                        ),
+                      }"
+                    >
+                      {{ scope.row.minorityCarrierLifetime }}
+                    </div>
+                  </template>
+                </el-table-column>
                 <el-table-column
                   label="常规缺陷"
                   min-width="100"
@@ -505,6 +518,12 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '头部电阻率',
+                        scope.row.headResistance
+                      ),
+                    }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.headResistance"
                     v-direction="{ x: 6, y: scope.$index }"
@@ -519,6 +538,12 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '尾部电阻率',
+                        scope.row.tailResistance
+                      ),
+                    }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.tailResistance"
                     v-direction="{ x: 7, y: scope.$index }"
@@ -571,6 +596,12 @@
                       class="form-input"
                     >
                       <el-input
+                        :style="{
+                          '--controlColor': getControlColor(
+                            '79oi头',
+                            scope.row.head79oi
+                          ),
+                        }"
                         v-model="scope.row.head79oi"
                         @change="
                           (val) => handleOiChange('head', scope.$index, val)
@@ -609,6 +640,12 @@
                       class="form-input"
                     >
                       <el-input
+                        :style="{
+                          '--controlColor': getControlColor(
+                            '79oi尾',
+                            scope.row.tail79oi
+                          ),
+                        }"
                         v-model="scope.row.tail79oi"
                         @change="
                           (val) => handleOiChange('tail', scope.$index, val)
@@ -652,6 +689,12 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '头碳含量',
+                        scope.row.headCarbonRate
+                      ),
+                    }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.headCarbonRate"
                   ></el-input>
@@ -686,6 +729,12 @@
                       class="form-input"
                     >
                       <el-input
+                        :style="{
+                          '--controlColor': getControlColor(
+                            '尾碳含量',
+                            scope.row.tailCarbonRate
+                          ),
+                        }"
                         v-if="scope.row.type !== 2"
                         v-model="scope.row.tailCarbonRate"
                       ></el-input>
@@ -1214,6 +1263,7 @@ import { getSeleteData } from "@/utils/select";
 import overStation from "@/mixins/overStation";
 import PhotoNew from "@/views/components/photoNew";
 import LeaderLine from "@/plugins/leader-line.min.js";
+import { getMateralModelExtras } from "@/api/factory/materialModel";
 
 export default {
   mixins: [overStation],
@@ -1267,6 +1317,16 @@ export default {
         headRrv: null,
         tailRrv: null,
       },
+      controlList: [
+        { key: "headResistance", name: "头部电阻率" },
+        { key: "tailResistance", name: "尾部电阻率" },
+        { key: "head79oi", name: "79oi头" },
+        { key: "tail79oi", name: "79oi尾" },
+        { key: "headCarbonRate", name: "头碳含量" },
+        { key: "tailCarbonRate", name: "尾碳含量" },
+        { key: "minorityCarrierLifetime", name: "少子寿命" },
+      ],
+      controlMap: {},
     };
   },
   computed: {
@@ -1587,6 +1647,8 @@ export default {
           thumb_url: fileItem.fileUrl,
         })
       );
+
+      this.getMateralModelExtras();
     },
     async handleCodeClick() {
       let { length } = this.formData;
@@ -1754,8 +1816,26 @@ export default {
       )
         return this.$message.warning("分段编号不能为空");
 
-      await this.$confirm("确认提交当前操作数据?", "提示", {
+      let outControlList = [];
+      this.controlList.forEach((control) => {
+        if (
+          this.formData.segmentedInstructionDetailVos.some(
+            (item) => !this.checkControl(control.name, item[control.key])
+          )
+        )
+          outControlList.push(control.name);
+      });
+
+      let message = "确认提交当前操作数据?";
+      if (!isEmpty(outControlList))
+        message =
+          "<div>以下数据超限：</div>" +
+          outControlList.join("、") +
+          "<div>请确认是否继续提交当前操作数据?</div>";
+
+      await this.$confirm(message, "提示", {
         type: "warning",
+        dangerouslyUseHTMLString: true,
       });
       const {
         equipmentCode,
@@ -2014,6 +2094,54 @@ export default {
         "reason",
         val.join(",")
       );
+    },
+    getControlColor(key, val) {
+      let item = this.controlMap[key] || {};
+      let maxItem = item["上限"] || {};
+      let minItem = item["下限"] || {};
+
+      if (maxItem.control && maxItem.value && val > maxItem.value)
+        return maxItem.controlColor;
+      if (minItem.control && minItem.value && val < minItem.value)
+        return minItem.controlColor;
+
+      return null;
+    },
+    checkControl(key, val) {
+      let item = this.controlMap[key] || {};
+      let maxItem = item["上限"] || {};
+      let minItem = item["下限"] || {};
+
+      if (maxItem.control && maxItem.value && val > maxItem.value) return false;
+      if (minItem.control && minItem.value && val < minItem.value) return false;
+
+      return true;
+    },
+    async getMateralModelExtras() {
+      let list = await getMateralModelExtras({
+        processOrderCode: this.formData.processOrderCode,
+      });
+
+      this.controlList.forEach((control) => {
+        let name = control.name;
+        let maxName = name + "上限";
+        let minName = name + "下限";
+        let maxItem = list.find((ele) => ele.displayName == maxName) || {};
+        let minItem = list.find((ele) => ele.displayName == minName) || {};
+
+        this.controlMap[name] = {
+          上限: {
+            control: maxItem.control,
+            controlColor: maxItem.controlColor,
+            value: maxItem.value,
+          },
+          下限: {
+            control: minItem.control,
+            controlColor: minItem.controlColor,
+            value: minItem.value,
+          },
+        };
+      });
     },
   },
 };
@@ -2359,6 +2487,7 @@ export default {
 
 /deep/ .el-input__inner {
   height: 25px;
+  color: var(--controlColor);
 }
 
 /deep/ .el-form-item__content {
