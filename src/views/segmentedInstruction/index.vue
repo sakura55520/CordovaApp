@@ -221,7 +221,13 @@
                   <template slot-scope="scope">
                     <div
                       :style="{
-                        color: getControlColor(
+                        color: getFontColorByBackgroundColor(
+                          getControlColor(
+                            '少子寿命',
+                            scope.row.minorityCarrierLifetime
+                          )
+                        ),
+                        background: getControlColor(
                           '少子寿命',
                           scope.row.minorityCarrierLifetime
                         ),
@@ -523,6 +529,9 @@
                         '头部电阻率',
                         scope.row.headResistance
                       ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('头部电阻率', scope.row.headResistance)
+                      ),
                     }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.headResistance"
@@ -542,6 +551,9 @@
                       '--controlColor': getControlColor(
                         '尾部电阻率',
                         scope.row.tailResistance
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('尾部电阻率', scope.row.tailResistance)
                       ),
                     }"
                     v-if="scope.row.type !== 2"
@@ -601,6 +613,9 @@
                             '79oi头',
                             scope.row.head79oi
                           ),
+                          '--textColor': getFontColorByBackgroundColor(
+                            getControlColor('79oi头', scope.row.head79oi)
+                          ),
                         }"
                         v-model="scope.row.head79oi"
                         @change="
@@ -644,6 +659,9 @@
                           '--controlColor': getControlColor(
                             '79oi尾',
                             scope.row.tail79oi
+                          ),
+                          '--textColor': getFontColorByBackgroundColor(
+                            getControlColor('79oi尾', scope.row.tail79oi)
                           ),
                         }"
                         v-model="scope.row.tail79oi"
@@ -694,6 +712,9 @@
                         '头碳含量',
                         scope.row.headCarbonRate
                       ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('头碳含量', scope.row.headCarbonRate)
+                      ),
                     }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.headCarbonRate"
@@ -733,6 +754,12 @@
                           '--controlColor': getControlColor(
                             '尾碳含量',
                             scope.row.tailCarbonRate
+                          ),
+                          '--textColor': getFontColorByBackgroundColor(
+                            getControlColor(
+                              '尾碳含量',
+                              scope.row.tailCarbonRate
+                            )
                           ),
                         }"
                         v-if="scope.row.type !== 2"
@@ -1264,6 +1291,7 @@ import overStation from "@/mixins/overStation";
 import PhotoNew from "@/views/components/photoNew";
 import LeaderLine from "@/plugins/leader-line.min.js";
 import { getMateralModelExtras } from "@/api/factory/materialModel";
+import { getFontColorByBackgroundColor } from "@/utils/color";
 
 export default {
   mixins: [overStation],
@@ -1272,6 +1300,7 @@ export default {
   },
   data() {
     return {
+      getFontColorByBackgroundColor,
       formData: {
         userCreate: null,
         length: null,
@@ -2100,6 +2129,8 @@ export default {
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
+      if (!val) return maxItem.controlColor || minItem.controlColor;
+
       if (maxItem.control && maxItem.value && val > maxItem.value)
         return maxItem.controlColor;
       if (minItem.control && minItem.value && val < minItem.value)
@@ -2111,6 +2142,8 @@ export default {
       let item = this.controlMap[key] || {};
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
+
+      if (!val) return false;
 
       if (maxItem.control && maxItem.value && val > maxItem.value) return false;
       if (minItem.control && minItem.value && val < minItem.value) return false;
@@ -2487,7 +2520,8 @@ export default {
 
 /deep/ .el-input__inner {
   height: 25px;
-  color: var(--controlColor);
+  background-color: var(--controlColor);
+  color: var(--textColor);
 }
 
 /deep/ .el-form-item__content {

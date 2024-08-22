@@ -281,7 +281,10 @@
                       scope.row.targetDeviation == 0
                     "
                     :style="{
-                      color: getControlColor(
+                      color: getFontColorByBackgroundColor(
+                        getControlColor('目标偏差', scope.row.targetDeviation)
+                      ),
+                      background: getControlColor(
                         '目标偏差',
                         scope.row.targetDeviation
                       ),
@@ -302,7 +305,10 @@
                   <div
                     v-if="scope.row.rrg || scope.row.rrg == 0"
                     :style="{
-                      color: getControlColor('RRG', scope.row.rrg),
+                      color: getFontColorByBackgroundColor(
+                        getControlColor('RRG', scope.row.rrg)
+                      ),
+                      background: getControlColor('RRG', scope.row.rrg),
                     }"
                   >
                     {{ scope.row.rrg }}%
@@ -334,6 +340,9 @@
                   <el-input
                     :style="{
                       '--controlColor': getControlColor('OI_C', scope.row.oiC),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_C', scope.row.oiC)
+                      ),
                     }"
                     :id="'input-5-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
@@ -346,6 +355,9 @@
                   <el-input
                     :style="{
                       '--controlColor': getControlColor('OI_E', scope.row.oiE),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_E', scope.row.oiE)
+                      ),
                     }"
                     :id="'input-6-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 6, scope.$index)"
@@ -358,6 +370,9 @@
                   <el-input
                     :style="{
                       '--controlColor': getControlColor('CS', scope.row.cs),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('CS', scope.row.cs)
+                      ),
                     }"
                     :id="'input-7-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
@@ -384,6 +399,12 @@
                       '--controlColor': getControlColor(
                         '少子寿命',
                         scope.row.minorityCarrierLifetime
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          '少子寿命',
+                          scope.row.minorityCarrierLifetime
+                        )
                       ),
                     }"
                     :id="'input-8-' + scope.$index"
@@ -732,12 +753,14 @@ import PhotoNew from "@/views/components/photoNew";
 import moment from "moment";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation";
 import { getMateralModelExtras } from "@/api/factory/materialModel";
+import { getFontColorByBackgroundColor } from "@/utils/color";
 
 export default {
   mixins: [overStation],
   components: { SelectUserinfo, PhotoNew },
   data() {
     return {
+      getFontColorByBackgroundColor,
       formData: {
         productionRemark: null,
         inspector: null,
@@ -1244,6 +1267,8 @@ export default {
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
+      if (!val) return maxItem.controlColor || minItem.controlColor;
+
       if (maxItem.control && maxItem.value && val > maxItem.value)
         return maxItem.controlColor;
       if (minItem.control && minItem.value && val < minItem.value)
@@ -1255,6 +1280,8 @@ export default {
       let item = this.controlMap[key] || {};
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
+
+      if (!val) return false;
 
       if (maxItem.control && maxItem.value && val > maxItem.value) return false;
       if (minItem.control && minItem.value && val < minItem.value) return false;
@@ -1476,7 +1503,8 @@ export default {
 
 /deep/ .el-input__inner {
   height: 25px;
-  color: var(--controlColor);
+  background-color: var(--controlColor);
+  color: var(--textColor);
 }
 
 /deep/ .el-form-item__content {
