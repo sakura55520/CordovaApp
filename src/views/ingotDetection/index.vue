@@ -208,7 +208,11 @@
                     :prop="'details.' + scope.$index + '.resC'"
                     :rules="[
                       {
-                        required: scope.row.valid,
+                        required:
+                          scope.row.valid &&
+                          scope.row.type === '头尾样片' &&
+                          (scope.row.samplePosition == 0 ||
+                            scope.row.samplePosition == formData.lengthQty),
                         message: ' ',
                         trigger: 'change',
                       },
@@ -242,7 +246,11 @@
                     :prop="'details.' + scope.$index + '.resE'"
                     :rules="[
                       {
-                        required: scope.row.valid,
+                        required:
+                          scope.row.valid &&
+                          scope.row.type === '头尾样片' &&
+                          (scope.row.samplePosition == 0 ||
+                            scope.row.samplePosition == formData.lengthQty),
                         message: ' ',
                         trigger: 'change',
                       },
