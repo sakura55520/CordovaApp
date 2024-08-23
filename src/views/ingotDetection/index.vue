@@ -910,6 +910,15 @@ export default {
   },
   methods: {
     async init() {
+      let cloneDetails = [];
+      try {
+        cloneDetails = cloneDeep(
+          JSON.parse(this.$route.query.fromData).details || []
+        );
+      } catch (e) {
+        console.log(e);
+      }
+
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -932,15 +941,23 @@ export default {
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
       getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
 
-      this.formData.details = (this.formData.details || []).map((item) => ({
-        ...item,
-        productCategory: this.formData.productCategory,
-        orientation: this.formData.orientation,
-        size: this.formData.size,
-        res: this.formData.targetResistivity,
-        crystalDensity:
-          item.crystalDensity || this.getCrystalDensity(item.samplePosition),
-      }));
+      this.formData.details = (this.formData.details || []).map((item) => {
+        let sampleWeight = (
+          cloneDetails.find((ele) => ele.sampleNumber == item.sampleNumber) ||
+          {}
+        ).sampleWeight;
+
+        return {
+          ...item,
+          productCategory: this.formData.productCategory,
+          orientation: this.formData.orientation,
+          size: this.formData.size,
+          res: this.formData.targetResistivity,
+          crystalDensity:
+            item.crystalDensity || this.getCrystalDensity(item.samplePosition),
+          sampleWeight,
+        };
+      });
 
       this.fetchBackCuttingSampleRecord();
       this.getMateralModelExtras();
