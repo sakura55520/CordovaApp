@@ -170,9 +170,7 @@
                   :key="formItem.renderKey"
                   :conf="formItem"
                   :prop-value="formItem.extValue"
-                  @input="
-                    handleDebounceTechsInput($event, recordIdx, formItemIdx)
-                  "
+                  @input="handleTechsInput($event, recordIdx, formItemIdx)"
                 />
               </component>
             </template>
@@ -324,7 +322,7 @@ export default {
     handleSeedChange(event, techs) {
       Api.getSeed({ uniqueCode: event }).then((res) => {
         let index = techs.findIndex((item) => item.extKey === "籽晶寿命");
-        this.$set(techs[index], "extValue", res.data.usefulLife);
+        this.$set(techs[index], "extValue", (res.data || {}).usefulLife);
       });
     },
     // 补掺-掺杂剂编号 change
@@ -332,8 +330,12 @@ export default {
       Api.findByCode({ code: event }).then((res) => {
         let typeIndex = techs.findIndex((item) => item.extKey === "掺杂剂类型");
         let dosageIndex = techs.findIndex((item) => item.extKey === "补掺量");
-        this.$set(techs[typeIndex], "extValue", res.data.materialTypeName);
-        this.$set(techs[dosageIndex], "extValue", res.data.qty);
+        this.$set(
+          techs[typeIndex],
+          "extValue",
+          (res.data || {}).materialTypeName
+        );
+        this.$set(techs[dosageIndex], "extValue", (res.data || {}).qty);
       });
     },
     handleBellChange(event, techs) {
