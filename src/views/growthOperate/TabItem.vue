@@ -295,9 +295,6 @@ export default {
         case "籽晶编号":
           this.handleSeedChange(event, techs);
           break;
-        case "掺杂剂编号":
-          this.handleDopantChange(event, techs);
-          break;
         case "冷却开始时间":
         case "冷却结束时间":
           this.handleCoolTimeChange(techs);

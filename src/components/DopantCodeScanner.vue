@@ -12,6 +12,7 @@
       :placeholder="placeholder"
       v-on="$listeners"
       class="scan-input"
+      @change="handleChange"
     >
       <i
         v-show="codeText"
@@ -33,6 +34,7 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import { isEmpty } from "lodash-es";
 
 export default {
   name: "DopantCodeScanner",
@@ -146,6 +148,42 @@ export default {
       } catch (e) {
         console.log("请在客户端使用", e);
       }
+    },
+    handleChange(val) {
+      let codes = val.split(",").filter((item) => item);
+      if (isEmpty(codes)) return this.handleClear();
+      let code = codes[codes.length - 1];
+      let preCodes = codes.slice(0, codes.length - 1);
+      Api.findByCode({
+        code,
+      })
+        .then((res) => {
+          if (!res.data) {
+            this.$message.warning(`物料不存在`);
+            return;
+          }
+          if (res.data.materialTypeName !== this.type) {
+            this.$message.warning(`物料类型不是${this.type}`);
+            return;
+          }
+          if (res.data.status === 10) {
+            this.$message.warning(`该物料已使用`);
+            return;
+          }
+          if (preCodes.some((ele) => ele == res.data.code)) {
+            this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
+            return;
+          }
+          return res.data;
+        })
+        .then((data) => {
+          let currentCodes = codes;
+          if (data) this.emitHasDone(data.qty);
+          else currentCodes = preCodes;
+
+          this.codeText =
+            currentCodes.join(",") + (isEmpty(currentCodes) ? "" : ",");
+        });
     },
     handleClear() {
       this.codeText = "";
