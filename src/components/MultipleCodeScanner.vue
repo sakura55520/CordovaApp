@@ -12,6 +12,9 @@
       value-key="id"
       class="scan-select"
       filterable
+      allow-create
+      default-first-option
+      @change="handleChange"
     >
       <el-option
         v-for="item in codes"
@@ -212,6 +215,52 @@ export default {
         this.codes.push(res.data);
         this.inputDialog = false;
         this.input = null;
+      });
+    },
+    handleChange() {
+      this.$refs.multipleCodeSanner.blur();
+      const stringCodes = this.codes.filter((code) => typeof code === "string");
+      this.codes = this.codes.filter((code) => typeof code !== "string");
+      stringCodes.forEach((code) => {
+        Api.findByCode({ code })
+          .then((res) => {
+            if (!res.data) {
+              this.$message.warning(`物料不存在`);
+              return;
+            }
+            if (res.data.materialTypeName !== this.type) {
+              this.$message.warning(`物料类型不是${this.type}`);
+              return;
+            }
+            if (res.data.status === 10) {
+              this.$message.warning(`该物料已使用`);
+              return;
+            }
+            if (
+              this.allCodes.flat().some((item) => item.code === res.data.code)
+            ) {
+              this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
+              return;
+            }
+            if (
+              this.materialCodes &&
+              this.materialCodes.every((item) => item !== res.data.materialCode)
+            ) {
+              this.$message.warning(
+                `该物料不是当前批次所需的物料，该料号：${
+                  res.data.materialCode
+                }，所需料号：${this.materialCodes.join("、")}`
+              );
+              return;
+            }
+            return res.data;
+          })
+          .then((res) => {
+            if (res) this.codes.push(res);
+            this.$nextTick(() => {
+              this.$refs.multipleCodeSanner.focus();
+            });
+          });
       });
     },
   },
