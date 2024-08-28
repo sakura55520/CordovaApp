@@ -1677,7 +1677,12 @@ export default {
         })
       );
 
-      this.getMateralModelExtras();
+      await this.getMateralModelExtras();
+      this.$set(
+        this.formData,
+        "segmentedInstructionDetailVos",
+        cloneDeep(this.formData.segmentedInstructionDetailVos)
+      );
     },
     async handleCodeClick() {
       let { length } = this.formData;
@@ -2130,7 +2135,8 @@ export default {
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
-      if (!val) return maxItem.controlColor || minItem.controlColor;
+      if ((maxItem.control || minItem.control) && !val)
+        return maxItem.controlColor || minItem.controlColor;
 
       if (maxItem.control && maxItem.value && val > maxItem.value)
         return maxItem.controlColor;
@@ -2144,7 +2150,7 @@ export default {
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
-      if (!val) return false;
+      if ((maxItem.control || minItem.control) && !val) return false;
 
       if (maxItem.control && maxItem.value && val > maxItem.value) return false;
       if (minItem.control && minItem.value && val < minItem.value) return false;
@@ -2521,7 +2527,7 @@ export default {
 
 /deep/ .el-input__inner {
   height: 25px;
-  background-color: var(--controlColor);
+  background-color: var(--controlColor) !important;
   color: var(--textColor);
 }
 
