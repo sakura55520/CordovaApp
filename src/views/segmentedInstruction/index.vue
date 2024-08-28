@@ -1699,7 +1699,8 @@ export default {
       //   );
       //   return;
       // }
-      let res = await Api.segmentedInstructionGenerateNo(this.formData);
+      const { photo, ...rest } = this.formData;
+      let res = await Api.segmentedInstructionGenerateNo(rest);
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
       res.segmentedInstructionDetailVos.forEach((item, index) => {
         list[index].segmentNo = item.segmentNo;

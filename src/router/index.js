@@ -54,6 +54,13 @@ export const constantRouterMap = [
     meta: { text: '交接班管理' },
   },
   {
+    name: 'deviceShiftChangeOperate',
+    path: '/deviceShiftChangeOperate',
+    component: () => import('@/views/shiftChange/deviceShiftChangeOperate'),
+    hidden: true,
+    meta: { text: '设备交接班' },
+  },
+  {
     name: 'shiftChangeOperate',
     path: '/shiftChangeOperate',
     component: () => import('@/views/shiftChange/shiftChangeOperate'),
