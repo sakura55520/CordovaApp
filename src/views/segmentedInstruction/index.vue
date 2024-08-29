@@ -1285,7 +1285,7 @@
 
 <script>
 import * as Api from "@/api/inStation";
-import { cloneDeep, isEmpty } from "lodash-es";
+import { cloneDeep, isEmpty, get } from "lodash-es";
 import { getSeleteData } from "@/utils/select";
 import overStation from "@/mixins/overStation";
 import PhotoNew from "@/views/components/photoNew";
@@ -1347,13 +1347,41 @@ export default {
         tailRrv: null,
       },
       controlList: [
-        { key: "headResistance", name: "头部电阻率" },
-        { key: "tailResistance", name: "尾部电阻率" },
-        { key: "head79oi", name: "79oi头" },
-        { key: "tail79oi", name: "79oi尾" },
-        { key: "headCarbonRate", name: "头碳含量" },
-        { key: "tailCarbonRate", name: "尾碳含量" },
-        { key: "minorityCarrierLifetime", name: "少子寿命" },
+        {
+          key: "headResistance",
+          name: "头部电阻率",
+          from: "formData.segmentedInstructionDetailVos",
+        },
+        {
+          key: "tailResistance",
+          name: "尾部电阻率",
+          from: "formData.segmentedInstructionDetailVos",
+        },
+        {
+          key: "head79oi",
+          name: "79oi头",
+          from: "formData.segmentedInstructionDetailVos",
+        },
+        {
+          key: "tail79oi",
+          name: "79oi尾",
+          from: "formData.segmentedInstructionDetailVos",
+        },
+        {
+          key: "headCarbonRate",
+          name: "头碳含量",
+          from: "formData.segmentedInstructionDetailVos",
+        },
+        {
+          key: "tailCarbonRate",
+          name: "尾碳含量",
+          from: "formData.segmentedInstructionDetailVos",
+        },
+        {
+          key: "minorityCarrierLifetime",
+          name: "少子寿命",
+          from: "checkInfo",
+        },
       ],
       controlMap: {},
     };
@@ -1853,8 +1881,9 @@ export default {
 
       let outControlList = [];
       this.controlList.forEach((control) => {
+        let list = get(this, control.from, []);
         if (
-          this.formData.segmentedInstructionDetailVos.some(
+          list.some(
             (item) => !this.checkControl(control.name, item[control.key])
           )
         )

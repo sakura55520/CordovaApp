@@ -756,7 +756,7 @@ import SelectUserinfo from "@/components/select_userinfo";
 import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
 import { mapState } from "vuex";
-import { cloneDeep, isEmpty } from "lodash-es";
+import { cloneDeep, isEmpty, get } from "lodash-es";
 import PhotoNew from "@/views/components/photoNew";
 import moment from "moment";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation";
@@ -894,12 +894,16 @@ export default {
       selectIndex: undefined,
       originalTall: undefined,
       controlList: [
-        { key: "targetDeviation", name: "目标偏差" },
-        { key: "rrg", name: "RRG" },
-        { key: "cs", name: "CS" },
-        { key: "minorityCarrierLifetime", name: "少子寿命" },
-        { key: "oiC", name: "OI_C" },
-        { key: "oiE", name: "OI_E" },
+        { key: "targetDeviation", name: "目标偏差", from: "formData.details" },
+        { key: "rrg", name: "RRG", from: "formData.details" },
+        { key: "cs", name: "CS", from: "formData.details" },
+        {
+          key: "minorityCarrierLifetime",
+          name: "少子寿命",
+          from: "formData.details",
+        },
+        { key: "oiC", name: "OI_C", from: "formData.details" },
+        { key: "oiE", name: "OI_E", from: "formData.details" },
       ],
       controlMap: {},
     };
@@ -1153,8 +1157,9 @@ export default {
 
       let outControlList = [];
       this.controlList.forEach((control) => {
+        let list = get(this, control.from, []);
         if (
-          this.formData.details.some(
+          list.some(
             (item) => !this.checkControl(control.name, item[control.key])
           )
         )
