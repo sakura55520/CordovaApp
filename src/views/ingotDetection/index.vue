@@ -1298,18 +1298,18 @@ export default {
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
-      if ((maxItem.control || minItem.control) && !(val || val == 0))
+      if ((maxItem.control || minItem.control) && !(val || String(val) === "0"))
         return maxItem.controlColor || minItem.controlColor;
 
       if (
         maxItem.control &&
-        (maxItem.value || maxItem.value == 0) &&
+        (maxItem.value || String(maxItem.value) === "0") &&
         Number(val) > Number(maxItem.value)
       )
         return maxItem.controlColor;
       if (
         minItem.control &&
-        (minItem.value || minItem.value == 0) &&
+        (minItem.value || String(minItem.value) === "0") &&
         Number(val) < Number(minItem.value)
       )
         return minItem.controlColor;
@@ -1321,18 +1321,18 @@ export default {
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
-      if ((maxItem.control || minItem.control) && !(val || val == 0))
+      if ((maxItem.control || minItem.control) && !(val || String(val) === "0"))
         return false;
 
       if (
         maxItem.control &&
-        (maxItem.value || maxItem.value == 0) &&
+        (maxItem.value || String(maxItem.value) === "0") &&
         Number(val) > Number(maxItem.value)
       )
         return false;
       if (
         minItem.control &&
-        (minItem.value || minItem.value == 0) &&
+        (minItem.value || String(minItem.value) === "0") &&
         Number(val) < Number(minItem.value)
       )
         return false;
