@@ -505,6 +505,11 @@ export default {
         )
       )
         return this.$message.warning("样片位置不能大于晶体实测长度");
+      if (
+        this.formData.lengthQty == 0 &&
+        !isEmpty(this.formData.wipCuttingSampleInfos)
+      )
+        return this.$message.warning("晶体实测长度为0mm时不能存在样片");
       if (this.formData.lengthQty == 0)
         await this.$confirm(
           "晶体实测长度为0mm时整根报废，确认是否报废?",
