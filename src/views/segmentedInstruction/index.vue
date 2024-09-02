@@ -1891,6 +1891,29 @@ export default {
       )
         return this.$message.warning("分段编号不能为空");
 
+      let minRes = Number((Number(this.tailResistance || 0) / 2).toFixed(3));
+      let maxRes = Number((Number(this.headResistance || 0) * 2).toFixed(3));
+      if (
+        this.formData.segmentedInstructionDetailVos.some((item) => {
+          const { headResistance, tailResistance } = item;
+          if (
+            (headResistance || String(headResistance) === "0") &&
+            (Number(headResistance) > maxRes || Number(headResistance) < minRes)
+          )
+            return true;
+          if (
+            (tailResistance || String(tailResistance) === "0") &&
+            (Number(tailResistance) > maxRes || Number(tailResistance) < minRes)
+          )
+            return true;
+
+          return false;
+        })
+      )
+        return this.$message.warning(
+          `电阻率范围：${minRes}(0.5倍尾部电阻率)~${maxRes}(2倍头部电阻率)`
+        );
+
       let outControlList = [];
       this.controlList.forEach((control) => {
         let list = get(this, control.from, []);
