@@ -373,7 +373,7 @@ export default {
       this.formData._polysilicons.forEach((item) => {
         if (!isEmpty(item)) {
           item.forEach((ele) => {
-            total += ele.qty;
+            if (ele) total += ele.qty || 0;
           });
         }
       });
@@ -392,7 +392,7 @@ export default {
       this.formData._dopants.forEach((item) => {
         if (!isEmpty(item)) {
           item.forEach((ele) => {
-            total += ele.qty;
+            if (ele) total += ele.qty || 0;
           });
         }
       });
