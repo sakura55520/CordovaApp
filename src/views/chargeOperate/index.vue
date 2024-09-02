@@ -432,7 +432,9 @@ export default {
 
       this.formData = Object.assign({}, cloneDeep(defaultForm), fromData);
       let _polysilicons = Object.values(this.formData.polysilicons);
-      let _dopants = Object.values(this.formData.dopants);
+      let _dopants = Object.values(this.formData.dopants).map((item) => {
+        return item.filter((ele) => ele);
+      });
       this.$set(this.formData, "_polysilicons", _polysilicons);
       this.$set(this.formData, "_dopants", _dopants);
 
