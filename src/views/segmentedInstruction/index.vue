@@ -1433,6 +1433,15 @@ export default {
         (item) => item.type === "头尾样片" && item.sampleIdentification === "T"
       ).resC;
     },
+    headCS() {
+      let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
+      return (
+        reverseDetails.find(
+          (item) =>
+            item.type === "头尾样片" && item.sampleIdentification === "H"
+        ) || {}
+      ).cs;
+    },
   },
   created() {
     this.initKeyup();
@@ -1668,6 +1677,7 @@ export default {
             headRrv: this.headAndTailRrv.headRrv,
             tailRrv: this.headAndTailRrv.tailRrv,
             _reason: [],
+            headCarbonRate: this.headCS,
           };
         });
 
@@ -1761,6 +1771,7 @@ export default {
         tail83oi: null,
         headRrv: this.headAndTailRrv.headRrv,
         tailRrv: this.headAndTailRrv.tailRrv,
+        headCarbonRate: this.headCS,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -1787,6 +1798,7 @@ export default {
         tail83oi: tailOi[1],
         headRrv: this.headAndTailRrv.headRrv,
         tailRrv: this.headAndTailRrv.tailRrv,
+        headCarbonRate: this.headCS,
       };
       this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
     },
