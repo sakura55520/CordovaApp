@@ -488,8 +488,10 @@ export default {
       await getSeleteData("sampleType", this.sampleTypeList);
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
 
-      this.fetchSampleCode();
-      this.handleLengthChange();
+      if (!this.$route.query.view) {
+        this.fetchSampleCode();
+        this.handleLengthChange();
+      }
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
