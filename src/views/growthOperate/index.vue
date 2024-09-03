@@ -33,7 +33,7 @@
         v-if="tabsVisible"
         v-model="currentStepName"
         tab-position="left"
-        @tab-click="handleSetpClick"
+        @tab-click="handleStepClick"
       >
         <el-tab-pane
           v-for="(stepName, index) in calcStepNameList"
@@ -730,7 +730,7 @@ export default {
         (stepData[recordIdx].errors || []).map((item) => item.errorMessage)
       );
     },
-    handleSetpClick({ name }) {
+    handleStepClick({ name }) {
       switch (name) {
         case "单晶异常":
           this.$nextTick(() => {
