@@ -1895,6 +1895,8 @@ export default {
       let maxRes = Number((Number(this.headResistance || 0) * 2).toFixed(3));
       if (
         this.formData.segmentedInstructionDetailVos.some((item) => {
+          if (item.type === 2) return false;
+
           const { headResistance, tailResistance } = item;
           if (
             (headResistance || String(headResistance) === "0") &&
