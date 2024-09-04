@@ -809,6 +809,7 @@ export default {
       return (Number(degrees) + Number(minute) / 60).toFixed(4);
     },
     async save() {
+      this.calcAngle();
       await Api.upldateBuffer(this.buffParams, this.formData);
       const msg = "保存成功!";
       this.back(msg);
