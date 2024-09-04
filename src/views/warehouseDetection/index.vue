@@ -131,15 +131,15 @@
               </el-form-item>
               <el-form-item
                 label="实际称重"
-                prop="weighingQty"
+                prop="goodQty"
                 class="item"
                 label-width="90px"
               >
                 <div class="input">
                   <el-input
                     class="value"
-                    v-model="formData.weighingQty"
-                    :disabled="!enableMap.weighingQty"
+                    v-model="formData.goodQty"
+                    :disabled="!enableMap.goodQty"
                     v-direction="{ x: 3, y: 2 }"
                   >
                     <template slot="append">kg</template>
@@ -277,54 +277,6 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="滚圆实测副参考面长度"
-                prop="auxiliaryReferenceSurfaceLength"
-                class="item"
-                label-width="175px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.auxiliaryReferenceSurfaceLength"
-                    :disabled="!enableMap.auxiliaryReferenceSurfaceLength"
-                    v-direction="{ x: 4, y: 4 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="滚圆主副测夹角"
-                prop="mainAuxiliaryAngle"
-                class="item"
-                label-width="130px"
-              >
-                <div class="inputs">
-                  <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
-                    <el-input
-                      v-model="formData.mainAuxiliaryAngleDegrees"
-                      :disabled="!enableMap.mainAuxiliaryAngleDegrees"
-                      v-direction="{ x: 5, y: 4 }"
-                      @input="handleNext"
-                    >
-                      <template slot="append">°</template>
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="" prop="mainAuxiliaryAngleMinute">
-                    <el-input
-                      v-model="formData.mainAuxiliaryAngleMinute"
-                      :disabled="!enableMap.mainAuxiliaryAngleMinute"
-                      v-direction="{ x: 6, y: 4 }"
-                      @input="handleNext"
-                    >
-                      <template slot="append">'</template>
-                    </el-input>
-                  </el-form-item>
-                </div>
-              </el-form-item>
-            </div>
-            <div class="row">
-              <el-form-item
                 label="滚圆实测主参考面宽度头"
                 prop="mainReferenceSurfaceWidthHead"
                 class="item"
@@ -335,7 +287,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthHead"
                     :disabled="!enableMap.mainReferenceSurfaceWidthHead"
-                    v-direction="{ x: 1, y: 5 }"
+                    v-direction="{ x: 4, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -352,7 +304,55 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthTail"
                     :disabled="!enableMap.mainReferenceSurfaceWidthTail"
-                    v-direction="{ x: 2, y: 5 }"
+                    v-direction="{ x: 5, y: 4 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="滚圆主副测夹角"
+                prop="mainAuxiliaryAngle"
+                class="item"
+                label-width="130px"
+              >
+                <div class="inputs">
+                  <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleDegrees"
+                      :disabled="!enableMap.mainAuxiliaryAngleDegrees"
+                      v-direction="{ x: 1, y: 5 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="mainAuxiliaryAngleMinute">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleMinute"
+                      :disabled="!enableMap.mainAuxiliaryAngleMinute"
+                      v-direction="{ x: 2, y: 5 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测副参考面长度"
+                prop="auxiliaryReferenceSurfaceLength"
+                class="item"
+                label-width="175px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.auxiliaryReferenceSurfaceLength"
+                    :disabled="!enableMap.auxiliaryReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -369,7 +369,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceHead"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceHead"
-                    v-direction="{ x: 3, y: 5 }"
+                    v-direction="{ x: 4, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -386,28 +386,177 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceTail"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceTail"
-                    v-direction="{ x: 4, y: 5 }"
+                    v-direction="{ x: 5, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
                 </div>
               </el-form-item>
             </div>
-            <!-- <el-form-item label="线边仓" prop="lineWarehouse" class="item">
-              <el-select v-model="formData.lineWarehouse" placeholder="">
-                <el-option label="成品线边仓" :value="1"></el-option>
-              </el-select>
-            </el-form-item> -->
-            <!-- <el-form-item
-              label="线边仓库位"
-              prop="lineWarehouseLocation"
-              class="item"
-            >
-              <SelectLinesideTree
-                v-model="formData.lineWarehouseLocation"
-                @select="handleWhouseSelect"
-              />
-            </el-form-item> -->
+            <div class="row">
+              <el-form-item
+                label="滚圆实测三参侧夹角"
+                prop="thirdAngle"
+                class="item"
+                label-width="170px"
+              >
+                <div class="inputs">
+                  <el-form-item label="" prop="thirdAngleDegrees">
+                    <el-input
+                      v-model="formData.thirdAngleDegrees"
+                      :disabled="!enableMap.thirdAngleDegrees"
+                      v-direction="{ x: 1, y: 6 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="thirdAngleMinute">
+                    <el-input
+                      v-model="formData.thirdAngleMinute"
+                      :disabled="!enableMap.thirdAngleMinute"
+                      v-direction="{ x: 2, y: 6 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测三参考面长度"
+                prop="thirdReferenceSurfaceLength"
+                class="item"
+                label-width="175px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.thirdReferenceSurfaceLength"
+                    :disabled="!enableMap.thirdReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 6 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测三参考面宽度头"
+                prop="thirdReferenceSurfaceWidthHead"
+                class="item"
+                label-width="190px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.thirdReferenceSurfaceWidthHead"
+                    :disabled="!enableMap.thirdReferenceSurfaceWidthHead"
+                    v-direction="{ x: 4, y: 6 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测三参考面宽度尾"
+                prop="thirdReferenceSurfaceWidthTail"
+                class="item"
+                label-width="190px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.thirdReferenceSurfaceWidthTail"
+                    :disabled="!enableMap.thirdReferenceSurfaceWidthTail"
+                    v-direction="{ x: 5, y: 6 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="滚圆实测四参侧夹角"
+                prop="fourthAngle"
+                class="item"
+                label-width="170px"
+              >
+                <div class="inputs">
+                  <el-form-item label="" prop="fourthAngleDegrees">
+                    <el-input
+                      v-model="formData.fourthAngleDegrees"
+                      :disabled="!enableMap.fourthAngleDegrees"
+                      v-direction="{ x: 1, y: 7 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="fourthAngleMinute">
+                    <el-input
+                      v-model="formData.fourthAngleMinute"
+                      :disabled="!enableMap.fourthAngleMinute"
+                      v-direction="{ x: 2, y: 7 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测四参考面长度"
+                prop="fourthReferenceSurfaceLength"
+                class="item"
+                label-width="175px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.fourthReferenceSurfaceLength"
+                    :disabled="!enableMap.fourthReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 7 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测四参考面宽度头"
+                prop="fourthReferenceSurfaceWidthHead"
+                class="item"
+                label-width="190px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.fourthReferenceSurfaceWidthHead"
+                    :disabled="!enableMap.fourthReferenceSurfaceWidthHead"
+                    v-direction="{ x: 4, y: 7 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="滚圆实测四参考面宽度尾"
+                prop="fourthReferenceSurfaceWidthTail"
+                class="item"
+                label-width="190px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.fourthReferenceSurfaceWidthTail"
+                    :disabled="!enableMap.fourthReferenceSurfaceWidthTail"
+                    v-direction="{ x: 5, y: 7 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
           </div>
           <div class="form">
             <div class="form-title">参数说明</div>
@@ -443,7 +592,6 @@
 import * as Api from "@/api/inStation";
 import SelectLinesideTree from "@/components/SelectLinesideTree";
 import overStation from "@/mixins/overStation";
-import { getSeleteData } from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -455,13 +603,11 @@ export default {
       formData: {
         userCreate: null,
         goodQty: null,
-        scrapQty: null,
         planLength: null,
         originLength: null,
         chippingLength: null,
         ellipticLength: null,
         qualifiedLength: null,
-        weighingQty: null,
         resHead: null,
         resTail: null,
         circleDiameterHead: null,
@@ -470,14 +616,26 @@ export default {
         mainReferenceSurfaceCrystalOrientationDegrees: null,
         mainReferenceSurfaceCrystalOrientationMinute: null,
         mainReferenceSurfaceLength: null,
-        auxiliaryReferenceSurfaceLength: null,
+        mainReferenceSurfaceWidthHead: null,
+        mainReferenceSurfaceWidthTail: null,
         mainAuxiliaryAngle: null,
         mainAuxiliaryAngleDegrees: null,
         mainAuxiliaryAngleMinute: null,
-        mainReferenceSurfaceWidthHead: null,
-        mainReferenceSurfaceWidthTail: null,
+        auxiliaryReferenceSurfaceLength: null,
         auxiliaryReferenceSurfaceHead: null,
         auxiliaryReferenceSurfaceTail: null,
+        thirdAngle: null,
+        thirdAngleDegrees: null,
+        thirdAngleMinute: null,
+        thirdReferenceSurfaceLength: null,
+        thirdReferenceSurfaceWidthHead: null,
+        thirdReferenceSurfaceWidthTail: null,
+        fourthAngle: null,
+        fourthAngleDegrees: null,
+        fourthAngleMinute: null,
+        fourthReferenceSurfaceLength: null,
+        fourthReferenceSurfaceWidthHead: null,
+        fourthReferenceSurfaceWidthTail: null,
         lineWarehouseLocation: null,
       },
       formRules: {
@@ -485,10 +643,7 @@ export default {
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
         goodQty: [
-          { required: true, message: "合格数量不能为空", trigger: "change" },
-        ],
-        scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "change" },
+          { required: true, message: "实际称重不能为空", trigger: "change" },
         ],
         planLength: [
           { required: true, message: "计划长度不能为空", trigger: "change" },
@@ -509,10 +664,6 @@ export default {
         qualifiedLength: [
           { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
-        weighingQty: [
-          { required: true, message: "实际称重不能为空", trigger: "change" },
-        ],
-        // !!formData.needRollingCircle,
         circleDiameterHead: [
           { required: true, message: "最小直径不能为空", trigger: "change" },
         ],
@@ -590,12 +741,18 @@ export default {
       ).toFixed(2);
     },
     calcDegreesMinute() {
-      const { mainReferenceSurfaceCrystalOrientation, mainAuxiliaryAngle } =
-        this.formData;
+      const {
+        mainReferenceSurfaceCrystalOrientation,
+        mainAuxiliaryAngle,
+        thirdAngle,
+        fourthAngle,
+      } = this.formData;
       let mainReferenceSurfaceCrystalOrientationDegreesMinute =
         this.formatDegree(mainReferenceSurfaceCrystalOrientation);
       let mainAuxiliaryAngleDegreesMinute =
         this.formatDegree(mainAuxiliaryAngle);
+      let thirdAngleDegreesMinute = this.formatDegree(thirdAngle);
+      let fourthAngleDegreesMinute = this.formatDegree(fourthAngle);
 
       this.formData.mainReferenceSurfaceCrystalOrientationDegrees =
         mainReferenceSurfaceCrystalOrientationDegreesMinute[0];
@@ -606,6 +763,12 @@ export default {
         mainAuxiliaryAngleDegreesMinute[0];
       this.formData.mainAuxiliaryAngleMinute =
         mainAuxiliaryAngleDegreesMinute[1];
+
+      this.formData.thirdAngleDegrees = thirdAngleDegreesMinute[0];
+      this.formData.thirdAngleMinute = thirdAngleDegreesMinute[1];
+
+      this.formData.fourthAngleDegrees = fourthAngleDegreesMinute[0];
+      this.formData.fourthAngleMinute = fourthAngleDegreesMinute[1];
     },
     calcAngle() {
       const {
@@ -613,6 +776,10 @@ export default {
         mainReferenceSurfaceCrystalOrientationMinute,
         mainAuxiliaryAngleDegrees,
         mainAuxiliaryAngleMinute,
+        thirdAngleDegrees,
+        thirdAngleMinute,
+        fourthAngleDegrees,
+        fourthAngleMinute,
       } = this.formData;
 
       this.formData.mainReferenceSurfaceCrystalOrientation = this.formatAngle(
@@ -622,6 +789,14 @@ export default {
       this.formData.mainAuxiliaryAngle = this.formatAngle(
         mainAuxiliaryAngleDegrees,
         mainAuxiliaryAngleMinute
+      );
+      this.formData.thirdAngle = this.formatAngle(
+        thirdAngleDegrees,
+        thirdAngleMinute
+      );
+      this.formData.fourthAngle = this.formatAngle(
+        fourthAngleDegrees,
+        fourthAngleMinute
       );
     },
     formatDegree(value) {
