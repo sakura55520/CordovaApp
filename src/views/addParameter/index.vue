@@ -74,7 +74,7 @@
                     class="value"
                     v-model="formData.originLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 1, y: 1 }"
+                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -91,7 +91,7 @@
                     class="value"
                     v-model="formData.chippingLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 2, y: 1 }"
+                    v-direction="{ x: 4, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -108,7 +108,7 @@
                     class="value"
                     v-model="formData.ellipticLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 3, y: 1 }"
+                    v-direction="{ x: 5, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -186,51 +186,6 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="实测副参考面长度"
-                prop="auxiliaryReferenceSurfaceLength"
-                class="item"
-                label-width="140px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.auxiliaryReferenceSurfaceLength"
-                    v-direction="{ x: 4, y: 2 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="主副侧夹角"
-                prop="mainAuxiliaryAngle"
-                class="item"
-                label-width="95px"
-              >
-                <div class="inputs">
-                  <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
-                    <el-input
-                      v-model="formData.mainAuxiliaryAngleDegrees"
-                      v-direction="{ x: 5, y: 2 }"
-                      @input="handleNext"
-                    >
-                      <template slot="append">°</template>
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="" prop="mainAuxiliaryAngleMinute">
-                    <el-input
-                      v-model="formData.mainAuxiliaryAngleMinute"
-                      v-direction="{ x: 6, y: 2 }"
-                      @input="handleNext"
-                    >
-                      <template slot="append">'</template>
-                    </el-input>
-                  </el-form-item>
-                </div>
-              </el-form-item>
-            </div>
-            <div class="row">
-              <el-form-item
                 label="实测主参考面宽度头"
                 prop="mainReferenceSurfaceWidthHead"
                 class="item"
@@ -240,7 +195,7 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthHead"
-                    v-direction="{ x: 1, y: 3 }"
+                    v-direction="{ x: 4, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -256,7 +211,52 @@
                   <el-input
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthTail"
-                    v-direction="{ x: 2, y: 3 }"
+                    v-direction="{ x: 5, y: 2 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="主副侧夹角"
+                prop="mainAuxiliaryAngle"
+                class="item"
+                label-width="95px"
+              >
+                <div class="inputs">
+                  <el-form-item label="" prop="mainAuxiliaryAngleDegrees">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleDegrees"
+                      v-direction="{ x: 1, y: 3 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="mainAuxiliaryAngleMinute">
+                    <el-input
+                      v-model="formData.mainAuxiliaryAngleMinute"
+                      v-direction="{ x: 2, y: 3 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测副参考面长度"
+                prop="auxiliaryReferenceSurfaceLength"
+                class="item"
+                label-width="140px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.auxiliaryReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -272,7 +272,7 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceHead"
-                    v-direction="{ x: 3, y: 3 }"
+                    v-direction="{ x: 4, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -288,7 +288,161 @@
                   <el-input
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceTail"
-                    v-direction="{ x: 4, y: 3 }"
+                    v-direction="{ x: 5, y: 3 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="实测三参侧夹角"
+                prop="thirdAngle"
+                class="item"
+                label-width="130px"
+              >
+                <div class="inputs">
+                  <el-form-item label="" prop="thirdAngleDegrees">
+                    <el-input
+                      v-model="formData.thirdAngleDegrees"
+                      v-direction="{ x: 1, y: 4 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="thirdAngleMinute">
+                    <el-input
+                      v-model="formData.thirdAngleMinute"
+                      v-direction="{ x: 2, y: 4 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测三参考面长度"
+                prop="thirdReferenceSurfaceLength"
+                class="item"
+                label-width="140px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.thirdReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 4 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测三参考面宽度头"
+                prop="thirdReferenceSurfaceWidthHead"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.thirdReferenceSurfaceWidthHead"
+                    v-direction="{ x: 4, y: 4 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测三参考面宽度尾"
+                prop="thirdReferenceSurfaceWidthTail"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.thirdReferenceSurfaceWidthTail"
+                    v-direction="{ x: 5, y: 4 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="实测四参侧夹角"
+                prop="fourthAngle"
+                class="item"
+                label-width="130px"
+              >
+                <div class="inputs">
+                  <el-form-item label="" prop="fourthAngleDegrees">
+                    <el-input
+                      v-model="formData.fourthAngleDegrees"
+                      v-direction="{ x: 1, y: 5 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">°</template>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="" prop="fourthAngleMinute">
+                    <el-input
+                      v-model="formData.fourthAngleMinute"
+                      v-direction="{ x: 2, y: 5 }"
+                      @input="handleNext"
+                    >
+                      <template slot="append">'</template>
+                    </el-input>
+                  </el-form-item>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测四参考面长度"
+                prop="fourthReferenceSurfaceLength"
+                class="item"
+                label-width="140px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.fourthReferenceSurfaceLength"
+                    v-direction="{ x: 3, y: 5 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测四参考面宽度头"
+                prop="fourthReferenceSurfaceWidthHead"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.fourthReferenceSurfaceWidthHead"
+                    v-direction="{ x: 4, y: 5 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="实测四参考面宽度尾"
+                prop="fourthReferenceSurfaceWidthTail"
+                class="item"
+                label-width="160px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.fourthReferenceSurfaceWidthTail"
+                    v-direction="{ x: 5, y: 5 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -356,14 +510,26 @@ export default {
         mainReferenceSurfaceCrystalOrientationDegrees: null,
         mainReferenceSurfaceCrystalOrientationMinute: null,
         mainReferenceSurfaceLength: null,
-        auxiliaryReferenceSurfaceLength: null,
+        mainReferenceSurfaceWidthHead: null,
+        mainReferenceSurfaceWidthTail: null,
         mainAuxiliaryAngle: null,
         mainAuxiliaryAngleDegrees: null,
         mainAuxiliaryAngleMinute: null,
-        mainReferenceSurfaceWidthHead: null,
-        mainReferenceSurfaceWidthTail: null,
+        auxiliaryReferenceSurfaceLength: null,
         auxiliaryReferenceSurfaceHead: null,
         auxiliaryReferenceSurfaceTail: null,
+        thirdAngle: null,
+        thirdAngleDegrees: null,
+        thirdAngleMinute: null,
+        thirdReferenceSurfaceLength: null,
+        thirdReferenceSurfaceWidthHead: null,
+        thirdReferenceSurfaceWidthTail: null,
+        fourthAngle: null,
+        fourthAngleDegrees: null,
+        fourthAngleMinute: null,
+        fourthReferenceSurfaceLength: null,
+        fourthReferenceSurfaceWidthHead: null,
+        fourthReferenceSurfaceWidthTail: null,
       },
       formRules: {
         userCreate: [
@@ -461,12 +627,18 @@ export default {
       ).toFixed(2);
     },
     calcDegreesMinute() {
-      const { mainReferenceSurfaceCrystalOrientation, mainAuxiliaryAngle } =
-        this.formData;
+      const {
+        mainReferenceSurfaceCrystalOrientation,
+        mainAuxiliaryAngle,
+        thirdAngle,
+        fourthAngle,
+      } = this.formData;
       let mainReferenceSurfaceCrystalOrientationDegreesMinute =
         this.formatDegree(mainReferenceSurfaceCrystalOrientation);
       let mainAuxiliaryAngleDegreesMinute =
         this.formatDegree(mainAuxiliaryAngle);
+      let thirdAngleDegreesMinute = this.formatDegree(thirdAngle);
+      let fourthAngleDegreesMinute = this.formatDegree(fourthAngle);
 
       this.formData.mainReferenceSurfaceCrystalOrientationDegrees =
         mainReferenceSurfaceCrystalOrientationDegreesMinute[0];
@@ -477,6 +649,12 @@ export default {
         mainAuxiliaryAngleDegreesMinute[0];
       this.formData.mainAuxiliaryAngleMinute =
         mainAuxiliaryAngleDegreesMinute[1];
+
+      this.formData.thirdAngleDegrees = thirdAngleDegreesMinute[0];
+      this.formData.thirdAngleMinute = thirdAngleDegreesMinute[1];
+
+      this.formData.fourthAngleDegrees = fourthAngleDegreesMinute[0];
+      this.formData.fourthAngleMinute = fourthAngleDegreesMinute[1];
     },
     calcAngle() {
       const {
@@ -484,6 +662,10 @@ export default {
         mainReferenceSurfaceCrystalOrientationMinute,
         mainAuxiliaryAngleDegrees,
         mainAuxiliaryAngleMinute,
+        thirdAngleDegrees,
+        thirdAngleMinute,
+        fourthAngleDegrees,
+        fourthAngleMinute,
       } = this.formData;
 
       this.formData.mainReferenceSurfaceCrystalOrientation = this.formatAngle(
@@ -493,6 +675,14 @@ export default {
       this.formData.mainAuxiliaryAngle = this.formatAngle(
         mainAuxiliaryAngleDegrees,
         mainAuxiliaryAngleMinute
+      );
+      this.formData.thirdAngle = this.formatAngle(
+        thirdAngleDegrees,
+        thirdAngleMinute
+      );
+      this.formData.fourthAngle = this.formatAngle(
+        fourthAngleDegrees,
+        fourthAngleMinute
       );
     },
     formatDegree(value) {
