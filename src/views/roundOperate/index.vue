@@ -309,6 +309,31 @@
             </div>
             <div class="row">
               <el-form-item
+                label="籽晶类型"
+                prop="seedCrystal"
+                label-width="90px"
+              >
+                <el-input v-model="formData.seedCrystal" disabled> </el-input>
+              </el-form-item>
+              <el-form-item
+                label="晶向偏离"
+                prop="crystalOrientationOffset"
+                label-width="90px"
+              >
+                <el-input v-model="formData.crystalOrientationOffset" disabled>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="参考面类型"
+                prop="referenceSurfaceType"
+                label-width="120px"
+              >
+                <el-input v-model="formData.referenceSurfaceType" disabled>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
                 label="主参"
                 prop="mainReferenceSurfaceLength"
                 label-width="90px"
@@ -438,31 +463,6 @@
                   v-model="formData.fourthReferenceSurfaceSite"
                   disabled
                 >
-                </el-input>
-              </el-form-item>
-            </div>
-            <div class="row">
-              <el-form-item
-                label="籽晶类型"
-                prop="seedCrystal"
-                label-width="90px"
-              >
-                <el-input v-model="formData.seedCrystal" disabled> </el-input>
-              </el-form-item>
-              <el-form-item
-                label="晶向偏离"
-                prop="crystalOrientationOffset"
-                label-width="90px"
-              >
-                <el-input v-model="formData.crystalOrientationOffset" disabled>
-                </el-input>
-              </el-form-item>
-              <el-form-item
-                label="参考面类型"
-                prop="referenceSurfaceType"
-                label-width="120px"
-              >
-                <el-input v-model="formData.referenceSurfaceType" disabled>
                 </el-input>
               </el-form-item>
             </div>

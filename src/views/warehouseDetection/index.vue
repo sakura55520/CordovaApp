@@ -313,7 +313,7 @@
             </div>
             <div class="row">
               <el-form-item
-                label="滚圆主副测夹角"
+                label="滚圆主副侧夹角"
                 prop="mainAuxiliaryAngle"
                 class="item"
                 label-width="130px"
