@@ -35,6 +35,7 @@ export default {
         ZL: "装料",
         ZJ: "长晶",
         DJSF: "单晶送付",
+        HX: "划线",
         QTWQY: "切头尾取样",
         JDJY: "晶锭检验",
         FDZL: "分段指令",

@@ -88,6 +88,12 @@ export default {
           group: "割断滚圆车间",
           children: [
             {
+              name: "划线",
+              href: "/overStationExecution?station=HX",
+              icon: "cutting",
+              permission: "pad_drawLine_menu",
+            },
+            {
               name: "切头尾取样",
               href: "/overStationExecution?station=QTWQY",
               icon: "head",

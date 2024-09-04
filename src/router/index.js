@@ -110,6 +110,13 @@ export const constantRouterMap = [
   },
 
   {
+    name: 'drawLine',
+    path: '/drawLine',
+    component: () => import('@/views/drawLine'),
+    meta: { text: '划线' },
+  },
+
+  {
     name: 'headAndTailSampling',
     path: '/headAndTailSampling',
     component: () => import('@/views/headAndTailSampling/index'),

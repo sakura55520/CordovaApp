@@ -231,6 +231,10 @@ export default {
           path: "/crystalDelivery",
           url: "/wipDelivery",
         },
+        HX: {
+          path: "/drawLine",
+          url: "/wipDrawLine",
+        },
         QTWQY: {
           path: "/headAndTailSampling",
           url: "/wipCuttingSample",
