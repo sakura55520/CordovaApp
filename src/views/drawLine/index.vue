@@ -20,537 +20,131 @@
         </div>
       </div>
       <el-divider class="divider" />
-      <h3>
-        出站数据录入 <i class="el-icon-refresh" @click="fetchSwitchDict" />
-      </h3>
+      <h3>出站数据录入</h3>
       <div class="outStation-form">
         <el-form
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="150px"
+          label-width="140px"
           :rules="formRules"
           :disabled="$route.query.view"
         >
           <div class="base-form">
-            <div class="row">
-              <el-form-item
-                label="操作者"
-                prop="userCreate"
-                class="item"
-                label-width="90px"
-              >
-                <el-input
-                  v-model="formData.userCreate"
-                  :disabled="!enableMap.userCreate"
-                ></el-input>
-              </el-form-item>
-              <el-form-item
-                label="反馈重量"
-                prop="feedbackQty"
-                class="item"
-                label-width="90px"
-              >
-                <el-input v-model="formData.feedbackQty" disabled>
-                  <template slot="append">kg</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item
-                label="收尾情况"
-                prop="endSitutation"
-                class="item"
-                label-width="90px"
-              >
-                <el-input
-                  v-model="formData.endSitutation"
-                  :disabled="!enableMap.endSitutation"
-                ></el-input>
-              </el-form-item>
-            </div>
+            <el-form-item label="操作者" prop="userCreate" class="item">
+              <el-input v-model="formData.userCreate"></el-input>
+            </el-form-item>
+            <el-form-item label="进站数量" prop="weighingQty" class="item">
+              <el-input v-model="formData.weighingQty">
+                <template slot="append">kg</template>
+              </el-input>
+            </el-form-item>
             <el-form-item
-              label="生产备注"
-              class="form-item-cover"
-              label-width="90px"
+              label="位错反延线长度"
+              prop="offsetLength"
+              class="item"
             >
-              <el-input class="value" v-model="formData.productionRemark" />
+              <el-input
+                v-model="formData.offsetLength"
+                :style="{ width: '100%' }"
+              >
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+          </div>
+          <el-form-item label="生产备注" class="form-item-cover">
+            <el-input
+              type="textarea"
+              class="value"
+              v-model="formData.productionRemark"
+            />
+          </el-form-item>
+          <div class="form">
+            <div class="form-title">设备/工艺参数确认</div>
+            <el-form-item label="原始长度" prop="originLength" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.originLength">
+                  <template slot="append">mm</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item
+              label="实测长度"
+              prop="actualMeasuredLength"
+              class="item"
+            >
+              <div class="input">
+                <el-input class="value" v-model="formData.actualMeasuredLength">
+                  <template slot="append">mm</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="备注" class="form-item-cover">
+              <el-input
+                type="textarea"
+                class="value"
+                v-model="formData.remarks"
+              />
             </el-form-item>
           </div>
           <div class="form">
-            <div class="form-title">设备/工艺参数确认</div>
-            <div class="row">
-              <el-form-item
-                label="单晶编号一致性"
-                prop="numberConsistence"
-                class="item"
-                label-width="140px"
-              >
-                <el-select
-                  v-model="formData.numberConsistence"
-                  placeholder=""
-                  :style="{ width: '100%' }"
-                >
-                  <el-option label="是" :value="true"></el-option>
-                  <el-option label="否" :value="false"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item
-                label="位错反延线标识"
-                prop="dislocationIdentification"
-                class="item"
-                label-width="140px"
-              >
-                <el-select
-                  v-model="formData.dislocationIdentification"
-                  placeholder=""
-                  :style="{ width: '100%' }"
-                >
-                  <el-option label="是" :value="true"></el-option>
-                  <el-option label="否" :value="false"></el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item
-                label="位错反延线长度"
-                prop="dislocationIdentificationLength"
-                class="item"
-                label-width="140px"
-                :rules="[
-                  {
-                    required: this.formData.dislocationIdentification,
-                    message: '位错反延线标识不能为空',
-                    trigger: 'change',
-                  },
-                ]"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.dislocationIdentificationLength"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="脱开直径"
-                prop="disengageDiameter"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input class="value" v-model="formData.disengageDiameter">
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
+            <div class="form-title">留档文档记录</div>
+            <div class="growth-section">
+              <PhotoNew
+                v-model="formData._files"
+                :componentDisabled="false"
+                :name="'CHECK_DEVICE'"
+                @input="handleFileChange"
+              />
             </div>
-
-            <div class="row">
-              <el-form-item
-                label="拉晶实测直径(头)"
-                prop="measuredDiameterHead"
-                class="item"
-              >
-                <el-input class="value" v-model="formData.measuredDiameterHead">
-                  <template slot="append">mm</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item
-                label="拉晶实测直径(中)"
-                prop="measuredDiameterMiddle"
-                class="item"
-              >
-                <el-input
-                  class="value"
-                  v-model="formData.measuredDiameterMiddle"
-                >
-                  <template slot="append">mm</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item
-                label="拉晶实测直径(尾)"
-                prop="measuredDiameterTail"
-                class="item"
-              >
-                <el-input class="value" v-model="formData.measuredDiameterTail">
-                  <template slot="append">mm</template>
-                </el-input>
-              </el-form-item>
-            </div>
-
-            <div class="row">
-              <el-form-item
-                label="拉晶实测最大直径"
-                prop="measuredDiameterMax"
-                class="item"
-                :rules="[
-                  {
-                    required: true,
-                    message: '拉晶实测最大直径不能为空',
-                    trigger: 'change',
-                  },
-                ]"
-                label-width="160px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.measuredDiameterMax"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-
-              <el-form-item
-                label="拉晶实测最小直径"
-                prop="measuredDiameterMin"
-                class="item"
-                :rules="[
-                  {
-                    required: true,
-                    message: '拉晶实测最小直径不能为空',
-                    trigger: 'change',
-                  },
-                ]"
-                label-width="160px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.measuredDiameterMin"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-            </div>
-
-            <div class="row">
-              <el-form-item label="晶锭称重" prop="ingotWeight" class="item">
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.ingotWeight"
-                    @input="handleIngotWeightChange"
-                  >
-                    <template slot="append">kg</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="埚底料净重"
-                prop="totalBottomMaterialGrossWeight"
-                class="item"
-                :rules="[
-                  {
-                    required: true,
-                    message: '埚底料净重不能为空',
-                    trigger: 'change',
-                  },
-                ]"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    disabled
-                    v-model="formData.totalBottomMaterialGrossWeight"
-                  >
-                    <template slot="append">kg</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="埚底料毛重"
-                prop="bottomMaterialNetWeight"
-                class="item"
-                :rules="[
-                  {
-                    required: true,
-                    message: '埚底料毛重不能为空',
-                    trigger: 'change',
-                  },
-                ]"
-                v-if="formData.end"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.bottomMaterialNetWeight"
-                    placeholder="埚底料称量重量"
-                  >
-                    <template slot="append">kg</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="form">
-            <div class="form-title">参数说明</div>
-            <div class="row">埚底料净重计算公式：<br /></div>
-            <div
-              class="row"
-              v-if="!formData.ingotWeight && formData.ingotWeight !== 0"
-            >
-              <b>晶锭称量没有值</b>：埚底料净重 （{{
-                (
-                  (formData.totalPolysiliconWeight || 0) -
-                  (formData.feedbackQty || 0) -
-                  (formData.totalPreIngotWeight || 0) -
-                  (formData.totalShoulderWeight || 0)
-                ).toFixed(3)
-              }}
-              kg） = 总投料多晶硅重量（{{
-                formData.totalPolysiliconWeight
-              }}
-              kg） - 反馈重量（{{ formData.feedbackQty }} kg） -
-              前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
-              吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）<br />
-            </div>
-            <div class="row" v-else>
-              <b>晶锭称量有值</b>：埚底料净重（{{
-                (
-                  (formData.totalPolysiliconWeight || 0) -
-                  (formData.ingotWeight || 0) -
-                  (formData.totalPreIngotWeight || 0) -
-                  (formData.totalShoulderWeight || 0)
-                ).toFixed(3)
-              }}
-              kg） = 总投料多晶硅重量（{{
-                formData.totalPolysiliconWeight
-              }}
-              kg） - 晶锭称量的值（{{ formData.ingotWeight }} kg） -
-              前置晶锭称量的值（{{ formData.totalPreIngotWeight }} kg） -
-              吊肩记录重量总和（{{ formData.totalShoulderWeight }} kg）
-            </div>
-            <br />
-            <div class="row">
-              反馈重量（{{ formData.feedbackQty }}
-              kg）：来源于长晶过站中，最后一条晶体重量的值
-            </div>
-            <br />
-            <div class="row"><b>埚底料毛重</b>：称重，可能包含坩埚碎片</div>
           </div>
         </el-form>
       </div>
     </div>
     <div class="page-handle-box" v-if="!$route.query.view">
       <el-button plain class="cancel" @click="back(null, 'confirm')"
-        >取消
-      </el-button>
+        >取消</el-button
+      >
       <el-button type="primary" plain class="save" @click="save"
-        >保存
-      </el-button>
-      <el-button type="primary" class="submit" @click="handleCheck"
-        >出站确认
-      </el-button>
+        >保存</el-button
+      >
+      <el-button type="primary" class="submit" @click="confirm"
+        >出站确认</el-button
+      >
     </div>
-    <el-dialog
-      width="80vw"
-      :visible.sync="dialogCheckVisible"
-      title="报工数据核对"
-    >
-      <el-table :data="checkList">
-        <el-table-column
-          label="批次号"
-          min-width="150"
-          prop="batch"
-        ></el-table-column>
-        <el-table-column
-          label="单晶顺序"
-          min-width="100"
-          prop="wheel"
-        ></el-table-column>
-        <el-table-column
-          label="良品数"
-          min-width="150"
-          prop="goodQty"
-        ></el-table-column>
-        <el-table-column label="埚底料" min-width="120" prop="bottomQty">
-          <template slot-scope="scope">
-            <div :class="scope.row.check ? '' : 'error'">
-              {{ scope.row.bottomQty }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="多晶硅投料"
-          min-width="150"
-          prop="polysiliconQty"
-        ></el-table-column>
-        <el-table-column
-          label="多晶硅扣料"
-          min-width="150"
-          prop="polysiliconDeductionQty"
-        ></el-table-column>
-        <el-table-column
-          label="多晶硅扣料计算"
-          min-width="250"
-          prop="polysiliconDeductionCalc"
-        >
-          <template slot="header">
-            <el-tooltip class="item" effect="dark" placement="bottom">
-              <template slot="content"
-                >多晶硅扣料： 当前轮次良品数 / 轮次总良品数 * 总投料</template
-              >
-              <span> 多晶硅扣料计算 <i class="el-icon-question"></i></span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="石英坩埚投料"
-          min-width="150"
-          prop="quartzCrucibleQty"
-        ></el-table-column>
-        <el-table-column
-          label="石英坩埚扣料"
-          min-width="150"
-          prop="quartzCrucibleDeductionQty"
-        >
-          <template slot="header">
-            <el-tooltip class="item" effect="dark" placement="bottom">
-              <template slot="content">石英坩埚扣料：1 / 总轮次</template>
-              <span> 石英坩埚扣料 <i class="el-icon-question"></i></span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="掺杂剂用量投料"
-          min-width="150"
-          prop="dopantQty"
-        ></el-table-column>
-        <el-table-column
-          label="掺杂剂扣料"
-          min-width="150"
-          prop="dopantDeductionQty"
-        ></el-table-column>
-        <el-table-column
-          label="掺杂剂扣料计算"
-          min-width="250"
-          prop="dopantDeductionCalc"
-        >
-          <template slot="header">
-            <el-tooltip class="item" effect="dark" placement="bottom">
-              <template slot="content">
-                <div>
-                  掺杂剂扣料首轮次：首轮次良品数 / 首轮次多晶硅投料 *
-                  首轮次掺杂剂投料
-                </div>
-                <div>
-                  掺杂剂扣料中间轮次：当前轮次良品数 / （多晶硅总投料量 -
-                  前置轮次总良品数）* （前置轮次掺杂剂总投料 -
-                  前置轮次掺杂剂总扣料 + 本轮次掺杂剂投料）
-                </div>
-                <div>
-                  掺杂剂扣料尾轮次：当前轮次良品数 / （多晶硅总投料量 -
-                  前置轮次总良品数）* （前置轮次掺杂剂总投料 -
-                  前置轮次掺杂剂总扣料）
-                </div>
-              </template>
-              <span> 掺杂剂扣料计算 <i class="el-icon-question"></i></span>
-            </el-tooltip>
-          </template>
-        </el-table-column>
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogCheckVisible = false">取 消</el-button>
-        <el-button type="primary" @click="confirm">提 交</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import * as Api from "@/api/inStation";
 import overStation from "@/mixins/overStation";
-import { mapState } from "vuex";
-import { getSeleteData } from "@/utils/select";
+import PhotoNew from "@/views/components/photoNew";
 
 export default {
   mixins: [overStation],
+  components: {
+    PhotoNew,
+  },
   data() {
     return {
       formData: {
         userCreate: null,
-        feedbackQty: null,
-        defectQty: null,
-        scrapQty: null,
+        weighingQty: null,
+        originLength: null,
+        actualMeasuredLength: null,
+        offsetLength: null,
         productionRemark: null,
-        numberConsistence: null,
-        endSitutation: null,
-        dislocationIdentification: null,
-        dislocationIdentificationLength: null,
-        measuredDiameterHead: null,
-        measuredDiameterMiddle: null,
-        measuredDiameterTail: null,
-        disengageDiameter: null,
-        bottomMaterialGrossWeight: null,
-        bottomMaterialNetWeight: null,
-        totalBottomMaterialGrossWeight: null,
-        measuredDiameterMax: null,
-        measuredDiameterMin: null,
-        totalShoulderWeight: null,
-        totalPolysiliconWeight: null,
-        totalPreIngotWeight: null,
-        ingotWeight: null,
+        remarks: null,
+        _files: [],
       },
       formRules: {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
-        feedbackQty: [
-          { required: true, message: "反馈数量不能为空", trigger: "change" },
-        ],
-        scrapQty: [
-          { required: true, message: "报废数量不能为空", trigger: "change" },
-        ],
-        numberConsistence: [
-          {
-            required: true,
-            message: "单晶编号一致性不能为空",
-            trigger: "change",
-          },
-        ],
-        dislocationIdentification: [
-          {
-            required: true,
-            message: "位错反延线标识不能为空",
-            trigger: "change",
-          },
-        ],
-        disengageDiameter: [
-          {
-            required: true,
-            message: "脱开直径不能为空",
-            trigger: "change",
-          },
-        ],
-        measuredDiameterHead: [
-          {
-            required: true,
-            message: "拉晶实测直径(头)不能为空",
-            trigger: "change",
-          },
-        ],
-        measuredDiameterMiddle: [
-          {
-            required: true,
-            message: "拉晶实测直径(中)不能为空",
-            trigger: "change",
-          },
-        ],
-        measuredDiameterTail: [
-          {
-            required: true,
-            message: "拉晶实测直径(尾)不能为空",
-            trigger: "change",
-          },
+        weighingQty: [
+          { required: true, message: "进站数量不能为空", trigger: "change" },
         ],
       },
-      checkList: [],
-      dialogCheckVisible: false,
-      check: null,
-      bottomMaterialDifference: null,
     };
   },
   computed: {
@@ -558,9 +152,6 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
-    ...mapState({
-      realName: (state) => state.user.realName,
-    }),
   },
   mounted() {
     this.init();
@@ -579,50 +170,16 @@ export default {
           console.log(e);
         }
       }
-      this.formData = {
-        ...this.formData,
-        ...fromData,
-        userCreate: fromData.userCreate || this.realName,
-      };
 
-      let wipSwitches = [];
-      await getSeleteData("wipSwitches", wipSwitches);
-      this.bottomMaterialDifference = wipSwitches.find(
-        (item) => item.name === "bottomMaterialDifference"
-      ).value;
+      this.formData = { ...this.formData, ...fromData };
 
-      this.handleIngotWeightChange();
-      this.fetchSwitchDict();
-    },
-    async handleCheck() {
-      const valid = await this.$refs.formRef.validate();
-      if (!valid) return;
-      let { totalBottomMaterialGrossWeight, bottomMaterialNetWeight } =
-        this.formData;
-      if (
-        this.formData.end &&
-        Math.abs(totalBottomMaterialGrossWeight - bottomMaterialNetWeight) >
-          this.bottomMaterialDifference
-      ) {
-        this.$message.warning(
-          `埚底料毛重和净重的差值不能超过：${this.bottomMaterialDifference}kg`
-        );
-        return;
-      }
-      await this.$confirm("确认提交当前操作数据?", "提示", {
-        type: "warning",
-      });
-
-      if (this.formData.end) {
-        this.dialogCheckVisible = true;
-        let res = await Api.check(this.formData);
-        this.check = res.data.check;
-        if (!res.data.check)
-          this.$message.warning("数据核对异常，请重新输入数据");
-        this.checkList = res.data.materials;
-      } else {
-        this.confirm();
-      }
+      this.formData._files = JSON.parse(this.formData.photo || "[]").map(
+        (fileItem) => ({
+          ...fileItem,
+          big_url: fileItem.fileUrl,
+          thumb_url: fileItem.fileUrl,
+        })
+      );
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
@@ -630,10 +187,13 @@ export default {
       this.back(msg);
     },
     async confirm() {
-      if (this.formData.end && !this.check) {
-        this.$message.warning("数据核对异常，请重新输入数据");
-        return;
-      }
+      const valid = await this.$refs.formRef.validate();
+      if (!valid) return;
+
+      await this.$confirm("确认提交当前操作数据?", "提示", {
+        type: "warning",
+      });
+
       const {
         equipmentCode,
         processUuid,
@@ -649,45 +209,18 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       });
-      this.dialogCheckVisible = false;
       const msg = "出站成功";
       Api.deleteBuffer(this.buffParams);
       this.back(msg);
     },
-    handleIngotWeightChange() {
-      const {
-        totalPolysiliconWeight,
-        feedbackQty,
-        ingotWeight,
-        totalPreIngotWeight,
-        totalShoulderWeight,
-      } = this.formData;
-      // if (!ingotWeight && ingotWeight !== 0) {
-      //   this.formData.totalBottomMaterialGrossWeight = (
-      //     (polysiliconWeight || 0) -
-      //     (feedbackQty || 0) -
-      //     (shoulderWeight || 0)
-      //   ).toFixed(3);
-      // } else
-      //   this.formData.totalBottomMaterialGrossWeight = (
-      //     (polysiliconWeight || 0) -
-      //     (ingotWeight || 0) -
-      //     (shoulderWeight || 0)
-      //   ).toFixed(3);
-      if (!ingotWeight && ingotWeight !== 0) {
-        this.formData.totalBottomMaterialGrossWeight = (
-          (totalPolysiliconWeight || 0) -
-          (feedbackQty || 0) -
-          (totalPreIngotWeight || 0) -
-          (totalShoulderWeight || 0)
-        ).toFixed(3);
-      } else
-        this.formData.totalBottomMaterialGrossWeight = (
-          (totalPolysiliconWeight || 0) -
-          (ingotWeight || 0) -
-          (totalPreIngotWeight || 0) -
-          (totalShoulderWeight || 0)
-        ).toFixed(3);
+    handleFileChange() {
+      const photo = (this.formData._files || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.photo = photo;
     },
   },
 };
@@ -697,27 +230,22 @@ export default {
 .outStationExecution-container {
   padding: 12px 12px 100px 12px;
   background-color: rgb(245, 245, 245);
-
   .info-container {
     background-color: rgb(245, 245, 245);
     display: flex;
     flex-wrap: wrap;
   }
-
   .info {
     display: flex;
     width: 50%;
     margin-bottom: 8px;
-
     .info-label {
       width: 40%;
     }
-
     .info-value {
       width: 60%;
     }
   }
-
   .outStation-form {
     border: 1px solid rgba(0, 0, 0, 0.1);
     min-height: 200px;
@@ -726,11 +254,9 @@ export default {
     background-color: white;
   }
 }
-
 .divider {
   margin: 8px 0px;
 }
-
 .btn {
   position: fixed;
   bottom: 0px;
@@ -740,43 +266,34 @@ export default {
   width: 100%;
   display: flex;
   gap: 8px;
-
   .cancel-btn {
     flex: 1;
   }
-
   .save-btn {
     flex: 1;
   }
-
   .confirm-btn {
     flex: 2;
   }
 }
-
 .base-form {
   display: flex;
   flex-wrap: wrap;
   gap: 2%;
-
   .item {
     width: 49%;
-
     .input {
       display: flex;
       gap: 8px;
-
       .value {
         flex: 1;
       }
-
       .unit {
         width: 30px;
       }
     }
   }
 }
-
 .form {
   margin-top: 20px;
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -787,24 +304,19 @@ export default {
   display: flex;
   flex-wrap: wrap;
   gap: 2%;
-
   .item {
     width: 49%;
-
     .input {
       display: flex;
       gap: 8px;
-
       .value {
         flex: 1;
       }
-
       .unit {
         width: 30px;
       }
     }
   }
-
   .form-title {
     position: absolute;
     top: -10px;
@@ -812,32 +324,26 @@ export default {
     background: white;
   }
 }
-
 .unit {
   width: 60px;
 }
-
-.dialog-footer {
-  display: flex;
-  justify-content: end;
+.print-btn {
+  padding: 9px 20px;
 }
-
-.error {
-  color: red;
+.table {
+  margin-top: 50px;
 }
-
-.required:before {
+.add-btn {
+  position: absolute;
+  left: 12px;
+}
+.form-custom-verify {
+  .form-input {
+    margin-bottom: 0px;
+  }
+}
+.form-table-header:before {
   content: "* ";
   color: red;
-}
-
-.row {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-
-  .item {
-    flex: 1;
-  }
 }
 </style>
