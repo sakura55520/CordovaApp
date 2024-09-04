@@ -32,10 +32,10 @@
         >
           <div class="base-form">
             <el-form-item label="操作者" prop="userCreate" class="item">
-              <el-input v-model="formData.userCreate"></el-input>
+              <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
             <el-form-item label="进站数量" prop="weighingQty" class="item">
-              <el-input v-model="formData.weighingQty">
+              <el-input v-model="formData.weighingQty" disabled>
                 <template slot="append">kg</template>
               </el-input>
             </el-form-item>
@@ -47,6 +47,7 @@
               <el-input
                 v-model="formData.offsetLength"
                 :style="{ width: '100%' }"
+                disabled
               >
                 <template slot="append">mm</template>
               </el-input>
@@ -57,13 +58,18 @@
               type="textarea"
               class="value"
               v-model="formData.productionRemark"
+              disabled
             />
           </el-form-item>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
             <el-form-item label="原始长度" prop="originLength" class="item">
               <div class="input">
-                <el-input class="value" v-model="formData.originLength">
+                <el-input
+                  class="value"
+                  v-model="formData.originLength"
+                  disabled
+                >
                   <template slot="append">mm</template>
                 </el-input>
               </div>
