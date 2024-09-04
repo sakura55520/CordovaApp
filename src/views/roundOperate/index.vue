@@ -725,7 +725,7 @@ export default {
     formatDegree(value) {
       value = Math.abs(value);
       let v1 = Math.floor(value);
-      let v2 = Math.floor((value - v1) * 60);
+      let v2 = Number(((value - v1) * 60).toFixed(2));
       return [v1, v2];
     },
     formatCrystallinePhase(degrees, minute) {
