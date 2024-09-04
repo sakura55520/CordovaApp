@@ -131,15 +131,15 @@
               </el-form-item>
               <el-form-item
                 label="实际称重"
-                prop="goodQty"
+                prop="weighingQty"
                 class="item"
                 label-width="90px"
               >
                 <div class="input">
                   <el-input
                     class="value"
-                    v-model="formData.goodQty"
-                    :disabled="!enableMap.goodQty"
+                    v-model="formData.weighingQty"
+                    :disabled="!enableMap.weighingQty"
                     v-direction="{ x: 3, y: 2 }"
                   >
                     <template slot="append">kg</template>
@@ -602,7 +602,7 @@ export default {
     return {
       formData: {
         userCreate: null,
-        goodQty: null,
+        weighingQty: null,
         planLength: null,
         originLength: null,
         chippingLength: null,
@@ -642,7 +642,7 @@ export default {
         userCreate: [
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
-        goodQty: [
+        weighingQty: [
           { required: true, message: "实际称重不能为空", trigger: "change" },
         ],
         planLength: [
