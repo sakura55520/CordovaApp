@@ -61,14 +61,14 @@
                 label="检测实测长度"
                 prop="actualLength"
                 class="item"
-                label-width="90px"
+                label-width="120px"
               >
                 <div class="input">
                   <el-input
                     class="value"
                     v-model="formData.actualLength"
                     :disabled="!enableMap.actualLength"
-                    v-direction="{ x: 1, y: 2 }"
+                    v-direction="{ x: 2, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -86,7 +86,7 @@
                     v-model="formData.chippingLength"
                     :disabled="!enableMap.chippingLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 1, y: 3 }"
+                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -104,7 +104,7 @@
                     v-model="formData.ellipticLength"
                     :disabled="!enableMap.ellipticLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 1, y: 4 }"
+                    v-direction="{ x: 4, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -157,6 +157,7 @@
                     class="value"
                     v-model="formData.maxLength"
                     :disabled="!enableMap.maxLength"
+                    v-direction="{ x: 2, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -196,6 +197,7 @@
                   </el-input>
                 </div>
               </el-form-item>
+              <div class="item"></div>
             </div>
             <div class="row">
               <el-form-item
@@ -227,6 +229,269 @@
                 >
                   <template slot="append">kg</template>
                 </el-input>
+              </el-form-item>
+              <el-form-item
+                label="RES_C"
+                prop="resC"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.resC"
+                  :disabled="!enableMap.resC"
+                  v-direction="{ x: 3, y: 3 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="RES_E"
+                prop="resE"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.resE"
+                  :disabled="!enableMap.resE"
+                  v-direction="{ x: 4, y: 3 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="RRG"
+                prop="rrg"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.rrg"
+                  :disabled="!enableMap.rrg"
+                  v-direction="{ x: 5, y: 3 }"
+                >
+                  <template slot="append">%</template>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="少子寿命"
+                prop="minorityCarrierLifetime"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.minorityCarrierLifetime"
+                  :disabled="!enableMap.minorityCarrierLifetime"
+                  v-direction="{ x: 1, y: 4 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="缺陷"
+                prop="flaw"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.flaw"
+                  :disabled="!enableMap.flaw"
+                  v-direction="{ x: 2, y: 4 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="位错"
+                prop="offset"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.offset"
+                  :disabled="!enableMap.offset"
+                  v-direction="{ x: 3, y: 4 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="OSF"
+                prop="osf"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.osf"
+                  :disabled="!enableMap.osf"
+                  v-direction="{ x: 4, y: 4 }"
+                >
+                </el-input>
+              </el-form-item>
+              <div class="item"></div>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="CS"
+                prop="cs"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.cs"
+                  :disabled="!enableMap.cs"
+                  v-direction="{ x: 1, y: 5 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="OI_C"
+                prop="oiC"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.oiC"
+                  :disabled="!enableMap.oiC"
+                  v-direction="{ x: 2, y: 5 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="1/2 OI"
+                prop="halfOi"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.halfOi"
+                  :disabled="!enableMap.halfOi"
+                  v-direction="{ x: 3, y: 5 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="OI_E"
+                prop="oiE"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.oiE"
+                  :disabled="!enableMap.oiE"
+                  v-direction="{ x: 4, y: 5 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="ORG"
+                prop="org"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.org"
+                  :disabled="!enableMap.org"
+                  v-direction="{ x: 5, y: 5 }"
+                >
+                  <template slot="append">%</template>
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="基磷"
+                prop="phosphorus"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.phosphorus"
+                  :disabled="!enableMap.phosphorus"
+                  v-direction="{ x: 1, y: 6 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="基硼"
+                prop="boron"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.boron"
+                  :disabled="!enableMap.boron"
+                  v-direction="{ x: 2, y: 6 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="基砷"
+                prop="arsenic"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.arsenic"
+                  :disabled="!enableMap.arsenic"
+                  v-direction="{ x: 3, y: 6 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="基锑"
+                prop="antimony"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.antimony"
+                  :disabled="!enableMap.antimony"
+                  v-direction="{ x: 4, y: 6 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="金属"
+                prop="metal"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.metal"
+                  :disabled="!enableMap.metal"
+                  v-direction="{ x: 5, y: 6 }"
+                >
+                </el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="备注"
+                prop="remarks"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  type="textarea"
+                  class="value"
+                  v-model="formData.remarks"
+                  :disabled="!enableMap.remarks"
+                  v-direction="{ x: 1, y: 7 }"
+                />
               </el-form-item>
             </div>
           </div>
@@ -281,6 +546,24 @@ export default {
         maxDiameter: null,
         weighingQty: null,
         theoryQty: null,
+        resC: null,
+        resE: null,
+        rrg: null,
+        minorityCarrierLifetime: null,
+        flaw: null,
+        offset: null,
+        osf: null,
+        cs: null,
+        oiC: null,
+        halfOi: null,
+        oiE: null,
+        org: null,
+        phosphorus: null,
+        boron: null,
+        arsenic: null,
+        antimony: null,
+        metal: null,
+        remarks: null,
       },
       formRules: {
         userCreate: [
@@ -330,6 +613,38 @@ export default {
         ],
         weighingQty: [
           { required: true, message: "实际称重不能为空", trigger: "change" },
+        ],
+        resC: [{ required: true, message: "RES_C不能为空", trigger: "change" }],
+        resE: [{ required: true, message: "RES_E不能为空", trigger: "change" }],
+        rrg: [{ required: true, message: "RRG不能为空", trigger: "change" }],
+        minorityCarrierLifetime: [
+          { required: true, message: "少子寿命不能为空", trigger: "change" },
+        ],
+        flaw: [{ required: true, message: "缺陷不能为空", trigger: "change" }],
+        offset: [
+          { required: true, message: "位错不能为空", trigger: "change" },
+        ],
+        osf: [{ required: true, message: "OSF不能为空", trigger: "change" }],
+        cs: [{ required: true, message: "CS不能为空", trigger: "change" }],
+        oiC: [{ required: true, message: "OI_C不能为空", trigger: "change" }],
+        halfOi: [
+          { required: true, message: "1/2 OI不能为空", trigger: "change" },
+        ],
+        oiE: [{ required: true, message: "OI_E不能为空", trigger: "change" }],
+        org: [{ required: true, message: "ORG不能为空", trigger: "change" }],
+        phosphorus: [
+          { required: true, message: "基磷不能为空", trigger: "change" },
+        ],
+        boron: [{ required: true, message: "基硼不能为空", trigger: "change" }],
+        arsenic: [
+          { required: true, message: "基砷不能为空", trigger: "change" },
+        ],
+        antimony: [
+          { required: true, message: "基锑不能为空", trigger: "change" },
+        ],
+        metal: [{ required: true, message: "金属不能为空", trigger: "change" }],
+        remarks: [
+          { required: true, message: "备注不能为空", trigger: "change" },
         ],
       },
     };
