@@ -1562,14 +1562,13 @@ export default {
           "diametermm",
           this.selectRollingDiameter
         );
-      if (this.selectedWorkOrder)
-        this.$set(
-          this.formData.segmentedInstructionDetailVos[
-            this.selectedSegmentWorkOrderIndex
-          ],
-          "orderCode",
-          this.selectedWorkOrder
-        );
+      this.$set(
+        this.formData.segmentedInstructionDetailVos[
+          this.selectedSegmentWorkOrderIndex
+        ],
+        "orderCode",
+        this.selectedWorkOrder
+      );
       this.workOrderDialog = false;
     },
     async handleProcessCodeVisibleChange(visible, index) {
