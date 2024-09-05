@@ -60,7 +60,7 @@
                   default-first-option
                   clearable
                   placeholder="填写或选择"
-                  @change="updateErrors"
+                  @change="(val) => updateErrors(val, formItemIdx)"
                 >
                   <span class="tip">填写后按下回车键即可添加</span>
                   <el-option
@@ -187,7 +187,13 @@ export default {
       }
       this.detailForm.list.splice(formItemIdx, 1);
     },
-    updateErrors() {
+    updateErrors(errors, formItemIdx) {
+      if ((errors || []).includes("无")) {
+        const { stepName, recordIdx } = this.detailForm.list[formItemIdx];
+        this.$set(this.detailForm.list[formItemIdx], "errorTime", null);
+        stepName &&
+          this.$set(this.steps[stepName][recordIdx], "errorTime", null);
+      }
       this.detailForm.list.forEach(({ stepName, recordIdx, _errors }) => {
         if (!stepName || !_errors || !_errors.length) return;
         this.$set(this.steps[stepName][recordIdx], "_errors", _errors);
