@@ -667,7 +667,7 @@ export default {
           stepData._defaultStepData.exts = form.content.map((formItem) => ({
             ...formItem,
             extKey: formItem.label,
-            disabled: !this.enabledInput && formItem.disabled,
+            disabled: this.enabledInput ? formItem.disabled : true,
           }));
         }
       }
