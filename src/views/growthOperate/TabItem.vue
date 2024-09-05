@@ -90,6 +90,7 @@
                 default-first-option
                 clearable
                 placeholder="填写或选择"
+                @change="(val) => handleErrorChange(val, recordIdx)"
               >
                 <span class="tip">填写后按下回车键即可添加</span>
                 <el-option
@@ -429,6 +430,10 @@ export default {
         return (val.value || "") + (val.unit || "");
       }
       return val;
+    },
+    handleErrorChange(errors, recordIdx) {
+      if ((errors || []).includes("无"))
+        this.$set(this.stepData[recordIdx], "errorTime", null);
     },
   },
 };
