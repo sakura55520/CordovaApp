@@ -490,7 +490,6 @@
                   class="value"
                   v-model="formData.remarks"
                   :disabled="!enableMap.remarks"
-                  v-direction="{ x: 1, y: 7 }"
                 />
               </el-form-item>
             </div>

@@ -1677,6 +1677,7 @@ export default {
             headRrv: this.headAndTailRrv.headRrv,
             tailRrv: this.headAndTailRrv.tailRrv,
             _reason: [],
+            reason: "",
             headCarbonRate: this.headCS,
           };
         });
