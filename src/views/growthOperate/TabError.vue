@@ -37,6 +37,7 @@
                   />
                 </el-select>
                 <el-date-picker
+                  :disabled="errorTimeDisabledList[formItemIdx]"
                   v-model="formItem.errorTime"
                   type="datetime"
                   value-format="yyyy-MM-dd HH:mm:ss"
@@ -118,6 +119,9 @@ export default {
     };
   },
   computed: {
+    errorTimeDisabledList() {
+      return this.detailForm.list.map((item) => item._errors.includes("无"));
+    },
     selectedRecord() {
       const selected = {};
       this.detailForm.list.forEach(
@@ -201,12 +205,25 @@ export default {
       this.detailForm.list.splice(formItemIdx, 1);
     },
     updateErrors(errors, formItemIdx) {
-      if ((errors || []).includes("无")) {
-        const { stepName, recordIdx } = this.detailForm.list[formItemIdx];
+      const { stepName, recordIdx } = this.detailForm.list[formItemIdx];
+
+      let noError = (errors || []).includes("无");
+      if (noError) {
         this.$set(this.detailForm.list[formItemIdx], "errorTime", null);
         stepName &&
           this.$set(this.steps[stepName][recordIdx], "errorTime", null);
       }
+
+      let errorTimeIndex = (
+        this.steps[stepName][recordIdx].exts || []
+      ).findIndex((item) => item.extKey === "单晶异常时间");
+      if (errorTimeIndex > -1)
+        this.$set(
+          this.steps[stepName][recordIdx].exts[errorTimeIndex],
+          "disabled",
+          noError
+        );
+
       this.detailForm.list.forEach(({ stepName, recordIdx, _errors }) => {
         if (!stepName || !_errors || !_errors.length) return;
         this.$set(this.steps[stepName][recordIdx], "_errors", _errors);

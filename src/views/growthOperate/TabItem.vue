@@ -438,8 +438,18 @@ export default {
       return val;
     },
     handleErrorChange(errors, recordIdx) {
-      if ((errors || []).includes("无"))
-        this.$set(this.stepData[recordIdx], "errorTime", null);
+      let noError = (errors || []).includes("无");
+      if (noError) this.$set(this.stepData[recordIdx], "errorTime", null);
+
+      let errorTimeIndex = (this.stepData[recordIdx].exts || []).findIndex(
+        (item) => item.extKey === "单晶异常时间"
+      );
+      if (errorTimeIndex > -1)
+        this.$set(
+          this.stepData[recordIdx].exts[errorTimeIndex],
+          "disabled",
+          noError
+        );
     },
   },
 };
