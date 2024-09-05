@@ -68,47 +68,12 @@
                     class="value"
                     v-model="formData.actualLength"
                     :disabled="!enableMap.actualLength"
+                    v-direction="{ x: 1, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
                 </div>
               </el-form-item>
-              <el-form-item
-                label="长度min"
-                prop="minLength"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.minLength"
-                    :disabled="!enableMap.minLength"
-                    @input="handleLengthChange"
-                    v-direction="{ x: 2, y: 1 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="长度max"
-                prop="maxLength"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.maxLength"
-                    :disabled="!enableMap.maxLength"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-            </div>
-            <div class="row">
               <el-form-item
                 label="崩边长度"
                 prop="chippingLength"
@@ -121,7 +86,7 @@
                     v-model="formData.chippingLength"
                     :disabled="!enableMap.chippingLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 1, y: 2 }"
+                    v-direction="{ x: 1, y: 3 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -139,7 +104,7 @@
                     v-model="formData.ellipticLength"
                     :disabled="!enableMap.ellipticLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 2, y: 2 }"
+                    v-direction="{ x: 1, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -164,7 +129,41 @@
             </div>
             <div class="row">
               <el-form-item
-                label="最小直径"
+                label="长度MIN"
+                prop="minLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.minLength"
+                    :disabled="!enableMap.minLength"
+                    @input="handleLengthChange"
+                    v-direction="{ x: 1, y: 2 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="长度MAX"
+                prop="maxLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.maxLength"
+                    :disabled="!enableMap.maxLength"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="直径MIN"
                 prop="minDiameter"
                 class="item"
                 label-width="90px"
@@ -174,14 +173,14 @@
                     class="value"
                     v-model="formData.minDiameter"
                     :disabled="!enableMap.minDiameter"
-                    v-direction="{ x: 1, y: 3 }"
+                    v-direction="{ x: 3, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
                 </div>
               </el-form-item>
               <el-form-item
-                label="最大直径"
+                label="直径MAX"
                 prop="maxDiameter"
                 class="item"
                 label-width="90px"
@@ -191,12 +190,14 @@
                     class="value"
                     v-model="formData.maxDiameter"
                     :disabled="!enableMap.maxDiameter"
-                    v-direction="{ x: 2, y: 3 }"
+                    v-direction="{ x: 4, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
                 </div>
               </el-form-item>
+            </div>
+            <div class="row">
               <el-form-item
                 label="理论重量"
                 prop="theoryQty"
@@ -207,7 +208,7 @@
                   class="value"
                   v-model="formData.theoryQty"
                   :disabled="!enableMap.theoryQty"
-                  v-direction="{ x: 3, y: 3 }"
+                  v-direction="{ x: 1, y: 3 }"
                 >
                   <template slot="append">kg</template>
                 </el-input>
@@ -222,7 +223,7 @@
                   class="value"
                   v-model="formData.weighingQty"
                   :disabled="!enableMap.weighingQty"
-                  v-direction="{ x: 4, y: 3 }"
+                  v-direction="{ x: 2, y: 3 }"
                 >
                   <template slot="append">kg</template>
                 </el-input>
@@ -233,7 +234,7 @@
             <div class="form-title">参数说明</div>
             <div class="row">出站长度计算公式：<br /></div>
             <div class="row">
-              出站长度（{{ formData.qualifiedLength }} mm） = 长度min（{{
+              出站长度（{{ formData.qualifiedLength }} mm） = 长度MIN（{{
                 formData.minLength
               }}
               mm） - 崩边长度（{{ formData.chippingLength }} mm） - 椭圆长度（{{
