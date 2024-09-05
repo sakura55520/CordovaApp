@@ -98,6 +98,12 @@
                   :key="item.id"
                   :value="item.value"
                   :label="item.value"
+                  :disabled="
+                    (recordItem._errors.includes('无') && item.value != '无') ||
+                    (!recordItem._errors.includes('无') &&
+                      recordItem._errors.length > 0 &&
+                      item.value === '无')
+                  "
                 />
               </el-select>
             </el-form-item>

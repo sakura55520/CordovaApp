@@ -64,10 +64,16 @@
                 >
                   <span class="tip">填写后按下回车键即可添加</span>
                   <el-option
-                    v-for="item in crystalGrowthErrList"
+                    v-for="item in currentCrystalGrowthErrList"
                     :key="item.id"
                     :value="item.value"
                     :label="item.value"
+                    :disabled="
+                      (formItem._errors.includes('无') && item.value != '无') ||
+                      (!formItem._errors.includes('无') &&
+                        formItem._errors.length > 0 &&
+                        item.value === '无')
+                    "
                   />
                 </el-select>
               </el-form-item>
@@ -134,6 +140,13 @@ export default {
           map[item.stepAndRecord] = index;
         });
       return map;
+    },
+    currentCrystalGrowthErrList() {
+      let map = {};
+      this.crystalGrowthErrList.forEach((item) => {
+        map[item.value] = item;
+      });
+      return Object.values(map);
     },
   },
   created() {
