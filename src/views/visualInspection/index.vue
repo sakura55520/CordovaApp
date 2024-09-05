@@ -58,6 +58,22 @@
                 </div>
               </el-form-item>
               <el-form-item
+                label="检测实测长度"
+                prop="actualLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.actualLength"
+                    :disabled="!enableMap.actualLength"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
                 label="长度min"
                 prop="minLength"
                 class="item"
@@ -254,6 +270,7 @@ export default {
       formData: {
         userCreate: null,
         planLength: null,
+        actualLength: null,
         minLength: null,
         maxLength: null,
         chippingLength: null,
@@ -270,6 +287,13 @@ export default {
         ],
         planLength: [
           { required: true, message: "计划长度不能为空", trigger: "change" },
+        ],
+        actualLength: [
+          {
+            required: true,
+            message: "检测实测长度不能为空",
+            trigger: "change",
+          },
         ],
         minLength: [
           {
