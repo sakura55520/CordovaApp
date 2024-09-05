@@ -1865,10 +1865,10 @@ export default {
       this.handleCodeClick();
     },
     calcPlanWeight(length) {
-      let density = this.diameterList.find(
-        (item) => item.value == this.formData.diameter
-      ).extendValue;
-      return ((length * density) / 1000).toFixed(3);
+      return (
+        ((length || 0) * (this.formData.theoryQtyCoefficient || 0)) /
+        1000
+      ).toFixed(3);
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
