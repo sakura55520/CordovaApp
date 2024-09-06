@@ -1693,7 +1693,9 @@ export default {
             let length = tailPosition - headPosition;
             return {
               ...item,
-              planWeight: this.calcPlanWeight(length),
+              planWeight: this.$route.query.view
+                ? item.planWeight
+                : this.calcPlanWeight(length),
               _reason: reason ? reason.split(",") : [],
             };
           });
