@@ -295,13 +295,18 @@
                 class="item"
                 label-width="90px"
               >
-                <el-input
-                  class="value"
+                <el-select
+                  style="width: 100%"
                   v-model="formData.flaw"
                   :disabled="!enableMap.flaw"
-                  v-direction="{ x: 2, y: 4 }"
                 >
-                </el-input>
+                  <el-option
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="item in conventionalDefectList"
+                    :key="item.value"
+                  ></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item
                 label="位错"
@@ -309,13 +314,18 @@
                 class="item"
                 label-width="90px"
               >
-                <el-input
-                  class="value"
+                <el-select
+                  style="width: 100%"
                   v-model="formData.offset"
                   :disabled="!enableMap.offset"
-                  v-direction="{ x: 3, y: 4 }"
                 >
-                </el-input>
+                  <el-option
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="item in offsetList"
+                    :key="item.value"
+                  ></el-option>
+                </el-select>
               </el-form-item>
               <el-form-item
                 label="OSF"
@@ -323,13 +333,18 @@
                 class="item"
                 label-width="90px"
               >
-                <el-input
-                  class="value"
+                <el-select
+                  style="width: 100%"
                   v-model="formData.osf"
                   :disabled="!enableMap.osf"
-                  v-direction="{ x: 4, y: 4 }"
                 >
-                </el-input>
+                  <el-option
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="item in osfDensityList"
+                    :key="item.value"
+                  ></el-option>
+                </el-select>
               </el-form-item>
               <div class="item"></div>
             </div>
@@ -469,13 +484,18 @@
                 class="item"
                 label-width="90px"
               >
-                <el-input
-                  class="value"
+                <el-select
+                  style="width: 100%"
                   v-model="formData.metal"
                   :disabled="!enableMap.metal"
-                  v-direction="{ x: 5, y: 6 }"
                 >
-                </el-input>
+                  <el-option
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="item in metalList"
+                    :key="item.value"
+                  ></el-option>
+                </el-select>
               </el-form-item>
             </div>
             <div class="row">
@@ -527,6 +547,7 @@
 <script>
 import * as Api from "@/api/inStation";
 import overStation from "@/mixins/overStation";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -646,6 +667,10 @@ export default {
           { required: true, message: "备注不能为空", trigger: "change" },
         ],
       },
+      conventionalDefectList: [],
+      offsetList: [],
+      osfDensityList: [],
+      metalList: [],
     };
   },
   computed: {
@@ -679,6 +704,10 @@ export default {
 
       this.initLength();
       this.fetchSwitchDict();
+      getSeleteData("conventionalDefect", this.conventionalDefectList);
+      getSeleteData("offset", this.offsetList);
+      getSeleteData("osfDensity", this.osfDensityList);
+      getSeleteData("metal", this.metalList);
     },
     initKeyup() {
       let direction = this.$getDirection();
