@@ -17,13 +17,6 @@
               @change="fetchData"
             ></el-input>
           </el-form-item>
-          <el-form-item label="">
-            <el-input
-              v-model="formData.search_LIKE_wheel"
-              placeholder="轮次号"
-              @change="fetchData"
-            ></el-input>
-          </el-form-item>
         </div>
         <div class="form-columns">
           <el-form-item label="">
@@ -211,7 +204,6 @@ export default {
       total: 0,
       list: [],
       formData: {
-        search_LIKE_wheel: null,
         search_LIKE_equipmentCode: null,
         search_LIKE_processingOrderCode: null,
         search_EQ_status: 2,
@@ -284,7 +276,6 @@ export default {
     },
     fetchData() {
       const {
-        search_LIKE_wheel,
         search_LIKE_equipmentCode,
         search_LIKE_processingOrderCode,
         startTimeRange,
@@ -295,7 +286,6 @@ export default {
         search_EQ_processCode: this.$route.query.station,
         rows: this.pageSize,
         page: this.currentPage,
-        search_LIKE_wheel,
         search_LIKE_equipmentCode,
         search_LIKE_processingOrderCode,
         search_GTE_startTime: !isEmpty(startTimeRange)
