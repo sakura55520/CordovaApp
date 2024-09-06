@@ -476,16 +476,6 @@
                 prop="planWeight"
                 show-overflow-tooltip
               />
-              <!-- <el-table-column
-                label="晶段类型"
-                min-width="100"
-                align="center"
-                prop="type"
-              >
-                <template slot-scope="scope">
-                  <el-input v-model="scope.row.type"></el-input>
-                </template>
-              </el-table-column> -->
               <el-table-column
                 label="计算位置"
                 min-width="100"
@@ -517,6 +507,102 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="头样片"
+                min-width="70"
+                align="center"
+                prop="takeHeadSample"
+              >
+                <template slot-scope="scope">
+                  <el-checkbox
+                    v-if="scope.row.type !== 2"
+                    v-model="scope.row.takeHeadSample"
+                  ></el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="头样片厚度"
+                min-width="100"
+                align="center"
+                prop="headSampleLength"
+              >
+                <template slot-scope="scope">
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.headSampleLength'
+                      "
+                      :rules="[
+                        {
+                          required:
+                            scope.row.type !== 2 && scope.row.takeHeadSample,
+                          message: ' ',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        v-if="scope.row.type !== 2"
+                        v-model="scope.row.headSampleLength"
+                        v-direction="{ x: 6, y: scope.$index }"
+                      ></el-input>
+                    </el-form-item>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="尾样片"
+                min-width="70"
+                align="center"
+                prop="takeTailSample"
+              >
+                <template slot-scope="scope">
+                  <el-checkbox
+                    v-if="scope.row.type !== 2"
+                    v-model="scope.row.takeTailSample"
+                  ></el-checkbox>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="尾样片厚度"
+                min-width="100"
+                align="center"
+                prop="tailSampleLength"
+              >
+                <template slot-scope="scope">
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.tailSampleLength'
+                      "
+                      :rules="[
+                        {
+                          required:
+                            scope.row.type !== 2 && scope.row.takeTailSample,
+                          message: ' ',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        v-if="scope.row.type !== 2"
+                        v-model="scope.row.tailSampleLength"
+                        v-direction="{ x: 7, y: scope.$index }"
+                      ></el-input>
+                    </el-form-item>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="头部电阻率"
                 min-width="100"
                 align="center"
@@ -535,7 +621,7 @@
                     }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.headResistance"
-                    v-direction="{ x: 6, y: scope.$index }"
+                    v-direction="{ x: 8, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -558,7 +644,7 @@
                     }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.tailResistance"
-                    v-direction="{ x: 7, y: scope.$index }"
+                    v-direction="{ x: 9, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -574,11 +660,6 @@
                 align="center"
                 prop="tailResistanceActual"
               />
-              <!-- <el-table-column
-                label="头尾电阻比"
-                min-width="120"
-                align="center"
-              ></el-table-column> -->
               <el-table-column
                 label="79oi头"
                 min-width="100"
@@ -621,6 +702,7 @@
                         @change="
                           (val) => handleOiChange('head', scope.$index, val)
                         "
+                        v-direction="{ x: 10, y: scope.$index }"
                       ></el-input>
                     </el-form-item>
                   </div>
@@ -668,6 +750,7 @@
                         @change="
                           (val) => handleOiChange('tail', scope.$index, val)
                         "
+                        v-direction="{ x: 11, y: scope.$index }"
                       ></el-input>
                     </el-form-item>
                   </div>
@@ -718,6 +801,7 @@
                     }"
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.headCarbonRate"
+                    v-direction="{ x: 12, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -764,6 +848,7 @@
                         }"
                         v-if="scope.row.type !== 2"
                         v-model="scope.row.tailCarbonRate"
+                        v-direction="{ x: 13, y: scope.$index }"
                       ></el-input>
                     </el-form-item>
                   </div>
@@ -779,6 +864,7 @@
                   <el-input
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.headRrv"
+                    v-direction="{ x: 14, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -792,6 +878,7 @@
                   <el-input
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.tailRrv"
+                    v-direction="{ x: 15, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -805,7 +892,7 @@
                   <el-input
                     v-if="scope.row.type !== 2"
                     v-model="scope.row.remarks"
-                    v-direction="{ x: 8, y: scope.$index }"
+                    v-direction="{ x: 16, y: scope.$index }"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -1678,6 +1765,10 @@ export default {
             _reason: [],
             reason: "",
             headCarbonRate: this.headCS,
+            takeHeadSample: false,
+            headSampleLength: null,
+            takeTailSample: false,
+            tailSampleLength: null,
           };
         });
 
@@ -1774,6 +1865,10 @@ export default {
         headRrv: this.headAndTailRrv.headRrv,
         tailRrv: this.headAndTailRrv.tailRrv,
         headCarbonRate: this.headCS,
+        takeHeadSample: false,
+        headSampleLength: null,
+        takeTailSample: false,
+        tailSampleLength: null,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -1801,6 +1896,10 @@ export default {
         headRrv: this.headAndTailRrv.headRrv,
         tailRrv: this.headAndTailRrv.tailRrv,
         headCarbonRate: this.headCS,
+        takeHeadSample: false,
+        headSampleLength: null,
+        takeTailSample: false,
+        tailSampleLength: null,
       };
       this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
     },
@@ -1867,6 +1966,10 @@ export default {
       this.handleCodeClick();
     },
     calcPlanWeight(length) {
+      // let density = this.diameterList.find(
+      //   (item) => item.value == this.formData.diameter
+      // ).extendValue;
+      // return ((length * density) / 1000).toFixed(3);
       return (
         ((length || 0) * (this.formData.theoryQtyCoefficient || 0)) /
         1000
