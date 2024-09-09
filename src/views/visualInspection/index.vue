@@ -515,6 +515,433 @@
             </div>
           </div>
           <div class="form">
+            <div class="form-title">样片信息</div>
+            <el-table
+              :data="formData.wipCrystalCheckSampleDatas"
+              :header-cell-style="{
+                background: 'rgba(242, 242, 242)',
+                color: '#606266',
+              }"
+            >
+              <el-table-column
+                label="样片编号"
+                width="175"
+                align="center"
+                prop="sampleNumber"
+                fixed="left"
+                show-overflow-tooltip
+                sortable
+              >
+              </el-table-column>
+              <el-table-column
+                label="样片标识"
+                width="110"
+                align="center"
+                prop="sampleIdentification"
+                fixed="left"
+                sortable
+              />
+              <el-table-column
+                label="样片位置"
+                width="110"
+                align="center"
+                prop="samplePosition"
+                fixed="left"
+                sortable
+              />
+              <el-table-column
+                label="样片重量(kg)"
+                width="120"
+                align="center"
+                prop="sampleWeight"
+              />
+              <el-table-column
+                label="样片类型"
+                width="85"
+                align="center"
+                prop="type"
+              />
+              <el-table-column
+                label="产品类型"
+                width="85"
+                align="center"
+                prop="productCategory"
+              >
+              </el-table-column>
+              <el-table-column
+                label="晶向"
+                width="55"
+                align="center"
+                prop="orientation"
+              >
+              </el-table-column>
+              <el-table-column
+                label="尺寸"
+                width="55"
+                align="center"
+                prop="size"
+              >
+              </el-table-column>
+              <el-table-column
+                label="结晶比重"
+                width="110"
+                align="center"
+                prop="crystalDensity"
+                ><template slot="header">
+                  <div class="form-table-header">结晶比重</div>
+                </template>
+                <template slot-scope="scope">
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'wipCrystalCheckSampleDatas.' +
+                        scope.$index +
+                        '.crystalDensity'
+                      "
+                      :rules="[
+                        {
+                          required: true,
+                          message: ' ',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        :id="'input-1-' + scope.$index"
+                        @keyup.native="(e) => handleKeyup(e, 1, scope.$index)"
+                        v-model="scope.row.crystalDensity"
+                      >
+                        <template slot="append">%</template>
+                      </el-input>
+                    </el-form-item>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="RES"
+                width="90"
+                align="center"
+                prop="res"
+                show-overflow-tooltip
+              />
+              <el-table-column label="RES_C" min-width="100" align="center">
+                <template slot="header">
+                  <div class="form-table-header">RES_C</div>
+                </template>
+                <template slot-scope="scope">
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'wipCrystalCheckSampleDatas.' + scope.$index + '.resC'
+                    "
+                    :rules="[
+                      {
+                        required: true,
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      :id="'input-2-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 2, scope.$index)"
+                      v-model="scope.row.resC"
+                      @input="
+                        () => {
+                          calcHalfRrg(scope.$index);
+                          calcRrg(scope.$index);
+                          calcTargetDeviation(scope.$index);
+                          calcHeadTailResistivityRatio(scope.row, scope.$index);
+                        }
+                      "
+                    ></el-input>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="RES_E" min-width="100" align="center">
+                <template slot="header">
+                  <div class="form-table-header">RES_E</div>
+                </template>
+                <template slot-scope="scope">
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'wipCrystalCheckSampleDatas.' + scope.$index + '.resE'
+                    "
+                    :rules="[
+                      {
+                        required: true,
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      :id="'input-3-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 3, scope.$index)"
+                      v-model="scope.row.resE"
+                      @input="calcRrg(scope.$index)"
+                    ></el-input>
+                  </el-form-item>
+                </template>
+              </el-table-column>
+              <el-table-column label="1/2RES" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :id="'input-4-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 4, scope.$index)"
+                    v-model="scope.row.halfRes"
+                    @input="calcHalfRrg(scope.$index)"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column
+                label="目标偏差"
+                min-width="90"
+                align="center"
+                prop="targetDeviation"
+                show-overflow-tooltip
+              >
+                <template slot-scope="scope">
+                  <div
+                    v-if="
+                      scope.row.targetDeviation ||
+                      scope.row.targetDeviation == 0
+                    "
+                    :style="{
+                      color: getFontColorByBackgroundColor(
+                        getControlColor('目标偏差', scope.row.targetDeviation)
+                      ),
+                      background: getControlColor(
+                        '目标偏差',
+                        scope.row.targetDeviation
+                      ),
+                    }"
+                  >
+                    {{ scope.row.targetDeviation }}%
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="RRG"
+                min-width="90"
+                align="center"
+                prop="rrg"
+                show-overflow-tooltip
+              >
+                <template slot-scope="scope">
+                  <div
+                    v-if="scope.row.rrg || scope.row.rrg == 0"
+                    :style="{
+                      color: getFontColorByBackgroundColor(
+                        getControlColor('RRG', scope.row.rrg)
+                      ),
+                      background: getControlColor('RRG', scope.row.rrg),
+                    }"
+                  >
+                    {{ scope.row.rrg }}%
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="1/2 RRG"
+                min-width="90"
+                align="center"
+                prop="halfRrg"
+                show-overflow-tooltip
+              >
+                <template slot-scope="scope">
+                  <div v-if="scope.row.halfRrg || scope.row.halfRrg == 0">
+                    {{ scope.row.halfRrg }}%
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="头尾电阻比"
+                min-width="100"
+                align="center"
+                prop="headTailResistivityRatio"
+                show-overflow-tooltip
+              />
+              <el-table-column label="OI_C" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor('OI_C', scope.row.oiC),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_C', scope.row.oiC)
+                      ),
+                    }"
+                    :id="'input-5-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
+                    v-model="scope.row.oiC"
+                    @input="calcOrg(scope.$index)"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="OI_E" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor('OI_E', scope.row.oiE),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_E', scope.row.oiE)
+                      ),
+                    }"
+                    :id="'input-6-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 6, scope.$index)"
+                    v-model="scope.row.oiE"
+                    @input="calcOrg(scope.$index)"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="CS" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor('CS', scope.row.cs),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('CS', scope.row.cs)
+                      ),
+                    }"
+                    :id="'input-7-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
+                    v-model="scope.row.cs"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column
+                label="ORG"
+                min-width="80"
+                align="center"
+                prop="org"
+                show-overflow-tooltip
+              >
+                <template slot-scope="scope">
+                  <div v-if="scope.row.org || scope.row.org == 0">
+                    {{ scope.row.org }}%
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="少子寿命" min-width="100" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '少子寿命',
+                        scope.row.minorityCarrierLifetime
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          '少子寿命',
+                          scope.row.minorityCarrierLifetime
+                        )
+                      ),
+                    }"
+                    :id="'input-8-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
+                    v-model="scope.row.minorityCarrierLifetime"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="常规缺陷" min-width="140" align="center">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.flaw" placeholder="">
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in conventionalDefectList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select> </template
+              ></el-table-column>
+              <el-table-column label="OSF密度" min-width="120" align="center">
+                <template slot-scope="scope">
+                  <el-select v-model="scope.row.osf" placeholder="">
+                    <el-option
+                      :label="item.label"
+                      :value="item.value"
+                      v-for="item in osfDensityList"
+                      :key="item.value"
+                    ></el-option>
+                  </el-select> </template
+              ></el-table-column>
+              <el-table-column label="基磷" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :id="'input-9-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
+                    v-model="scope.row.phosphorus"
+                    @change="
+                      (val) => handleToFixed(val, scope.$index, 'phosphorus')
+                    "
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="基硼" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :id="'input-10-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
+                    v-model="scope.row.boron"
+                    @change="(val) => handleToFixed(val, scope.$index, 'boron')"
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="基砷" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :id="'input-11-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
+                    v-model="scope.row.arsenic"
+                    @change="
+                      (val) => handleToFixed(val, scope.$index, 'arsenic')
+                    "
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="基锑" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :id="'input-12-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
+                    v-model="scope.row.antimony"
+                    @change="
+                      (val) => handleToFixed(val, scope.$index, 'antimony')
+                    "
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="检测人员" min-width="120" align="center">
+                <template slot-scope="scope">
+                  <SelectUserinfo
+                    v-model="scope.row.inspector"
+                    @handleSelect="
+                      (val) => handleInspectorSelect(val, scope.$index)
+                    "
+                  /> </template
+              ></el-table-column>
+              <el-table-column label="检测日期" min-width="250" align="center">
+                <template slot-scope="scope">
+                  <el-date-picker
+                    class="time"
+                    v-model="scope.row.checkDate"
+                    type="datetime"
+                    value-format="yyyy-MM-dd HH:mm:ss"
+                  /> </template
+              ></el-table-column>
+            </el-table>
+          </div>
+          <div class="form">
+            <div class="form-title">留档文档记录</div>
+            <div class="growth-section">
+              <PhotoNew
+                v-model="formData._files"
+                :componentDisabled="false"
+                :name="'CHECK_DEVICE'"
+                @input="handleFileChange"
+              />
+            </div>
+          </div>
+          <div class="form">
             <div class="form-title">参数说明</div>
             <div class="row">出站长度计算公式：<br /></div>
             <div class="row">
@@ -546,13 +973,23 @@
 
 <script>
 import * as Api from "@/api/inStation";
+import SelectUserinfo from "@/components/select_userinfo";
 import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
+import PhotoNew from "@/views/components/photoNew";
+import { getMateralModelExtras } from "@/api/factory/materialModel";
+import { getFontColorByBackgroundColor } from "@/utils/color";
+import { cloneDeep, isEmpty, get } from "lodash-es";
 
 export default {
   mixins: [overStation],
+  components: {
+    SelectUserinfo,
+    PhotoNew,
+  },
   data() {
     return {
+      getFontColorByBackgroundColor,
       formData: {
         userCreate: null,
         planLength: null,
@@ -584,6 +1021,8 @@ export default {
         antimony: null,
         metal: null,
         remarks: null,
+        _files: [],
+        wipCrystalCheckSampleDatas: [],
       },
       formRules: {
         userCreate: [
@@ -671,6 +1110,35 @@ export default {
       offsetList: [],
       osfDensityList: [],
       metalList: [],
+      controlList: [
+        {
+          key: "targetDeviation",
+          name: "目标偏差",
+          from: "formData.wipCrystalCheckSampleDatas",
+        },
+        {
+          key: "rrg",
+          name: "RRG",
+          from: "formData.wipCrystalCheckSampleDatas",
+        },
+        { key: "cs", name: "CS", from: "formData.wipCrystalCheckSampleDatas" },
+        {
+          key: "minorityCarrierLifetime",
+          name: "少子寿命",
+          from: "formData.wipCrystalCheckSampleDatas",
+        },
+        {
+          key: "oiC",
+          name: "OI_C",
+          from: "formData.wipCrystalCheckSampleDatas",
+        },
+        {
+          key: "oiE",
+          name: "OI_E",
+          from: "formData.wipCrystalCheckSampleDatas",
+        },
+      ],
+      controlMap: {},
     };
   },
   computed: {
@@ -702,12 +1170,32 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
 
+      this.formData._files = JSON.parse(this.formData.photo || "[]").map(
+        (fileItem) => ({
+          ...fileItem,
+          big_url: fileItem.fileUrl,
+          thumb_url: fileItem.fileUrl,
+        })
+      );
+
       this.initLength();
       this.fetchSwitchDict();
       getSeleteData("conventionalDefect", this.conventionalDefectList);
       getSeleteData("offset", this.offsetList);
       getSeleteData("osfDensity", this.osfDensityList);
       getSeleteData("metal", this.metalList);
+
+      if (!this.$route.query.view) this.updateData();
+
+      await this.getMateralModelExtras();
+      this.$set(
+        this.formData,
+        "wipCrystalCheckSampleDatas",
+        cloneDeep(this.formData.wipCrystalCheckSampleDatas)
+      );
+    },
+    updateData() {
+      if (isEmpty(this.formData.wipCrystalCheckSampleDatas)) return;
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -756,6 +1244,7 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       } = this.$route.query;
+
       await Api.inOrOutStation({
         equipmentCode,
         param: {
@@ -784,6 +1273,184 @@ export default {
         ((qualifiedLength || 0) * (theoryQtyCoefficient || 0)) /
         1000
       ).toFixed(3);
+    },
+    handleFileChange() {
+      const photo = (this.formData._files || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.photo = photo;
+    },
+    calcHalfRrg(index) {
+      let item = this.formData.wipCrystalCheckSampleDatas[index];
+      let data;
+      if (item.resC)
+        data = (((item.halfRes - item.resC) / item.resC) * 100).toFixed(3);
+      this.$set(
+        this.formData.wipCrystalCheckSampleDatas[index],
+        "halfRrg",
+        data
+      );
+    },
+    calcRrg(index) {
+      let item = this.formData.wipCrystalCheckSampleDatas[index];
+      let data;
+      if (item.resC)
+        data = (((item.resE - item.resC) / item.resC) * 100).toFixed(3);
+      this.$set(this.formData.wipCrystalCheckSampleDatas[index], "rrg", data);
+    },
+    calcTargetDeviation(index) {
+      let item = this.formData.wipCrystalCheckSampleDatas[index];
+      let data;
+      if (item.res)
+        data = (((item.resC - item.res) / item.res) * 100).toFixed(3);
+      this.$set(
+        this.formData.wipCrystalCheckSampleDatas[index],
+        "targetDeviation",
+        data
+      );
+    },
+    calcOrg(index) {
+      let item = this.formData.wipCrystalCheckSampleDatas[index];
+      let data;
+      if (item.oiC)
+        data = ((Math.abs(item.oiC - item.oiE) / item.oiC) * 100).toFixed(3);
+      this.$set(this.formData.wipCrystalCheckSampleDatas[index], "org", data);
+    },
+    calcHeadTailResistivityRatio(row, index) {
+      let headTailResistivityRatio = null;
+      let reverseDetails = (
+        cloneDeep(this.formData.wipCrystalCheckSampleDatas) || []
+      ).reverse();
+      let headIndex =
+        reverseDetails.length -
+        reverseDetails.findIndex(
+          (item) =>
+            item.type === "头尾样片" && item.sampleIdentification === "H"
+        ) -
+        1;
+      let tailIndex =
+        reverseDetails.length -
+        reverseDetails.findIndex(
+          (item) =>
+            item.type === "头尾样片" && item.sampleIdentification === "T"
+        ) -
+        1;
+      let headResC = this.formData.wipCrystalCheckSampleDatas[headIndex].resC;
+      let tailResC = this.formData.wipCrystalCheckSampleDatas[tailIndex].resC;
+
+      if ((headResC || headResC === 0) && tailResC)
+        headTailResistivityRatio = (headResC / tailResC).toFixed(3);
+
+      this.$set(
+        this.formData.wipCrystalCheckSampleDatas[headIndex],
+        "headTailResistivityRatio",
+        headTailResistivityRatio
+      );
+      this.$set(
+        this.formData.wipCrystalCheckSampleDatas[tailIndex],
+        "headTailResistivityRatio",
+        headTailResistivityRatio
+      );
+    },
+    handleInspectorSelect(val, index) {
+      this.$set(
+        this.formData.wipCrystalCheckSampleDatas[index],
+        "checkDate",
+        new Date()
+      );
+    },
+    getControlColor(key, val) {
+      let item = this.controlMap[key] || {};
+      let maxItem = item["上限"] || {};
+      let minItem = item["下限"] || {};
+
+      if ((maxItem.control || minItem.control) && !(val || String(val) === "0"))
+        return maxItem.controlColor || minItem.controlColor;
+
+      if (
+        maxItem.control &&
+        (maxItem.value || String(maxItem.value) === "0") &&
+        Number(val) > Number(maxItem.value)
+      )
+        return maxItem.controlColor;
+      if (
+        minItem.control &&
+        (minItem.value || String(minItem.value) === "0") &&
+        Number(val) < Number(minItem.value)
+      )
+        return minItem.controlColor;
+
+      return null;
+    },
+    checkControl(key, val) {
+      let item = this.controlMap[key] || {};
+      let maxItem = item["上限"] || {};
+      let minItem = item["下限"] || {};
+
+      if ((maxItem.control || minItem.control) && !(val || String(val) === "0"))
+        return false;
+
+      if (
+        maxItem.control &&
+        (maxItem.value || String(maxItem.value) === "0") &&
+        Number(val) > Number(maxItem.value)
+      )
+        return false;
+      if (
+        minItem.control &&
+        (minItem.value || String(minItem.value) === "0") &&
+        Number(val) < Number(minItem.value)
+      )
+        return false;
+
+      return true;
+    },
+    handleKeyup(e, x, y) {
+      if (e.keyCode === 39) {
+        let dom = document.getElementById(`input-${x + 1}-${y}`);
+        dom && dom.focus();
+      }
+      if (e.keyCode === 37) {
+        let dom = document.getElementById(`input-${x - 1}-${y}`);
+        dom && dom.focus();
+      }
+      if (e.keyCode === 38) {
+        let dom = document.getElementById(`input-${x}-${y - 1}`);
+        dom && dom.focus();
+      }
+      if (e.keyCode === 40) {
+        let dom = document.getElementById(`input-${x}-${y + 1}`);
+        dom && dom.focus();
+      }
+    },
+    async getMateralModelExtras() {
+      let list = await getMateralModelExtras({
+        processOrderCode: this.formData.processOrderCode,
+      });
+
+      this.controlList.forEach((control) => {
+        let name = control.name;
+        let maxName = name + "上限";
+        let minName = name + "下限";
+        let maxItem = list.find((ele) => ele.displayName == maxName) || {};
+        let minItem = list.find((ele) => ele.displayName == minName) || {};
+
+        this.controlMap[name] = {
+          上限: {
+            control: maxItem.control,
+            controlColor: maxItem.controlColor,
+            value: maxItem.value,
+          },
+          下限: {
+            control: minItem.control,
+            controlColor: minItem.controlColor,
+            value: minItem.value,
+          },
+        };
+      });
     },
   },
 };
@@ -887,19 +1554,54 @@ export default {
     background: white;
   }
 }
-.unit {
-  width: 60px;
+
+.form-input {
+  margin-bottom: 0px;
 }
-.inputs {
-  display: flex;
-  gap: 8px;
+
+.form-table-header:before {
+  content: "* ";
+  color: red;
 }
-.multiple-form-item /deep/ {
-  margin-bottom: 0px !important;
-  .el-form-item__label {
-    height: 40px !important;
+
+.el-table {
+  /deep/ .el-table__cell {
+    padding: 0px;
+  }
+
+  /deep/ .el-input-group__append {
+    padding: 0 5px;
+  }
+
+  /deep/ .el-input__inner {
+    padding: 0px 3px;
+  }
+
+  /deep/ .el-input__icon {
+    line-height: 25px;
+  }
+
+  .time {
+    /deep/ .el-input__inner {
+      padding: 0px 30px;
+    }
   }
 }
+
+/deep/ .el-input__inner {
+  height: 25px;
+  background-color: var(--controlColor) !important;
+  color: var(--textColor);
+}
+
+/deep/ .el-form-item__content {
+  line-height: 25px;
+}
+
+/deep/ .el-form-item__label {
+  line-height: 25px;
+}
+
 .row {
   display: flex;
   gap: 10px;
