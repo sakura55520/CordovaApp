@@ -515,7 +515,11 @@
             </div>
           </div>
           <div class="form">
-            <div class="form-title">样片信息</div>
+            <div class="form-title">
+              样片信息(当前晶段头样片:{{
+                formData.headSampleNo || "无"
+              }},当前晶段尾样片:{{ formData.tailSampleNo || "无" }})
+            </div>
             <el-table
               :data="formData.wipCrystalCheckSampleDatas"
               :header-cell-style="{
@@ -611,6 +615,10 @@
                       class="form-input"
                     >
                       <el-input
+                        :class="{
+                          disabled: checkDisabled(scope.row),
+                        }"
+                        :disabled="checkDisabled(scope.row)"
                         :id="'input-1-' + scope.$index"
                         @keyup.native="(e) => handleKeyup(e, 1, scope.$index)"
                         v-model="scope.row.crystalDensity"
@@ -650,6 +658,10 @@
                     class="form-input"
                   >
                     <el-input
+                      :class="{
+                        disabled: checkDisabled(scope.row),
+                      }"
+                      :disabled="checkDisabled(scope.row)"
                       :id="'input-2-' + scope.$index"
                       @keyup.native="(e) => handleKeyup(e, 2, scope.$index)"
                       v-model="scope.row.resC"
@@ -688,6 +700,10 @@
                     class="form-input"
                   >
                     <el-input
+                      :class="{
+                        disabled: checkDisabled(scope.row),
+                      }"
+                      :disabled="checkDisabled(scope.row)"
                       :id="'input-3-' + scope.$index"
                       @keyup.native="(e) => handleKeyup(e, 3, scope.$index)"
                       v-model="scope.row.resE"
@@ -704,6 +720,10 @@
               <el-table-column label="1/2RES" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :id="'input-4-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 4, scope.$index)"
                     v-model="scope.row.halfRes"
@@ -781,6 +801,10 @@
               <el-table-column label="OI_C" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :style="{
                       '--controlColor': getControlColor('OI_C', scope.row.oiC),
                       '--textColor': getFontColorByBackgroundColor(
@@ -801,6 +825,10 @@
               <el-table-column label="OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :style="{
                       '--controlColor': getControlColor('OI_E', scope.row.oiE),
                       '--textColor': getFontColorByBackgroundColor(
@@ -821,6 +849,10 @@
               <el-table-column label="CS" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :style="{
                       '--controlColor': getControlColor('CS', scope.row.cs),
                       '--textColor': getFontColorByBackgroundColor(
@@ -849,6 +881,10 @@
               <el-table-column label="少子寿命" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :style="{
                       '--controlColor': getControlColor(
                         '少子寿命',
@@ -870,6 +906,10 @@
               <el-table-column label="常规缺陷" min-width="140" align="center">
                 <template slot-scope="scope">
                   <el-select
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     v-model="scope.row.flaw"
                     placeholder=""
                     @change="updateData"
@@ -885,6 +925,10 @@
               <el-table-column label="OSF密度" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-select
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     v-model="scope.row.osf"
                     placeholder=""
                     @change="updateData"
@@ -900,6 +944,10 @@
               <el-table-column label="基磷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :id="'input-9-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
                     v-model="scope.row.phosphorus"
@@ -914,6 +962,10 @@
               <el-table-column label="基硼" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :id="'input-10-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
                     v-model="scope.row.boron"
@@ -928,6 +980,10 @@
               <el-table-column label="基砷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :id="'input-11-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
                     v-model="scope.row.arsenic"
@@ -942,6 +998,10 @@
               <el-table-column label="基锑" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     :id="'input-12-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
                     v-model="scope.row.antimony"
@@ -956,6 +1016,10 @@
               <el-table-column label="检测人员" min-width="120" align="center">
                 <template slot-scope="scope">
                   <SelectUserinfo
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     v-model="scope.row.inspector"
                     @handleSelect="
                       (val) => handleInspectorSelect(val, scope.$index)
@@ -965,6 +1029,10 @@
               <el-table-column label="检测日期" min-width="250" align="center">
                 <template slot-scope="scope">
                   <el-date-picker
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
                     class="time"
                     v-model="scope.row.checkDate"
                     type="datetime"
@@ -1537,6 +1605,12 @@ export default {
         };
       });
     },
+    checkDisabled(row) {
+      const { headSampleNo, tailSampleNo } = this.formData;
+      return (
+        row.sampleNumber !== headSampleNo && row.sampleNumber !== tailSampleNo
+      );
+    },
   },
 };
 </script>
@@ -1697,5 +1771,9 @@ export default {
       padding: 0 5px;
     }
   }
+}
+
+.disabled {
+  background-color: #f5f7fa !important;
 }
 </style>

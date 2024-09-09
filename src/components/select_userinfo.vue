@@ -8,6 +8,7 @@
     @select="handleSelect"
     @focus="handleFocus($event)"
     @keyup.enter.native="handleEnter"
+    :disabled="disabled"
   >
     <template slot-scope="{ item }">
       <div>{{ `${item.value}(${item.workNo})` }}</div>
@@ -19,7 +20,7 @@
 import * as select from "@/utils/select.js";
 export default {
   name: "select_userinfo",
-  props: ["value", "userId"],
+  props: ["value", "userId", "disabled"],
   data() {
     return {
       userName: "",
