@@ -659,6 +659,7 @@
                           calcRrg(scope.$index);
                           calcTargetDeviation(scope.$index);
                           calcHeadTailResistivityRatio(scope.row, scope.$index);
+                          updateData();
                         }
                       "
                     ></el-input>
@@ -690,7 +691,12 @@
                       :id="'input-3-' + scope.$index"
                       @keyup.native="(e) => handleKeyup(e, 3, scope.$index)"
                       v-model="scope.row.resE"
-                      @input="calcRrg(scope.$index)"
+                      @input="
+                        () => {
+                          calcRrg(scope.$index);
+                          updateData();
+                        }
+                      "
                     ></el-input>
                   </el-form-item>
                 </template>
@@ -784,7 +790,12 @@
                     :id="'input-5-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
                     v-model="scope.row.oiC"
-                    @input="calcOrg(scope.$index)"
+                    @input="
+                      () => {
+                        calcOrg(scope.$index);
+                        updateData();
+                      }
+                    "
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="OI_E" min-width="80" align="center">
@@ -799,7 +810,12 @@
                     :id="'input-6-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 6, scope.$index)"
                     v-model="scope.row.oiE"
-                    @input="calcOrg(scope.$index)"
+                    @input="
+                      () => {
+                        calcOrg(scope.$index);
+                        updateData();
+                      }
+                    "
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="CS" min-width="80" align="center">
@@ -814,6 +830,7 @@
                     :id="'input-7-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
                     v-model="scope.row.cs"
+                    @change="updateData"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column
@@ -847,11 +864,16 @@
                     :id="'input-8-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
                     v-model="scope.row.minorityCarrierLifetime"
+                    @change="updateData"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="常规缺陷" min-width="140" align="center">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.flaw" placeholder="">
+                  <el-select
+                    v-model="scope.row.flaw"
+                    placeholder=""
+                    @change="updateData"
+                  >
                     <el-option
                       :label="item.label"
                       :value="item.value"
@@ -862,7 +884,11 @@
               ></el-table-column>
               <el-table-column label="OSF密度" min-width="120" align="center">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.osf" placeholder="">
+                  <el-select
+                    v-model="scope.row.osf"
+                    placeholder=""
+                    @change="updateData"
+                  >
                     <el-option
                       :label="item.label"
                       :value="item.value"
@@ -878,7 +904,10 @@
                     @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
                     v-model="scope.row.phosphorus"
                     @change="
-                      (val) => handleToFixed(val, scope.$index, 'phosphorus')
+                      (val) => {
+                        handleToFixed(val, scope.$index, 'phosphorus');
+                        updateData();
+                      }
                     "
                   ></el-input> </template
               ></el-table-column>
@@ -888,7 +917,12 @@
                     :id="'input-10-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
                     v-model="scope.row.boron"
-                    @change="(val) => handleToFixed(val, scope.$index, 'boron')"
+                    @change="
+                      (val) => {
+                        handleToFixed(val, scope.$index, 'boron');
+                        updateData();
+                      }
+                    "
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="基砷" min-width="80" align="center">
@@ -898,7 +932,10 @@
                     @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
                     v-model="scope.row.arsenic"
                     @change="
-                      (val) => handleToFixed(val, scope.$index, 'arsenic')
+                      (val) => {
+                        handleToFixed(val, scope.$index, 'arsenic');
+                        updateData();
+                      }
                     "
                   ></el-input> </template
               ></el-table-column>
@@ -909,7 +946,10 @@
                     @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
                     v-model="scope.row.antimony"
                     @change="
-                      (val) => handleToFixed(val, scope.$index, 'antimony')
+                      (val) => {
+                        handleToFixed(val, scope.$index, 'antimony');
+                        updateData();
+                      }
                     "
                   ></el-input> </template
               ></el-table-column>
