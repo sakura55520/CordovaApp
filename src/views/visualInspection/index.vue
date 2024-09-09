@@ -522,6 +522,7 @@
                 background: 'rgba(242, 242, 242)',
                 color: '#606266',
               }"
+              :row-class-name="tableRowClassName"
             >
               <el-table-column
                 label="样片编号"
@@ -602,7 +603,7 @@
                       "
                       :rules="[
                         {
-                          required: true,
+                          required: scope.row.valid,
                           message: ' ',
                           trigger: 'change',
                         },
@@ -640,7 +641,8 @@
                     "
                     :rules="[
                       {
-                        required: true,
+                        required:
+                          scope.row.valid && scope.row.type === '头尾样片',
                         message: ' ',
                         trigger: 'change',
                       },
@@ -676,7 +678,8 @@
                     "
                     :rules="[
                       {
-                        required: true,
+                        required:
+                          scope.row.valid && scope.row.type === '头尾样片',
                         message: ' ',
                         trigger: 'change',
                       },
@@ -1283,6 +1286,11 @@ export default {
       );
       this.formData.photo = photo;
     },
+    tableRowClassName({ row }) {
+      if (!row.valid) {
+        return "invalid_tr";
+      }
+    },
     calcHalfRrg(index) {
       let item = this.formData.wipCrystalCheckSampleDatas[index];
       let data;
@@ -1321,23 +1329,16 @@ export default {
     },
     calcHeadTailResistivityRatio(row, index) {
       let headTailResistivityRatio = null;
-      let reverseDetails = (
-        cloneDeep(this.formData.wipCrystalCheckSampleDatas) || []
-      ).reverse();
-      let headIndex =
-        reverseDetails.length -
-        reverseDetails.findIndex(
-          (item) =>
-            item.type === "头尾样片" && item.sampleIdentification === "H"
-        ) -
-        1;
-      let tailIndex =
-        reverseDetails.length -
-        reverseDetails.findIndex(
-          (item) =>
-            item.type === "头尾样片" && item.sampleIdentification === "T"
-        ) -
-        1;
+      const { headSampleNo, tailSampleNo } = this.formData;
+      let headIndex = this.formData.wipCrystalCheckSampleDatas.findIndex(
+        (item) => item.sampleNumber === headSampleNo
+      );
+      let tailIndex = this.formData.wipCrystalCheckSampleDatas.findIndex(
+        (item) => item.sampleNumber === tailSampleNo
+      );
+
+      if (headIndex === -1 || tailIndex === -1) return;
+
       let headResC = this.formData.wipCrystalCheckSampleDatas[headIndex].resC;
       let tailResC = this.formData.wipCrystalCheckSampleDatas[tailIndex].resC;
 
