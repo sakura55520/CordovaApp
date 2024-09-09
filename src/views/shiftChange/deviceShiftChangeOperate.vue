@@ -101,6 +101,7 @@
       :visible.sync="dialogDeviceVisible"
       estimate-visible
       @has-confirm="hasSelectDeviceConfirm"
+      isBatch
     />
 
     <!-- 页面操作 -->

@@ -48,9 +48,11 @@
 
 <script>
 import * as Api from '@/api/deviceCapacity'
+import selectDeviceArea from '@/mixins/selectDeviceArea'
 
 export default {
   name: 'SelectDeviceList',
+  mixins: [selectDeviceArea],
   props: {
     // 是批量操作
     isBatch: {
