@@ -1775,5 +1775,6 @@ export default {
 
 .disabled {
   background-color: #f5f7fa !important;
+  color: #c0c4cc !important;
 }
 </style>
