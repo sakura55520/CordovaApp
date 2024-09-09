@@ -1390,8 +1390,28 @@ export default {
     async confirm() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
-      await this.$confirm("确认提交当前操作数据?", "提示", {
+
+      let outControlList = [];
+      this.controlList.forEach((control) => {
+        let list = get(this, control.from, []);
+        if (
+          list.some(
+            (item) => !this.checkControl(control.name, item[control.key])
+          )
+        )
+          outControlList.push(control.name);
+      });
+
+      let message = "确认提交当前操作数据?";
+      if (!isEmpty(outControlList))
+        message =
+          "<div>以下数据超限：</div>" +
+          outControlList.join("、") +
+          "<div>请确认是否继续提交当前操作数据?</div>";
+
+      await this.$confirm(message, "提示", {
         type: "warning",
+        dangerouslyUseHTMLString: true,
       });
       const {
         equipmentCode,
@@ -1606,10 +1626,11 @@ export default {
       });
     },
     checkDisabled(row) {
-      const { headSampleNo, tailSampleNo } = this.formData;
-      return (
-        row.sampleNumber !== headSampleNo && row.sampleNumber !== tailSampleNo
-      );
+      return false;
+      // const { headSampleNo, tailSampleNo } = this.formData;
+      // return (
+      //   row.sampleNumber !== headSampleNo && row.sampleNumber !== tailSampleNo
+      // );
     },
   },
 };
