@@ -1037,7 +1037,7 @@ export default {
         actualLength: [
           {
             required: true,
-            message: "检测实测长度不能为空",
+            message: "实测长度不能为空",
             trigger: "change",
           },
         ],
@@ -1076,38 +1076,32 @@ export default {
         weighingQty: [
           { required: true, message: "实际称重不能为空", trigger: "change" },
         ],
-        resC: [{ required: true, message: "RES_C不能为空", trigger: "change" }],
-        resE: [{ required: true, message: "RES_E不能为空", trigger: "change" }],
-        rrg: [{ required: true, message: "RRG不能为空", trigger: "change" }],
+        resC: [{ required: true, message: "RES_C不能为空", trigger: "blur" }],
+        resE: [{ required: true, message: "RES_E不能为空", trigger: "blur" }],
+        rrg: [{ required: true, message: "RRG不能为空", trigger: "blur" }],
         minorityCarrierLifetime: [
-          { required: true, message: "少子寿命不能为空", trigger: "change" },
+          { required: true, message: "少子寿命不能为空", trigger: "blur" },
         ],
-        flaw: [{ required: true, message: "缺陷不能为空", trigger: "change" }],
-        offset: [
-          { required: true, message: "位错不能为空", trigger: "change" },
-        ],
-        osf: [{ required: true, message: "OSF不能为空", trigger: "change" }],
-        cs: [{ required: true, message: "CS不能为空", trigger: "change" }],
-        oiC: [{ required: true, message: "OI_C不能为空", trigger: "change" }],
+        flaw: [{ required: true, message: "缺陷不能为空", trigger: "blur" }],
+        offset: [{ required: true, message: "位错不能为空", trigger: "blur" }],
+        osf: [{ required: true, message: "OSF不能为空", trigger: "blur" }],
+        cs: [{ required: true, message: "CS不能为空", trigger: "blur" }],
+        oiC: [{ required: true, message: "OI_C不能为空", trigger: "blur" }],
         halfOi: [
-          { required: true, message: "1/2 OI不能为空", trigger: "change" },
+          { required: true, message: "1/2 OI不能为空", trigger: "blur" },
         ],
-        oiE: [{ required: true, message: "OI_E不能为空", trigger: "change" }],
-        org: [{ required: true, message: "ORG不能为空", trigger: "change" }],
+        oiE: [{ required: true, message: "OI_E不能为空", trigger: "blur" }],
+        org: [{ required: true, message: "ORG不能为空", trigger: "blur" }],
         phosphorus: [
-          { required: true, message: "基磷不能为空", trigger: "change" },
+          { required: true, message: "基磷不能为空", trigger: "blur" },
         ],
-        boron: [{ required: true, message: "基硼不能为空", trigger: "change" }],
-        arsenic: [
-          { required: true, message: "基砷不能为空", trigger: "change" },
-        ],
+        boron: [{ required: true, message: "基硼不能为空", trigger: "blur" }],
+        arsenic: [{ required: true, message: "基砷不能为空", trigger: "blur" }],
         antimony: [
-          { required: true, message: "基锑不能为空", trigger: "change" },
+          { required: true, message: "基锑不能为空", trigger: "blur" },
         ],
-        metal: [{ required: true, message: "金属不能为空", trigger: "change" }],
-        remarks: [
-          { required: true, message: "备注不能为空", trigger: "change" },
-        ],
+        metal: [{ required: true, message: "金属不能为空", trigger: "blur" }],
+        remarks: [{ required: true, message: "备注不能为空", trigger: "blur" }],
       },
       conventionalDefectList: [],
       offsetList: [],
@@ -1199,6 +1193,56 @@ export default {
     },
     updateData() {
       if (isEmpty(this.formData.wipCrystalCheckSampleDatas)) return;
+      const { wipCrystalCheckSampleDatas, headSampleNo, tailSampleNo } =
+        this.formData;
+      let headSample = wipCrystalCheckSampleDatas.find(
+        (item) => item.sampleNumber === headSampleNo
+      );
+      let tailSample = wipCrystalCheckSampleDatas.find(
+        (item) => item.sampleNumber === tailSampleNo
+      );
+
+      if (headSample) {
+        const { resC, resE, rrg, flaw, osf, cs, oiC, oiE, halfOi, org } =
+          headSample;
+
+        let data = {
+          ...this.formData,
+          resC,
+          resE,
+          rrg,
+          flaw,
+          osf,
+          cs,
+          oiC,
+          oiE,
+          halfOi,
+          org,
+        };
+        this.$set(this, "formData", data);
+      }
+
+      if (tailSample) {
+        const {
+          minorityCarrierLifetime,
+          offset,
+          phosphorus,
+          boron,
+          arsenic,
+          antimony,
+        } = tailSample;
+
+        let data = {
+          ...this.formData,
+          minorityCarrierLifetime,
+          offset,
+          phosphorus,
+          boron,
+          arsenic,
+          antimony,
+        };
+        this.$set(this, "formData", data);
+      }
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -1587,20 +1631,20 @@ export default {
       padding: 0px 30px;
     }
   }
-}
 
-/deep/ .el-input__inner {
-  height: 25px;
-  background-color: var(--controlColor) !important;
-  color: var(--textColor);
-}
+  /deep/ .el-input__inner {
+    height: 25px;
+    background-color: var(--controlColor) !important;
+    color: var(--textColor);
+  }
 
-/deep/ .el-form-item__content {
-  line-height: 25px;
-}
+  /deep/ .el-form-item__content {
+    line-height: 25px;
+  }
 
-/deep/ .el-form-item__label {
-  line-height: 25px;
+  /deep/ .el-form-item__label {
+    line-height: 25px;
+  }
 }
 
 .row {
