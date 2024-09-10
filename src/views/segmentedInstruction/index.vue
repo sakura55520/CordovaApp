@@ -368,7 +368,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.orderCode"
                     @focus="handleWorkOrderFocus(scope.$index)"
                     clearable
@@ -384,7 +384,7 @@
               >
                 <template slot-scope="scope">
                   <el-select
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.processCode"
                     @visible-change="
                       (val) => handleProcessCodeVisibleChange(val, scope.$index)
@@ -437,7 +437,7 @@
                 prop="segmentNum"
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.type !== 2">
+                  <div v-if="scope.row.type === 0">
                     {{ scope.row.segmentNum }}
                   </div>
                 </template>
@@ -484,7 +484,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.calculatedPosition"
                     @change="(value) => calcResistivity(value, scope.$index)"
                     v-direction="{ x: 4, y: scope.$index }"
@@ -499,107 +499,11 @@
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.calculatedResistivity"
                     @change="(value) => calcPosition(value, scope.$index)"
                     v-direction="{ x: 5, y: scope.$index }"
                   ></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="头样片"
-                min-width="70"
-                align="center"
-                prop="takeHeadSample"
-              >
-                <template slot-scope="scope">
-                  <el-checkbox
-                    v-if="scope.row.type !== 2"
-                    v-model="scope.row.takeHeadSample"
-                  ></el-checkbox>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="头样片厚度"
-                min-width="100"
-                align="center"
-                prop="headSampleLength"
-              >
-                <template slot-scope="scope">
-                  <div class="form-custom-verify">
-                    <el-form-item
-                      label=""
-                      label-width="0px"
-                      :prop="
-                        'segmentedInstructionDetailVos.' +
-                        scope.$index +
-                        '.headSampleLength'
-                      "
-                      :rules="[
-                        {
-                          required:
-                            scope.row.type !== 2 && scope.row.takeHeadSample,
-                          message: ' ',
-                          trigger: 'change',
-                        },
-                      ]"
-                      class="form-input"
-                    >
-                      <el-input
-                        v-if="scope.row.type !== 2"
-                        v-model="scope.row.headSampleLength"
-                        v-direction="{ x: 6, y: scope.$index }"
-                      ></el-input>
-                    </el-form-item>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="尾样片"
-                min-width="70"
-                align="center"
-                prop="takeTailSample"
-              >
-                <template slot-scope="scope">
-                  <el-checkbox
-                    v-if="scope.row.type !== 2"
-                    v-model="scope.row.takeTailSample"
-                  ></el-checkbox>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="尾样片厚度"
-                min-width="100"
-                align="center"
-                prop="tailSampleLength"
-              >
-                <template slot-scope="scope">
-                  <div class="form-custom-verify">
-                    <el-form-item
-                      label=""
-                      label-width="0px"
-                      :prop="
-                        'segmentedInstructionDetailVos.' +
-                        scope.$index +
-                        '.tailSampleLength'
-                      "
-                      :rules="[
-                        {
-                          required:
-                            scope.row.type !== 2 && scope.row.takeTailSample,
-                          message: ' ',
-                          trigger: 'change',
-                        },
-                      ]"
-                      class="form-input"
-                    >
-                      <el-input
-                        v-if="scope.row.type !== 2"
-                        v-model="scope.row.tailSampleLength"
-                        v-direction="{ x: 7, y: scope.$index }"
-                      ></el-input>
-                    </el-form-item>
-                  </div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -619,7 +523,7 @@
                         getControlColor('头部电阻率', scope.row.headResistance)
                       ),
                     }"
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.headResistance"
                     v-direction="{ x: 8, y: scope.$index }"
                   ></el-input>
@@ -642,7 +546,7 @@
                         getControlColor('尾部电阻率', scope.row.tailResistance)
                       ),
                     }"
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.tailResistance"
                     v-direction="{ x: 9, y: scope.$index }"
                   ></el-input>
@@ -799,7 +703,7 @@
                         getControlColor('头碳含量', scope.row.headCarbonRate)
                       ),
                     }"
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.headCarbonRate"
                     v-direction="{ x: 12, y: scope.$index }"
                   ></el-input>
@@ -824,7 +728,7 @@
                       :rules="[
                         {
                           required:
-                            scope.row.type !== 2 &&
+                            scope.row.type === 0 &&
                             scope.$index ===
                               formData.segmentedInstructionDetailVos.length - 1,
                           message: ' ',
@@ -846,7 +750,7 @@
                             )
                           ),
                         }"
-                        v-if="scope.row.type !== 2"
+                        v-if="scope.row.type === 0"
                         v-model="scope.row.tailCarbonRate"
                         v-direction="{ x: 13, y: scope.$index }"
                       ></el-input>
@@ -862,7 +766,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.headRrv"
                     v-direction="{ x: 14, y: scope.$index }"
                   ></el-input>
@@ -876,7 +780,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.tailRrv"
                     v-direction="{ x: 15, y: scope.$index }"
                   ></el-input>
@@ -890,7 +794,7 @@
               >
                 <template slot-scope="scope">
                   <el-input
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     v-model="scope.row.remarks"
                     v-direction="{ x: 16, y: scope.$index }"
                   ></el-input>
@@ -912,7 +816,7 @@
                       "
                       :rules="[
                         {
-                          required: scope.row.type !== 2,
+                          required: scope.row.type === 0,
                           message: ' ',
                           trigger: 'change',
                         },
@@ -920,7 +824,7 @@
                       class="form-input"
                     >
                       <el-select
-                        v-if="scope.row.type !== 2"
+                        v-if="scope.row.type === 0"
                         v-model="scope.row.status"
                         @change="(val) => handleStatusChange(val, scope.$index)"
                       >
@@ -955,7 +859,7 @@
                   <el-select
                     v-model="scope.row._reason"
                     clearable
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                     multiple
                     collapse-tags
                     @change="(val) => handleReasonChange(val, scope.$index)"
@@ -979,7 +883,7 @@
                   <el-select
                     v-model="scope.row.reasonIn"
                     clearable
-                    v-if="scope.row.type !== 2"
+                    v-if="scope.row.type === 0"
                   >
                     <el-option
                       :label="item.label"
@@ -1107,57 +1011,57 @@
                   <div class="label">计划重量：</div>
                   <div class="value">{{ item.planWeight }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">计算位置：</div>
                   <div class="value">{{ item.calculatedPosition }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">计算电阻率：</div>
                   <div class="value">{{ item.calculatedResistivity }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">头部电阻率：</div>
                   <div class="value">{{ item.headResistance }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">尾部电阻率：</div>
                   <div class="value">{{ item.tailResistance }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">头部电阻率实测：</div>
                   <div class="value">{{ item.headResistanceActual }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">尾部电阻率实测：</div>
                   <div class="value">{{ item.tailResistanceActual }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">79oi头：</div>
                   <div class="value">{{ item.head79oi }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">79oi尾：</div>
                   <div class="value">{{ item.tail79oi }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">83oi头：</div>
                   <div class="value">{{ item.head83oi }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">83oi尾：</div>
                   <div class="value">{{ item.tail83oi }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">合格状态：</div>
                   <div class="value">
                     {{ item.status === 1 ? "合格" : "不合格" }}
                   </div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">合格长度：</div>
                   <div class="value">{{ item.qualifiedLength }}</div>
                 </div>
-                <div class="item" v-if="item.type !== 2">
+                <div class="item" v-if="item.type === 0">
                   <div class="label">合格重量：</div>
                   <div class="value">{{ item.qualifiedWeight }}</div>
                 </div>
@@ -1922,7 +1826,7 @@ export default {
       }
 
       for (const item of list) {
-        if (item.type !== 2) item.segmentNo = null;
+        if (item.type === 0) item.segmentNo = null;
         if (
           (item.tailPosition || item.tailPosition === 0) &&
           (item.headPosition || item.headPosition === 0)
@@ -1949,7 +1853,7 @@ export default {
       }
 
       for (const item of list) {
-        if (item.type !== 2) item.segmentNo = null;
+        if (item.type === 0) item.segmentNo = null;
         if (
           (item.tailPosition || item.tailPosition === 0) &&
           (item.headPosition || item.headPosition === 0)
