@@ -317,7 +317,7 @@
               max-height="350px"
             >
               <el-table-column
-                label="晶锭编号/回收料编号"
+                label="晶锭/回收料/样片编号"
                 min-width="220"
                 align="center"
                 show-overflow-tooltip
@@ -330,7 +330,7 @@
                     size="small"
                     @click="addSegmentedInfo"
                   ></el-button>
-                  <span>晶锭编号/回收料编号</span>
+                  <span>晶锭/回收料/样片编号</span>
                 </template>
                 <template slot-scope="scope">
                   <div class="segment-table">
@@ -339,7 +339,7 @@
                     </div>
                     <div v-else>
                       <div class="get-btn" @click="handleCodeClick">
-                        获取晶锭/回收料编号
+                        获取晶锭/回收料/样片编号
                       </div>
                     </div>
                     <div
@@ -424,7 +424,7 @@
                   <el-input
                     v-model="scope.row.diametermm"
                     v-direction="{ x: 1, y: scope.$index }"
-                    :disabled="scope.row.type === 2"
+                    :disabled="scope.row.type !== 0"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -445,7 +445,7 @@
               <el-table-column label="头部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :disabled="scope.row.type === 2"
+                    :disabled="scope.row.type !== 0 && !scope.row.new"
                     v-model="scope.row.headPosition"
                     @change="(value) => handleHeadChange(value, scope.$index)"
                     v-direction="{ x: 2, y: scope.$index }"
@@ -455,7 +455,7 @@
               <el-table-column label="尾部位置" min-width="100" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :disabled="scope.row.type === 2"
+                    :disabled="scope.row.type !== 0 && !scope.row.new"
                     v-model="scope.row.tailPosition"
                     @change="(value) => handleTailChange(value, scope.$index)"
                     v-direction="{ x: 3, y: scope.$index }"
@@ -729,8 +729,7 @@
                         {
                           required:
                             scope.row.type === 0 &&
-                            scope.$index ===
-                              formData.segmentedInstructionDetailVos.length - 1,
+                            scope.$index === lastSegmentIndex,
                           message: ' ',
                           trigger: 'change',
                         },
@@ -987,12 +986,16 @@
                 :id="`detail_${index}`"
                 @click="handleSegmentedBarClick(index)"
               >
-                <div class="item" v-if="item.type === 2">
-                  <div class="label">回收料编号：</div>
-                  <div class="value">{{ item.segmentNo }}</div>
-                </div>
                 <div class="item" v-if="item.type === 0">
                   <div class="label">晶锭编号：</div>
+                  <div class="value">{{ item.segmentNo }}</div>
+                </div>
+                <div class="item" v-if="item.type === 1">
+                  <div class="label">样片编号：</div>
+                  <div class="value">{{ item.segmentNo }}</div>
+                </div>
+                <div class="item" v-if="item.type === 2">
+                  <div class="label">回收料编号：</div>
                   <div class="value">{{ item.segmentNo }}</div>
                 </div>
                 <div class="item">
@@ -1432,6 +1435,16 @@ export default {
             item.type === "头尾样片" && item.sampleIdentification === "H"
         ) || {}
       ).cs;
+    },
+    lastSegmentIndex() {
+      let reverseDetails = (
+        cloneDeep(this.formData.segmentedInstructionDetailVos) || []
+      ).reverse();
+      return (
+        reverseDetails.length -
+        reverseDetails.findIndex((item) => item.type === 0) -
+        1
+      );
     },
   },
   created() {
@@ -1904,7 +1917,7 @@ export default {
       let maxRes = Number((Number(this.headResistance || 0) * 2).toFixed(3));
       if (
         this.formData.segmentedInstructionDetailVos.some((item) => {
-          if (item.type === 2) return false;
+          if (item.type !== 0) return false;
 
           const { headResistance, tailResistance } = item;
           if (
