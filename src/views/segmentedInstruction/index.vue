@@ -328,7 +328,7 @@
                     icon="el-icon-plus"
                     circle
                     size="small"
-                    @click="addSegmentedInfo"
+                    @click="handleAddDialogShow(null)"
                   ></el-button>
                   <span>晶锭/回收料/样片编号</span>
                 </template>
@@ -345,7 +345,7 @@
                     <div
                       class="segment-add-btn"
                       v-if="scope.$index !== 0"
-                      @click="addSegmentedInfoByIndex(scope.$index)"
+                      @click="handleAddDialogShow(scope.$index)"
                     >
                       +
                     </div>
@@ -1274,6 +1274,20 @@
         <el-button type="primary" @click="handleConfirm">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog :visible.sync="addDialog" title="新增" width="400px">
+      <el-form :model="temp">
+        <el-form-item label="类型" label-width="80px">
+          <el-select v-model="temp.type" style="width: 100%">
+            <el-option label="晶段" :value="0" />
+            <el-option label="样片" :value="1" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialog = false">取 消</el-button>
+        <el-button type="primary" @click="handleAdd">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -1286,6 +1300,10 @@ import PhotoNew from "@/views/components/photoNew";
 import LeaderLine from "@/plugins/leader-line.min.js";
 import { getMateralModelExtras } from "@/api/factory/materialModel";
 import { getFontColorByBackgroundColor } from "@/utils/color";
+
+const defaultTemp = {
+  type: 0,
+};
 
 export default {
   mixins: [overStation],
@@ -1378,6 +1396,9 @@ export default {
         },
       ],
       controlMap: {},
+      addDialog: false,
+      addIndex: null,
+      temp: Object.assign({}, defaultTemp),
     };
   },
   computed: {
@@ -1682,10 +1703,6 @@ export default {
             _reason: [],
             reason: "",
             headCarbonRate: this.headCS,
-            takeHeadSample: false,
-            headSampleLength: null,
-            takeTailSample: false,
-            tailSampleLength: null,
           };
         });
 
@@ -1761,6 +1778,16 @@ export default {
       });
       this.formData.segmentedInstructionDetailVos = list;
     },
+    handleAddDialogShow(index) {
+      this.addIndex = index;
+      this.temp = Object.assign({}, defaultTemp);
+      this.addDialog = true;
+    },
+    handleAdd() {
+      if (this.addIndex === null) this.addSegmentedInfo();
+      else this.addSegmentedInfoByIndex(this.addIndex);
+      this.addDialog = false;
+    },
     addSegmentedInfo() {
       let list = this.formData.segmentedInstructionDetailVos;
       let headPosition;
@@ -1769,7 +1796,7 @@ export default {
       let headOi = this.calcOi(headPosition);
       let item = {
         headPosition,
-        type: 0,
+        type: this.temp.type,
         headResistance: 0,
         tailResistance: 0,
         diameter: this.formData.diameter,
@@ -1782,10 +1809,7 @@ export default {
         headRrv: this.headAndTailRrv.headRrv,
         tailRrv: this.headAndTailRrv.tailRrv,
         headCarbonRate: this.headCS,
-        takeHeadSample: false,
-        headSampleLength: null,
-        takeTailSample: false,
-        tailSampleLength: null,
+        new: this.temp.type,
       };
       this.formData.segmentedInstructionDetailVos.push(item);
     },
@@ -1801,7 +1825,7 @@ export default {
         tailPosition,
         length,
         planWeight: this.calcPlanWeight(length),
-        type: 0,
+        type: this.temp.type,
         headResistance: 0,
         tailResistance: 0,
         diameter: this.formData.diameter,
@@ -1813,10 +1837,7 @@ export default {
         headRrv: this.headAndTailRrv.headRrv,
         tailRrv: this.headAndTailRrv.tailRrv,
         headCarbonRate: this.headCS,
-        takeHeadSample: false,
-        headSampleLength: null,
-        takeTailSample: false,
-        tailSampleLength: null,
+        new: this.temp.type,
       };
       this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
     },
