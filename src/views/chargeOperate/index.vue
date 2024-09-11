@@ -96,7 +96,7 @@
               prop="feedingTime"
               :rules="[
                 {
-                  required: formData.crystalOrder == 1,
+                  required: formData.wheel == 1,
                   message: '请输入装料开始时间',
                   trigger: 'change',
                 },
@@ -135,7 +135,7 @@
               class="codeScan-form-item"
               :rules="[
                 {
-                  required: formData.crystalOrder == 1,
+                  required: formData.wheel == 1,
                   message: '请输入石英坩埚编号',
                   trigger: 'change',
                 },
@@ -160,7 +160,7 @@
               class="multipleCodeScan-form-item"
               :rules="[
                 {
-                  required: formData.crystalOrder == 1,
+                  required: formData.wheel == 1,
                   message: '请输入多晶硅编号',
                   trigger: 'change',
                 },
