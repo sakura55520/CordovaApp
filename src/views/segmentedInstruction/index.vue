@@ -1775,6 +1775,9 @@ export default {
       res.segmentedInstructionDetailVos.forEach((item, index) => {
         list[index].segmentNo = item.segmentNo;
         list[index].segmentNum = item.segmentNum;
+        list[index].sampleIdentification = item.sampleIdentification;
+        list[index].sampleNew = item.sampleNew;
+        list[index].sampleType = item.sampleType;
       });
       this.formData.segmentedInstructionDetailVos = list;
     },
