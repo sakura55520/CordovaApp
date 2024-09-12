@@ -607,7 +607,7 @@
                       "
                       :rules="[
                         {
-                          required: scope.row.valid,
+                          required: scope.row.valid || !scope.row.id,
                           message: ' ',
                           trigger: 'change',
                         },
@@ -650,7 +650,8 @@
                     :rules="[
                       {
                         required:
-                          scope.row.valid && scope.row.type === '头尾样片',
+                          (scope.row.valid || !scope.row.id) &&
+                          scope.row.type === '头尾样片',
                         message: ' ',
                         trigger: 'change',
                       },
@@ -692,7 +693,8 @@
                     :rules="[
                       {
                         required:
-                          scope.row.valid && scope.row.type === '头尾样片',
+                          (scope.row.valid || !scope.row.id) &&
+                          scope.row.type === '头尾样片',
                         message: ' ',
                         trigger: 'change',
                       },
@@ -1459,7 +1461,7 @@ export default {
       this.formData.photo = photo;
     },
     tableRowClassName({ row }) {
-      if (!row.valid) {
+      if (!row.valid && row.id) {
         return "invalid_tr";
       }
     },
