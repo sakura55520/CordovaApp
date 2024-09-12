@@ -62,11 +62,13 @@ export default {
   },
   methods: {
     init() {
-      this.detailForm._files = this.stepData[0].files.map((fileItem) => ({
-        ...fileItem,
-        big_url: fileItem.fileUrl,
-        thumb_url: fileItem.fileUrl,
-      }));
+      this.detailForm._files = (this.stepData[0].files || []).map(
+        (fileItem) => ({
+          ...fileItem,
+          big_url: fileItem.fileUrl,
+          thumb_url: fileItem.fileUrl,
+        })
+      );
     },
     handleFileChange() {
       this.$refs.detailForm.validate();
