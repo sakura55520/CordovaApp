@@ -179,6 +179,7 @@
                   :prop-value="formItem.extValue"
                   @input="handleTechsInput($event, recordIdx, formItemIdx)"
                 />
+                <!-- <div @click="test(formItem)">123</div> -->
               </component>
             </template>
           </div>
@@ -450,6 +451,9 @@ export default {
           "disabled",
           noError
         );
+    },
+    test(val) {
+      console.log(val);
     },
   },
 };

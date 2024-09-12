@@ -959,6 +959,8 @@ export default {
           {}
         ).sampleWeight;
 
+        let number = this.getNumber(item.sampleNumber);
+
         return {
           ...item,
           productCategory: this.formData.productCategory,
@@ -968,6 +970,7 @@ export default {
           crystalDensity:
             item.crystalDensity || this.getCrystalDensity(item.samplePosition),
           sampleWeight,
+          number,
         };
       });
 
@@ -1003,6 +1006,7 @@ export default {
             item.size = this.formData.size;
             item.res = this.formData.targetResistivity;
             item.crystalDensity = this.getCrystalDensity(item.samplePosition);
+            item.number = this.getNumber(item.sampleNumber);
             this.formData.details.push(item);
           }
         });
@@ -1402,6 +1406,12 @@ export default {
           },
         };
       });
+    },
+    getNumber(sampleNumber) {
+      if (!sampleNumber) return null;
+      let list = sampleNumber.split("-");
+      let lastNumber = Number(list[list.length - 1]);
+      return isNaN(lastNumber) ? 0 : lastNumber;
     },
   },
 };
