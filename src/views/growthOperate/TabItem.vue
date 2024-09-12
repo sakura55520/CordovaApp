@@ -170,6 +170,7 @@
                     message: formItem.label + '不能为空',
                     trigger: 'change',
                   },
+                  ...getRules(formItem.regList),
                 ]"
                 :prop="'techs.' + formItemIdx + '.extValue'"
               >
@@ -179,7 +180,6 @@
                   :prop-value="formItem.extValue"
                   @input="handleTechsInput($event, recordIdx, formItemIdx)"
                 />
-                <!-- <div @click="test(formItem)">123</div> -->
               </component>
             </template>
           </div>
@@ -452,8 +452,12 @@ export default {
           noError
         );
     },
-    test(val) {
-      console.log(val);
+    getRules(regList) {
+      return (regList || []).map((item) => ({
+        message: item.message,
+        pattern: item.pattern,
+        trigger: "change",
+      }));
     },
   },
 };
