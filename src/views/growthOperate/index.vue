@@ -351,6 +351,9 @@ export default {
       const valid = await this.$refs.dialogForm.validate();
       if (!valid) return;
 
+      if (this.dialogForm.startTime > this.dialogForm.endTime)
+        return this.$message.warning("化料开始时间不能大于工艺结束时间");
+
       const {
         equipmentCode,
         processUuid,
