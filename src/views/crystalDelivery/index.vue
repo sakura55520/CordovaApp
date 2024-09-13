@@ -111,7 +111,7 @@
               <el-form-item
                 label="位错反延线长度"
                 prop="dislocationIdentificationLength"
-                class="item"
+                class="item item-large"
                 label-width="140px"
                 :rules="[
                   {
@@ -835,9 +835,15 @@ export default {
   display: flex;
   gap: 10px;
   width: 100%;
-
-  .item {
+  .item /deep/ {
     flex: 1;
+    .el-input-group__append {
+      padding: 0 5px;
+    }
+  }
+
+  .item-large {
+    flex: 1.2;
   }
 }
 </style>
