@@ -1860,6 +1860,9 @@ export default {
         let headOi = this.calcOi(value);
         list[index].head79oi = headOi[0];
         list[index].head83oi = headOi[1];
+
+        list[index - 1].tail79oi = headOi[0];
+        list[index - 1].tail83oi = headOi[1];
       }
 
       for (const item of list) {
@@ -1887,6 +1890,9 @@ export default {
         let tailOi = this.calcOi(value);
         list[index].tail79oi = tailOi[0];
         list[index].tail83oi = tailOi[1];
+
+        list[index + 1].head79oi = tailOi[0];
+        list[index + 1].head83oi = tailOi[1];
       }
 
       for (const item of list) {
