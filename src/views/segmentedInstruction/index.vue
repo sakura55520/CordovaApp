@@ -1074,12 +1074,14 @@
           <div class="form">
             <div class="form-title">留档文档记录</div>
             <div class="growth-section">
-              <PhotoNew
-                v-model="formData._files"
-                :componentDisabled="false"
-                :name="'CHECK_DEVICE'"
-                @input="handleFileChange"
-              />
+              <el-form-item label-width="0px" prop="_files">
+                <PhotoNew
+                  v-model="formData._files"
+                  :componentDisabled="false"
+                  :name="'CHECK_DEVICE'"
+                  @input="handleFileChange"
+                />
+              </el-form-item>
             </div>
           </div>
         </el-form>
@@ -1329,6 +1331,13 @@ export default {
         ],
         number: [
           { required: true, message: "数量不能为空", trigger: "change" },
+        ],
+        _files: [
+          {
+            required: true,
+            message: "留档文档记录不能为空",
+            trigger: "change",
+          },
         ],
       },
       selectedIndex: null,
