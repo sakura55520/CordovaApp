@@ -1757,6 +1757,8 @@ export default {
         "segmentedInstructionDetailVos",
         cloneDeep(this.formData.segmentedInstructionDetailVos)
       );
+
+      this.fetchSwitchDict();
     },
     async handleCodeClick() {
       let { length } = this.formData;
@@ -1941,7 +1943,7 @@ export default {
       try {
         valid = await this.$refs.formRef.validate();
       } catch (err) {
-        return this.$message.warning("分段信息未填写完整");
+        return this.$message.warning("分段信息或留档文档记录未填写完整");
       }
       if (!valid) return;
 
