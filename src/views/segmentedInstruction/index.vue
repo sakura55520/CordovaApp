@@ -1743,13 +1743,13 @@ export default {
       if (cloneSegmentedInstructionDetailVos.some((item) => !item.segmentNo))
         this.handleCodeClick();
 
-      this.formData._files = JSON.parse(this.formData.photo || "[]").map(
-        (fileItem) => ({
-          ...fileItem,
-          big_url: fileItem.fileUrl,
-          thumb_url: fileItem.fileUrl,
-        })
-      );
+      const { photo } = this.formData;
+      let photos = Array.isArray(photo) ? photo : JSON.parse(photo || "[]");
+      this.formData._files = photos.map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
 
       await this.getMateralModelExtras();
       this.$set(
