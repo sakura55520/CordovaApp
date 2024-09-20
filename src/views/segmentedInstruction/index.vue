@@ -1171,28 +1171,10 @@
         />
         <el-table-column key="qty" prop="qty" label="工单数量" width="90" />
         <el-table-column
-          key="offlineQty"
-          prop="offlineQty"
-          label="已下线数量"
-          width="110"
-        />
-        <el-table-column
-          key="onlineQty"
-          prop="onlineQty"
-          label="在线数量"
-          width="90"
-        />
-        <el-table-column
-          key="qualifiedQty"
-          prop="qualifiedQty"
-          label="合格数量"
-          width="90"
-        />
-        <el-table-column
-          key="matchingQty"
-          prop="matchingQty"
-          label="标准匹配合格数量"
-          width="160"
+          key="qualifiedWeight"
+          prop="qualifiedWeight"
+          label="分段合格数量"
+          width="120"
         />
         <el-table-column key="unit" prop="unit" label="工单单位" width="90" />
         <el-table-column
