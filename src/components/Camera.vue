@@ -59,6 +59,9 @@ export default {
   },
   methods: {
     async fetchDevices() {
+      if (!navigator.mediaDevices)
+        return this.$message.warning("请先信任当前网页");
+
       let allDevices = await navigator.mediaDevices.enumerateDevices();
 
       let videoDevices = (allDevices || []).filter(
