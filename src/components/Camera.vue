@@ -62,10 +62,13 @@ export default {
       let allDevices = await navigator.mediaDevices.enumerateDevices();
 
       let videoDevices = (allDevices || []).filter(
-        (item) => item.kind === "videoinput"
+        (item) => item.kind === "videoinput" && item.deviceId
       );
 
-      if (isEmpty(videoDevices)) return this.$message.warning("无拍摄设备!");
+      if (isEmpty(videoDevices))
+        return this.$message.warning(
+          "当前无可用的拍摄设备,请连接设备并开启摄像头权限!"
+        );
 
       this.devices = videoDevices.map((item) => ({
         label: item.label,
