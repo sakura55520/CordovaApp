@@ -39,7 +39,7 @@
           icon="el-icon-camera-solid"
           type="primary"
           plain
-          @click="openCamera"
+          @click.stop="openCamera"
           >拍照</el-button
         >
         <el-button icon="el-icon-picture" type="primary" plain
@@ -70,6 +70,8 @@
     <el-dialog :visible.sync="previewDialog" title="预览" width="95%">
       <img :src="previewUrl" width="100%" />
     </el-dialog>
+
+    <Camera :visible.sync="cameraDialogVisible" @handleShoot="handleShoot" />
   </div>
 </template>
 
@@ -77,10 +79,14 @@
 import * as api from "@/api/photo";
 import { getToken } from "@/utils/auth";
 import url from "url";
+import Camera from "@/components/Camera";
+import { uploadImage } from "@/api/file";
 
 export default {
   props: ["value", "name"],
-  components: {},
+  components: {
+    Camera,
+  },
   data() {
     return {
       imageList: [],
@@ -91,6 +97,7 @@ export default {
       headers: {
         token: getToken(),
       },
+      cameraDialogVisible: false,
     };
   },
   computed: {
@@ -166,8 +173,17 @@ export default {
       this.imageList.splice(index, 1);
       this.$emit("input", this.imageList);
     },
-    openCamera(e) {
-      console.log(e);
+    openCamera() {
+      this.cameraDialogVisible = true;
+    },
+    handleShoot(file) {
+      let formData = new FormData();
+      formData.append("file", file);
+      uploadImage(formData)
+        .then(this.handleSuccess)
+        .catch((err) => {
+          console.log("err", err);
+        });
     },
   },
   watch: {
