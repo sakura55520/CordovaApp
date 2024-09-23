@@ -60,7 +60,16 @@ export default {
   methods: {
     async fetchDevices() {
       if (!navigator.mediaDevices)
-        return this.$message.warning("请先信任当前网页");
+        return this.$message.warning("请先信任当前网站!");
+
+      try {
+        await navigator.mediaDevices.getUserMedia({
+          audio: false,
+          video: true,
+        });
+      } catch (err) {
+        return this.$message.warning("请开启摄像头权限!");
+      }
 
       let allDevices = await navigator.mediaDevices.enumerateDevices();
 
@@ -69,9 +78,7 @@ export default {
       );
 
       if (isEmpty(videoDevices))
-        return this.$message.warning(
-          "当前无可用的拍摄设备,请连接设备并开启摄像头权限!"
-        );
+        return this.$message.warning("当前无可用的拍摄设备,请连接设备!");
 
       this.devices = videoDevices.map((item) => ({
         label: item.label,
