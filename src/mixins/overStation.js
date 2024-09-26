@@ -36,7 +36,7 @@ export default {
       }
     },
     fetchSwitchDict() {
-      const nameSpace = this.$route.query.wipStorageCode || this.$route.query.processCode;
+      const nameSpace = this.$route.query.wipStorageCode || this.$route.query.processCode || JSON.parse(this.$route.query.fromData || "{}").processCode;
       const list = [];
       this.enableMap = {};
       // 系统全局开关 字典
