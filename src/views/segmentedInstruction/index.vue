@@ -425,6 +425,7 @@
                     v-model="scope.row.diametermm"
                     v-direction="{ x: 1, y: scope.$index }"
                     :disabled="scope.row.type !== 0"
+                    v-trim
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -449,6 +450,7 @@
                     v-model="scope.row.headPosition"
                     @change="(value) => handleHeadChange(value, scope.$index)"
                     v-direction="{ x: 2, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -459,6 +461,7 @@
                     v-model="scope.row.tailPosition"
                     @change="(value) => handleTailChange(value, scope.$index)"
                     v-direction="{ x: 3, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -488,6 +491,7 @@
                     v-model="scope.row.calculatedPosition"
                     @change="(value) => calcResistivity(value, scope.$index)"
                     v-direction="{ x: 4, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -503,6 +507,7 @@
                     v-model="scope.row.calculatedResistivity"
                     @change="(value) => calcPosition(value, scope.$index)"
                     v-direction="{ x: 5, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -526,6 +531,7 @@
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headResistance"
                     v-direction="{ x: 8, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -549,6 +555,7 @@
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailResistance"
                     v-direction="{ x: 9, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -607,6 +614,7 @@
                           (val) => handleOiChange('head', scope.$index, val)
                         "
                         v-direction="{ x: 10, y: scope.$index }"
+                        v-trim
                       ></el-input>
                     </el-form-item>
                   </div>
@@ -655,6 +663,7 @@
                           (val) => handleOiChange('tail', scope.$index, val)
                         "
                         v-direction="{ x: 11, y: scope.$index }"
+                        v-trim
                       ></el-input>
                     </el-form-item>
                   </div>
@@ -706,6 +715,7 @@
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headCarbonRate"
                     v-direction="{ x: 12, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -752,6 +762,7 @@
                         v-if="scope.row.type === 0"
                         v-model="scope.row.tailCarbonRate"
                         v-direction="{ x: 13, y: scope.$index }"
+                        v-trim
                       ></el-input>
                     </el-form-item>
                   </div>
@@ -768,6 +779,7 @@
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headRrv"
                     v-direction="{ x: 14, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -782,6 +794,7 @@
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailRrv"
                     v-direction="{ x: 15, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -796,6 +809,7 @@
                     v-if="scope.row.type === 0"
                     v-model="scope.row.remarks"
                     v-direction="{ x: 16, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
