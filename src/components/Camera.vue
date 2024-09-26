@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogVisible" title="拍照" width="80%">
+  <el-dialog :visible.sync="dialogVisible" title="拍照" fullscreen>
     <el-form-item label="拍摄设备">
       <el-select v-model="deviceId" @change="openCamera" style="width: 100%">
         <el-option
@@ -150,7 +150,6 @@ export default {
   width: 100%;
   .video {
     width: 100%;
-    height: 400px;
   }
 }
 </style>
