@@ -58,23 +58,6 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="检测实测长度"
-                prop="actualLength"
-                class="item"
-                label-width="120px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.actualLength"
-                    :disabled="!enableMap.actualLength"
-                    v-direction="{ x: 2, y: 1 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
                 label="崩边长度"
                 prop="chippingLength"
                 class="item"
@@ -86,7 +69,7 @@
                     v-model="formData.chippingLength"
                     :disabled="!enableMap.chippingLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 3, y: 1 }"
+                    v-direction="{ x: 2, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -104,7 +87,7 @@
                     v-model="formData.ellipticLength"
                     :disabled="!enableMap.ellipticLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 4, y: 1 }"
+                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -126,6 +109,7 @@
                   </el-input>
                 </div>
               </el-form-item>
+              <div class="item"></div>
             </div>
             <div class="row">
               <el-form-item
