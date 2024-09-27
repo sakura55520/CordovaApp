@@ -65,7 +65,7 @@ export default {
       try {
         await navigator.mediaDevices.getUserMedia({
           audio: false,
-          video: true,
+          video: { width: { ideal: 5120 }, height: { ideal: 3840 } },
         });
       } catch (err) {
         return this.$message.warning("请开启摄像头权限!");
@@ -109,6 +109,7 @@ export default {
           audio: false,
           video: {
             deviceId: { exact: deviceId },
+            video: { width: { ideal: 5120 }, height: { ideal: 3840 } },
           },
         })
         .then(this.handleSuccess)
