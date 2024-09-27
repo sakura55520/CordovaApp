@@ -1634,7 +1634,7 @@ export default {
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
-      if (res.data) {
+      if (!this.$route.query.view && res.data) {
         fromData = res.data;
       } else {
         try {
