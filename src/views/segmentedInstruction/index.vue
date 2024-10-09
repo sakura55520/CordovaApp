@@ -1950,6 +1950,13 @@ export default {
       )
         return this.$message.warning("分段编号不能为空");
 
+      if (
+        this.formData.segmentedInstructionDetailVos.every(
+          (item) => item.type !== 0
+        )
+      )
+        return this.$message.warning("分段信息必须有晶段");
+
       let minRes = Number((Number(this.tailResistance || 0) / 2).toFixed(3));
       let maxRes = Number((Number(this.headResistance || 0) * 2).toFixed(3));
       if (
