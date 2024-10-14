@@ -70,7 +70,26 @@
     </div>
 
     <el-dialog :visible.sync="previewDialog" title="预览" width="95%">
-      <img :src="previewUrl" width="100%" />
+      <div class="preview">
+        <el-button
+          class="btn"
+          :style="{
+            visibility: selectIndex > 0 ? 'visible' : 'hidden',
+          }"
+          icon="el-icon-arrow-left"
+          @click="handlePrev"
+        />
+        <img class="preview-img" :src="previewUrl" />
+        <el-button
+          class="btn"
+          :style="{
+            visibility:
+              selectIndex < imageList.length - 1 ? 'visible' : 'hidden',
+          }"
+          icon="el-icon-arrow-right"
+          @click="handleNext"
+        />
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -93,6 +112,7 @@ export default {
       headers: {
         token: getToken(),
       },
+      selectIndex: null,
     };
   },
   computed: {
@@ -161,6 +181,7 @@ export default {
       this.$emit("input", this.imageList);
     },
     preview(index) {
+      this.selectIndex = index;
       this.previewUrl = this.imageList[index].big_url;
       this.previewDialog = true;
     },
@@ -170,6 +191,14 @@ export default {
     },
     handleInputChange() {
       this.$emit("input", this.imageList);
+    },
+    handlePrev() {
+      this.selectIndex -= 1;
+      this.previewUrl = this.imageList[this.selectIndex].big_url;
+    },
+    handleNext() {
+      this.selectIndex += 1;
+      this.previewUrl = this.imageList[this.selectIndex].big_url;
     },
   },
   watch: {
@@ -234,5 +263,17 @@ export default {
 
 .remark {
   margin-top: 10px;
+}
+
+.preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .preview-img {
+    width: calc(100% - 134px);
+  }
+  .btn {
+    width: 62px;
+  }
 }
 </style>
