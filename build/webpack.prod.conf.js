@@ -21,7 +21,7 @@ function resolve(dir) {
 }
 
 // 当前时间作为更新版本号
-const VERSION = moment().format('YYYY-MM-DD HH:mm:ss')
+const UPDATETIME = moment().format('YYYY-MM-DD HH:mm:ss')
 
 
 // 根据process.env.NODE_ENV模式，修改配置文件的src值
@@ -69,7 +69,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env,
-      'VERSION': '"' + VERSION + '"'
+      'UPDATETIME': '"' + UPDATETIME + '"'
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
@@ -121,7 +121,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks (module) {
+      minChunks(module) {
         // any required modules inside node_modules are extracted to vendor
         return (
           module.resource &&

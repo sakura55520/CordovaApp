@@ -19,7 +19,7 @@ const HOST = process.env.HOST
 const PORT = process.env.PORT && Number(process.env.PORT)
 
 // 当前时间作为更新版本号
-const VERSION = moment().format('YYYY-MM-DD HH:mm:ss')
+const UPDATETIME = moment().format('YYYY-MM-DD HH:mm:ss')
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -55,7 +55,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env'),
-      'VERSION': '"' + VERSION + '"'
+      'UPDATETIME': '"' + UPDATETIME + '"'
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
@@ -95,8 +95,8 @@ module.exports = new Promise((resolve, reject) => {
           messages: [`Your application is running here: http://${devWebpackConfig.devServer.host}:${port}`],
         },
         onErrors: config.dev.notifyOnErrors
-        ? utils.createNotifierCallback()
-        : undefined
+          ? utils.createNotifierCallback()
+          : undefined
       }))
 
       resolve(devWebpackConfig)

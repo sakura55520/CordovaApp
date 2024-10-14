@@ -3,153 +3,210 @@
     <div class="login">
       <div class="login_title">
         <div class="logo">
-          <img :src="App.appLogo" alt="海纳" height="105">
+          <img :src="App.appLogo" alt="海纳" height="105" />
         </div>
-<!--        <div class="logo_title">{{ App.appName }}</div>-->
+        <!--        <div class="logo_title">{{ App.appName }}</div>-->
       </div>
-      <el-form ref="loginForm" v-if="dialogLoginVisible" autoComplete="on" :model="loginForm" :rules="loginRules"
-               label-position="left" label-width="0px" class="login-form">
+      <el-form
+        ref="loginForm"
+        v-if="dialogLoginVisible"
+        autoComplete="on"
+        :model="loginForm"
+        :rules="loginRules"
+        label-position="left"
+        label-width="0px"
+        class="login-form"
+      >
         <el-form-item prop="loginName">
-          <el-input v-trim name="loginName" placeholder="请输入账号" suffix-icon="el-icon-user"
-                    v-model="loginForm.loginName" autoComplete="on">
+          <el-input
+            v-trim
+            name="loginName"
+            placeholder="请输入账号"
+            suffix-icon="el-icon-user"
+            v-model="loginForm.loginName"
+            autoComplete="on"
+          >
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-trim name="password" placeholder="请输入密码" type="password" @keyup.enter.native="handleLogin"
-                    v-model="loginForm.password" autoComplete="off" suffix-icon="el-icon-lock"></el-input>
+          <el-input
+            v-trim
+            name="password"
+            placeholder="请输入密码"
+            type="password"
+            @keyup.enter.native="handleLogin"
+            v-model="loginForm.password"
+            autoComplete="off"
+            suffix-icon="el-icon-lock"
+          ></el-input>
         </el-form-item>
         <el-row :gutter="16">
           <el-col :span="12">
             <el-form-item prop="teamGroup">
-              <el-select v-model="loginForm.teamGroup" name="teamGroup" placeholder="请选择班组">
+              <el-select
+                v-model="loginForm.teamGroup"
+                name="teamGroup"
+                placeholder="请选择班组"
+              >
                 <el-option
                   v-for="item in options_className"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.name">
+                  :value="item.name"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item prop="classNo">
-              <el-select v-model="loginForm.classNo" name="classNo" placeholder="请选择班次">
+              <el-select
+                v-model="loginForm.classNo"
+                name="classNo"
+                placeholder="请选择班次"
+              >
                 <el-option
                   v-for="item in options_classNo"
                   :key="item.id"
                   :label="item.classnoname"
-                  :value="item.classnoname">
+                  :value="item.classnoname"
+                >
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item>
-          <el-button :loading="loading" class="login-btn" type="primary" @click.native.prevent="handleLogin">
+          <el-button
+            :loading="loading"
+            class="login-btn"
+            type="primary"
+            @click.native.prevent="handleLogin"
+          >
             登 录
           </el-button>
         </el-form-item>
       </el-form>
       <div class="version">
-        更新时间: <span id="updateTime"></span>
+        <div>版本号: {{ version }}</div>
+        <div>更新时间: <span id="updateTime"></span></div>
       </div>
 
-      <el-form ref="pass-form" v-if="dialogPassVisible" :model="passForm" :rules="passRules"
-               class="card-box login-form">
+      <el-form
+        ref="pass-form"
+        v-if="dialogPassVisible"
+        :model="passForm"
+        :rules="passRules"
+        class="card-box login-form"
+      >
         <div class="lt_warning">
           <i class="el-icon-warning-outline"></i>初次登录，请先重置密码
         </div>
         <div class="enter_item">
           <el-form-item prop="password">
             <span class="password"></span>
-            <el-input v-trim type="password" v-model="passForm.password" placeholder="原始密码" autoComplete="off"></el-input>
+            <el-input
+              v-trim
+              type="password"
+              v-model="passForm.password"
+              placeholder="原始密码"
+              autoComplete="off"
+            ></el-input>
           </el-form-item>
         </div>
         <div class="enter_item">
           <el-form-item prop="passNew">
             <span class="password"></span>
-            <el-input v-trim type="password" v-model="passForm.passNew" placeholder="新密码, 必须包含字母、数字, 不少于6位"
-                      autoComplete="off"></el-input>
+            <el-input
+              v-trim
+              type="password"
+              v-model="passForm.passNew"
+              placeholder="新密码, 必须包含字母、数字, 不少于6位"
+              autoComplete="off"
+            ></el-input>
           </el-form-item>
         </div>
         <div class="enter_item">
           <el-form-item prop="passNewAgain">
             <span class="password"></span>
-            <el-input v-trim type="password" v-model="passForm.passNewAgain" placeholder="再次输入新密码"
-                      autoComplete="off"></el-input>
+            <el-input
+              v-trim
+              type="password"
+              v-model="passForm.passNewAgain"
+              placeholder="再次输入新密码"
+              autoComplete="off"
+            ></el-input>
           </el-form-item>
         </div>
         <div class="enter_item enter_btn">
           <el-form-item>
-            <el-button class="login-btn" type="primary" @click.native.prevent="changeConfirm">
+            <el-button
+              class="login-btn"
+              type="primary"
+              @click.native.prevent="changeConfirm"
+            >
               重置密码
             </el-button>
           </el-form-item>
         </div>
-
       </el-form>
-
     </div>
   </div>
 </template>
 
 <script>
-import {isvalidUsername} from "@/utils/validate";
+import { isvalidUsername } from "@/utils/validate";
 import * as Login from "@/api/login";
-import { validPassword } from '@/utils/validate'
-import * as App from '@/utils/app'
+import { validPassword } from "@/utils/validate";
+import * as App from "@/utils/app";
 
 const defaultPassForm = {
-  password: '',
-  passNew: '',
-  passNewAgain: ''
-}
+  password: "",
+  passNew: "",
+  passNewAgain: "",
+};
 
 export default {
   name: "login",
   data() {
     const validatePass = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请输入密码'))
+        callback(new Error("请输入密码"));
       } else if (!validPassword(value)) {
-        callback(new Error('密码必须包含字母、数字, 且不能少于6位'))
+        callback(new Error("密码必须包含字母、数字, 且不能少于6位"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     const validatePass2 = (rule, value, callback) => {
       if (!value) {
-        callback(new Error('请再次输入密码'))
+        callback(new Error("请再次输入密码"));
       } else if (!validPassword(value)) {
-        callback(new Error('密码必须包含字母、数字, 且不能少于6位'))
+        callback(new Error("密码必须包含字母、数字, 且不能少于6位"));
       } else if (value !== this.passForm.passNew) {
-        callback(new Error('两次输入密码不一致!'))
+        callback(new Error("两次输入密码不一致!"));
       } else {
-        callback()
+        callback();
       }
-    }
+    };
     return {
       App,
       loginForm: {
-        loginName: '',
-        password: '',
-        teamGroup: localStorage.getItem('teamGroup'),
-        classNo: localStorage.getItem('classNo'),
-        clientType: 'pad'
+        loginName: "",
+        password: "",
+        teamGroup: localStorage.getItem("teamGroup"),
+        classNo: localStorage.getItem("classNo"),
+        clientType: "pad",
       },
       loginRules: {
         loginName: [
-          {required: true, message: '请输入用户名', trigger: "blur"}
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
-        password: [
-          {required: true, message: '请输入密码', trigger: "blur"}
-        ],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
         teamGroup: [
-          {required: true, message: '请选择班组', trigger: 'change'}
+          { required: true, message: "请选择班组", trigger: "change" },
         ],
-        classNo: [
-          {required: true, message: '请选择班次', trigger: 'change'}
-        ]
+        classNo: [{ required: true, message: "请选择班次", trigger: "change" }],
       },
       loading: false,
       options_className: [],
@@ -159,19 +216,20 @@ export default {
       passForm: Object.assign({}, defaultPassForm),
       passRules: {
         passNew: [
-          {required: true, message: '请输入密码', trigger: 'blur'},
-          {validator: validatePass, trigger: 'blur'}
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { validator: validatePass, trigger: "blur" },
         ],
         passNewAgain: [
-          {required: true, message: '请再次输入密码', trigger: 'blur'},
-          {validator: validatePass2, trigger: 'blur'}
-        ]
+          { required: true, message: "请再次输入密码", trigger: "blur" },
+          { validator: validatePass2, trigger: "blur" },
+        ],
       },
       token: null,
       screenHeight: document.body.clientHeight,
       originHeight: document.body.clientHeight,
       seriesList: [],
       redirect: undefined,
+      version: process.env.VERSION,
     };
   },
   created() {
@@ -181,92 +239,89 @@ export default {
     }, 300);
   },
   mounted() {
-    document.getElementById('updateTime').innerText = VERSION
+    document.getElementById("updateTime").innerText = UPDATETIME;
   },
   methods: {
     getClassNo() {
-      Login.getClassNo().then(data => {
+      Login.getClassNo().then((data) => {
         this.options_classNo = data.data;
       });
     },
     getClassName() {
-      Login.getClassName().then(data => {
+      Login.getClassName().then((data) => {
         this.options_className = data.data;
       });
     },
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      this.$refs.loginForm.validate((valid) => {
         if (valid) {
-          this.login()
+          this.login();
         }
       });
     },
     setSessionStorage() {
-      const {loginName, password, classNo, teamGroup} = this.loginForm
-      localStorage.setItem('classNo', classNo)
-      localStorage.setItem('teamGroup', teamGroup)
-      sessionStorage.setItem('classNo', classNo)
-      sessionStorage.setItem('teamGroup', teamGroup)
-      sessionStorage.setItem('loginName', loginName)
+      const { loginName, password, classNo, teamGroup } = this.loginForm;
+      localStorage.setItem("classNo", classNo);
+      localStorage.setItem("teamGroup", teamGroup);
+      sessionStorage.setItem("classNo", classNo);
+      sessionStorage.setItem("teamGroup", teamGroup);
+      sessionStorage.setItem("loginName", loginName);
     },
     async login() {
       try {
-        this.loading = true
+        this.loading = true;
         try {
-          await this.$store.dispatch('Login', this.loginForm)
-          this.setSessionStorage()
+          await this.$store.dispatch("Login", this.loginForm);
+          this.setSessionStorage();
         } catch (err) {
-          this.loading = false
+          this.loading = false;
           if (err.code === 201) {
             // 初次登录，先重置密码
-            this.token = err.data
-            this.dialogLoginVisible = false
-            this.dialogPassVisible = true
-            this.passForm = Object.assign({}, defaultPassForm)
-            this.passForm.password = this.loginForm.password
+            this.token = err.data;
+            this.dialogLoginVisible = false;
+            this.dialogPassVisible = true;
+            this.passForm = Object.assign({}, defaultPassForm);
+            this.passForm.password = this.loginForm.password;
             this.$nextTick(() => {
-              this.$refs['pass-form'].clearValidate()
-            })
+              this.$refs["pass-form"].clearValidate();
+            });
           }
-          return
+          return;
         }
 
         // 登录成功后
-        await this.$store.dispatch('getCurrentUserInfo')
-        this.loading = false
-        this.$router.push({ path: '/' })
+        await this.$store.dispatch("getCurrentUserInfo");
+        this.loading = false;
+        this.$router.push({ path: "/" });
       } catch (err) {
-        console.log('login', err)
-        this.loading = false
+        console.log("login", err);
+        this.loading = false;
       }
     },
     changeConfirm() {
-      this.$refs['pass-form'].validate(async (valid) => {
+      this.$refs["pass-form"].validate(async (valid) => {
         if (valid) {
-          const change_form = {}
-          change_form.oldPassword = this.passForm.password
-          change_form.newPassword = this.passForm.passNew
-          await Login.updatePassword(
-            change_form,
-            {
-              headers: {token: this.token}
-            }
-          )
+          const change_form = {};
+          change_form.oldPassword = this.passForm.password;
+          change_form.newPassword = this.passForm.passNew;
+          await Login.updatePassword(change_form, {
+            headers: { token: this.token },
+          });
           // 更换密码后直接登录
-          this.loginForm.password = this.passForm.passNew
-          this.login()
+          this.loginForm.password = this.passForm.passNew;
+          this.login();
         }
-      })
+      });
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== 'redirect') {
-          acc[cur] = query[cur]
+        if (cur !== "redirect") {
+          acc[cur] = query[cur];
         }
-        return acc
-      }, {})
-    }
-  }
+        return acc;
+      }, {});
+    },
+  },
 };
 </script>
 
@@ -292,7 +347,6 @@ export default {
   font-family: PingFang SC;
   line-height: 60px;
 }
-
 
 .login-form {
   width: 60%;
@@ -323,7 +377,7 @@ export default {
   width: 100%;
   height: 56px;
   line-height: 30px;
-  background: linear-gradient(270deg, #1283F9 0.5%, #0BA4FA 99.38%);
+  background: linear-gradient(270deg, #1283f9 0.5%, #0ba4fa 99.38%);
 }
 
 .version {
