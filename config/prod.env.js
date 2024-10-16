@@ -6,5 +6,5 @@ module.exports = {
   BASE_API_FILEHOST: '"http://192.172.15.108/MES_SERVER"',
   BASE_API_FILEPREVIEW: '"http://192.172.15.108/MES_SERVER/"',
   BASE_PC: '"http://192.172.15.108"',
-  VERSION: '20241014.1'
+  VERSION: '"v20241016.1"'
 }

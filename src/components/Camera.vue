@@ -1,17 +1,25 @@
 <template>
   <el-dialog :visible.sync="dialogVisible" title="拍照" fullscreen>
-    <el-form-item label="拍摄设备">
-      <el-select v-model="deviceId" @change="openCamera" style="width: 100%">
-        <el-option
-          v-for="(item, index) in devices"
-          :key="index"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-    </el-form-item>
+    <div class="options">
+      <el-form-item class="device" label="拍摄设备" label-width="80px">
+        <el-select v-model="deviceId" @change="openCamera" style="width: 100%">
+          <el-option
+            v-for="(item, index) in devices"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item class="direction" label="拍摄方向" label-width="80px">
+        <el-select v-model="direction" style="width: 100%">
+          <el-option label="横向" value="horizontal" />
+          <el-option label="纵向" value="vertical" />
+        </el-select>
+      </el-form-item>
+    </div>
     <div class="video-container">
-      <video ref="video" playsinline autoplay class="video" />
+      <video ref="video" playsinline autoplay :class="direction" />
     </div>
 
     <div slot="footer" class="dialog-footer">
@@ -39,6 +47,7 @@ export default {
       deviceId: null,
       devices: [],
       stream: null,
+      direction: "horizontal",
     };
   },
   computed: {
@@ -65,7 +74,7 @@ export default {
       try {
         await navigator.mediaDevices.getUserMedia({
           audio: false,
-          video: { width: { ideal: 5120 }, height: { ideal: 3840 } },
+          video: { width: { ideal: 2560 }, height: { ideal: 1440 } },
         });
       } catch (err) {
         return this.$message.warning("请开启摄像头权限!");
@@ -109,7 +118,7 @@ export default {
           audio: false,
           video: {
             deviceId: { exact: deviceId },
-            video: { width: { ideal: 5120 }, height: { ideal: 3840 } },
+            video: { width: { ideal: 2560 }, height: { ideal: 1440 } },
           },
         })
         .then(this.handleSuccess)
@@ -149,8 +158,26 @@ export default {
 
 .video-container {
   width: 100%;
-  .video {
-    width: 100%;
+  text-align: center;
+  .horizontal {
+    height: 70vh;
+  }
+  .vertical {
+    width: 70vh;
+    height: 70vh;
+    transform: rotate(90deg);
+  }
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  .device {
+    flex: 3;
+  }
+  .direction {
+    flex: 1;
   }
 }
 </style>
