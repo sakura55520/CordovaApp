@@ -78,24 +78,26 @@
         <el-option label="纵向" value="vertical" />
       </el-select>
       <div class="preview" :style="{ height: imgHeight }">
-        <el-button
+        <div
           class="btn"
           :style="{
             visibility: selectIndex > 0 ? 'visible' : 'hidden',
           }"
-          icon="el-icon-arrow-left"
           @click="handlePrev"
-        />
+        >
+          <i class="el-icon-arrow-left"></i>
+        </div>
         <img ref="img" :class="['preview-img', direction]" :src="previewUrl" />
-        <el-button
+        <div
           class="btn"
           :style="{
             visibility:
               selectIndex < imageList.length - 1 ? 'visible' : 'hidden',
           }"
-          icon="el-icon-arrow-right"
           @click="handleNext"
-        />
+        >
+          <i class="el-icon-arrow-right"></i>
+        </div>
       </div>
     </el-dialog>
 
@@ -311,6 +313,17 @@ export default {
   .btn {
     width: 62px;
     height: 200px;
+    border: 1px solid #dcdfe6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 32px;
+  }
+  .btn:hover {
+    border: 1px solid #409eff;
+    color: #409eff;
+    cursor: pointer;
   }
 }
 
