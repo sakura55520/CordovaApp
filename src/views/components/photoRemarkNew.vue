@@ -71,24 +71,26 @@
 
     <el-dialog :visible.sync="previewDialog" title="预览" width="95%">
       <div class="preview">
-        <el-button
+        <div
           class="btn"
           :style="{
             visibility: selectIndex > 0 ? 'visible' : 'hidden',
           }"
-          icon="el-icon-arrow-left"
           @click="handlePrev"
-        />
+        >
+          <i class="el-icon-arrow-left"></i>
+        </div>
         <img class="preview-img" :src="previewUrl" />
-        <el-button
+        <div
           class="btn"
           :style="{
             visibility:
               selectIndex < imageList.length - 1 ? 'visible' : 'hidden',
           }"
-          icon="el-icon-arrow-right"
           @click="handleNext"
-        />
+        >
+          <i class="el-icon-arrow-right"></i>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -274,6 +276,18 @@ export default {
   }
   .btn {
     width: 62px;
+    height: 200px;
+    border: 1px solid #dcdfe6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 32px;
+  }
+  .btn:hover {
+    border: 1px solid #409eff;
+    color: #409eff;
+    cursor: pointer;
   }
 }
 </style>

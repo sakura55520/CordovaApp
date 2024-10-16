@@ -310,6 +310,7 @@ export default {
   }
   .btn {
     width: 62px;
+    height: 200px;
   }
 }
 
