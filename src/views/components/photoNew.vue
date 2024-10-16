@@ -68,7 +68,16 @@
     </div>
 
     <el-dialog :visible.sync="previewDialog" title="预览" width="95%">
-      <div class="preview">
+      <el-select
+        class="direction"
+        v-model="direction"
+        style="width: 70px"
+        @change="handleDirectionChange"
+      >
+        <el-option label="横向" value="horizontal" />
+        <el-option label="纵向" value="vertical" />
+      </el-select>
+      <div class="preview" :style="{ height: imgHeight }">
         <el-button
           class="btn"
           :style="{
@@ -77,7 +86,7 @@
           icon="el-icon-arrow-left"
           @click="handlePrev"
         />
-        <img class="preview-img" :src="previewUrl" />
+        <img ref="img" :class="['preview-img', direction]" :src="previewUrl" />
         <el-button
           class="btn"
           :style="{
@@ -118,6 +127,8 @@ export default {
       },
       cameraDialogVisible: false,
       selectIndex: null,
+      direction: "horizontal",
+      imgHeight: null,
     };
   },
   computed: {
@@ -214,12 +225,27 @@ export default {
       this.selectIndex += 1;
       this.previewUrl = this.imageList[this.selectIndex].big_url;
     },
+    handleDirectionChange() {
+      const imgRef = this.$refs["img"];
+      const width = imgRef.clientWidth;
+      const height = imgRef.clientHeight;
+      const max = Math.max(width, height);
+      const min = Math.min(width, height);
+      this.imgHeight = (this.direction === "horizontal" ? min : max) + "px";
+    },
   },
   watch: {
     value: {
       immediate: true,
       handler(v) {
         this.imageList = v || [];
+      },
+    },
+    previewUrl: {
+      immediate: true,
+      handler() {
+        this.direction = "horizontal";
+        this.imgHeight = null;
       },
     },
   },
@@ -285,5 +311,15 @@ export default {
   .btn {
     width: 62px;
   }
+}
+
+.direction {
+  position: absolute;
+  top: 20px;
+  right: 50px;
+}
+
+.vertical {
+  transform: rotate(90deg);
 }
 </style>
