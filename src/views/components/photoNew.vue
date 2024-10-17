@@ -71,7 +71,7 @@
       <el-select
         class="direction"
         v-model="direction"
-        style="width: 70px"
+        style="width: 100px"
         @change="handleDirectionChange"
       >
         <el-option label="横向" value="horizontal" />
