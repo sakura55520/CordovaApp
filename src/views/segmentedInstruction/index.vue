@@ -1093,6 +1093,7 @@
                   v-model="formData._files"
                   :componentDisabled="false"
                   :name="'CHECK_DEVICE'"
+                  default-direction="vertical"
                   @input="handleFileChange"
                 />
               </el-form-item>

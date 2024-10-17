@@ -113,7 +113,7 @@ import Camera from "@/components/Camera";
 import { uploadImage } from "@/api/file";
 
 export default {
-  props: ["value", "name"],
+  props: ["value", "name", "defaultDirection"],
   components: {
     Camera,
   },
@@ -129,7 +129,7 @@ export default {
       },
       cameraDialogVisible: false,
       selectIndex: null,
-      direction: "horizontal",
+      direction: null,
       imgHeight: null,
     };
   },
@@ -229,6 +229,7 @@ export default {
     },
     handleDirectionChange() {
       const imgRef = this.$refs["img"];
+      if (!imgRef) return;
       const width = imgRef.clientWidth;
       const height = imgRef.clientHeight;
       const max = Math.max(width, height);
@@ -244,10 +245,13 @@ export default {
       },
     },
     previewUrl: {
-      immediate: true,
       handler() {
-        this.direction = "horizontal";
-        this.imgHeight = null;
+        this.direction = this.defaultDirection || "horizontal";
+        if (this.direction === "horizontal") this.imgHeight = null;
+        else
+          this.$nextTick(() => {
+            this.handleDirectionChange();
+          });
       },
     },
   },

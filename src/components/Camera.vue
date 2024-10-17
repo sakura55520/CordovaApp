@@ -47,7 +47,7 @@ export default {
       deviceId: null,
       devices: [],
       stream: null,
-      direction: "horizontal",
+      direction: "vertical",
     };
   },
   computed: {
@@ -74,7 +74,7 @@ export default {
       try {
         await navigator.mediaDevices.getUserMedia({
           audio: false,
-          video: { width: { ideal: 2560 }, height: { ideal: 1440 } },
+          video: { width: { ideal: 1600 }, height: { ideal: 1200 } },
         });
       } catch (err) {
         return this.$message.warning("请开启摄像头权限!");
@@ -118,7 +118,7 @@ export default {
           audio: false,
           video: {
             deviceId: { exact: deviceId },
-            video: { width: { ideal: 2560 }, height: { ideal: 1440 } },
+            video: { width: { ideal: 1600 }, height: { ideal: 1200 } },
           },
         })
         .then(this.handleSuccess)
