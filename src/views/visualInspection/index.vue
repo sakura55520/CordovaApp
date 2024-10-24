@@ -1279,10 +1279,19 @@ export default {
       if (!this.$route.query.view) this.updateData();
 
       await this.getMateralModelExtras();
+
+      const cloneWipCrystalCheckSampleDatas = cloneDeep(
+        this.formData.wipCrystalCheckSampleDatas || []
+      ).map((item) => ({
+        ...item,
+        crystalDensity:
+          item.crystalDensity || this.getCrystalDensity(item.samplePosition),
+      }));
+
       this.$set(
         this.formData,
         "wipCrystalCheckSampleDatas",
-        cloneDeep(this.formData.wipCrystalCheckSampleDatas)
+        cloneWipCrystalCheckSampleDatas
       );
     },
     updateData() {
@@ -1617,6 +1626,30 @@ export default {
       // return (
       //   row.sampleNumber !== headSampleNo && row.sampleNumber !== tailSampleNo
       // );
+    },
+    getCrystalDensity(val) {
+      let crystalDensity;
+      let value = Number(val);
+      let info = this.formData;
+      if (
+        (!value && value !== 0) ||
+        value === "NaN" ||
+        !info.weight ||
+        !info.lengthQty
+      )
+        crystalDensity = "0";
+      else {
+        let goodWeight = info.goodWeight || 0;
+        let headWeight = info.headWeight || 0;
+        let tailWeight = info.tailWeight || 0;
+        crystalDensity = (
+          ((((goodWeight - headWeight - tailWeight) * value) / info.lengthQty +
+            headWeight) /
+            info.weight) *
+          100
+        ).toFixed(2);
+      }
+      return crystalDensity;
     },
   },
 };
