@@ -259,7 +259,7 @@
             </div>
             <div class="row">
               <el-form-item
-                label="滚圆实测直径头"
+                label="滚圆实测直径min"
                 prop="circleDiameterHead"
                 label-width="140px"
               >
@@ -272,7 +272,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item
-                label="滚圆实测直径尾"
+                label="滚圆实测直径max"
                 prop="circleDiameterTail"
                 label-width="140px"
               >

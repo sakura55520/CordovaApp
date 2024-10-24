@@ -58,6 +58,107 @@
                 </div>
               </el-form-item>
               <el-form-item
+                label="直径MAX"
+                prop="maxDiameter"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.maxDiameter"
+                    :disabled="!enableMap.maxDiameter"
+                    v-direction="{ x: 2, y: 1 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="直径MIN"
+                prop="minDiameter"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.minDiameter"
+                    :disabled="!enableMap.minDiameter"
+                    v-direction="{ x: 3, y: 1 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="长度MAX"
+                prop="maxLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.maxLength"
+                    :disabled="!enableMap.maxLength"
+                    v-direction="{ x: 4, y: 1 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="长度MIN"
+                prop="minLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.minLength"
+                    :disabled="!enableMap.minLength"
+                    @input="handleLengthChange"
+                    v-direction="{ x: 5, y: 1 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="理论重量"
+                prop="theoryQty"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.theoryQty"
+                  :disabled="!enableMap.theoryQty"
+                  v-direction="{ x: 1, y: 2 }"
+                >
+                  <template slot="append">kg</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="实际称重"
+                prop="weighingQty"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.weighingQty"
+                  :disabled="!enableMap.weighingQty"
+                  v-direction="{ x: 2, y: 2 }"
+                >
+                  <template slot="append">kg</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item
                 label="崩边长度"
                 prop="chippingLength"
                 class="item"
@@ -69,7 +170,7 @@
                     v-model="formData.chippingLength"
                     :disabled="!enableMap.chippingLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 2, y: 1 }"
+                    v-direction="{ x: 3, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -87,7 +188,7 @@
                     v-model="formData.ellipticLength"
                     :disabled="!enableMap.ellipticLength"
                     @input="handleLengthChange"
-                    v-direction="{ x: 3, y: 1 }"
+                    v-direction="{ x: 4, y: 2 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -109,111 +210,8 @@
                   </el-input>
                 </div>
               </el-form-item>
-              <div class="item"></div>
             </div>
             <div class="row">
-              <el-form-item
-                label="长度MIN"
-                prop="minLength"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.minLength"
-                    :disabled="!enableMap.minLength"
-                    @input="handleLengthChange"
-                    v-direction="{ x: 1, y: 2 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="长度MAX"
-                prop="maxLength"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.maxLength"
-                    :disabled="!enableMap.maxLength"
-                    v-direction="{ x: 2, y: 2 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="直径MIN"
-                prop="minDiameter"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.minDiameter"
-                    :disabled="!enableMap.minDiameter"
-                    v-direction="{ x: 3, y: 2 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
-                label="直径MAX"
-                prop="maxDiameter"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.maxDiameter"
-                    :disabled="!enableMap.maxDiameter"
-                    v-direction="{ x: 4, y: 2 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <div class="item"></div>
-            </div>
-            <div class="row">
-              <el-form-item
-                label="理论重量"
-                prop="theoryQty"
-                class="item"
-                label-width="90px"
-              >
-                <el-input
-                  class="value"
-                  v-model="formData.theoryQty"
-                  :disabled="!enableMap.theoryQty"
-                  v-direction="{ x: 1, y: 3 }"
-                >
-                  <template slot="append">kg</template>
-                </el-input>
-              </el-form-item>
-              <el-form-item
-                label="实际称重"
-                prop="weighingQty"
-                class="item"
-                label-width="90px"
-              >
-                <el-input
-                  class="value"
-                  v-model="formData.weighingQty"
-                  :disabled="!enableMap.weighingQty"
-                  v-direction="{ x: 2, y: 3 }"
-                >
-                  <template slot="append">kg</template>
-                </el-input>
-              </el-form-item>
               <el-form-item
                 label="RES_C"
                 prop="resC"
@@ -224,7 +222,7 @@
                   class="value"
                   v-model="formData.resC"
                   :disabled="!enableMap.resC"
-                  v-direction="{ x: 3, y: 3 }"
+                  v-direction="{ x: 1, y: 3 }"
                 >
                 </el-input>
               </el-form-item>
@@ -238,7 +236,7 @@
                   class="value"
                   v-model="formData.resE"
                   :disabled="!enableMap.resE"
-                  v-direction="{ x: 4, y: 3 }"
+                  v-direction="{ x: 2, y: 3 }"
                 >
                 </el-input>
               </el-form-item>
@@ -252,11 +250,13 @@
                   class="value"
                   v-model="formData.rrg"
                   :disabled="!enableMap.rrg"
-                  v-direction="{ x: 5, y: 3 }"
+                  v-direction="{ x: 3, y: 3 }"
                 >
                   <template slot="append">%</template>
                 </el-input>
               </el-form-item>
+              <div class="item"></div>
+              <div class="item"></div>
             </div>
             <div class="row">
               <el-form-item
