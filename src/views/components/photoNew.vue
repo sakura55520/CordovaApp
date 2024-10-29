@@ -77,7 +77,7 @@
         <el-option label="横向" value="horizontal" />
         <el-option label="纵向" value="vertical" />
       </el-select>
-      <div class="preview" :style="{ height: imgHeight }">
+      <div class="preview">
         <div
           class="btn"
           :style="{
@@ -87,7 +87,22 @@
         >
           <i class="el-icon-arrow-left"></i>
         </div>
-        <img ref="img" :class="['preview-img', direction]" :src="previewUrl" />
+        <div
+          ref="imgBox"
+          class="img-box"
+          :style="{ height: imgBoxHeight ? imgBoxHeight + 'px' : null }"
+        >
+          <img
+            ref="img"
+            :class="imgClass"
+            :style="{
+              width: imgWidth ? imgWidth + 'px' : null,
+              height: imgHeight ? imgHeight + 'px' : null,
+            }"
+            :src="previewUrl"
+          />
+          <img ref="imgHidden" class="img-hidden" :src="previewUrl" />
+        </div>
         <div
           class="btn"
           :style="{
@@ -130,7 +145,11 @@ export default {
       cameraDialogVisible: false,
       selectIndex: null,
       direction: null,
+      imgBoxHeight: null,
+      imgWidth: null,
       imgHeight: null,
+      imgClass: "",
+      currentDistance: 0,
     };
   },
   computed: {
@@ -228,13 +247,65 @@ export default {
       this.previewUrl = this.imageList[this.selectIndex].big_url;
     },
     handleDirectionChange() {
-      const imgRef = this.$refs["img"];
-      if (!imgRef) return;
+      const imgRef = this.$refs["imgHidden"];
+      const imgBoxRef = this.$refs["imgBox"];
+      if (!imgRef || !imgBoxRef) return;
       const width = imgRef.clientWidth;
       const height = imgRef.clientHeight;
-      const max = Math.max(width, height);
-      const min = Math.min(width, height);
-      this.imgHeight = (this.direction === "horizontal" ? min : max) + "px";
+      const boxWidth = imgBoxRef.clientWidth;
+      const ratio = width > height ? width / height : height / width;
+      if (width > height) {
+        if (this.direction === "vertical") {
+          this.imgClass = "rotate";
+          this.imgBoxHeight = boxWidth * ratio;
+          this.imgHeight = boxWidth;
+          this.imgWidth = boxWidth * ratio;
+        } else {
+          this.imgClass = "";
+          this.imgBoxHeight = boxWidth / ratio;
+          this.imgWidth = boxWidth;
+          this.imgHeight = boxWidth / ratio;
+        }
+      }
+      if (width < height) {
+        if (this.direction === "vertical") {
+          this.imgClass = "";
+          this.imgBoxHeight = boxWidth * ratio;
+          this.imgWidth = boxWidth;
+          this.imgHeight = boxWidth * ratio;
+        } else {
+          this.imgClass = "rotate";
+          this.imgBoxHeight = boxWidth / ratio;
+          this.imgHeight = boxWidth;
+          this.imgWidth = boxWidth / ratio;
+        }
+      }
+    },
+    handleTouchmove(event) {
+      event.stopPropagation();
+      event.preventDefault();
+      const touches = event.touches;
+      const events = touches[0];
+      const events2 = touches[1];
+      if (events2)
+        this.resize(
+          { x: events.pageX, y: events.pageY },
+          { x: events2.pageX, y: events2.pageY }
+        );
+    },
+    getDistance(start, stop) {
+      return Math.hypot(stop.x - start.x, stop.y - start.y);
+    },
+    resize(start, stop) {
+      const currentVal = this.getDistance(start, stop);
+      if (this.currentDistance < currentVal) {
+        this.imgWidth = this.imgWidth * 1.1;
+        this.imgHeight = this.imgHeight * 1.1;
+      } else {
+        this.imgWidth = this.imgWidth * 0.9;
+        this.imgHeight = this.imgHeight * 0.9;
+      }
+      this.currentDistance = currentVal;
     },
   },
   watch: {
@@ -247,11 +318,24 @@ export default {
     previewUrl: {
       handler() {
         this.direction = this.defaultDirection || "horizontal";
-        if (this.direction === "horizontal") this.imgHeight = null;
-        else
-          this.$nextTick(() => {
-            this.handleDirectionChange();
-          });
+        this.$nextTick(() => {
+          this.handleDirectionChange();
+        });
+      },
+    },
+    previewDialog: {
+      handler(val) {
+        this.$nextTick(() => {
+          const dom = this.$refs["img"];
+          if (val)
+            dom.addEventListener("touchmove", this.handleTouchmove, {
+              passive: false,
+            });
+          else
+            dom.removeEventListener("touchmove", this.handleTouchmove, {
+              passive: false,
+            });
+        });
       },
     },
   },
@@ -311,8 +395,11 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  .preview-img {
+  .img-box {
     width: calc(100% - 134px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .btn {
     width: 62px;
@@ -323,6 +410,7 @@ export default {
     justify-content: center;
     border-radius: 5px;
     font-size: 32px;
+    z-index: 999;
   }
   .btn:hover {
     border: 1px solid #409eff;
@@ -337,7 +425,13 @@ export default {
   right: 50px;
 }
 
-.vertical {
+.rotate {
   transform: rotate(90deg);
+}
+
+.img-hidden {
+  position: absolute;
+  top: -9999px;
+  left: -99999px;
 }
 </style>
