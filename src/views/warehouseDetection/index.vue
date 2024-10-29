@@ -120,26 +120,6 @@
                 ></el-input>
               </el-form-item>
               <el-form-item
-                label="最大直径"
-                prop="circleDiameterTail"
-                class="item"
-                label-width="100px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.circleDiameterTail"
-                    :disabled="
-                      !enableMap.circleDiameterTail &&
-                      !formData.needRollingCircle
-                    "
-                    v-direction="{ x: 3, y: 2 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
                 label="最小直径"
                 prop="circleDiameterHead"
                 class="item"
@@ -151,6 +131,26 @@
                     v-model="formData.circleDiameterHead"
                     :disabled="
                       !enableMap.circleDiameterHead &&
+                      !formData.needRollingCircle
+                    "
+                    v-direction="{ x: 3, y: 2 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="最大直径"
+                prop="circleDiameterTail"
+                class="item"
+                label-width="100px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.circleDiameterTail"
+                    :disabled="
+                      !enableMap.circleDiameterTail &&
                       !formData.needRollingCircle
                     "
                     v-direction="{ x: 4, y: 2 }"

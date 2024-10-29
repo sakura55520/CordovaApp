@@ -58,23 +58,6 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="直径MAX"
-                prop="maxDiameter"
-                class="item"
-                label-width="90px"
-              >
-                <div class="input">
-                  <el-input
-                    class="value"
-                    v-model="formData.maxDiameter"
-                    :disabled="!enableMap.maxDiameter"
-                    v-direction="{ x: 2, y: 1 }"
-                  >
-                    <template slot="append">mm</template>
-                  </el-input>
-                </div>
-              </el-form-item>
-              <el-form-item
                 label="直径MIN"
                 prop="minDiameter"
                 class="item"
@@ -85,24 +68,24 @@
                     class="value"
                     v-model="formData.minDiameter"
                     :disabled="!enableMap.minDiameter"
-                    v-direction="{ x: 3, y: 1 }"
+                    v-direction="{ x: 2, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
                 </div>
               </el-form-item>
               <el-form-item
-                label="长度MAX"
-                prop="maxLength"
+                label="直径MAX"
+                prop="maxDiameter"
                 class="item"
                 label-width="90px"
               >
                 <div class="input">
                   <el-input
                     class="value"
-                    v-model="formData.maxLength"
-                    :disabled="!enableMap.maxLength"
-                    v-direction="{ x: 4, y: 1 }"
+                    v-model="formData.maxDiameter"
+                    :disabled="!enableMap.maxDiameter"
+                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -120,6 +103,23 @@
                     v-model="formData.minLength"
                     :disabled="!enableMap.minLength"
                     @input="handleLengthChange"
+                    v-direction="{ x: 4, y: 1 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="长度MAX"
+                prop="maxLength"
+                class="item"
+                label-width="90px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.maxLength"
+                    :disabled="!enableMap.maxLength"
                     v-direction="{ x: 5, y: 1 }"
                   >
                     <template slot="append">mm</template>
