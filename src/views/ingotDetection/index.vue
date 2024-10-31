@@ -26,7 +26,7 @@
           ref="formRef"
           :model="formData"
           label-position="left"
-          label-width="105px"
+          label-width="120px"
           :rules="formRules"
           :disabled="$route.query.view"
         >
@@ -65,6 +65,28 @@
                   v-model="formData.targetResistivity"
                   disabled
                 ></el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item label="送付合格重量" class="item">
+                <el-input v-model="formData.goodWeight" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="本根投料量" class="item">
+                <el-input v-model="formData.feedQty" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="炉内多晶重量" class="item">
+                <el-input v-model="formData.weight" disabled></el-input>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item label="目标重量" class="item">
+                <el-input v-model="formData.targetQuantity" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="连尾重量" class="item">
+                <el-input v-model="formData.batchQuantity" disabled></el-input>
+              </el-form-item>
+              <el-form-item label="埚底料重量" class="item">
+                <el-input v-model="formData.bottomWeight" disabled></el-input>
               </el-form-item>
             </div>
 
