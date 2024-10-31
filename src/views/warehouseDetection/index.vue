@@ -607,6 +607,7 @@
 import * as Api from "@/api/inStation";
 import SelectLinesideTree from "@/components/SelectLinesideTree";
 import overStation from "@/mixins/overStation";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   mixins: [overStation],
@@ -687,6 +688,7 @@ export default {
           { required: true, message: "最大直径不能为空", trigger: "change" },
         ],
       },
+      wipSwitches: [],
     };
   },
   computed: {
@@ -726,6 +728,7 @@ export default {
       this.initLength();
       this.calcDegreesMinute();
       this.fetchSwitchDict();
+      getSeleteData("wipSwitches", this.wipSwitches);
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -834,6 +837,16 @@ export default {
       this.calcAngle();
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
+
+      let wipSwitch = this.wipSwitches.find(
+        (item) => item.name === "validateLengthSwitchWarehouse"
+      );
+      if (wipSwitch && wipSwitch.value === "打开") {
+        let { qualifiedLength } = this.formData;
+        let value = wipSwitch.extendValue;
+        if (Number(qualifiedLength) <= Number(value))
+          return this.$message.warning(`合格长度必须大于${value}mm`);
+      }
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
