@@ -545,6 +545,13 @@ export default {
             trigger: "change",
           },
         ],
+        ingotWeight: [
+          {
+            required: true,
+            message: "晶锭称重不能为空",
+            trigger: "change",
+          },
+        ],
       },
       checkList: [],
       dialogCheckVisible: false,
