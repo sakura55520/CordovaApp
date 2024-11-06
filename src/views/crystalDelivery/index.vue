@@ -615,6 +615,8 @@ export default {
         );
         return;
       }
+      if (Number(totalBottomMaterialGrossWeight) < 0)
+        return this.$message.warning(`埚底料净重不能小于0kg`);
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
