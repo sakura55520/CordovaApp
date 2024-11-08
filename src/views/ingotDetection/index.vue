@@ -1136,6 +1136,9 @@ export default {
         return;
       }
 
+      if (this.backCuttingFormData.tall == 0)
+        this.backCuttingFormData.sampleNumber = "";
+
       this.backCuttingFormData.processOrderCode =
         this.formData.processOrderCode;
 
