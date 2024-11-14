@@ -54,6 +54,7 @@
             <div>
               <el-form-item label="单晶异常" class="error-form">
                 <el-select
+                  :disabled="!formItem.stepAndRecord"
                   v-model="formItem._errors"
                   multiple
                   filterable
