@@ -261,7 +261,7 @@
               <el-form-item
                 label="滚圆实测直径min"
                 prop="circleDiameterHead"
-                label-width="140px"
+                label-width="160px"
               >
                 <el-input
                   v-model="formData.circleDiameterHead"
@@ -274,12 +274,21 @@
               <el-form-item
                 label="滚圆实测直径max"
                 prop="circleDiameterTail"
-                label-width="140px"
+                label-width="160px"
               >
                 <el-input
                   v-model="formData.circleDiameterTail"
                   type="number"
                   v-direction="{ x: 2, y: 3 }"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="偏离量mm" label-width="120px">
+                <el-input
+                  v-model="formData.deviation"
+                  type="number"
+                  v-direction="{ x: 3, y: 3 }"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -531,6 +540,7 @@ const defaultForm = {
   cMinute: null,
   dMinute: null,
   crystalDeviation: null, //偏差
+  deviation: null,
 };
 
 export default {
@@ -733,6 +743,7 @@ export default {
     },
     // 操作
     async handle(typeName) {
+      this.formData.deviation = this.formData.deviation || 0;
       const { ...form } = this.formData;
       const FormData = JSON.stringify({
         ...form,
