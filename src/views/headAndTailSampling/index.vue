@@ -338,7 +338,7 @@
       <div style="font-size: 20px; margin-bottom: 20px">
         晶体实测长度为0mm时整根报废，请确认是否报废单晶？
       </div>
-      <el-form ref="scrapFormRef" :model="temp">
+      <el-form ref="scrapFormRef" :model="temp" @submit.native.prevent>
         <el-form-item
           label="单晶编号"
           prop="processingOrderCode"
