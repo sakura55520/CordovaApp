@@ -20,7 +20,9 @@
         </div>
       </div>
       <el-divider class="divider" />
-      <h3>出站数据录入</h3>
+      <h3>
+        出站数据录入<i class="el-icon-refresh refresh" @click="refresh" />
+      </h3>
       <div class="outStation-form">
         <el-collapse v-model="activeName" class="collapse">
           <el-collapse-item title="样片检验数据" name="checkInfo">
@@ -1299,6 +1301,7 @@ import PhotoNew from "@/views/components/photoNew";
 import LeaderLine from "@/plugins/leader-line.min.js";
 import { getMateralModelExtras } from "@/api/factory/materialModel";
 import { getFontColorByBackgroundColor } from "@/utils/color";
+import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
 
 const defaultTemp = {
   type: 0,
@@ -1648,6 +1651,10 @@ export default {
         ...this.formData,
         ...fromData,
       };
+
+      this.handleInitData();
+    },
+    async handleInitData() {
       let ingotDetectionRes = await Api.fetchDetail({
         url: "/wipcrystalcheck",
         page: 1,
@@ -2335,6 +2342,23 @@ export default {
         };
       });
     },
+    async refresh() {
+      await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      const res = await getCurrentWipStorageClearData(
+        this.formData.processOrderCode
+      );
+      if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
+      const fromData = res.data[0].fromData;
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+      };
+      this.handleInitData();
+    },
   },
 };
 </script>
@@ -2707,5 +2731,10 @@ export default {
 .get-btn {
   cursor: pointer;
   color: rgb(41, 152, 255);
+}
+
+.refresh {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
