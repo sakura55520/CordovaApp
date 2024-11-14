@@ -552,7 +552,10 @@ export default {
     async handleScrap() {
       const valid = await this.$refs.scrapFormRef.validate();
       if (!valid) return;
-      if (this.temp.processingOrderCode !== this.formData.processOrderCode)
+      if (
+        this.temp.processingOrderCode.toLocaleLowerCase() !==
+        this.formData.processOrderCode.toLocaleLowerCase()
+      )
         return this.$message.warning("报废的晶编与当前晶编不一致");
       this.scrapDialog = false;
       this.handleInOrOutStation();
