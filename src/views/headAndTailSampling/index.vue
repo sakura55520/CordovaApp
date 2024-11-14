@@ -334,6 +334,29 @@
       :print-data="printData"
       print-type="切头尾取样回收料编码"
     />
+    <el-dialog :visible.sync="scrapDialog" title="报废确认" width="80%">
+      <div style="font-size: 20px; margin-bottom: 20px">
+        晶体实测长度为0mm时整根报废，请确认是否报废单晶？
+      </div>
+      <el-form ref="scrapFormRef" :model="temp">
+        <el-form-item
+          label="单晶编号"
+          prop="processingOrderCode"
+          :rules="[{ required: true, message: '请输入', trigger: 'change' }]"
+        >
+          <CodeScanner
+            v-model="temp.processingOrderCode"
+            placeholder="请扫描或输入单晶编号"
+          />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button class="submit" @click="scrapDialog = false">取 消</el-button>
+        <el-button class="submit" type="primary" @click="handleScrap"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -344,12 +367,14 @@ import PhotoNew from "@/views/components/photoNew";
 import { getSeleteData } from "@/utils/select";
 import { isEmpty, cloneDeep } from "lodash-es";
 import PrintDialog from "@/components/PrintDialog/index.vue";
+import CodeScanner from "@/components/CodeScanner";
 
 export default {
   mixins: [overStation],
   components: {
     PhotoNew,
     PrintDialog,
+    CodeScanner,
   },
   data() {
     return {
@@ -407,6 +432,8 @@ export default {
       sampleIdentificationList: [],
       printVisible: false,
       printData: {},
+      scrapDialog: false,
+      temp: {},
     };
   },
   computed: {
@@ -512,19 +539,25 @@ export default {
         !isEmpty(this.formData.wipCuttingSampleInfos)
       )
         return this.$message.warning("晶体实测长度为0mm时不能存在样片");
-      if (this.formData.lengthQty == 0)
-        await this.$confirm(
-          "晶体实测长度为0mm时整根报废，确认是否报废?",
-          "提示",
-          {
-            type: "warning",
-          }
-        );
-      else
+      if (this.formData.lengthQty == 0) {
+        this.scrapDialog = true;
+        this.temp = {};
+      } else {
         await this.$confirm("确认提交当前操作数据?", "提示", {
           type: "warning",
         });
-
+        this.handleInOrOutStation();
+      }
+    },
+    async handleScrap() {
+      const valid = await this.$refs.scrapFormRef.validate();
+      if (!valid) return;
+      if (this.temp.processingOrderCode !== this.formData.processOrderCode)
+        return this.$message.warning("报废的晶编与当前晶编不一致");
+      this.scrapDialog = false;
+      this.handleInOrOutStation();
+    },
+    async handleInOrOutStation() {
       const {
         equipmentCode,
         processUuid,
