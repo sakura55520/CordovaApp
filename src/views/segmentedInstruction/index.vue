@@ -1625,6 +1625,7 @@ export default {
         this.processMap[val];
     },
     async init() {
+      this.fetchSwitchDict();
       getSeleteData(
         "wipStorageDisqualificationReason",
         this.wipStorageDisqualificationReasonList
@@ -1761,8 +1762,6 @@ export default {
         "segmentedInstructionDetailVos",
         cloneDeep(this.formData.segmentedInstructionDetailVos)
       );
-
-      this.fetchSwitchDict();
     },
     async handleCodeClick() {
       let { length } = this.formData;

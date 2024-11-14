@@ -22,7 +22,7 @@
       <el-divider class="divider" />
       <h3>
         出站数据录入
-        <i class="el-icon-refresh" @click="fetchSwitchDict" />
+        <i class="el-icon-refresh refresh" @click="refresh" />
       </h3>
       <div class="outStation-form">
         <el-form
@@ -1077,6 +1077,7 @@ import PhotoNew from "@/views/components/photoNew";
 import { getMateralModelExtras } from "@/api/factory/materialModel";
 import { getFontColorByBackgroundColor } from "@/utils/color";
 import { cloneDeep, isEmpty, get } from "lodash-es";
+import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
 
 export default {
   mixins: [overStation],
@@ -1246,6 +1247,11 @@ export default {
   },
   methods: {
     async init() {
+      this.fetchSwitchDict();
+      getSeleteData("conventionalDefect", this.conventionalDefectList);
+      getSeleteData("offset", this.offsetList);
+      getSeleteData("osfDensity", this.osfDensityList);
+      getSeleteData("metal", this.metalList);
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -1261,6 +1267,9 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
 
+      this.handleInitData();
+    },
+    async handleInitData() {
       this.formData._files = JSON.parse(this.formData.photo || "[]").map(
         (fileItem) => ({
           ...fileItem,
@@ -1270,11 +1279,6 @@ export default {
       );
 
       this.initLength();
-      this.fetchSwitchDict();
-      getSeleteData("conventionalDefect", this.conventionalDefectList);
-      getSeleteData("offset", this.offsetList);
-      getSeleteData("osfDensity", this.osfDensityList);
-      getSeleteData("metal", this.metalList);
 
       if (!this.$route.query.view) this.updateData();
 
@@ -1651,6 +1655,23 @@ export default {
       }
       return crystalDensity;
     },
+    async refresh() {
+      await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      const res = await getCurrentWipStorageClearData(
+        this.formData.processOrderCode
+      );
+      if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
+      const fromData = res.data[0].fromData;
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+      };
+      this.handleInitData();
+    },
   },
 };
 </script>
@@ -1816,5 +1837,10 @@ export default {
 .disabled {
   background-color: #f5f7fa !important;
   color: #c0c4cc !important;
+}
+
+.refresh {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
