@@ -26,8 +26,9 @@
                 }}</el-tag>
                 <el-select
                   v-model="formItem.stepAndRecord"
-                  style="width: 200px"
+                  style="width: 250px"
                   @change="handleStepRecordChange($event, formItemIdx)"
+                  :disabled="formItem.stepAndRecord"
                 >
                   <el-option
                     v-for="item in stepRecordList"
