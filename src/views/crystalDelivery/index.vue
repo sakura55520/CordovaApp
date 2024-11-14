@@ -456,6 +456,12 @@
         <el-button type="primary" @click="confirm">提 交</el-button>
       </span>
     </el-dialog>
+    <CrystalDeliveryPrintDialog
+      :visible.sync="printVisible"
+      :print-data="printData"
+      print-type="回收料"
+      @has-finished="handlePrintDone"
+    />
   </div>
 </template>
 
@@ -464,9 +470,13 @@ import * as Api from "@/api/inStation";
 import overStation from "@/mixins/overStation";
 import { mapState } from "vuex";
 import { getSeleteData } from "@/utils/select";
+import CrystalDeliveryPrintDialog from "@/components/CrystalDeliveryPrintDialog/index.vue";
 
 export default {
   mixins: [overStation],
+  components: {
+    CrystalDeliveryPrintDialog,
+  },
   data() {
     return {
       formData: {
@@ -557,6 +567,8 @@ export default {
       dialogCheckVisible: false,
       check: null,
       bottomMaterialDifference: null,
+      printVisible: false,
+      printData: { data: null },
     };
   },
   computed: {
@@ -648,7 +660,7 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       } = this.$route.query;
-      await Api.inOrOutStation({
+      const res = await Api.inOrOutStation({
         equipmentCode,
         param: {
           FormData: JSON.stringify(this.formData),
@@ -658,8 +670,12 @@ export default {
         wipStorageStatus,
       });
       this.dialogCheckVisible = false;
-      const msg = "出站成功";
       Api.deleteBuffer(this.buffParams);
+      this.printVisible = true;
+      this.printData.data = res.data;
+    },
+    handlePrintDone() {
+      const msg = "出站成功";
       this.back(msg);
     },
     handleIngotWeightChange() {
