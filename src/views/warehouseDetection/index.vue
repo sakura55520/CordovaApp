@@ -214,6 +214,17 @@
                   </el-input>
                 </div>
               </el-form-item>
+              <el-form-item label="晶偏扣减" class="item" label-width="90px">
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.crystalDeviation"
+                    :disabled="true"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
             </div>
             <div class="row">
               <el-form-item
@@ -583,7 +594,7 @@
               mm） - 崩边长度（{{ formData.chippingLength }} mm） - 椭圆长度（{{
                 formData.ellipticLength
               }}
-              mm）<br />
+              mm） - 晶偏扣减（{{ formData.crystalDeviation }} mm）<br />
             </div>
           </div>
         </el-form>
@@ -624,6 +635,7 @@ export default {
         chippingLength: null,
         ellipticLength: null,
         qualifiedLength: null,
+        crystalDeviation: null,
         resHead: null,
         resTail: null,
         circleDiameterHead: null,
@@ -748,15 +760,22 @@ export default {
       });
     },
     initLength() {
-      const { originLength, planLength, chippingLength, ellipticLength } =
-        this.formData;
+      const {
+        originLength,
+        planLength,
+        chippingLength,
+        ellipticLength,
+        crystalDeviation,
+      } = this.formData;
       this.formData.originLength = originLength || planLength || 0;
       this.formData.chippingLength = chippingLength || 0;
       this.formData.ellipticLength = ellipticLength || 0;
+      this.formData.crystalDeviation = crystalDeviation || 0;
       this.formData.qualifiedLength = (
         this.formData.originLength -
         this.formData.chippingLength -
-        this.formData.ellipticLength
+        this.formData.ellipticLength -
+        this.formData.crystalDeviation
       ).toFixed(2);
     },
     calcDegreesMinute() {
@@ -873,11 +892,13 @@ export default {
       this.formData.lineWarehouseLocation = name;
     },
     handleLengthChange() {
-      let { originLength, chippingLength, ellipticLength } = this.formData;
+      let { originLength, chippingLength, ellipticLength, crystalDeviation } =
+        this.formData;
       this.formData.qualifiedLength = (
         (originLength || 0) -
         (chippingLength || 0) -
-        (ellipticLength || 0)
+        (ellipticLength || 0) -
+        (crystalDeviation || 0)
       ).toFixed(2);
     },
     handleNext(val) {
