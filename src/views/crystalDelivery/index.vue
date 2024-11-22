@@ -460,7 +460,7 @@
       :visible.sync="printVisible"
       :print-data="printData"
       print-type="回收料"
-      @has-finished="handlePrintDone"
+      @has-finished="handleDone"
     />
   </div>
 </template>
@@ -671,10 +671,15 @@ export default {
       });
       this.dialogCheckVisible = false;
       Api.deleteBuffer(this.buffParams);
-      this.printVisible = true;
-      this.printData.data = res.data;
+
+      if (this.formData.end) {
+        this.printVisible = true;
+        this.printData.data = res.data;
+      } else {
+        this.handleDone();
+      }
     },
-    handlePrintDone() {
+    handleDone() {
       const msg = "出站成功";
       this.back(msg);
     },
