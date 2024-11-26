@@ -285,10 +285,23 @@
                 </el-input>
               </el-form-item>
               <el-form-item label="偏离量mm" label-width="120px">
-                <el-input
+                <el-select
                   v-model="formData.deviation"
+                  @change="handleDeviationChange"
+                >
+                  <el-option
+                    v-for="(item, index) in deviationOptions"
+                    :key="index"
+                    :label="item.value"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="偏离扣减" label-width="100px">
+                <el-input
+                  v-model="formData.deviationDeduction"
                   type="number"
-                  v-direction="{ x: 3, y: 3 }"
+                  disabled
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -612,6 +625,7 @@ export default {
       printVisible: false,
       printData: {},
       wipSwitches: [],
+      deviationOptions: [],
     };
   },
   computed: {
@@ -648,6 +662,13 @@ export default {
       this.initLength();
       this.calcDegreesMinute();
       getSeleteData("wipSwitches", this.wipSwitches);
+
+      let deviationList = [];
+      getSeleteData("deviation_amount", deviationList).then(() => {
+        this.deviationOptions = deviationList
+          .filter((item) => item.name == "6")
+          .sort((a, b) => Number(a.value) - Number(b.value));
+      });
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -808,6 +829,12 @@ export default {
     handlePrint(code) {
       this.printData.data = code;
       this.printVisible = true;
+    },
+    handleDeviationChange() {
+      const matched = this.deviationOptions.find(
+        (item) => item.value == this.formData.deviation
+      );
+      matched && (this.formData.deviationDeduction = matched.extendValue1);
     },
   },
 };
