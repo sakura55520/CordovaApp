@@ -574,6 +574,60 @@
                 prop="tailResistanceActual"
               />
               <el-table-column
+                label="头边缘电阻率"
+                min-width="120"
+                align="center"
+                prop="headResistanceEdge"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '头边缘电阻率',
+                        scope.row.headResistanceEdge
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          '头边缘电阻率',
+                          scope.row.headResistanceEdge
+                        )
+                      ),
+                    }"
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.headResistanceEdge"
+                    v-direction="{ x: 10, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="尾边缘电阻率"
+                min-width="120"
+                align="center"
+                prop="tailResistanceEdge"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '尾边缘电阻率',
+                        scope.row.tailResistanceEdge
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          '尾边缘电阻率',
+                          scope.row.tailResistanceEdge
+                        )
+                      ),
+                    }"
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tailResistanceEdge"
+                    v-direction="{ x: 11, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="79oi头"
                 min-width="100"
                 align="center"
@@ -615,7 +669,7 @@
                         @change="
                           (val) => handleOiChange('head', scope.$index, val)
                         "
-                        v-direction="{ x: 10, y: scope.$index }"
+                        v-direction="{ x: 12, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
@@ -664,7 +718,7 @@
                         @change="
                           (val) => handleOiChange('tail', scope.$index, val)
                         "
-                        v-direction="{ x: 11, y: scope.$index }"
+                        v-direction="{ x: 13, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
@@ -716,7 +770,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headCarbonRate"
-                    v-direction="{ x: 12, y: scope.$index }"
+                    v-direction="{ x: 14, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -763,7 +817,7 @@
                         }"
                         v-if="scope.row.type === 0"
                         v-model="scope.row.tailCarbonRate"
-                        v-direction="{ x: 13, y: scope.$index }"
+                        v-direction="{ x: 15, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
@@ -780,7 +834,7 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headRrv"
-                    v-direction="{ x: 14, y: scope.$index }"
+                    v-direction="{ x: 16, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -795,7 +849,7 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailRrv"
-                    v-direction="{ x: 15, y: scope.$index }"
+                    v-direction="{ x: 17, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -810,7 +864,7 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.remarks"
-                    v-direction="{ x: 16, y: scope.$index }"
+                    v-direction="{ x: 18, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -1697,6 +1751,11 @@ export default {
             tail83oi = this.headAndTailOi.tail83oi;
           }
 
+          const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
+            item.head,
+            item.tail
+          );
+
           return {
             segmentNo: item.sampleNumber,
             type: item.type,
@@ -1712,8 +1771,10 @@ export default {
             head83oi,
             tail79oi,
             tail83oi,
-            headRrv: this.headAndTailRrv.headRrv,
-            tailRrv: this.headAndTailRrv.tailRrv,
+            headRrv: resistanceEdgeAndRrv.headRrv,
+            tailRrv: resistanceEdgeAndRrv.tailRrv,
+            headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
+            tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
             _reason: [],
             reason: "",
             headCarbonRate: this.headCS,
@@ -1811,6 +1872,12 @@ export default {
       if (list.length === 0) headPosition = 0;
       else headPosition = list[list.length - 1].tailPosition;
       let headOi = this.calcOi(headPosition);
+
+      const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
+        item.head,
+        item.tail
+      );
+
       let item = {
         headPosition,
         type: this.temp.type,
@@ -1823,8 +1890,10 @@ export default {
         head83oi: headOi[1],
         tail79oi: null,
         tail83oi: null,
-        headRrv: this.headAndTailRrv.headRrv,
-        tailRrv: this.headAndTailRrv.tailRrv,
+        headRrv: resistanceEdgeAndRrv.headRrv,
+        tailRrv: resistanceEdgeAndRrv.tailRrv,
+        headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
+        tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
         headCarbonRate: this.headCS,
         new: this.temp.type,
       };
@@ -1837,6 +1906,12 @@ export default {
       let length = tailPosition - headPosition;
       let headOi = this.calcOi(headPosition);
       let tailOi = this.calcOi(tailPosition);
+
+      const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
+        headPosition,
+        tailPosition
+      );
+
       let item = {
         headPosition,
         tailPosition,
@@ -1851,8 +1926,10 @@ export default {
         head83oi: headOi[1],
         tail79oi: tailOi[0],
         tail83oi: tailOi[1],
-        headRrv: this.headAndTailRrv.headRrv,
-        tailRrv: this.headAndTailRrv.tailRrv,
+        headRrv: resistanceEdgeAndRrv.headRrv,
+        tailRrv: resistanceEdgeAndRrv.tailRrv,
+        headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
+        tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
         headCarbonRate: this.headCS,
         new: this.temp.type,
       };
@@ -1880,7 +1957,18 @@ export default {
       }
 
       for (const item of list) {
-        if (item.type === 0) item.segmentNo = null;
+        if (item.type === 0) {
+          item.segmentNo = null;
+
+          const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
+            item.headPosition,
+            item.tailPosition
+          );
+          item.headRrv = resistanceEdgeAndRrv.headRrv;
+          item.tailRrv = resistanceEdgeAndRrv.tailRrv;
+          item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
+          item.tailResistanceEdge = resistanceEdgeAndRrv.tailResistanceEdge;
+        }
         if (
           (item.tailPosition || item.tailPosition === 0) &&
           (item.headPosition || item.headPosition === 0)
@@ -1910,7 +1998,18 @@ export default {
       }
 
       for (const item of list) {
-        if (item.type === 0) item.segmentNo = null;
+        if (item.type === 0) {
+          item.segmentNo = null;
+
+          const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
+            item.headPosition,
+            item.tailPosition
+          );
+          item.headRrv = resistanceEdgeAndRrv.headRrv;
+          item.tailRrv = resistanceEdgeAndRrv.tailRrv;
+          item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
+          item.tailResistanceEdge = resistanceEdgeAndRrv.tailResistanceEdge;
+        }
         if (
           (item.tailPosition || item.tailPosition === 0) &&
           (item.headPosition || item.headPosition === 0)
@@ -2261,6 +2360,42 @@ export default {
       let headRrv = Math.abs(this.checkInfo[headIndex].rrg || 0).toFixed(2);
       let tailRrv = Math.abs(this.checkInfo[tailIndex].rrg || 0).toFixed(2);
       this.headAndTailRrv = { headRrv, tailRrv };
+    },
+    getResistanceEdgeAndRrv(headPosition, tailPosition) {
+      let headResistanceEdge = null;
+      let tailResistanceEdge = null;
+      let headRrv = null;
+      let tailRrv = null;
+      if (
+        (headPosition || headPosition == 0) &&
+        (tailPosition || tailPosition == 0) &&
+        !isEmpty(this.checkInfo)
+      ) {
+        const headCheckInfoList = this.checkInfo.filter(
+          (item) => Number(item.samplePosition) <= Number(headPosition)
+        );
+
+        if (!isEmpty(headCheckInfoList)) {
+          headResistanceEdge =
+            headCheckInfoList[headCheckInfoList.length - 1].resE;
+          headRrv = headCheckInfoList[headCheckInfoList.length - 1].rrg;
+        }
+
+        const tailCheckInfoList = this.checkInfo.filter(
+          (item) => Number(item.samplePosition) >= Number(tailPosition)
+        );
+
+        if (!isEmpty(tailCheckInfoList)) {
+          tailResistanceEdge = tailCheckInfoList[0].resE;
+          tailRrv = tailCheckInfoList[0].rrg;
+        }
+      }
+      return {
+        headResistanceEdge,
+        tailResistanceEdge,
+        headRrv,
+        tailRrv,
+      };
     },
     handleReasonChange(val, index) {
       this.$set(
