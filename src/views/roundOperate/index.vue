@@ -526,11 +526,11 @@
 import CodeScanner from "@/components/CodeScanner";
 import SelectUserinfo from "@/components/select_userinfo";
 import * as Api from "@/api/inStation";
-import { cloneDeep, round } from "lodash-es";
 import moment from "moment";
 import overStation from "@/mixins/overStation";
 import PrintDialog from "@/components/PrintDialog/index.vue";
 import { getSeleteData } from "@/utils/select";
+import { isEmpty } from "lodash-es";
 
 const defaultForm = {
   planLength: null, // 计划长度
@@ -554,6 +554,7 @@ const defaultForm = {
   dMinute: null,
   crystalDeviation: null, //偏差
   deviation: null,
+  deviationDeduction: null,
 };
 
 export default {
@@ -663,12 +664,21 @@ export default {
       this.calcDegreesMinute();
       getSeleteData("wipSwitches", this.wipSwitches);
 
-      let deviationList = [];
-      getSeleteData("deviation_amount", deviationList).then(() => {
-        this.deviationOptions = deviationList
-          .filter((item) => item.name == "6")
+      const { rollingCircleDiameter, rollingCircleDiameterStatus } =
+        this.formData;
+      if (rollingCircleDiameterStatus == 0) {
+        let deviationList = [];
+        await getSeleteData("deviation_amount", deviationList);
+        let deviationOptions = deviationList
+          .filter((item) => item.name == rollingCircleDiameter)
           .sort((a, b) => Number(a.value) - Number(b.value));
-      });
+        if (isEmpty(deviationOptions))
+          this.$message.warning("该滚圆直径目标未维护对应扣减关系");
+        else this.deviationOptions = deviationOptions;
+      } else if (rollingCircleDiameterStatus == 1)
+        this.$message.warning("该晶锭未匹配B工单");
+      else if (rollingCircleDiameterStatus == 2)
+        this.$message.warning("该B工单未维护滚圆直径目标");
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -765,6 +775,7 @@ export default {
     // 操作
     async handle(typeName) {
       this.formData.deviation = this.formData.deviation || 0;
+      this.formData.deviationDeduction = this.formData.deviationDeduction || 0;
       const { ...form } = this.formData;
       const FormData = JSON.stringify({
         ...form,
