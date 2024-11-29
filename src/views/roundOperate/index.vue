@@ -288,6 +288,7 @@
                 <el-select
                   v-model="formData.deviation"
                   @change="handleDeviationChange"
+                  clearable
                 >
                   <el-option
                     v-for="(item, index) in deviationOptions"
@@ -299,7 +300,7 @@
               </el-form-item>
               <el-form-item label="偏离扣减" label-width="100px">
                 <el-input
-                  v-model="formData.deviationDeduction"
+                  v-model="formData.crystalPhaseReduction"
                   type="number"
                   disabled
                 >
@@ -554,7 +555,7 @@ const defaultForm = {
   dMinute: null,
   crystalDeviation: null, //偏差
   deviation: null,
-  deviationDeduction: null,
+  crystalPhaseReduction: null,
 };
 
 export default {
@@ -775,7 +776,8 @@ export default {
     // 操作
     async handle(typeName) {
       this.formData.deviation = this.formData.deviation || 0;
-      this.formData.deviationDeduction = this.formData.deviationDeduction || 0;
+      this.formData.crystalPhaseReduction =
+        this.formData.crystalPhaseReduction || 0;
       const { ...form } = this.formData;
       const FormData = JSON.stringify({
         ...form,
@@ -845,7 +847,7 @@ export default {
       const matched = this.deviationOptions.find(
         (item) => item.value == this.formData.deviation
       );
-      matched && (this.formData.deviationDeduction = matched.extendValue1);
+      matched && (this.formData.crystalPhaseReduction = matched.extendValue1);
     },
   },
 };
