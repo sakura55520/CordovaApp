@@ -1762,8 +1762,8 @@ export default {
             headPosition: item.head,
             tailPosition: item.tail,
             length,
-            headResistance: 0,
-            tailResistance: 0,
+            headResistance: resistanceEdgeAndRrv.headResistance,
+            tailResistance: resistanceEdgeAndRrv.tailResistance,
             diameter: this.formData.diameter,
             diametermm: this.formData.diametermm,
             planWeight: this.calcPlanWeight(length),
@@ -1881,8 +1881,8 @@ export default {
       let item = {
         headPosition,
         type: this.temp.type,
-        headResistance: 0,
-        tailResistance: 0,
+        headResistance: resistanceEdgeAndRrv.headResistance,
+        tailResistance: resistanceEdgeAndRrv.tailResistance,
         diameter: this.formData.diameter,
         diametermm: this.formData.diametermm,
         planWeight: 0,
@@ -1918,8 +1918,8 @@ export default {
         length,
         planWeight: this.calcPlanWeight(length),
         type: this.temp.type,
-        headResistance: 0,
-        tailResistance: 0,
+        headResistance: resistanceEdgeAndRrv.headResistance,
+        tailResistance: resistanceEdgeAndRrv.tailResistance,
         diameter: this.formData.diameter,
         diametermm: this.formData.diametermm,
         head79oi: headOi[0],
@@ -1964,6 +1964,8 @@ export default {
             item.headPosition,
             item.tailPosition
           );
+          item.headResistance = resistanceEdgeAndRrv.headResistance;
+          item.tailResistance = resistanceEdgeAndRrv.tailResistance;
           item.headRrv = resistanceEdgeAndRrv.headRrv;
           item.tailRrv = resistanceEdgeAndRrv.tailRrv;
           item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
@@ -2005,6 +2007,8 @@ export default {
             item.headPosition,
             item.tailPosition
           );
+          item.headResistance = resistanceEdgeAndRrv.headResistance;
+          item.tailResistance = resistanceEdgeAndRrv.tailResistance;
           item.headRrv = resistanceEdgeAndRrv.headRrv;
           item.tailRrv = resistanceEdgeAndRrv.tailRrv;
           item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
@@ -2362,6 +2366,8 @@ export default {
       this.headAndTailRrv = { headRrv, tailRrv };
     },
     getResistanceEdgeAndRrv(headPosition, tailPosition) {
+      let headResistance = null;
+      let tailResistance = null;
       let headResistanceEdge = null;
       let tailResistanceEdge = null;
       let headRrv = null;
@@ -2376,6 +2382,7 @@ export default {
         );
 
         if (!isEmpty(headCheckInfoList)) {
+          headResistance = headCheckInfoList[headCheckInfoList.length - 1].resC;
           headResistanceEdge =
             headCheckInfoList[headCheckInfoList.length - 1].resE;
           headRrv = headCheckInfoList[headCheckInfoList.length - 1].rrg;
@@ -2386,11 +2393,14 @@ export default {
         );
 
         if (!isEmpty(tailCheckInfoList)) {
+          tailResistance = tailCheckInfoList[0].resC;
           tailResistanceEdge = tailCheckInfoList[0].resE;
           tailRrv = tailCheckInfoList[0].rrg;
         }
       }
       return {
+        headResistance,
+        tailResistance,
         headResistanceEdge,
         tailResistanceEdge,
         headRrv,
