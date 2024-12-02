@@ -1874,8 +1874,8 @@ export default {
       let headOi = this.calcOi(headPosition);
 
       const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
-        item.head,
-        item.tail
+        headPosition,
+        null
       );
 
       let item = {
