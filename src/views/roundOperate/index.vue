@@ -289,6 +289,7 @@
                   v-model="formData.deviation"
                   @change="handleDeviationChange"
                   clearable
+                  @clear="handleDeviationClear"
                 >
                   <el-option
                     v-for="(item, index) in deviationOptions"
@@ -848,6 +849,9 @@ export default {
         (item) => item.value == this.formData.deviation
       );
       matched && (this.formData.crystalPhaseReduction = matched.extendValue1);
+    },
+    handleDeviationClear() {
+      this.formData.crystalPhaseReduction = null;
     },
   },
 };
