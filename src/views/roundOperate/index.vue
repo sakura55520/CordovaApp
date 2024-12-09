@@ -308,6 +308,11 @@
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
+              <el-form-item label="未滚出长度" label-width="100px">
+                <el-input v-model="formData.unRolledLen" type="number">
+                  <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
             </div>
             <div class="row">
               <el-form-item
@@ -557,6 +562,7 @@ const defaultForm = {
   crystalDeviation: null, //偏差
   deviation: null,
   crystalPhaseReduction: null,
+  unRolledLen: null,
 };
 
 export default {
@@ -779,6 +785,7 @@ export default {
       this.formData.deviation = this.formData.deviation || 0;
       this.formData.crystalPhaseReduction =
         this.formData.crystalPhaseReduction || 0;
+      this.formData.unRolledLen = this.formData.unRolledLen || 0;
       const { ...form } = this.formData;
       const FormData = JSON.stringify({
         ...form,
