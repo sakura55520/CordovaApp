@@ -1539,6 +1539,8 @@ export default {
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
+      if (!(val || String(val) === "0")) return null;
+
       if ((maxItem.control || minItem.control) && !(val || String(val) === "0"))
         return maxItem.controlColor || minItem.controlColor;
 
