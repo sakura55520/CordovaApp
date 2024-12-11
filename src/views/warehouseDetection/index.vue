@@ -38,6 +38,72 @@
               <el-input v-model="formData.userCreate" disabled></el-input>
             </el-form-item>
           </div>
+          <div class="base-form">
+            <el-form-item
+              label="合格状态"
+              prop="status"
+              class="item"
+              label-width="90px"
+            >
+              <el-select
+                v-model="formData.status"
+                clearable
+                style="width: 100%"
+              >
+                <el-option label="合格" :value="1"></el-option>
+                <el-option label="不合格" :value="0"></el-option>
+              </el-select>
+            </el-form-item>
+            <template v-if="formData.status">
+              <el-form-item
+                label="入库原因"
+                prop="inStorageReason"
+                class="item"
+                label-width="110px"
+              >
+                <el-select
+                  key="inStorageReason"
+                  v-model="formData.inStorageReason"
+                  clearable
+                  filterable
+                  style="width: 100%"
+                >
+                  <el-option
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="(item, index) in wipStorageInStorageReasonList"
+                    :key="index"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+            <template v-else>
+              <el-form-item
+                label="不合格原因"
+                prop="unqualifiedReason"
+                class="item"
+                label-width="110px"
+              >
+                <el-select
+                  key="unqualifiedReason"
+                  v-model="formData.unqualifiedReason"
+                  clearable
+                  multiple
+                  filterable
+                  style="width: 100%"
+                >
+                  <el-option
+                    :label="item.label"
+                    :value="item.value"
+                    v-for="(
+                      item, index
+                    ) in wipStorageDisqualificationReasonList"
+                    :key="index"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+            </template>
+          </div>
           <div class="form">
             <div class="form-title">设备/工艺参数确认</div>
             <div class="row">
@@ -679,6 +745,10 @@ export default {
         fourthReferenceSurfaceWidthTail: null,
         lineWarehouseLocation: null,
         remarks: null,
+        status: null,
+        inStorageReason: "",
+        unqualifiedReason: [],
+        reason: null,
       },
       formRules: {
         userCreate: [
@@ -712,8 +782,17 @@ export default {
         circleDiameterTail: [
           { required: true, message: "最大直径不能为空", trigger: "change" },
         ],
+        status: [{ required: true, message: "请选择", trigger: "change" }],
+        inStorageReason: [
+          { required: true, message: "请选择", trigger: "blur" },
+        ],
+        unqualifiedReason: [
+          { required: true, message: "请选择", trigger: "blur" },
+        ],
       },
       wipSwitches: [],
+      wipStorageDisqualificationReasonList: [],
+      wipStorageInStorageReasonList: [],
     };
   },
   computed: {
@@ -730,6 +809,14 @@ export default {
   },
   methods: {
     async init() {
+      getSeleteData(
+        "wipStorageDisqualificationReason",
+        this.wipStorageDisqualificationReasonList
+      );
+      getSeleteData(
+        "wipStorageInStorageReason",
+        this.wipStorageInStorageReasonList
+      );
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -749,6 +836,15 @@ export default {
       this.formRules.circleDiameterHead[0].required =
         this.formRules.circleDiameterTail[0].required =
           !!this.formData.needRollingCircle;
+
+      const { status, reason } = this.formData;
+      if (status) {
+        this.formData.inStorageReason = reason;
+        this.formData.unqualifiedReason = [];
+      } else {
+        this.formData.inStorageReason = "";
+        this.formData.unqualifiedReason = reason ? reason.split(",") : [];
+      }
 
       this.initLength();
       this.calcDegreesMinute();
@@ -853,6 +949,12 @@ export default {
         fourthAngleMinute
       );
     },
+    getReason() {
+      const { status, inStorageReason, unqualifiedReason } = this.formData;
+      this.formData.reason = status
+        ? inStorageReason
+        : unqualifiedReason.join(",");
+    },
     formatDegree(value) {
       value = Math.abs(value);
       let v1 = Math.floor(value);
@@ -864,12 +966,14 @@ export default {
     },
     async save() {
       this.calcAngle();
+      this.getReason();
       await Api.upldateBuffer(this.buffParams, this.formData);
       const msg = "保存成功!";
       this.back(msg);
     },
     async confirm() {
       this.calcAngle();
+      this.getReason();
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
 
