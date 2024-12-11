@@ -17,6 +17,10 @@
             <span class="grid-item-name">执行设备：</span>
             <span class="grid-item-value">{{ executionEquipment }}</span>
           </div>
+          <div class="grid-item" v-if="segmentNum">
+            <span class="grid-item-name">段位：</span>
+            <span class="grid-item-value">{{ segmentNum }}</span>
+          </div>
         </div>
       </div>
       <el-divider class="divider" />
@@ -280,11 +284,35 @@
                   </el-input>
                 </div>
               </el-form-item>
-              <el-form-item label="晶偏扣减" class="item" label-width="90px">
+              <el-form-item label="晶向偏差" class="item" label-width="90px">
                 <div class="input">
                   <el-input
                     class="value"
                     v-model="formData.crystalDeviation"
+                    :disabled="true"
+                  >
+                    <template slot="append">°</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item label="偏离量mm" class="item" label-width="90px">
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.deviation"
+                    :disabled="true"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item label="晶偏扣减" class="item" label-width="90px">
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.crystalPhaseReduction"
                     :disabled="true"
                   >
                     <template slot="append">mm</template>
@@ -671,7 +699,7 @@
               mm） - 崩边长度（{{ formData.chippingLength }} mm） - 椭圆长度（{{
                 formData.ellipticLength
               }}
-              mm） - 晶偏扣减（{{ formData.crystalDeviation }} mm） -
+              mm） - 晶偏扣减（{{ formData.crystalPhaseReduction }} mm） -
               未滚出长度（{{ formData.unRolledLen }} mm）<br />
             </div>
           </div>
@@ -714,6 +742,8 @@ export default {
         ellipticLength: null,
         qualifiedLength: null,
         crystalDeviation: null,
+        crystalPhaseReduction: null,
+        deviation: null,
         unRolledLen: null,
         resHead: null,
         resTail: null,
@@ -874,19 +904,19 @@ export default {
         planLength,
         chippingLength,
         ellipticLength,
-        crystalDeviation,
+        crystalPhaseReduction,
         unRolledLen,
       } = this.formData;
       this.formData.originLength = originLength || planLength || 0;
       this.formData.chippingLength = chippingLength || 0;
       this.formData.ellipticLength = ellipticLength || 0;
-      this.formData.crystalDeviation = crystalDeviation || 0;
+      this.formData.crystalPhaseReduction = crystalPhaseReduction || 0;
       this.formData.unRolledLen = unRolledLen || 0;
       this.formData.qualifiedLength = (
         this.formData.originLength -
         this.formData.chippingLength -
         this.formData.ellipticLength -
-        this.formData.crystalDeviation -
+        this.formData.crystalPhaseReduction -
         this.formData.unRolledLen
       ).toFixed(2);
     },
@@ -1016,14 +1046,14 @@ export default {
         originLength,
         chippingLength,
         ellipticLength,
-        crystalDeviation,
+        crystalPhaseReduction,
         unRolledLen,
       } = this.formData;
       this.formData.qualifiedLength = (
         (originLength || 0) -
         (chippingLength || 0) -
         (ellipticLength || 0) -
-        (crystalDeviation || 0) -
+        (crystalPhaseReduction || 0) -
         (unRolledLen || 0)
       ).toFixed(2);
     },

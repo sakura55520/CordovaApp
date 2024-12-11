@@ -20,6 +20,12 @@ export default {
     executionEquipment() {
       return this.$route.query.deviceCode || this.$route.query.equipmentCode;
     },
+    segmentNum() {
+      return (
+        JSON.parse(this.$route.query.orderInfo || "{}")
+          .segmentNum
+      );
+    }
   },
   methods: {
     async back(msg, operator) {
