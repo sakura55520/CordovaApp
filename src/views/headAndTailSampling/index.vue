@@ -20,7 +20,9 @@
         </div>
       </div>
       <el-divider class="divider" />
-      <h3>出站数据录入</h3>
+      <h3>
+        出站数据录入<i class="el-icon-refresh refresh" @click="refresh" />
+      </h3>
       <div class="outStation-form">
         <el-form
           ref="formRef"
@@ -368,6 +370,7 @@ import { getSeleteData } from "@/utils/select";
 import { isEmpty, cloneDeep } from "lodash-es";
 import PrintDialog from "@/components/PrintDialog/index.vue";
 import CodeScanner from "@/components/CodeScanner";
+import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
 
 export default {
   mixins: [overStation],
@@ -454,6 +457,9 @@ export default {
   },
   methods: {
     async init() {
+      await getSeleteData("sampleType", this.sampleTypeList);
+      getSeleteData("sampleIdentification", this.sampleIdentificationList);
+
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -462,48 +468,55 @@ export default {
       } else {
         try {
           fromData = JSON.parse(this.$route.query.fromData);
-          if (isEmpty(fromData.wipCuttingSampleInfos)) {
-            fromData.wipCuttingSampleInfos = [
-              {
-                type: "头尾样片",
-                sampleIdentification: "H",
-                samplePosition: 0,
-                valid: true,
-                sampleNumber: undefined,
-              },
-              {
-                type: "头尾样片",
-                sampleIdentification: "T",
-                samplePosition: fromData.lengthQty,
-                valid: true,
-                sampleNumber: undefined,
-              },
-            ];
-            if (fromData.lengthQty >= 700) {
-              fromData.wipCuttingSampleInfos.push({
-                type: "中间样片",
-                sampleIdentification: "M",
-                samplePosition: fromData.lengthQty - 300,
-                valid: true,
-                sampleNumber: undefined,
-              });
-            }
-            if (this.calcNeedYH(fromData.osf) && fromData.lengthQty > 300) {
-              fromData.wipCuttingSampleInfos.push({
-                type: "氧化样片",
-                sampleIdentification: "H",
-                samplePosition: 300,
-                valid: true,
-                sampleNumber: undefined,
-              });
-            }
-          }
         } catch (e) {
           console.log(e);
         }
       }
 
       this.formData = { ...this.formData, ...fromData };
+
+      this.handleInitData();
+    },
+    async handleInitData() {
+      if (isEmpty(this.formData.wipCuttingSampleInfos)) {
+        this.formData.wipCuttingSampleInfos = [
+          {
+            type: "头尾样片",
+            sampleIdentification: "H",
+            samplePosition: 0,
+            valid: true,
+            sampleNumber: undefined,
+          },
+          {
+            type: "头尾样片",
+            sampleIdentification: "T",
+            samplePosition: this.formData.lengthQty,
+            valid: true,
+            sampleNumber: undefined,
+          },
+        ];
+        if (this.formData.lengthQty >= 700) {
+          this.formData.wipCuttingSampleInfos.push({
+            type: "中间样片",
+            sampleIdentification: "M",
+            samplePosition: this.formData.lengthQty - 300,
+            valid: true,
+            sampleNumber: undefined,
+          });
+        }
+        if (
+          this.calcNeedYH(this.formData.osf) &&
+          this.formData.lengthQty > 300
+        ) {
+          this.formData.wipCuttingSampleInfos.push({
+            type: "氧化样片",
+            sampleIdentification: "H",
+            samplePosition: 300,
+            valid: true,
+            sampleNumber: undefined,
+          });
+        }
+      }
 
       this.formData._files = JSON.parse(this.formData.photo || "[]").map(
         (fileItem) => ({
@@ -512,8 +525,6 @@ export default {
           thumb_url: fileItem.fileUrl,
         })
       );
-      await getSeleteData("sampleType", this.sampleTypeList);
-      getSeleteData("sampleIdentification", this.sampleIdentificationList);
 
       if (!this.$route.query.view) {
         this.fetchSampleCode();
@@ -809,6 +820,23 @@ export default {
     calcNeedYH(val) {
       return val === "≤10" || val === "≤100" || val === "无";
     },
+    async refresh() {
+      await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      const res = await getCurrentWipStorageClearData(
+        this.formData.processOrderCode
+      );
+      if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
+      const fromData = res.data[0].fromData;
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+      };
+      this.handleInitData();
+    },
   },
 };
 </script>
@@ -932,5 +960,10 @@ export default {
 .form-table-header:before {
   content: "* ";
   color: red;
+}
+
+.refresh {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
