@@ -20,7 +20,9 @@
         </div>
       </div>
       <el-divider class="divider" />
-      <h3>出站数据录入</h3>
+      <h3>
+        出站数据录入<i class="el-icon-refresh refresh" @click="refresh" />
+      </h3>
       <div class="outStation-form">
         <el-form
           ref="formRef"
@@ -784,6 +786,7 @@ import moment from "moment";
 import { getCurrentWipStorageData } from "@/api/overStation/overStation";
 import { getMateralModelExtras } from "@/api/factory/materialModel";
 import { getFontColorByBackgroundColor } from "@/utils/color";
+import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
 
 export default {
   mixins: [overStation],
@@ -928,6 +931,7 @@ export default {
         { key: "oiE", name: "OI_E", from: "formData.details" },
       ],
       controlMap: {},
+      cloneDetails: [],
     };
   },
   computed: {
@@ -944,9 +948,15 @@ export default {
   },
   methods: {
     async init() {
-      let cloneDetails = [];
+      getSeleteData("sampleType", this.sampleTypeList);
+      getSeleteData("backCutType", this.backCutTypeList);
+
+      getSeleteData("conventionalDefect", this.conventionalDefectList);
+      getSeleteData("osfDensity", this.osfDensityList);
+      getSeleteData("sampleIdentification", this.sampleIdentificationList);
+      getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
       try {
-        cloneDetails = cloneDeep(
+        this.cloneDetails = cloneDeep(
           JSON.parse(this.$route.query.fromData).details || []
         );
       } catch (e) {
@@ -967,18 +977,14 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
-      getSeleteData("sampleType", this.sampleTypeList);
-      getSeleteData("backCutType", this.backCutTypeList);
-
-      getSeleteData("conventionalDefect", this.conventionalDefectList);
-      getSeleteData("osfDensity", this.osfDensityList);
-      getSeleteData("sampleIdentification", this.sampleIdentificationList);
-      getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
-
+      this.handleInitData();
+    },
+    async handleInitData() {
       this.formData.details = (this.formData.details || []).map((item) => {
         let sampleWeight = (
-          cloneDetails.find((ele) => ele.sampleNumber == item.sampleNumber) ||
-          {}
+          this.cloneDetails.find(
+            (ele) => ele.sampleNumber == item.sampleNumber
+          ) || {}
         ).sampleWeight;
 
         let number = this.getNumber(item.sampleNumber);
@@ -1440,6 +1446,24 @@ export default {
       let lastNumber = Number(list[list.length - 1]);
       return isNaN(lastNumber) ? 0 : lastNumber;
     },
+    async refresh() {
+      await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      const res = await getCurrentWipStorageClearData(
+        this.formData.processOrderCode
+      );
+      if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
+      const fromData = res.data[0].fromData;
+      this.cloneDetails = fromData.details || [];
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+      };
+      this.handleInitData();
+    },
   },
 };
 </script>
@@ -1619,5 +1643,10 @@ export default {
 .table-btn {
   font-size: 12px;
   padding: 0px;
+}
+
+.refresh {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
