@@ -518,13 +518,15 @@ export default {
         }
       }
 
-      this.formData._files = JSON.parse(this.formData.photo || "[]").map(
-        (fileItem) => ({
-          ...fileItem,
-          big_url: fileItem.fileUrl,
-          thumb_url: fileItem.fileUrl,
-        })
-      );
+      this.formData._files = (
+        Array.isArray(this.formData.photo)
+          ? this.formData.photo
+          : JSON.parse(this.formData.photo || "[]")
+      ).map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
 
       if (!this.$route.query.view) {
         this.fetchSampleCode();

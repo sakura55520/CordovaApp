@@ -246,6 +246,40 @@
               </div>
             </el-form-item>
           </div>
+
+          <div class="headLine">
+            <div
+              :class="{
+                'headLine-title': true,
+                required: formRules._beforePhoto,
+              }"
+            >
+              拆炉前留档文件(炉盖、抽气孔)
+            </div>
+          </div>
+          <el-form-item style="margin-left: 20px" prop="_beforePhoto">
+            <PhotoRemarkNew
+              v-model="formData._beforePhoto"
+              @input="handleBeforePhotoChange"
+            />
+          </el-form-item>
+
+          <div class="headLine">
+            <div
+              :class="{
+                'headLine-title': true,
+                required: formRules._afterPhoto,
+              }"
+            >
+              拆炉后留档文件(炉盖、抽气孔、加热器与坩埚间距*4、加热器与保温筒间距*4)
+            </div>
+          </div>
+          <el-form-item style="margin-left: 20px" prop="_afterPhoto">
+            <PhotoRemarkNew
+              v-model="formData._afterPhoto"
+              @input="handleAfterPhotoChange"
+            />
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -273,6 +307,7 @@ import moment from "moment";
 import { getProcessNo } from "@/api/tool";
 import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
+import PhotoRemarkNew from "@/views/components/photoRemarkNew";
 
 const defaultForm = {
   userConfirm: null, // 掺杂剂确认者
@@ -300,6 +335,8 @@ const defaultForm = {
   polysiliconMaterialCodes: [],
   dopantMaterialCodes: [],
   quartzCrucibleMaterialCodes: [],
+  _beforePhoto: [],
+  _afterPhoto: [],
 };
 export default {
   name: "ChargeOperate",
@@ -308,6 +345,7 @@ export default {
     CodeScanner,
     SelectUserinfo,
     MultipleCodeScanner,
+    PhotoRemarkNew,
   },
   data() {
     return {
@@ -417,6 +455,8 @@ export default {
   },
   methods: {
     async init() {
+      await this.fetchSwitchDict();
+      this.$refs.formData.clearValidate();
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -437,6 +477,26 @@ export default {
       });
       this.$set(this.formData, "_polysilicons", _polysilicons);
       this.$set(this.formData, "_dopants", _dopants);
+
+      this.formData._beforePhoto = (
+        Array.isArray(this.formData.beforePhoto)
+          ? this.formData.beforePhoto
+          : JSON.parse(this.formData.beforePhoto || "[]")
+      ).map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
+
+      this.formData._afterPhoto = (
+        Array.isArray(this.formData.afterPhoto)
+          ? this.formData.afterPhoto
+          : JSON.parse(this.formData.afterPhoto || "[]")
+      ).map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
 
       this.getProcessNo();
 
@@ -627,6 +687,26 @@ export default {
     deleteDopant(index) {
       this.formData._dopants.splice(index, 1);
     },
+    handleBeforePhotoChange() {
+      this.$refs.formData.validate();
+      const beforePhoto = (this.formData._beforePhoto || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.beforePhoto = beforePhoto;
+    },
+    handleAfterPhotoChange() {
+      this.$refs.formData.validate();
+      const afterPhoto = (this.formData._afterPhoto || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.afterPhoto = afterPhoto;
+    },
   },
 };
 </script>
@@ -664,5 +744,9 @@ export default {
 }
 .codeScan-input {
   width: 100% !important;
+}
+.required:before {
+  content: "* ";
+  color: red;
 }
 </style>

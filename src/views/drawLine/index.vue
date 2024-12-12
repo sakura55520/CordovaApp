@@ -179,13 +179,15 @@ export default {
 
       this.formData = { ...this.formData, ...fromData };
 
-      this.formData._files = JSON.parse(this.formData.photo || "[]").map(
-        (fileItem) => ({
-          ...fileItem,
-          big_url: fileItem.fileUrl,
-          thumb_url: fileItem.fileUrl,
-        })
-      );
+      this.formData._files = (
+        Array.isArray(this.formData.photo)
+          ? this.formData.photo
+          : JSON.parse(this.formData.photo || "[]")
+      ).map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
     },
     async save() {
       await Api.upldateBuffer(this.buffParams, this.formData);
