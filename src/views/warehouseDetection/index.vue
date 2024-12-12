@@ -26,7 +26,7 @@
       <el-divider class="divider" />
       <h3>
         出站数据录入
-        <i class="el-icon-refresh" @click="fetchSwitchDict" />
+        <i class="el-icon-refresh refresh" @click="refresh" />
       </h3>
       <div class="outStation-form">
         <el-form
@@ -725,6 +725,8 @@ import * as Api from "@/api/inStation";
 import SelectLinesideTree from "@/components/SelectLinesideTree";
 import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
+import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
+import { isEmpty } from "lodash-es";
 
 export default {
   mixins: [overStation],
@@ -839,6 +841,8 @@ export default {
   },
   methods: {
     async init() {
+      this.fetchSwitchDict();
+      getSeleteData("wipSwitches", this.wipSwitches);
       getSeleteData(
         "wipStorageDisqualificationReason",
         this.wipStorageDisqualificationReasonList
@@ -863,6 +867,10 @@ export default {
       }
 
       this.formData = { ...this.formData, ...fromData };
+
+      this.handleInitData();
+    },
+    async handleInitData() {
       this.formRules.circleDiameterHead[0].required =
         this.formRules.circleDiameterTail[0].required =
           !!this.formData.needRollingCircle;
@@ -878,8 +886,6 @@ export default {
 
       this.initLength();
       this.calcDegreesMinute();
-      this.fetchSwitchDict();
-      getSeleteData("wipSwitches", this.wipSwitches);
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -1060,6 +1066,25 @@ export default {
     handleNext(val) {
       if ((val + "").length >= 2) this.$getDirection().next();
     },
+    async refresh() {
+      await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      const res = await getCurrentWipStorageClearData(
+        this.formData.processOrderCode
+      );
+      if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
+      let fromData = res.data[0].fromData;
+      fromData.resHead = undefined;
+      fromData.resTail = undefined;
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+      };
+      this.handleInitData();
+    },
   },
 };
 </script>
@@ -1185,5 +1210,10 @@ export default {
       padding: 0 5px;
     }
   }
+}
+
+.refresh {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>

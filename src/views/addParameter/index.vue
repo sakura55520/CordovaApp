@@ -20,7 +20,9 @@
         </div>
       </div>
       <el-divider class="divider" />
-      <h3>出站数据录入</h3>
+      <h3>
+        出站数据录入<i class="el-icon-refresh refresh" @click="refresh" />
+      </h3>
       <div class="outStation-form">
         <el-form
           ref="formRef"
@@ -489,6 +491,8 @@ import * as Api from "@/api/inStation";
 import overStation from "@/mixins/overStation";
 import PrintDialog from "@/components/PrintDialog/index.vue";
 import { getSeleteData } from "@/utils/select";
+import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
+import { isEmpty } from "lodash-es";
 
 export default {
   mixins: [overStation],
@@ -580,6 +584,8 @@ export default {
   },
   methods: {
     async init() {
+      getSeleteData("wipSwitches", this.wipSwitches);
+
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -593,9 +599,12 @@ export default {
         }
       }
       this.formData = { ...this.formData, ...fromData };
+
+      this.handleInitData();
+    },
+    async handleInitData() {
       this.initLength();
       this.calcDegreesMinute();
-      getSeleteData("wipSwitches", this.wipSwitches);
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -755,6 +764,23 @@ export default {
       this.printData.data = code;
       this.printVisible = true;
     },
+    async refresh() {
+      await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      const res = await getCurrentWipStorageClearData(
+        this.formData.processOrderCode
+      );
+      if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
+      const fromData = res.data[0].fromData;
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+      };
+      this.handleInitData();
+    },
   },
 };
 </script>
@@ -883,5 +909,10 @@ export default {
 }
 .print-btn {
   float: right;
+}
+
+.refresh {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>

@@ -23,7 +23,12 @@
     <div class="fromCard">
       <div class="fromCard">
         <div class="headLine">
-          <div class="headLine-title">{{ storageLabel }}数据录入</div>
+          <div class="headLine-title">
+            {{ storageLabel }}数据录入<i
+              class="el-icon-refresh refresh"
+              @click="refresh"
+            />
+          </div>
         </div>
         <el-form
           ref="formData"
@@ -538,6 +543,7 @@ import overStation from "@/mixins/overStation";
 import PrintDialog from "@/components/PrintDialog/index.vue";
 import { getSeleteData } from "@/utils/select";
 import { isEmpty } from "lodash-es";
+import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
 
 const defaultForm = {
   planLength: null, // 计划长度
@@ -654,6 +660,8 @@ export default {
   },
   methods: {
     async init() {
+      getSeleteData("wipSwitches", this.wipSwitches);
+
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -668,9 +676,12 @@ export default {
       }
 
       this.formData = Object.assign({}, defaultForm, fromData);
+
+      this.handleInitData();
+    },
+    async handleInitData() {
       this.initLength();
       this.calcDegreesMinute();
-      getSeleteData("wipSwitches", this.wipSwitches);
 
       const { rollingCircleDiameter, rollingCircleDiameterStatus } =
         this.formData;
@@ -860,6 +871,23 @@ export default {
     handleDeviationClear() {
       this.formData.crystalPhaseReduction = null;
     },
+    async refresh() {
+      await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      const res = await getCurrentWipStorageClearData(
+        this.formData.processOrderCode
+      );
+      if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
+      const fromData = res.data[0].fromData;
+      this.formData = {
+        ...this.formData,
+        ...fromData,
+      };
+      this.handleInitData();
+    },
   },
 };
 </script>
@@ -941,5 +969,10 @@ export default {
 }
 .print-btn {
   float: right;
+}
+
+.refresh {
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
