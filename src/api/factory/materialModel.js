@@ -1,10 +1,10 @@
 import request from "@/utils/req";
 
-const RequestURL = "/factory/materialModel/";
+const RequestURL = "/workOrder/";
 
 export function getMateralModelExtras(params) {
   return request({
-    url: RequestURL + "getMateralModelExtras",
+    url: RequestURL + "findPlanWorkOrderExtraVos",
     method: "get",
     params,
   });
