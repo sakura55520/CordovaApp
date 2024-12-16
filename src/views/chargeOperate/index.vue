@@ -478,25 +478,13 @@ export default {
       this.$set(this.formData, "_polysilicons", _polysilicons);
       this.$set(this.formData, "_dopants", _dopants);
 
-      this.formData._beforePhoto = (
-        Array.isArray(this.formData.beforePhoto)
-          ? this.formData.beforePhoto
-          : JSON.parse(this.formData.beforePhoto || "[]")
-      ).map((fileItem) => ({
-        ...fileItem,
-        big_url: fileItem.fileUrl,
-        thumb_url: fileItem.fileUrl,
-      }));
+      this.formData._beforePhoto = Array.isArray(this.formData.beforePhoto)
+        ? this.formData.beforePhoto
+        : JSON.parse(this.formData.beforePhoto || "[]");
 
-      this.formData._afterPhoto = (
-        Array.isArray(this.formData.afterPhoto)
-          ? this.formData.afterPhoto
-          : JSON.parse(this.formData.afterPhoto || "[]")
-      ).map((fileItem) => ({
-        ...fileItem,
-        big_url: fileItem.fileUrl,
-        thumb_url: fileItem.fileUrl,
-      }));
+      this.formData._afterPhoto = Array.isArray(this.formData.afterPhoto)
+        ? this.formData.afterPhoto
+        : JSON.parse(this.formData.afterPhoto || "[]");
 
       this.getProcessNo();
 
@@ -689,22 +677,12 @@ export default {
     },
     handleBeforePhotoChange() {
       this.$refs.formData.validate();
-      const beforePhoto = (this.formData._beforePhoto || []).map(
-        ({ big_url, thumb_url, ...item }) => ({
-          ...item,
-          fileUrl: big_url,
-        })
-      );
+      const beforePhoto = cloneDeep(this.formData._beforePhoto || []);
       this.formData.beforePhoto = beforePhoto;
     },
     handleAfterPhotoChange() {
       this.$refs.formData.validate();
-      const afterPhoto = (this.formData._afterPhoto || []).map(
-        ({ big_url, thumb_url, ...item }) => ({
-          ...item,
-          fileUrl: big_url,
-        })
-      );
+      const afterPhoto = cloneDeep(this.formData._afterPhoto || []);
       this.formData.afterPhoto = afterPhoto;
     },
   },
