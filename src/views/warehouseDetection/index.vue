@@ -324,7 +324,7 @@
                   <el-input
                     class="value"
                     v-model="formData.unRolledLen"
-                    :disabled="true"
+                    @input="handleLengthChange"
                   >
                     <template slot="append">mm</template>
                   </el-input>
