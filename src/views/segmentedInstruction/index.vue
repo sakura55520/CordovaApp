@@ -1337,6 +1337,16 @@
             <el-option label="样片" :value="1" />
           </el-select>
         </el-form-item>
+        <el-form-item
+          v-if="addIndex === null"
+          label="新增位置"
+          label-width="80px"
+        >
+          <el-select v-model="temp.position" style="width: 100%">
+            <el-option label="最前" value="最前" />
+            <el-option label="最后" value="最后" />
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialog = false">取 消</el-button>
@@ -1359,6 +1369,7 @@ import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js"
 
 const defaultTemp = {
   type: 0,
+  position: "最后",
 };
 
 export default {
@@ -1867,37 +1878,73 @@ export default {
       this.addDialog = false;
     },
     addSegmentedInfo() {
-      let list = this.formData.segmentedInstructionDetailVos;
-      let headPosition;
-      if (list.length === 0) headPosition = 0;
-      else headPosition = list[list.length - 1].tailPosition;
-      let headOi = this.calcOi(headPosition);
+      if (this.temp.position === "最前") {
+        let headPosition = 0;
+        let tailPosition = 0;
+        let length = 0;
+        let headOi = this.calcOi(headPosition);
+        let tailOi = this.calcOi(tailPosition);
 
-      const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
-        headPosition,
-        null
-      );
+        const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
+          headPosition,
+          tailPosition
+        );
 
-      let item = {
-        headPosition,
-        type: this.temp.type,
-        headResistance: resistanceEdgeAndRrv.headResistance,
-        tailResistance: resistanceEdgeAndRrv.tailResistance,
-        diameter: this.formData.diameter,
-        diametermm: this.formData.diametermm,
-        planWeight: 0,
-        head79oi: headOi[0],
-        head83oi: headOi[1],
-        tail79oi: null,
-        tail83oi: null,
-        headRrv: resistanceEdgeAndRrv.headRrv,
-        tailRrv: resistanceEdgeAndRrv.tailRrv,
-        headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
-        tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
-        headCarbonRate: this.headCS,
-        new: this.temp.type,
-      };
-      this.formData.segmentedInstructionDetailVos.push(item);
+        let item = {
+          headPosition,
+          tailPosition,
+          length,
+          type: this.temp.type,
+          headResistance: resistanceEdgeAndRrv.headResistance,
+          tailResistance: resistanceEdgeAndRrv.tailResistance,
+          diameter: this.formData.diameter,
+          diametermm: this.formData.diametermm,
+          planWeight: this.calcPlanWeight(length),
+          head79oi: headOi[0],
+          head83oi: headOi[1],
+          tail79oi: tailOi[0],
+          tail83oi: tailOi[1],
+          headRrv: resistanceEdgeAndRrv.headRrv,
+          tailRrv: resistanceEdgeAndRrv.tailRrv,
+          headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
+          tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
+          headCarbonRate: this.headCS,
+          new: this.temp.type,
+        };
+        this.formData.segmentedInstructionDetailVos.unshift(item);
+      } else {
+        let list = this.formData.segmentedInstructionDetailVos;
+        let headPosition;
+        if (list.length === 0) headPosition = 0;
+        else headPosition = list[list.length - 1].tailPosition;
+        let headOi = this.calcOi(headPosition);
+
+        const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
+          headPosition,
+          null
+        );
+
+        let item = {
+          headPosition,
+          type: this.temp.type,
+          headResistance: resistanceEdgeAndRrv.headResistance,
+          tailResistance: resistanceEdgeAndRrv.tailResistance,
+          diameter: this.formData.diameter,
+          diametermm: this.formData.diametermm,
+          planWeight: 0,
+          head79oi: headOi[0],
+          head83oi: headOi[1],
+          tail79oi: null,
+          tail83oi: null,
+          headRrv: resistanceEdgeAndRrv.headRrv,
+          tailRrv: resistanceEdgeAndRrv.tailRrv,
+          headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
+          tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
+          headCarbonRate: this.headCS,
+          new: this.temp.type,
+        };
+        this.formData.segmentedInstructionDetailVos.push(item);
+      }
     },
     addSegmentedInfoByIndex(index) {
       let list = this.formData.segmentedInstructionDetailVos;
@@ -2443,7 +2490,7 @@ export default {
       let item = this.controlMap[key] || {};
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
-      
+
       if ((maxItem.control || minItem.control) && !(val || String(val) === "0"))
         return false;
 
