@@ -394,20 +394,45 @@
                 show-overflow-tooltip
               />
               <el-table-column label="OI_C" min-width="80" align="center">
+                <template slot="header">
+                  <div class="form-table-header">OI_C</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    :style="{
-                      '--controlColor': getControlColor('OI_C', scope.row.oiC),
-                      '--textColor': getFontColorByBackgroundColor(
-                        getControlColor('OI_C', scope.row.oiC)
-                      ),
-                    }"
-                    :id="'input-5-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
-                    v-model="scope.row.oiC"
-                    @input="calcOrg(scope.$index)"
-                  ></el-input> </template
-              ></el-table-column>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="'details.' + scope.$index + '.oiC'"
+                    :rules="[
+                      {
+                        required:
+                          scope.row.valid &&
+                          scope.row.type === '头尾样片' &&
+                          (scope.row.samplePosition == 0 ||
+                            scope.row.samplePosition == formData.lengthQty),
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      :style="{
+                        '--controlColor': getControlColor(
+                          'OI_C',
+                          scope.row.oiC
+                        ),
+                        '--textColor': getFontColorByBackgroundColor(
+                          getControlColor('OI_C', scope.row.oiC)
+                        ),
+                      }"
+                      :id="'input-5-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
+                      v-model="scope.row.oiC"
+                      @input="calcOrg(scope.$index)"
+                    ></el-input>
+                  </el-form-item>
+                </template>
+              </el-table-column>
               <el-table-column label="OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
@@ -424,19 +449,41 @@
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="CS" min-width="80" align="center">
+                <template slot="header">
+                  <div class="form-table-header">CS</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    :style="{
-                      '--controlColor': getControlColor('CS', scope.row.cs),
-                      '--textColor': getFontColorByBackgroundColor(
-                        getControlColor('CS', scope.row.cs)
-                      ),
-                    }"
-                    :id="'input-7-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
-                    v-model="scope.row.cs"
-                  ></el-input> </template
-              ></el-table-column>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="'details.' + scope.$index + '.cs'"
+                    :rules="[
+                      {
+                        required:
+                          scope.row.valid &&
+                          scope.row.type === '头尾样片' &&
+                          (scope.row.samplePosition == 0 ||
+                            scope.row.samplePosition == formData.lengthQty),
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      :style="{
+                        '--controlColor': getControlColor('CS', scope.row.cs),
+                        '--textColor': getFontColorByBackgroundColor(
+                          getControlColor('CS', scope.row.cs)
+                        ),
+                      }"
+                      :id="'input-7-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
+                      v-model="scope.row.cs"
+                    ></el-input>
+                  </el-form-item>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="ORG"
                 min-width="80"
@@ -462,36 +509,81 @@
                 </template>
               </el-table-column>
               <el-table-column label="少子寿命" min-width="100" align="center">
+                <template slot="header">
+                  <div class="form-table-header">少子寿命</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-input
-                    :style="{
-                      '--controlColor': getControlColor(
-                        '少子寿命',
-                        scope.row.minorityCarrierLifetime
-                      ),
-                      '--textColor': getFontColorByBackgroundColor(
-                        getControlColor(
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'details.' + scope.$index + '.minorityCarrierLifetime'
+                    "
+                    :rules="[
+                      {
+                        required:
+                          scope.row.valid &&
+                          scope.row.type === '头尾样片' &&
+                          scope.row.sampleIdentification == 'T',
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-input
+                      :style="{
+                        '--controlColor': getControlColor(
                           '少子寿命',
                           scope.row.minorityCarrierLifetime
-                        )
-                      ),
-                    }"
-                    :id="'input-8-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
-                    v-model="scope.row.minorityCarrierLifetime"
-                  ></el-input> </template
-              ></el-table-column>
+                        ),
+                        '--textColor': getFontColorByBackgroundColor(
+                          getControlColor(
+                            '少子寿命',
+                            scope.row.minorityCarrierLifetime
+                          )
+                        ),
+                      }"
+                      :id="'input-8-' + scope.$index"
+                      @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
+                      v-model="scope.row.minorityCarrierLifetime"
+                    ></el-input>
+                  </el-form-item>
+                </template>
+              </el-table-column>
               <el-table-column label="常规缺陷" min-width="140" align="center">
+                <template slot="header">
+                  <div class="form-table-header">常规缺陷</div>
+                </template>
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.flaw" placeholder="">
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in conventionalDefectList"
-                      :key="item.value"
-                    ></el-option>
-                  </el-select> </template
-              ></el-table-column>
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="'details.' + scope.$index + '.flaw'"
+                    :rules="[
+                      {
+                        required:
+                          scope.row.valid &&
+                          scope.row.type === '头尾样片' &&
+                          (scope.row.samplePosition == 0 ||
+                            scope.row.samplePosition == formData.lengthQty),
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
+                  >
+                    <el-select v-model="scope.row.flaw" placeholder="">
+                      <el-option
+                        :label="item.label"
+                        :value="item.value"
+                        v-for="item in conventionalDefectList"
+                        :key="item.value"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
+                </template>
+              </el-table-column>
               <el-table-column label="OSF密度" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.osf" placeholder="">
