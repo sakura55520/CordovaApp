@@ -226,12 +226,14 @@
                         color: getFontColorByBackgroundColor(
                           getControlColor(
                             '少子寿命',
-                            scope.row.minorityCarrierLifetime
+                            scope.row.minorityCarrierLifetime,
+                            'default'
                           )
                         ),
                         background: getControlColor(
                           '少子寿命',
-                          scope.row.minorityCarrierLifetime
+                          scope.row.minorityCarrierLifetime,
+                          'default'
                         ),
                       }"
                     >
@@ -524,10 +526,15 @@
                     :style="{
                       '--controlColor': getControlColor(
                         '头部电阻率',
-                        scope.row.headResistance
+                        scope.row.headResistance,
+                        scope.row.orderCode
                       ),
                       '--textColor': getFontColorByBackgroundColor(
-                        getControlColor('头部电阻率', scope.row.headResistance)
+                        getControlColor(
+                          '头部电阻率',
+                          scope.row.headResistance,
+                          scope.row.orderCode
+                        )
                       ),
                     }"
                     v-if="scope.row.type === 0"
@@ -548,10 +555,15 @@
                     :style="{
                       '--controlColor': getControlColor(
                         '尾部电阻率',
-                        scope.row.tailResistance
+                        scope.row.tailResistance,
+                        scope.row.orderCode
                       ),
                       '--textColor': getFontColorByBackgroundColor(
-                        getControlColor('尾部电阻率', scope.row.tailResistance)
+                        getControlColor(
+                          '尾部电阻率',
+                          scope.row.tailResistance,
+                          scope.row.orderCode
+                        )
                       ),
                     }"
                     v-if="scope.row.type === 0"
@@ -584,12 +596,14 @@
                     :style="{
                       '--controlColor': getControlColor(
                         '头边缘电阻率',
-                        scope.row.headResistanceEdge
+                        scope.row.headResistanceEdge,
+                        scope.row.orderCode
                       ),
                       '--textColor': getFontColorByBackgroundColor(
                         getControlColor(
                           '头边缘电阻率',
-                          scope.row.headResistanceEdge
+                          scope.row.headResistanceEdge,
+                          scope.row.orderCode
                         )
                       ),
                     }"
@@ -611,12 +625,14 @@
                     :style="{
                       '--controlColor': getControlColor(
                         '尾边缘电阻率',
-                        scope.row.tailResistanceEdge
+                        scope.row.tailResistanceEdge,
+                        scope.row.orderCode
                       ),
                       '--textColor': getFontColorByBackgroundColor(
                         getControlColor(
                           '尾边缘电阻率',
-                          scope.row.tailResistanceEdge
+                          scope.row.tailResistanceEdge,
+                          scope.row.orderCode
                         )
                       ),
                     }"
@@ -659,10 +675,15 @@
                         :style="{
                           '--controlColor': getControlColor(
                             '79oi头',
-                            scope.row.head79oi
+                            scope.row.head79oi,
+                            scope.row.orderCode
                           ),
                           '--textColor': getFontColorByBackgroundColor(
-                            getControlColor('79oi头', scope.row.head79oi)
+                            getControlColor(
+                              '79oi头',
+                              scope.row.head79oi,
+                              scope.row.orderCode
+                            )
                           ),
                         }"
                         v-model="scope.row.head79oi"
@@ -708,10 +729,15 @@
                         :style="{
                           '--controlColor': getControlColor(
                             '79oi尾',
-                            scope.row.tail79oi
+                            scope.row.tail79oi,
+                            scope.row.orderCode
                           ),
                           '--textColor': getFontColorByBackgroundColor(
-                            getControlColor('79oi尾', scope.row.tail79oi)
+                            getControlColor(
+                              '79oi尾',
+                              scope.row.tail79oi,
+                              scope.row.orderCode
+                            )
                           ),
                         }"
                         v-model="scope.row.tail79oi"
@@ -762,10 +788,15 @@
                     :style="{
                       '--controlColor': getControlColor(
                         '头碳含量',
-                        scope.row.headCarbonRate
+                        scope.row.headCarbonRate,
+                        scope.row.orderCode
                       ),
                       '--textColor': getFontColorByBackgroundColor(
-                        getControlColor('头碳含量', scope.row.headCarbonRate)
+                        getControlColor(
+                          '头碳含量',
+                          scope.row.headCarbonRate,
+                          scope.row.orderCode
+                        )
                       ),
                     }"
                     v-if="scope.row.type === 0"
@@ -806,12 +837,14 @@
                         :style="{
                           '--controlColor': getControlColor(
                             '尾碳含量',
-                            scope.row.tailCarbonRate
+                            scope.row.tailCarbonRate,
+                            scope.row.orderCode
                           ),
                           '--textColor': getFontColorByBackgroundColor(
                             getControlColor(
                               '尾碳含量',
-                              scope.row.tailCarbonRate
+                              scope.row.tailCarbonRate,
+                              scope.row.orderCode
                             )
                           ),
                         }"
@@ -835,12 +868,14 @@
                     :style="{
                       '--controlColor': getControlColor(
                         'RRV头',
-                        Math.abs(scope.row.headRrv || 0)
+                        Math.abs(scope.row.headRrv || 0),
+                        scope.row.orderCode
                       ),
                       '--textColor': getFontColorByBackgroundColor(
                         getControlColor(
                           'RRV头',
-                          Math.abs(scope.row.headRrv || 0)
+                          Math.abs(scope.row.headRrv || 0),
+                          scope.row.orderCode
                         )
                       ),
                     }"
@@ -862,12 +897,14 @@
                     :style="{
                       '--controlColor': getControlColor(
                         'RRV尾',
-                        Math.abs(scope.row.tailRrv || 0)
+                        Math.abs(scope.row.tailRrv || 0),
+                        scope.row.orderCode
                       ),
                       '--textColor': getFontColorByBackgroundColor(
                         getControlColor(
                           'RRV尾',
-                          Math.abs(scope.row.tailRrv || 0)
+                          Math.abs(scope.row.tailRrv || 0),
+                          scope.row.orderCode
                         )
                       ),
                     }"
@@ -1503,7 +1540,9 @@ export default {
           from: "formData.segmentedInstructionDetailVos",
         },
       ],
-      controlMap: {},
+      controlMap: {
+        default: {},
+      },
       addDialog: false,
       addIndex: null,
       temp: Object.assign({}, defaultTemp),
@@ -2178,7 +2217,12 @@ export default {
         let list = get(this, control.from, []);
         if (
           list.some(
-            (item) => !this.checkControl(control.name, item[control.key])
+            (item) =>
+              !this.checkControl(
+                control.name,
+                item[control.key],
+                item.orderCode
+              )
           )
         )
           outControlList.push(control.name);
@@ -2495,8 +2539,9 @@ export default {
         val.join(",")
       );
     },
-    getControlColor(key, val) {
-      let item = this.controlMap[key] || {};
+    getControlColor(key, val, type) {
+      let map = this.controlMap[type || "default"] || {};
+      let item = map[key] || {};
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
@@ -2520,8 +2565,9 @@ export default {
 
       return null;
     },
-    checkControl(key, val) {
-      let item = this.controlMap[key] || {};
+    checkControl(key, val, type) {
+      let map = this.controlMap[type || "default"] || {};
+      let item = map[key] || {};
       let maxItem = item["上限"] || {};
       let minItem = item["下限"] || {};
 
@@ -2620,7 +2666,7 @@ export default {
           }
         }
 
-        this.controlMap[name] = {
+        this.controlMap["default"][name] = {
           上限: {
             control: maxItem.control,
             controlColor: maxItem.controlColor,
