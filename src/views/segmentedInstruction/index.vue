@@ -832,6 +832,18 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        'RRV头',
+                        Math.abs(scope.row.headRrv || 0)
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          'RRV头',
+                          Math.abs(scope.row.headRrv || 0)
+                        )
+                      ),
+                    }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headRrv"
                     v-direction="{ x: 16, y: scope.$index }"
@@ -847,6 +859,18 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        'RRV尾',
+                        Math.abs(scope.row.tailRrv || 0)
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          'RRV尾',
+                          Math.abs(scope.row.tailRrv || 0)
+                        )
+                      ),
+                    }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailRrv"
                     v-direction="{ x: 17, y: scope.$index }"
@@ -1467,6 +1491,16 @@ export default {
           key: "minorityCarrierLifetime",
           name: "少子寿命",
           from: "checkInfo",
+        },
+        {
+          key: "headRrv",
+          name: "RRV头",
+          from: "formData.segmentedInstructionDetailVos",
+        },
+        {
+          key: "tailRrv",
+          name: "RRV尾",
+          from: "formData.segmentedInstructionDetailVos",
         },
       ],
       controlMap: {},
@@ -2516,10 +2550,75 @@ export default {
 
       this.controlList.forEach((control) => {
         let name = control.name;
-        let maxName = name + "上限";
-        let minName = name + "下限";
-        let maxItem = list.find((ele) => ele.displayName == maxName) || {};
-        let minItem = list.find((ele) => ele.displayName == minName) || {};
+        // let maxName = name + "上限";
+        // let minName = name + "下限";
+        // let maxItem = list.find((ele) => ele.displayName == maxName) || {};
+        // let minItem = list.find((ele) => ele.displayName == minName) || {};
+
+        let minItem = {};
+        let maxItem = {};
+
+        if (name === "头部电阻率") {
+          minItem = list.find((ele) => ele.keyVal === "C010") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C020") || {};
+        }
+        if (name === "尾部电阻率") {
+          minItem = list.find((ele) => ele.keyVal === "C010") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C020") || {};
+        }
+        if (name === "RRV头") {
+          let item = list.find((ele) => ele.keyVal === "C030") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "RRV尾") {
+          let item = list.find((ele) => ele.keyVal === "C030") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "79oi头") {
+          minItem = list.find((ele) => ele.keyVal === "C050") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+        }
+        if (name === "79oi尾") {
+          minItem = list.find((ele) => ele.keyVal === "C050") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+        }
+        if (name === "头碳含量") {
+          let item = list.find((ele) => ele.keyVal === "C070") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "尾碳含量") {
+          let item = list.find((ele) => ele.keyVal === "C070") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "少子寿命") {
+          let item = list.find((ele) => ele.keyVal === "C080") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
 
         this.controlMap[name] = {
           上限: {
