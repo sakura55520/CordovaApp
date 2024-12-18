@@ -244,6 +244,15 @@
                     class="form-input"
                   >
                     <el-input
+                      :style="{
+                        '--controlColor': getControlColor(
+                          'RES_C',
+                          scope.row.resC
+                        ),
+                        '--textColor': getFontColorByBackgroundColor(
+                          getControlColor('RES_C', scope.row.resC)
+                        ),
+                      }"
                       :id="'input-2-' + scope.$index"
                       @keyup.native="(e) => handleKeyup(e, 2, scope.$index)"
                       v-model="scope.row.resC"
@@ -338,9 +347,12 @@
                     v-if="scope.row.rrg || scope.row.rrg == 0"
                     :style="{
                       color: getFontColorByBackgroundColor(
-                        getControlColor('RRG', scope.row.rrg)
+                        getControlColor('RRG', Math.abs(scope.row.rrg || 0))
                       ),
-                      background: getControlColor('RRG', scope.row.rrg),
+                      background: getControlColor(
+                        'RRG',
+                        Math.abs(scope.row.rrg || 0)
+                      ),
                     }"
                   >
                     {{ scope.row.rrg }}%
@@ -348,14 +360,28 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="1/2 RRG"
+                label="1/2RRG"
                 min-width="90"
                 align="center"
                 prop="halfRrg"
                 show-overflow-tooltip
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.halfRrg || scope.row.halfRrg == 0">
+                  <div
+                    :style="{
+                      backgroundColor: getControlColor(
+                        '1/2RRG',
+                        Math.abs(scope.row.halfRrg || 0)
+                      ),
+                      color: getFontColorByBackgroundColor(
+                        getControlColor(
+                          '1/2RRG',
+                          Math.abs(scope.row.halfRrg || 0)
+                        )
+                      ),
+                    }"
+                    v-if="scope.row.halfRrg || scope.row.halfRrg == 0"
+                  >
                     {{ scope.row.halfRrg }}%
                   </div>
                 </template>
@@ -419,7 +445,18 @@
                 show-overflow-tooltip
               >
                 <template slot-scope="scope">
-                  <div v-if="scope.row.org || scope.row.org == 0">
+                  <div
+                    :style="{
+                      color: getFontColorByBackgroundColor(
+                        getControlColor('ORG', Math.abs(scope.row.org || 0))
+                      ),
+                      background: getControlColor(
+                        'ORG',
+                        Math.abs(scope.row.org || 0)
+                      ),
+                    }"
+                    v-if="scope.row.org || scope.row.org == 0"
+                  >
                     {{ scope.row.org }}%
                   </div>
                 </template>
@@ -929,6 +966,9 @@ export default {
         },
         { key: "oiC", name: "OI_C", from: "formData.details" },
         { key: "oiE", name: "OI_E", from: "formData.details" },
+        { key: "resC", name: "RES_C", from: "formData.details" },
+        { key: "halfRrg", name: "1/2RRG", from: "formData.details" },
+        { key: "org", name: "ORG", from: "formData.details" },
       ],
       controlMap: {},
       cloneDetails: [],
@@ -1421,10 +1461,67 @@ export default {
 
       this.controlList.forEach((control) => {
         let name = control.name;
-        let maxName = name + "上限";
-        let minName = name + "下限";
-        let maxItem = list.find((ele) => ele.displayName == maxName) || {};
-        let minItem = list.find((ele) => ele.displayName == minName) || {};
+        // let maxName = name + "上限";
+        // let minName = name + "下限";
+        // let maxItem = list.find((ele) => ele.displayName == maxName) || {};
+        // let minItem = list.find((ele) => ele.displayName == minName) || {};
+
+        let minItem = {};
+        let maxItem = {};
+
+        if (name === "RES_C") {
+          minItem = list.find((ele) => ele.keyVal === "C010") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C020") || {};
+        }
+        if (name === "RRG") {
+          let item = list.find((ele) => ele.keyVal === "C030") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "1/2RRG") {
+          let item = list.find((ele) => ele.keyVal === "C040") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "OI_C") {
+          minItem = list.find((ele) => ele.keyVal === "C050") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+        }
+        if (name === "CS") {
+          let item = list.find((ele) => ele.keyVal === "C070") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "少子寿命") {
+          let item = list.find((ele) => ele.keyVal === "C080") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "ORG") {
+          let item = list.find((ele) => ele.keyVal === "C090") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
 
         this.controlMap[name] = {
           上限: {
