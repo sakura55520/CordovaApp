@@ -247,39 +247,41 @@
             </el-form-item>
           </div>
 
-          <div class="headLine">
-            <div
-              :class="{
-                'headLine-title': true,
-                required: formRules._beforePhoto,
-              }"
-            >
-              拆炉前留档文件(炉盖、抽气孔)
+          <div v-if="formData.wheel == 1">
+            <div class="headLine">
+              <div
+                :class="{
+                  'headLine-title': true,
+                  required: formRules._beforePhoto,
+                }"
+              >
+                拆炉前留档文件(炉盖、抽气孔)
+              </div>
             </div>
-          </div>
-          <el-form-item style="margin-left: 20px" prop="_beforePhoto">
-            <PhotoRemarkNew
-              v-model="formData._beforePhoto"
-              @input="handleBeforePhotoChange"
-            />
-          </el-form-item>
+            <el-form-item style="margin-left: 20px" prop="_beforePhoto">
+              <PhotoRemarkNew
+                v-model="formData._beforePhoto"
+                @input="handleBeforePhotoChange"
+              />
+            </el-form-item>
 
-          <div class="headLine">
-            <div
-              :class="{
-                'headLine-title': true,
-                required: formRules._afterPhoto,
-              }"
-            >
-              拆炉后留档文件(炉盖、抽气孔、加热器与坩埚间距*4、加热器与保温筒间距*4)
+            <div class="headLine">
+              <div
+                :class="{
+                  'headLine-title': true,
+                  required: formRules._afterPhoto,
+                }"
+              >
+                拆炉后留档文件(炉盖、抽气孔、加热器与坩埚间距*4、加热器与保温筒间距*4)
+              </div>
             </div>
+            <el-form-item style="margin-left: 20px" prop="_afterPhoto">
+              <PhotoRemarkNew
+                v-model="formData._afterPhoto"
+                @input="handleAfterPhotoChange"
+              />
+            </el-form-item>
           </div>
-          <el-form-item style="margin-left: 20px" prop="_afterPhoto">
-            <PhotoRemarkNew
-              v-model="formData._afterPhoto"
-              @input="handleAfterPhotoChange"
-            />
-          </el-form-item>
         </el-form>
       </div>
     </div>
