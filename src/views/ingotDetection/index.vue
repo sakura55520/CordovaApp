@@ -291,6 +291,15 @@
                     class="form-input"
                   >
                     <el-input
+                      :style="{
+                        '--controlColor': getControlColor(
+                          'RES_E',
+                          scope.row.resE
+                        ),
+                        '--textColor': getFontColorByBackgroundColor(
+                          getControlColor('RES_E', scope.row.resE)
+                        ),
+                      }"
                       :id="'input-3-' + scope.$index"
                       @keyup.native="(e) => handleKeyup(e, 3, scope.$index)"
                       v-model="scope.row.resE"
@@ -1059,6 +1068,7 @@ export default {
         { key: "oiC", name: "OI_C", from: "formData.details" },
         { key: "oiE", name: "OI_E", from: "formData.details" },
         { key: "resC", name: "RES_C", from: "formData.details" },
+        { key: "resE", name: "RES_E", from: "formData.details" },
         { key: "halfRrg", name: "1/2RRG", from: "formData.details" },
         { key: "org", name: "ORG", from: "formData.details" },
       ],
@@ -1565,6 +1575,10 @@ export default {
           minItem = list.find((ele) => ele.keyVal === "C010") || {};
           maxItem = list.find((ele) => ele.keyVal === "C020") || {};
         }
+        if (name === "RES_E") {
+          minItem = list.find((ele) => ele.keyVal === "C010") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C020") || {};
+        }
         if (name === "RRG") {
           let item = list.find((ele) => ele.keyVal === "C030") || {};
           if (item.value) {
@@ -1584,6 +1598,10 @@ export default {
           }
         }
         if (name === "OI_C") {
+          minItem = list.find((ele) => ele.keyVal === "C050") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+        }
+        if (name === "OI_E") {
           minItem = list.find((ele) => ele.keyVal === "C050") || {};
           maxItem = list.find((ele) => ele.keyVal === "C060") || {};
         }
