@@ -184,3 +184,11 @@ export function updateIngotDetectionStatus(data) {
     data,
   });
 }
+
+export function getSegmentations(params) {
+  return request({
+    url: `/wipcrystalcheck/getSegmentations`,
+    method: "get",
+    params,
+  });
+}
