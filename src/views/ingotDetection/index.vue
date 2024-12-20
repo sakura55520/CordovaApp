@@ -754,6 +754,12 @@
                 show-overflow-tooltip
               />
               <el-table-column
+                label="返切次数"
+                min-width="85"
+                align="center"
+                prop="backCutCount"
+              />
+              <el-table-column
                 label="状态"
                 min-width="60"
                 align="center"
@@ -796,6 +802,30 @@
                 </template>
               </el-table-column>
             </el-table>
+          </div>
+          <div class="form">
+            <div class="form-title">分段示意图</div>
+            <div class="form-content" v-for="(item, i) in segmentList" :key="i">
+              <div>{{ i == 0 ? "初始" : `第${i}次返切` }}</div>
+              <div class="chart">
+                <div
+                  class="chart-item"
+                  v-for="(ele, j) in item"
+                  :key="j"
+                  :style="{
+                    width: getChartWidth(ele.startIndex, ele.endIndex),
+                    left: getChartLeft(ele.startIndex),
+                    background: ele.type == 2 ? '' : '#ccc',
+                  }"
+                >
+                  <div class="bar">
+                    <div class="text">
+                      {{ ele.number }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </el-form>
       </div>
@@ -882,6 +912,20 @@
               :value="Number(item.value)"
               v-for="item in backCuttingAndReuseList"
               :key="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="返切晶段" prop="number">
+          <el-select
+            v-model="backCuttingFormData.number"
+            placeholder=""
+            class="form-item-cover"
+          >
+            <el-option
+              :label="item"
+              :value="item"
+              v-for="(item, index) in backCutSegmentList"
+              :key="index"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -1009,6 +1053,7 @@ export default {
         cutDistanceEnd: undefined,
         tall: undefined,
         recycle: undefined,
+        number: undefined,
         userCreate: undefined,
         gmtCreate: undefined,
         processId: undefined,
@@ -1051,6 +1096,13 @@ export default {
             trigger: "change",
           },
         ],
+        number: [
+          {
+            required: true,
+            message: "返切晶段不能为空",
+            trigger: "change",
+          },
+        ],
       },
       backCuttingDialogVisible: false,
       backCuttingFormType: undefined,
@@ -1074,6 +1126,9 @@ export default {
       ],
       controlMap: {},
       cloneDetails: [],
+      segmentList: [],
+      segmentTotalLength: 0,
+      backCutSegmentList: [],
     };
   },
   computed: {
@@ -1147,6 +1202,52 @@ export default {
       this.fetchBackCuttingSampleRecord();
       await this.getMateralModelExtras();
       this.$set(this.formData, "details", cloneDeep(this.formData.details));
+
+      Api.getSegmentations({
+        processingOrderCode: this.formData.processOrderCode,
+      }).then((res) => {
+        const tree = res.data;
+        this.segmentTotalLength = (tree.endIndex || 0) - (tree.startIndex || 0);
+        let segmentList = [];
+        let backCutSegmentList = [];
+        this.handleSegmentationTree(tree, segmentList, backCutSegmentList);
+        this.segmentList = segmentList;
+        this.backCutSegmentList = backCutSegmentList;
+      });
+    },
+    handleSegmentationTree(treeNode, segmentList, backCutSegmentList) {
+      if (!treeNode) return;
+      let { backCutCount, number, startIndex, endIndex, children, type } =
+        treeNode;
+
+      if (type == 2) backCutSegmentList.push(number);
+
+      if (backCutCount == -1) backCutCount = 0;
+      if (!segmentList[backCutCount]) segmentList[backCutCount] = [];
+      segmentList[backCutCount].push({
+        number,
+        startIndex,
+        endIndex,
+        type,
+      });
+
+      if (!isEmpty(children)) {
+        children.forEach((item) => {
+          this.handleSegmentationTree(item, segmentList, backCutSegmentList);
+        });
+      }
+    },
+    getChartWidth(startIndex, endIndex) {
+      let width = 0;
+      if (this.segmentTotalLength > 0)
+        width = ((endIndex - startIndex) * 100) / this.segmentTotalLength;
+      return width + "%";
+    },
+    getChartLeft(startIndex) {
+      let left = 0;
+      if (this.segmentTotalLength > 0)
+        left = (startIndex * 100) / this.segmentTotalLength;
+      return left + "%";
     },
     async updateDetails() {
       const { processingOrderCode } = this.$route.query;
@@ -1202,6 +1303,7 @@ export default {
         cutDistanceEnd: this.formData.lengthQty || 0,
         tall: 4,
         recycle: 1,
+        number: null,
         userCreate: this.realName,
         gmtCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
         processId: this.formData.processId,
@@ -1855,5 +1957,53 @@ export default {
 .refresh {
   color: #409eff;
   cursor: pointer;
+}
+
+.form-content {
+  width: 100%;
+  padding: 0 10px;
+  margin-top: 20px;
+  .chart {
+    display: flex;
+    width: 100%;
+    position: relative;
+    height: 60px;
+    .chart-item {
+      position: absolute;
+      .bar {
+        margin: 0 auto;
+        width: calc(100% - 10px);
+        height: 60px;
+        border: 1px solid #000;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .text {
+          overflow: hidden;
+          white-space: nowrap; /* 使文本在一行内显示 */
+          text-overflow: ellipsis; /* 使用省略号表示溢出的文本 */
+        }
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          width: 10px;
+          height: 60px;
+          border: 1px solid #000;
+          background-color: white;
+          border-radius: 50%;
+        }
+        &::before {
+          z-index: 1;
+          left: -5px;
+        }
+        &::after {
+          z-index: 3;
+          right: -5px;
+        }
+      }
+    }
+  }
 }
 </style>
