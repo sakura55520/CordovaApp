@@ -1820,6 +1820,7 @@ export default {
           }
         }
 
+        if (!this.controlMap[type]) this.controlMap[type] = {};
         this.controlMap[type][name] = {
           上限: {
             control: maxItem.control,
