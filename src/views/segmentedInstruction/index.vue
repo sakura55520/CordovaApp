@@ -381,6 +381,13 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="相对段号"
+                min-width="120"
+                align="center"
+                prop="relativeCode"
+                show-overflow-tooltip
+              />
+              <el-table-column
                 label="流程编号"
                 min-width="120"
                 align="center"
@@ -1546,6 +1553,7 @@ export default {
       addDialog: false,
       addIndex: null,
       temp: Object.assign({}, defaultTemp),
+      wipCrystalCheckSampleRangeDtos: [],
     };
   },
   computed: {
@@ -1900,6 +1908,10 @@ export default {
 
       this.initOiAndRrv();
 
+      this.wipCrystalCheckSampleRangeDtos = cloneDeep(
+        this.formData.wipCrystalCheckSampleRangeDtos || []
+      );
+
       let cloneSegmentedInstructionDetailVos;
       if (isEmpty(this.formData.segmentedInstructionDetailVos)) {
         cloneSegmentedInstructionDetailVos = (
@@ -1935,6 +1947,7 @@ export default {
           return {
             segmentNo: item.sampleNumber,
             type: item.type,
+            relativeCode: item.relativeCode,
             headPosition: item.head,
             tailPosition: item.tail,
             length,
@@ -2024,6 +2037,16 @@ export default {
       let res = await Api.segmentedInstructionGenerateNo(rest);
       let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
       res.segmentedInstructionDetailVos.forEach((item, index) => {
+        if (item.type == 0) {
+          const matched = this.wipCrystalCheckSampleRangeDtos.find(
+            (ele) =>
+              item.headPosition >= ele.head &&
+              item.tailPosition <= ele.tail &&
+              ele.type == 0
+          );
+          matched && (list[index].relativeCode = matched.relativeCode);
+        }
+
         list[index].segmentNo = item.segmentNo;
         list[index].segmentNum = item.segmentNum;
         list[index].sampleIdentification = item.sampleIdentification;
@@ -2060,6 +2083,7 @@ export default {
           tailPosition,
           length,
           type: this.temp.type,
+          relativeCode: null,
           headResistance: resistanceEdgeAndRrv.headResistance,
           tailResistance: resistanceEdgeAndRrv.tailResistance,
           diameter: this.formData.diameter,
@@ -2092,6 +2116,7 @@ export default {
         let item = {
           headPosition,
           type: this.temp.type,
+          relativeCode: null,
           headResistance: resistanceEdgeAndRrv.headResistance,
           tailResistance: resistanceEdgeAndRrv.tailResistance,
           diameter: this.formData.diameter,
@@ -2130,6 +2155,7 @@ export default {
         length,
         planWeight: this.calcPlanWeight(length),
         type: this.temp.type,
+        relativeCode: null,
         headResistance: resistanceEdgeAndRrv.headResistance,
         tailResistance: resistanceEdgeAndRrv.tailResistance,
         diameter: this.formData.diameter,
