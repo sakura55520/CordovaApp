@@ -39,7 +39,7 @@
               :label="formItem.label"
               :rules="[
                 {
-                  required: getRequired(formItem, recordItem),
+                  required: getRequired(formItem, recordItem, recordIdx),
                   message: formItem.label + '不能为空',
                   trigger: 'change',
                 },
@@ -283,9 +283,14 @@ export default {
     this.activeCollapse = ["0"];
   },
   methods: {
-    getRequired(formItem, recordItem) {
+    getRequired(formItem, recordItem, recordIdx) {
       if (formItem.extKey === "单晶异常时间")
         return !(recordItem._errors || []).includes("无");
+      else if (
+        (formItem.extKey === "操作者" || formItem.extKey === "操作者1") &&
+        recordIdx == 0
+      )
+        return true;
       else return formItem.required;
     },
     handleExtsInput(event, recordIdx, formItemIdx, vModel) {
