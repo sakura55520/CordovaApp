@@ -89,6 +89,7 @@ export default {
           if (_otherReason) form.reason = _otherReason
           stockReturn({
             ...form,
+            reason: `${this.rowData.equipmentCode} ${form.reason}`,
             id: this.rowData.id
           }).then(res => {
             this.$message.success('退库成功!')
