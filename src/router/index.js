@@ -47,6 +47,16 @@ export const constantRouterMap = [
     },
   },
   {
+    name: 'EAPSensorSupplementSignal',
+    path: '/EAPSensorSupplementSignal',
+    component: () => import('@/views/EAPSensorSupplementSignal/index'),
+    hidden: true,
+    meta: {
+      text: 'EAP传感器',
+      returnPath: '/'
+    },
+  },
+  {
     name: 'shiftChange',
     path: '/shiftChange',
     component: () => import('@/views/shiftChange/index'),

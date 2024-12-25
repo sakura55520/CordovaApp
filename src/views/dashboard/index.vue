@@ -53,6 +53,12 @@ export default {
               key: null,
               icon: "guozhan",
             },
+            {
+              name: "EAP传感器",
+              href: "/EAPSensorSupplementSignal",
+              key: null,
+              icon: "bxh",
+            },
           ],
         },
         {
