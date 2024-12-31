@@ -1593,24 +1593,27 @@ export default {
     },
     headResistance() {
       let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
-      return reverseDetails.find(
+      const foundItem = reverseDetails.find(
         (item) => item.type === "头尾样片" && item.sampleIdentification === "H"
-      ).resC;
+      );
+      return foundItem ? foundItem.resC : null;
     },
     tailResistance() {
       let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
-      return reverseDetails.find(
+      const foundItem = reverseDetails.find(
         (item) => item.type === "头尾样片" && item.sampleIdentification === "T"
-      ).resC;
+      );
+      return foundItem ? foundItem.resC : null;
     },
     headCS() {
       let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
-      return (
+      const foundItem = (
         reverseDetails.find(
           (item) =>
             item.type === "头尾样片" && item.sampleIdentification === "H"
         ) || {}
-      ).cs;
+      );
+      return foundItem ? foundItem.cs : null;
     },
     lastSegmentIndex() {
       let reverseDetails = (
@@ -2308,6 +2311,7 @@ export default {
       let minRes = Number((Number(this.tailResistance || 0) / 2).toFixed(3));
       let maxRes = Number((Number(this.headResistance || 0) * 2).toFixed(3));
       if (
+        maxRes > 0 &&
         this.formData.segmentedInstructionDetailVos.some((item) => {
           if (item.type !== 0) return false;
 
