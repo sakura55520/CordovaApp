@@ -1761,6 +1761,12 @@ export default {
       });
 
       this.updateControlMap(list, this.selectedWorkOrder);
+
+      this.$set(
+        this.formData,
+        "segmentedInstructionDetailVos",
+        cloneDeep(this.formData.segmentedInstructionDetailVos)
+      );
     },
     updateControlMap(list, type) {
       this.controlList.forEach((control) => {
@@ -2010,6 +2016,18 @@ export default {
       }));
 
       await this.getMateralModelExtras();
+
+      let orderCodeList = (this.formData.segmentedInstructionDetailVos || [])
+        .map((item) => item.orderCode)
+        .filter((item) => item);
+      for (const item of orderCodeList) {
+        let list = await getMateralModelExtras({
+          workOrderNo: item,
+        });
+
+        this.updateControlMap(list, item);
+      }
+
       this.$set(
         this.formData,
         "segmentedInstructionDetailVos",
