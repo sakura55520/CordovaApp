@@ -1203,6 +1203,9 @@ export default {
       await this.getMateralModelExtras();
       this.$set(this.formData, "details", cloneDeep(this.formData.details));
 
+      this.getSegmentationTree();
+    },
+    getSegmentationTree() {
       Api.getSegmentations({
         processingOrderCode: this.formData.processOrderCode,
       }).then((res) => {
@@ -1222,7 +1225,6 @@ export default {
 
       if (type == 2) backCutSegmentList.push(number);
 
-      if (backCutCount == -1) backCutCount = 0;
       if (!segmentList[backCutCount]) segmentList[backCutCount] = [];
       segmentList[backCutCount].push({
         number,
@@ -1359,6 +1361,8 @@ export default {
       this.fetchBackCuttingSampleRecord();
       this.updateDetails();
       this.backCuttingDialogVisible = false;
+
+      this.getSegmentationTree();
     },
     async handleUpdateStatus(row) {
       Api.updateIngotDetectionStatus(row).then(() => {
@@ -1408,6 +1412,8 @@ export default {
       this.$message.success("返切指令删除成功");
       this.fetchBackCuttingSampleRecord();
       this.updateDetails();
+
+      this.getSegmentationTree();
     },
     handleBackCuttingFormConfirm() {
       if (this.backCuttingFormType === "新增") this.addBackCuttings();
