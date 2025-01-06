@@ -841,6 +841,20 @@
         :rules="backCuttingFormRules"
         ref="backCuttingFormRef"
       >
+        <el-form-item label="返切晶段" prop="number">
+          <el-select
+            v-model="backCuttingFormData.number"
+            placeholder=""
+            class="form-item-cover"
+          >
+            <el-option
+              :label="item.number"
+              :value="item.number"
+              v-for="(item, index) in backCutSegmentList"
+              :key="index"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="返切类型" prop="type">
           <el-select
             v-model="backCuttingFormData.type"
@@ -912,20 +926,6 @@
               :value="Number(item.value)"
               v-for="item in backCuttingAndReuseList"
               :key="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="返切晶段" prop="number">
-          <el-select
-            v-model="backCuttingFormData.number"
-            placeholder=""
-            class="form-item-cover"
-          >
-            <el-option
-              :label="item"
-              :value="item"
-              v-for="(item, index) in backCutSegmentList"
-              :key="index"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -1223,7 +1223,7 @@ export default {
       let { backCutCount, number, startIndex, endIndex, children, type } =
         treeNode;
 
-      if (type == 2) backCutSegmentList.push(number);
+      if (type == 2) backCutSegmentList.push({ number, startIndex, endIndex });
 
       if (!segmentList[backCutCount]) segmentList[backCutCount] = [];
       segmentList[backCutCount].push({
@@ -1316,6 +1316,17 @@ export default {
     async addBackCuttings() {
       const valid = await this.$refs.backCuttingFormRef.validate();
       if (!valid) return;
+
+      const backCutSegment = this.backCutSegmentList.find(
+        (item) => item.number == this.backCuttingFormData.number
+      );
+      if (
+        this.backCuttingFormData.samplePosition < backCutSegment.startIndex ||
+        this.backCuttingFormData.samplePosition > backCutSegment.endIndex
+      )
+        return this.$message.warning(
+          `返切位置范围为:${backCutSegment.startIndex}~${backCutSegment.endIndex}`
+        );
 
       if (
         this.formData.backCuttings.some(
