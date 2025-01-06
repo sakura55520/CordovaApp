@@ -1223,7 +1223,8 @@ export default {
       let { backCutCount, number, startIndex, endIndex, children, type } =
         treeNode;
 
-      if (type == 2) backCutSegmentList.push({ number, startIndex, endIndex });
+      if (type == 2 && backCutCount != -1)
+        backCutSegmentList.push({ number, startIndex, endIndex });
 
       if (!segmentList[backCutCount]) segmentList[backCutCount] = [];
       segmentList[backCutCount].push({
