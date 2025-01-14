@@ -823,8 +823,24 @@ export default {
             return;
           }
         }
-        this.$confirm("确认提交当前操作数据?", "提示", {
+        let text = "确认提交当前操作数据?";
+        let crystallinePhaseCheckList = [];
+        if (Number(this.formData.crystallinePhaseA) > 20)
+          crystallinePhaseCheckList.push("<div>A点晶向大于20°</div>");
+        if (Number(this.formData.crystallinePhaseB) > 20)
+          crystallinePhaseCheckList.push("<div>B点晶向大于20°</div>");
+        if (Number(this.formData.crystallinePhaseC) > 20)
+          crystallinePhaseCheckList.push("<div>C点晶向大于20°</div>");
+        if (Number(this.formData.crystallinePhaseD) > 20)
+          crystallinePhaseCheckList.push("<div>D点晶向大于20°</div>");
+        if (crystallinePhaseCheckList.length > 0) {
+          text = "<div>以下数据超过上限，是否继续提交当前操作数据?</div>";
+          text += crystallinePhaseCheckList.join(" ");
+        }
+
+        this.$confirm(text, "提示", {
           type: "warning",
+          dangerouslyUseHTMLString: true,
         }).then(() => {
           const {
             equipmentCode,
