@@ -1468,7 +1468,7 @@ export default {
       let item = this.formData.wipCrystalCheckSampleDatas[index];
       let data;
       if (item.resC)
-        data = (((item.halfRes - item.resC) / item.resC) * 100).toFixed(3);
+        data = Math.abs(((item.halfRes - item.resC) / item.resC) * 100).toFixed(3);
       this.$set(
         this.formData.wipCrystalCheckSampleDatas[index],
         "halfRrg",
@@ -1479,14 +1479,14 @@ export default {
       let item = this.formData.wipCrystalCheckSampleDatas[index];
       let data;
       if (item.resC)
-        data = (((item.resE - item.resC) / item.resC) * 100).toFixed(3);
+        data = Math.abs(((item.resE - item.resC) / item.resC) * 100).toFixed(3);
       this.$set(this.formData.wipCrystalCheckSampleDatas[index], "rrg", data);
     },
     calcTargetDeviation(index) {
       let item = this.formData.wipCrystalCheckSampleDatas[index];
       let data;
       if (item.res)
-        data = (((item.resC - item.res) / item.res) * 100).toFixed(3);
+        data = Math.abs(((item.resC - item.res) / item.res) * 100).toFixed(3);
       this.$set(
         this.formData.wipCrystalCheckSampleDatas[index],
         "targetDeviation",
