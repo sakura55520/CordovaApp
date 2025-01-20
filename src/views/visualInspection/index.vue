@@ -1292,6 +1292,7 @@ export default {
         ...item,
         crystalDensity:
           item.crystalDensity || this.getCrystalDensity(item.samplePosition),
+        flaw: item.flaw || '无'
       }));
 
       this.$set(

@@ -1196,6 +1196,7 @@ export default {
             item.crystalDensity || this.getCrystalDensity(item.samplePosition),
           sampleWeight,
           number,
+          flaw: item.flaw || '无'
         };
       });
 
