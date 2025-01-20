@@ -128,7 +128,7 @@
                 </div>
               </el-form-item>
               <el-form-item
-                label="检测实测长度"
+                label="长度MIN"
                 prop="originLength"
                 class="item"
                 label-width="120px"
@@ -140,6 +140,22 @@
                     :disabled="!enableMap.originLength"
                     @input="handleLengthChange"
                     v-direction="{ x: 2, y: 1 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="长度MAX"
+                prop="maxLength"
+                class="item"
+                label-width="120px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.maxLength"
+                    v-direction="{ x: 3, y: 1 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -693,7 +709,7 @@
             <div class="form-title">参数说明</div>
             <div class="row">合格长度计算公式：<br /></div>
             <div class="row">
-              合格长度（{{ formData.qualifiedLength }} mm） = 检测实测长度（{{
+              合格长度（{{ formData.qualifiedLength }} mm） = 长度MIN（{{
                 formData.originLength
               }}
               mm） - 崩边长度（{{ formData.chippingLength }} mm） - 椭圆长度（{{
@@ -740,6 +756,7 @@ export default {
         weighingQty: null,
         planLength: null,
         originLength: null,
+        maxLength: null,
         chippingLength: null,
         ellipticLength: null,
         qualifiedLength: null,
@@ -795,7 +812,14 @@ export default {
         originLength: [
           {
             required: true,
-            message: "检测实测长度不能为空",
+            message: "长度MIN不能为空",
+            trigger: "change",
+          },
+        ],
+        maxLength: [
+          {
+            required: true,
+            message: "长度MAX不能为空",
             trigger: "change",
           },
         ],
