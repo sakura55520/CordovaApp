@@ -237,6 +237,7 @@ import Render from "@/components/renderForm/render.vue";
 import { isEmpty, debounce, get } from "lodash-es";
 import * as Api from "@/api/inStation";
 import moment from "moment";
+import { getSeleteData } from "@/utils/select";
 
 export default {
   name: "TabItem",
@@ -268,6 +269,8 @@ export default {
     return {
       detailForm: {},
       activeCollapse: ["0"],
+      wipSwitches: [],
+      dismantleFurnaceCheck: null,
     };
   },
   computed: {
@@ -281,6 +284,13 @@ export default {
   },
   created() {
     this.activeCollapse = ["0"];
+    getSeleteData("wipSwitches", this.wipSwitches).then(() => {
+      let dismantleFurnaceCheckMatched = this.wipSwitches.find(
+        (item) => item.name === "dismantleFurnaceCheck"
+      );
+      dismantleFurnaceCheckMatched &&
+        (this.dismantleFurnaceCheck = dismantleFurnaceCheckMatched.value);
+    });
   },
   methods: {
     getExtsRequired(formItem, recordItem, recordIdx) {
@@ -294,7 +304,7 @@ export default {
       else return formItem.required;
     },
     getTechsRequired(formItem, recordItem, recordIdx) {
-      if (this.stepName == '收尾' && formItem.extKey === "收尾结束时-平均拉速")
+      if (this.stepName == "收尾" && formItem.extKey === "收尾结束时-平均拉速")
         return true;
       else return formItem.required;
     },
@@ -420,6 +430,14 @@ export default {
       });
     },
     async valid() {
+      if (
+        this.dismantleFurnaceCheck === "打开" &&
+        this.stepName === "拆炉" &&
+        isEmpty(this.stepData)
+      ) {
+        this.$message.warning(this.stepName + "记录不能为空");
+        return false;
+      }
       if (this.stepName === "冷却" && isEmpty(this.stepData)) {
         this.$message.warning(this.stepName + "记录不能为空");
         return false;
