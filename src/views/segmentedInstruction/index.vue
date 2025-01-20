@@ -806,8 +806,10 @@
                         )
                       ),
                     }"
-                    v-if="scope.row.type === 0"
                     v-model="scope.row.headCarbonRate"
+                    @change="
+                      (val) => handleCarbonRateChange('head', scope.$index, val)
+                    "
                     v-direction="{ x: 14, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -855,8 +857,11 @@
                             )
                           ),
                         }"
-                        v-if="scope.row.type === 0"
                         v-model="scope.row.tailCarbonRate"
+                        @change="
+                          (val) =>
+                            handleCarbonRateChange('tail', scope.$index, val)
+                        "
                         v-direction="{ x: 15, y: scope.$index }"
                         v-trim
                       ></el-input>
@@ -1490,6 +1495,10 @@ export default {
       kValueList: [],
       lineList: [],
       detailMarginOffset: 0,
+      headAndTailCarbonRate: {
+        headCarbonRate: null,
+        tailCarbonRate: null,
+      },
       headAndTailOi: {
         head79oi: null,
         head83oi: null,
@@ -1607,12 +1616,11 @@ export default {
     },
     headCS() {
       let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
-      const foundItem = (
+      const foundItem =
         reverseDetails.find(
           (item) =>
             item.type === "头尾样片" && item.sampleIdentification === "H"
-        ) || {}
-      );
+        ) || {};
       return foundItem ? foundItem.cs : null;
     },
     lastSegmentIndex() {
@@ -1915,7 +1923,7 @@ export default {
         this.checkInfo = list[0].details;
       }
 
-      this.initOiAndRrv();
+      this.initOiAndRrvAndCarbonRate();
 
       this.wipCrystalCheckSampleRangeDtos = cloneDeep(
         this.formData.wipCrystalCheckSampleRangeDtos || []
@@ -1948,6 +1956,19 @@ export default {
             tail83oi = this.headAndTailOi.tail83oi;
           }
 
+          let headCarbonRate = this.calcCarbonRate(item.head);
+          let tailCarbonRate = this.calcCarbonRate(item.tail);
+
+          if (index === 0) {
+            headCarbonRate = this.headAndTailCarbonRate.headCarbonRate;
+          }
+          if (
+            index ===
+            this.formData.wipCrystalCheckSampleRangeDtos.length - 1
+          ) {
+            tailCarbonRate = this.headAndTailCarbonRate.tailCarbonRate;
+          }
+
           const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
             item.head,
             item.tail
@@ -1975,7 +1996,8 @@ export default {
             tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
             _reason: [],
             reason: "",
-            headCarbonRate: this.headCS,
+            headCarbonRate,
+            tailCarbonRate,
           };
         });
 
@@ -2093,6 +2115,8 @@ export default {
         let length = 0;
         let headOi = this.calcOi(headPosition);
         let tailOi = this.calcOi(tailPosition);
+        let headCarbonRate = this.calcCarbonRate(headPosition);
+        let tailCarbonRate = this.calcCarbonRate(tailPosition);
 
         const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
           headPosition,
@@ -2118,7 +2142,8 @@ export default {
           tailRrv: resistanceEdgeAndRrv.tailRrv,
           headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
           tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
-          headCarbonRate: this.headCS,
+          headCarbonRate,
+          tailCarbonRate,
           new: this.temp.type,
         };
         this.formData.segmentedInstructionDetailVos.unshift(item);
@@ -2128,6 +2153,7 @@ export default {
         if (list.length === 0) headPosition = 0;
         else headPosition = list[list.length - 1].tailPosition;
         let headOi = this.calcOi(headPosition);
+        let headCarbonRate = this.calcCarbonRate(headPosition);
 
         const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
           headPosition,
@@ -2151,7 +2177,8 @@ export default {
           tailRrv: resistanceEdgeAndRrv.tailRrv,
           headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
           tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
-          headCarbonRate: this.headCS,
+          headCarbonRate,
+          tailCarbonRate: null,
           new: this.temp.type,
         };
         this.formData.segmentedInstructionDetailVos.push(item);
@@ -2164,6 +2191,8 @@ export default {
       let length = tailPosition - headPosition;
       let headOi = this.calcOi(headPosition);
       let tailOi = this.calcOi(tailPosition);
+      let headCarbonRate = this.calcCarbonRate(headPosition);
+      let tailCarbonRate = this.calcCarbonRate(tailPosition);
 
       const resistanceEdgeAndRrv = this.getResistanceEdgeAndRrv(
         headPosition,
@@ -2189,7 +2218,8 @@ export default {
         tailRrv: resistanceEdgeAndRrv.tailRrv,
         headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
         tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
-        headCarbonRate: this.headCS,
+        headCarbonRate,
+        tailCarbonRate,
         new: this.temp.type,
       };
       this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
@@ -2213,6 +2243,10 @@ export default {
 
         list[index - 1].tail79oi = headOi[0];
         list[index - 1].tail83oi = headOi[1];
+
+        let headCarbonRate = this.calcCarbonRate(value);
+        list[index].headCarbonRate = headCarbonRate;
+        list[index - 1].tailCarbonRate = headCarbonRate;
       }
 
       for (const item of list) {
@@ -2256,6 +2290,10 @@ export default {
 
         list[index + 1].head79oi = tailOi[0];
         list[index + 1].head83oi = tailOi[1];
+
+        let tailCarbonRate = this.calcCarbonRate(value);
+        list[index].tailCarbonRate = tailCarbonRate;
+        list[index + 1].headCarbonRate = tailCarbonRate;
       }
 
       for (const item of list) {
@@ -2607,7 +2645,60 @@ export default {
         cloneSegmentedInstructionDetailVos
       );
     },
-    initOiAndRrv() {
+    calcCarbonRate(position) {
+      const { headCarbonRate, tailCarbonRate } = this.headAndTailCarbonRate;
+      const { length } = this.formData;
+      if (
+        (!headCarbonRate && headCarbonRate !== 0) ||
+        (!tailCarbonRate && tailCarbonRate !== 0) ||
+        (!position && position !== 0)
+      )
+        return null;
+
+      return Number(
+        headCarbonRate - ((headCarbonRate - tailCarbonRate) * position) / length
+      ).toFixed(3);
+    },
+    handleCarbonRateChange(type, index, val) {
+      if (type === "head" && index == 0) {
+        this.headAndTailCarbonRate.headCarbonRate = val;
+        this.refreshCarbonRate();
+      }
+      if (
+        type === "tail" &&
+        index === this.formData.segmentedInstructionDetailVos.length - 1
+      ) {
+        this.headAndTailCarbonRate.tailCarbonRate = val;
+        this.refreshCarbonRate();
+      }
+    },
+    refreshCarbonRate() {
+      let cloneSegmentedInstructionDetailVos =
+        this.formData.segmentedInstructionDetailVos.map((item, index) => {
+          let headCarbonRate = this.calcCarbonRate(item.headPosition);
+          let tailCarbonRate = this.calcCarbonRate(item.tailPosition);
+
+          if (index == 0) {
+            headCarbonRate = this.headAndTailCarbonRate.headCarbonRate;
+          }
+          if (index == this.formData.segmentedInstructionDetailVos.length - 1) {
+            tailCarbonRate = this.headAndTailCarbonRate.tailCarbonRate;
+          }
+
+          return {
+            ...item,
+            headCarbonRate,
+            tailCarbonRate,
+          };
+        });
+
+      this.$set(
+        this.formData,
+        "segmentedInstructionDetailVos",
+        cloneSegmentedInstructionDetailVos
+      );
+    },
+    initOiAndRrvAndCarbonRate() {
       let reverseDetails = (cloneDeep(this.checkInfo) || []).reverse();
       let reverseHeadIndex = reverseDetails.findIndex(
         (item) => item.type === "头尾样片" && item.sampleIdentification === "H"
@@ -2629,6 +2720,10 @@ export default {
       let headRrv = Math.abs(this.checkInfo[headIndex].rrg || 0).toFixed(2);
       let tailRrv = Math.abs(this.checkInfo[tailIndex].rrg || 0).toFixed(2);
       this.headAndTailRrv = { headRrv, tailRrv };
+
+      let headCarbonRate = this.checkInfo[headIndex].cs;
+      let tailCarbonRate = this.checkInfo[tailIndex].cs;
+      this.headAndTailCarbonRate = { headCarbonRate, tailCarbonRate };
     },
     getResistanceEdgeAndRrv(headPosition, tailPosition) {
       let headResistance = null;
