@@ -90,7 +90,7 @@ const componentChild = {
 }
 
 export default {
-  props: ['conf', 'propValue'],
+  props: ['conf', 'propValue', 'formItemIdx'],
   data() {
     return {
       dictList: []
@@ -118,6 +118,7 @@ export default {
         dataObject.attrs[key] = val
       }
     })
+    dataObject.props.formItemIdx = this.formItemIdx;
 
     // 数据字典
     if (confClone.dictCode) {

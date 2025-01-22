@@ -2,7 +2,7 @@
 <template>
   <el-row :gutter="8">
     <el-col v-if="!disabled" :span="9">
-      <el-form-item :label="calcScanLabel" class="pre-label">
+      <el-form-item :label="calcScanLabel" class="pre-label" :prop="'techs.' + formItemIdx + '.extValue.objScan.extValue'" :rules="[{ required, message: '请输入', trigger: 'blur'  }]">
         <CodeScanner v-model="valueScan" @has-done="fetchAccessory"/>
       </el-form-item>
     </el-col>
@@ -62,7 +62,12 @@ export default {
     disabled: {
       type: Boolean,
       default: false
-    }
+    },
+    required: {
+      type: Boolean,
+      default: false
+    },
+    formItemIdx: Number,
   },
   data() {
     return {

@@ -193,6 +193,7 @@
                 :prop="'techs.' + formItemIdx + '.extValue'"
               >
                 <Render
+                  :form-item-idx="formItemIdx"
                   :key="formItem.renderKey"
                   :conf="formItem"
                   :prop-value="formItem.extValue"
