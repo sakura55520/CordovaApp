@@ -122,15 +122,33 @@
               v-for="(formItem, formItemIdx) in recordItem.checks"
               :key="formItemIdx"
             >
-              <el-form-item :label="formItem.label" class="check-item">
+              <el-form-item
+                :label="formItem.label"
+                class="check-item"
+                :rules="[
+                  {
+                    required: formItem.required,
+                    message: '请选择',
+                    trigger: 'blur',
+                  },
+                ]"
+                :prop="'checks.' + formItemIdx + '.isError'"
+              >
                 <el-radio-group v-model="formItem.isError">
-                  <el-radio :label="false">正常</el-radio>
-                  <el-radio :label="true">异常</el-radio>
+                  <el-radio
+                    v-for="(item, index) in formItem.options"
+                    :key="index"
+                    :label="JSON.parse(item.value)"
+                    >{{ item.label }}
+                  </el-radio>
                 </el-radio-group>
               </el-form-item>
 
               <el-form-item
-                v-if="formItem.isError"
+                v-if="
+                  formItem.options.some((item) => item.label == '异常') &&
+                  formItem.isError
+                "
                 label="异常备注"
                 :rules="[
                   {
