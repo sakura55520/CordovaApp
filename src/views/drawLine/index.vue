@@ -39,7 +39,7 @@
                 <template slot="append">kg</template>
               </el-input>
             </el-form-item>
-            <el-form-item
+            <!-- <el-form-item
               label="位错反延线长度"
               prop="offsetLength"
               class="item"
@@ -51,7 +51,7 @@
               >
                 <template slot="append">mm</template>
               </el-input>
-            </el-form-item>
+            </el-form-item> -->
           </div>
           <el-form-item label="生产备注" class="form-item-cover">
             <el-input
@@ -75,7 +75,7 @@
               </div>
             </el-form-item>
             <el-form-item
-              label="实测长度"
+              label="划线长度"
               prop="actualMeasuredLength"
               class="item"
             >
