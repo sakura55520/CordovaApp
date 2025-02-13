@@ -79,7 +79,21 @@
                 </el-input>
               </div>
             </el-form-item>
-            <el-form-item label="晶体实测长度" prop="lengthQty" class="item">
+            <el-form-item
+              label="划线长度"
+              prop="lineLength"
+              class="item"
+            >
+              <div class="input">
+                <el-input
+                  class="value"
+                  v-model="formData.lineLength"
+                >
+                  <template slot="append">mm</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="截断实测长度" prop="lengthQty" class="item">
               <div class="input">
                 <el-input
                   class="value"
@@ -386,6 +400,7 @@ export default {
         totalQty: null,
         defectQty: null,
         originalLengthQty: null,
+        lineLength: null,
         dislocationIdentificationLength: null,
         productionRemark: null,
         headWeight: null,
