@@ -42,7 +42,7 @@
               </el-input>
             </el-form-item>
             <el-form-item
-              label="位错反延线长度"
+              label="位错/多晶反延线长度"
               prop="dislocationIdentificationLength"
               class="item"
             >
@@ -88,6 +88,7 @@
                 <el-input
                   class="value"
                   v-model="formData.lineLength"
+                  @change="calcDislocationIdentificationLength"
                 >
                   <template slot="append">mm</template>
                 </el-input>
@@ -833,6 +834,10 @@ export default {
           );
         }
       });
+      this.calcDislocationIdentificationLength()
+    },
+    calcDislocationIdentificationLength() {
+      this.formData.dislocationIdentificationLength = (this.formData.lineLength || 0) - (this.formData.lengthQty || 0)
     },
     calcNeedYH(val) {
       return val === "≤10" || val === "≤100" || val === "无";
