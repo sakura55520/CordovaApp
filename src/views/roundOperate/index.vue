@@ -290,19 +290,11 @@
                 </el-input>
               </el-form-item>
               <el-form-item label="偏离量mm" label-width="120px">
-                <el-select
+                <el-input
                   v-model="formData.deviation"
-                  @change="handleDeviationChange"
+                  type="number"
                   clearable
-                  @clear="handleDeviationClear"
-                >
-                  <el-option
-                    v-for="(item, index) in deviationOptions"
-                    :key="index"
-                    :label="item.value"
-                    :value="item.value"
-                  />
-                </el-select>
+                />
               </el-form-item>
               <el-form-item label="偏离扣减" label-width="100px">
                 <el-input
@@ -651,6 +643,44 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
+    calcCrystalPhaseReduction() {
+      let crystalPhaseReduction = 0;
+      let crystalDeviation = this.formData.crystalDeviation;
+      let deviation = this.formData.deviation;
+      this.deviationOptions.forEach((item) => {
+        let deviationMin = item.value.split("-")[0];
+        let deviationMax = item.value.split("-")[1];
+        let crystalDeviationMin = item.extendValue.split("-")[0];
+        let crystalDeviationMax = item.extendValue.split("-")[1];
+
+        if (deviation) {
+          if (
+            (deviationMin === "" ||
+              Number(deviation) >= Number(deviationMin)) &&
+            (deviationMax === "" || Number(deviation) < Number(deviationMax))
+          )
+            crystalPhaseReduction = item.extendValue1;
+        } else {
+          if (
+            (crystalDeviationMin === "" ||
+              Number(crystalDeviation) >= Number(crystalDeviationMin)) &&
+            (crystalDeviationMax === "" ||
+              Number(crystalDeviation) < Number(crystalDeviationMax))
+          )
+            crystalPhaseReduction = item.extendValue1;
+        }
+      });
+      return crystalPhaseReduction;
+    },
+  },
+  watch: {
+    calcCrystalPhaseReduction: {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        this.formData.crystalPhaseReduction = val;
+      },
+    },
   },
   created() {
     this.initKeyup();
@@ -688,9 +718,9 @@ export default {
       if (rollingCircleDiameterStatus == 0) {
         let deviationList = [];
         await getSeleteData("deviation_amount", deviationList);
-        let deviationOptions = deviationList
-          .filter((item) => item.name == rollingCircleDiameter)
-          .sort((a, b) => Number(a.value) - Number(b.value));
+        let deviationOptions = deviationList.filter(
+          (item) => item.name == rollingCircleDiameter
+        );
         if (isEmpty(deviationOptions))
           this.$message.warning("该滚圆直径目标未维护对应扣减关系");
         else this.deviationOptions = deviationOptions;
@@ -793,7 +823,7 @@ export default {
     },
     // 操作
     async handle(typeName) {
-      this.formData.deviation = this.formData.deviation || 0;
+      this.formData.deviation = this.formData.deviation || null;
       this.formData.crystalPhaseReduction =
         this.formData.crystalPhaseReduction || 0;
       this.formData.unRolledLen = this.formData.unRolledLen || 0;
@@ -877,12 +907,6 @@ export default {
     handlePrint(code) {
       this.printData.data = code;
       this.printVisible = true;
-    },
-    handleDeviationChange() {
-      const matched = this.deviationOptions.find(
-        (item) => item.value == this.formData.deviation
-      );
-      matched && (this.formData.crystalPhaseReduction = matched.extendValue1);
     },
     handleDeviationClear() {
       this.formData.crystalPhaseReduction = null;
