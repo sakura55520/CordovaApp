@@ -146,7 +146,6 @@
 
               <el-form-item
                 v-if="
-                  formItem.options.some((item) => item.label == '异常') &&
                   formItem.isError
                 "
                 label="异常备注"
