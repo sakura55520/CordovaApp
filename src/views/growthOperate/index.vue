@@ -52,6 +52,7 @@
             :can-add-record="calcAddRecordMap[stepName]"
             :crystal-growth-err-list="getStepErrList(stepName)"
             :all-step-data="steps"
+            :process-order-code="formData.processOrderCode"
           />
         </el-tab-pane>
         <el-tab-pane name="单晶异常">

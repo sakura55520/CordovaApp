@@ -283,6 +283,10 @@ export default {
       type: Object | null,
       required: true,
     },
+    processOrderCode: {
+      type: String,
+      required: true,
+    },
   },
   data() {
     return {
@@ -290,6 +294,7 @@ export default {
       activeCollapse: ["0"],
       wipSwitches: [],
       dismantleFurnaceCheck: null,
+      dismantleFurnaceFirstCheck: null,
     };
   },
   computed: {
@@ -309,6 +314,12 @@ export default {
       );
       dismantleFurnaceCheckMatched &&
         (this.dismantleFurnaceCheck = dismantleFurnaceCheckMatched.value);
+
+      let dismantleFurnaceFirstCheckMatched = this.wipSwitches.find(
+        (item) => item.name === "dismantleFurnaceFirstCheck"
+      );
+      dismantleFurnaceFirstCheckMatched &&
+        (this.dismantleFurnaceFirstCheck = dismantleFurnaceFirstCheckMatched.value);
     });
   },
   methods: {
@@ -450,7 +461,7 @@ export default {
     },
     async valid() {
       if (
-        this.dismantleFurnaceCheck === "打开" &&
+        (this.dismantleFurnaceCheck === "打开" || this.dismantleFurnaceFirstCheck === '打开' && this.processOrderCode.endsWith('1')) &&
         this.stepName === "拆炉" &&
         isEmpty(this.stepData)
       ) {
