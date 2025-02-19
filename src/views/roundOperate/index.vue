@@ -696,7 +696,8 @@ export default {
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
       if (res.data) {
-        fromData = res.data;
+        const { deductionStatus, calculateDiameterb } = JSON.parse(this.$route.query.fromData)
+        fromData = { ...res.data, deductionStatus, calculateDiameterb };
       } else {
         try {
           fromData = JSON.parse(this.$route.query.fromData);
@@ -704,7 +705,7 @@ export default {
           console.log(e);
         }
       }
-
+      
       this.formData = Object.assign({}, defaultForm, fromData);
 
       this.handleInitData();
@@ -713,21 +714,19 @@ export default {
       this.initLength();
       this.calcDegreesMinute();
 
-      const { rollingCircleDiameter, rollingCircleDiameterStatus } =
+      const { deductionStatus, calculateDiameterb } =
         this.formData;
-      if (rollingCircleDiameterStatus == 0) {
+      if (deductionStatus == '是') {
+        if(!calculateDiameterb) return this.$message.warning("计算直径(B工单)不存在")
         let deviationList = [];
         await getSeleteData("deviation_amount", deviationList);
         let deviationOptions = deviationList.filter(
-          (item) => item.name == rollingCircleDiameter
+          (item) => item.name == calculateDiameterb
         );
         if (isEmpty(deviationOptions))
-          this.$message.warning("该滚圆直径目标未维护对应扣减关系");
+          this.$message.warning("该计算直径未维护对应扣减关系");
         else this.deviationOptions = deviationOptions;
-      } else if (rollingCircleDiameterStatus == 1)
-        this.$message.warning("该晶锭未匹配B工单");
-      else if (rollingCircleDiameterStatus == 2)
-        this.$message.warning("该B工单未维护滚圆直径目标");
+      }
     },
     initKeyup() {
       let direction = this.$getDirection();
