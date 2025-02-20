@@ -717,6 +717,7 @@ export default {
       this.calcDegreesMinute();
 
       const { deductionStatus, calculateDiameterb } = this.formData;
+      if(!deductionStatus) return this.$message.warning('偏离是否扣减未配置')
       if (deductionStatus == "是") {
         if (!calculateDiameterb)
           return this.$message.warning("计算直径(B工单)不存在");
