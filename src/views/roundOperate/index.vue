@@ -696,7 +696,9 @@ export default {
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
       if (res.data) {
-        const { deductionStatus, calculateDiameterb } = JSON.parse(this.$route.query.fromData)
+        const { deductionStatus, calculateDiameterb } = JSON.parse(
+          this.$route.query.fromData
+        );
         fromData = { ...res.data, deductionStatus, calculateDiameterb };
       } else {
         try {
@@ -705,7 +707,7 @@ export default {
           console.log(e);
         }
       }
-      
+
       this.formData = Object.assign({}, defaultForm, fromData);
 
       this.handleInitData();
@@ -714,10 +716,10 @@ export default {
       this.initLength();
       this.calcDegreesMinute();
 
-      const { deductionStatus, calculateDiameterb } =
-        this.formData;
-      if (deductionStatus == '是') {
-        if(!calculateDiameterb) return this.$message.warning("计算直径(B工单)不存在")
+      const { deductionStatus, calculateDiameterb } = this.formData;
+      if (deductionStatus == "是") {
+        if (!calculateDiameterb)
+          return this.$message.warning("计算直径(B工单)不存在");
         let deviationList = [];
         await getSeleteData("deviation_amount", deviationList);
         let deviationOptions = deviationList.filter(
@@ -776,12 +778,13 @@ export default {
       this.formData.cMinute = cDegreesMinute[1];
       this.formData.dDegrees = dDegreesMinute[0];
       this.formData.dMinute = dDegreesMinute[1];
-      this.formData.crystalDeviation = (
+      let result =
         Math.sqrt(
           Math.pow(crystallinePhaseA - crystallinePhaseC, 2) +
             Math.pow(crystallinePhaseB - crystallinePhaseD, 2)
-        ) / 2
-      ).toFixed(2);
+        ) / 2;
+      if (result + "" == NaN) this.formData.crystalDeviation = null;
+      else this.formData.crystalDeviation = result.toFixed(2);
     },
     calcCrystallinePhase() {
       const {
@@ -803,13 +806,13 @@ export default {
       this.formData.crystallinePhaseB = crystallinePhaseB;
       this.formData.crystallinePhaseC = crystallinePhaseC;
       this.formData.crystallinePhaseD = crystallinePhaseD;
-
-      this.formData.crystalDeviation = (
+      let result =
         Math.sqrt(
           Math.pow(crystallinePhaseA - crystallinePhaseC, 2) +
             Math.pow(crystallinePhaseB - crystallinePhaseD, 2)
-        ) / 2
-      ).toFixed(2);
+        ) / 2;
+      if (result + "" == NaN) this.formData.crystalDeviation = null;
+      else this.formData.crystalDeviation = result.toFixed(2);
     },
     formatDegree(value) {
       value = Math.abs(value);
