@@ -1382,6 +1382,7 @@ export default {
         this.formData.chippingLength -
         this.formData.ellipticLength
       ).toFixed(2);
+      if(this.$route.query.view) return;
       this.calcPlanWeight();
     },
     async save() {
