@@ -678,6 +678,7 @@ export default {
       immediate: true,
       deep: true,
       handler(val) {
+        if(this.$route.query.view) return;
         this.formData.crystalPhaseReduction = val;
       },
     },
@@ -716,6 +717,7 @@ export default {
       this.initLength();
       this.calcDegreesMinute();
 
+      if(this.$route.query.view) return;
       const { deductionStatus, calculateDiameterb } = this.formData;
       if(!deductionStatus) return this.$message.warning('偏离是否扣减未配置')
       if (deductionStatus == "是") {
