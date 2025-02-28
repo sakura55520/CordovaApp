@@ -2577,12 +2577,12 @@ export default {
       let oi_79 = Number(
         head79oi - ((head79oi - tail79oi) * position) / length
       ).toFixed(3);
-      let oi_83 = (oi_79 * 0.509).toFixed(3);
+      let oi_83 = (oi_79 * 0.509).toFixed(2);
       return [oi_79, oi_83];
     },
     handleOiChange(type, index, val) {
       if (type === "head") {
-        let oi_83 = (val * 0.509).toFixed(3);
+        let oi_83 = (val * 0.509).toFixed(2);
         if (index == 0) {
           this.headAndTailOi.head79oi = val;
           this.headAndTailOi.head83oi = oi_83;
@@ -2596,7 +2596,7 @@ export default {
         }
       }
       if (type === "tail") {
-        let oi_83 = (val * 0.509).toFixed(3);
+        let oi_83 = (val * 0.509).toFixed(2);
         if (index === this.formData.segmentedInstructionDetailVos.length - 1) {
           this.headAndTailOi.tail79oi = val;
           this.headAndTailOi.tail83oi = oi_83;
@@ -2712,9 +2712,9 @@ export default {
       if (reverseHeadIndex === -1 || reverseTailIndex === -1) return;
 
       let head79oi = this.checkInfo[headIndex].oiC;
-      let head83oi = (head79oi * 0.509).toFixed(3);
+      let head83oi = (head79oi * 0.509).toFixed(2);
       let tail79oi = this.checkInfo[tailIndex].oiC;
-      let tail83oi = (tail79oi * 0.509).toFixed(3);
+      let tail83oi = (tail79oi * 0.509).toFixed(2);
       this.headAndTailOi = { head79oi, head83oi, tail79oi, tail83oi };
 
       let headRrv = Math.abs(this.checkInfo[headIndex].rrg || 0).toFixed(2);
