@@ -548,6 +548,7 @@
                     v-model="scope.row.headResistance"
                     v-direction="{ x: 8, y: scope.$index }"
                     v-trim
+                    @change="handleResistanceChange('head', scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -577,6 +578,7 @@
                     v-model="scope.row.tailResistance"
                     v-direction="{ x: 9, y: scope.$index }"
                     v-trim
+                    @change="handleResistanceChange('tail', scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -618,6 +620,7 @@
                     v-model="scope.row.headResistanceEdge"
                     v-direction="{ x: 10, y: scope.$index }"
                     v-trim
+                    @change="handleResistanceChange('head', scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -647,6 +650,7 @@
                     v-model="scope.row.tailResistanceEdge"
                     v-direction="{ x: 11, y: scope.$index }"
                     v-trim
+                    @change="handleResistanceChange('tail', scope.$index)"
                   ></el-input>
                 </template>
               </el-table-column>
@@ -2745,7 +2749,14 @@ export default {
           headResistance = headCheckInfoList[headCheckInfoList.length - 1].resC;
           headResistanceEdge =
             headCheckInfoList[headCheckInfoList.length - 1].resE;
-          headRrv = headCheckInfoList[headCheckInfoList.length - 1].rrg;
+          if (headResistance && headResistance != "0")
+            headRrv = Math.abs(
+              (
+                (((headResistanceEdge || 0) - headResistance) /
+                  headResistance) *
+                100
+              ).toFixed(3)
+            );
         }
 
         const tailCheckInfoList = this.checkInfo.filter(
@@ -2755,7 +2766,14 @@ export default {
         if (!isEmpty(tailCheckInfoList)) {
           tailResistance = tailCheckInfoList[0].resC;
           tailResistanceEdge = tailCheckInfoList[0].resE;
-          tailRrv = tailCheckInfoList[0].rrg;
+          if (tailResistance && tailResistance != "0")
+            tailRrv = Math.abs(
+              (
+                (((tailResistanceEdge || 0) - tailResistance) /
+                  tailResistance) *
+                100
+              ).toFixed(3)
+            );
         }
       }
       return {
@@ -2846,6 +2864,44 @@ export default {
         ...fromData,
       };
       this.handleInitData();
+    },
+    handleResistanceChange(type, index) {
+      let {
+        headResistance,
+        headResistanceEdge,
+        tailResistance,
+        tailResistanceEdge,
+      } = this.formData.segmentedInstructionDetailVos[index];
+      if (type == "head") {
+        let headRrv = null;
+        if (headResistance && headResistance != "0")
+          headRrv = Math.abs(
+            (
+              (((headResistanceEdge || 0) - headResistance) / headResistance) *
+              100
+            ).toFixed(3)
+          );
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "headRrv",
+          headRrv
+        );
+      }
+      if (type == "tail") {
+        let tailRrv = null;
+        if (tailResistance && tailResistance != "0")
+          tailRrv = Math.abs(
+            (
+              (((tailResistanceEdge || 0) - tailResistance) / tailResistance) *
+              100
+            ).toFixed(3)
+          );
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "tailRrv",
+          tailRrv
+        );
+      }
     },
   },
 };
