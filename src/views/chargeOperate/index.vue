@@ -306,7 +306,7 @@ import SelectUserinfo from "@/components/select_userinfo";
 import * as Api from "@/api/inStation";
 import { cloneDeep, round, isEmpty } from "lodash-es";
 import moment from "moment";
-import { getProcessNo } from "@/api/tool";
+import { getProcessNo, getWorkOrderInfo } from "@/api/tool";
 import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
 import PhotoRemarkNew from "@/views/components/photoRemarkNew";
@@ -581,15 +581,26 @@ export default {
         );
       callback();
     },
-    getProcessNo() {
-      getProcessNo({
+    async getProcessNo() {
+      let info = {}
+      let resOrderInfo = await getWorkOrderInfo({ page: 1, rows: 10, search_EQ_batchNo: this.formData.processOrderCode })
+      if(resOrderInfo.data.rows.length != 0) {
+        info = resOrderInfo.data.rows[0]
+      }
+      let resProcessNo = await getProcessNo({
         search_EQ_equipmentCode:
           this.formData.deviceCode || this.$route.query.deviceCode,
+        search_EQ_crystalOrientation: info.crystalOrientation,
+        search_EQ_diameter: info.diameter,
+        search_EQ_dopant: info.dopant,
+        search_EQ_pullingCrystalMethod: info.pullingCrystalMethod,
+        search_EQ_enabled: true,
         page: 1,
         rows: 1000,
-      }).then((res) => {
-        this.technologyList = res.data.rows.map(({ processNo }) => processNo);
       });
+      this.technologyList = (resProcessNo.data.rows || []).map(({ processNo }) => processNo);
+      if(this.technologyList.length == 1)
+        this.formData.technologyNumber = this.technologyList[0]
     },
     async handleSeedCrystalNumberCodeScan(val) {
       let res = await Api.getSeed({ uniqueCode: val });

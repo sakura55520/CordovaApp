@@ -21,3 +21,11 @@ export function getProcessNo(params) {
     params
   })
 }
+
+export function getWorkOrderInfo(params) {
+  return request({
+    url: `/plan/workOrderSchedule/listByPage`,
+    method: "get",
+    params,
+  });
+}
