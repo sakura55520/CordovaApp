@@ -422,7 +422,7 @@ export default {
 
 .direction {
   position: absolute;
-  top: 20px;
+  top: 30px;
   right: 50px;
 }
 
