@@ -68,15 +68,13 @@
     </div>
 
     <el-dialog :visible.sync="previewDialog" title="预览" width="95%">
-      <el-select
+      <el-button
         class="direction"
-        v-model="direction"
-        style="width: 100px"
-        @change="handleDirectionChange"
-      >
-        <el-option label="横向" value="horizontal" />
-        <el-option label="纵向" value="vertical" />
-      </el-select>
+        type="text"
+        icon="el-icon-refresh-right"
+        :disabled="false"
+        @click="handleTransformClick"
+      />
       <div class="preview">
         <div
           class="btn"
@@ -94,10 +92,10 @@
         >
           <img
             ref="img"
-            :class="imgClass"
             :style="{
               width: imgWidth ? imgWidth + 'px' : null,
               height: imgHeight ? imgHeight + 'px' : null,
+              transform: `rotate(${rotate}deg)`,
             }"
             :src="previewUrl"
           />
@@ -150,6 +148,7 @@ export default {
       imgHeight: null,
       imgClass: "",
       currentDistance: 0,
+      rotate: 0,
     };
   },
   computed: {
@@ -246,6 +245,10 @@ export default {
       this.selectIndex += 1;
       this.previewUrl = this.imageList[this.selectIndex].big_url;
     },
+    handleTransformClick() {
+      this.rotate = (this.rotate + 90) % 360;
+      this.handleDirectionChange();
+    },
     handleDirectionChange() {
       const imgRef = this.$refs["imgHidden"];
       const imgBoxRef = this.$refs["imgBox"];
@@ -255,26 +258,24 @@ export default {
       const boxWidth = imgBoxRef.clientWidth;
       const ratio = width > height ? width / height : height / width;
       if (width > height) {
-        if (this.direction === "vertical") {
-          this.imgClass = "rotate";
-          this.imgBoxHeight = boxWidth * ratio;
-          this.imgHeight = boxWidth;
-          this.imgWidth = boxWidth * ratio;
-        } else {
-          this.imgClass = "";
+        if (this.rotate == 0 || this.rotate == 180) {
           this.imgBoxHeight = boxWidth / ratio;
           this.imgWidth = boxWidth;
           this.imgHeight = boxWidth / ratio;
         }
+        if (this.rotate == 90 || this.rotate == 270) {
+          this.imgBoxHeight = boxWidth * ratio;
+          this.imgHeight = boxWidth;
+          this.imgWidth = boxWidth * ratio;
+        }
       }
       if (width < height) {
-        if (this.direction === "vertical") {
-          this.imgClass = "";
+        if (this.rotate == 0 || this.rotate == 180) {
           this.imgBoxHeight = boxWidth * ratio;
           this.imgWidth = boxWidth;
           this.imgHeight = boxWidth * ratio;
-        } else {
-          this.imgClass = "rotate";
+        }
+        if (this.rotate == 90 || this.rotate == 270) {
           this.imgBoxHeight = boxWidth / ratio;
           this.imgHeight = boxWidth;
           this.imgWidth = boxWidth / ratio;
