@@ -267,7 +267,7 @@ export default {
           this.imgWidth = boxWidth * ratio;
         }
       }
-      if (width < height) {
+      if (width <= height) {
         if (this.rotate == 0 || this.rotate == 180) {
           this.imgBoxHeight = boxWidth * ratio;
           this.imgWidth = boxWidth;
