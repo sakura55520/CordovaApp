@@ -142,11 +142,9 @@ export default {
       },
       cameraDialogVisible: false,
       selectIndex: null,
-      direction: null,
       imgBoxHeight: null,
       imgWidth: null,
       imgHeight: null,
-      imgClass: "",
       currentDistance: 0,
       rotate: 0,
     };
@@ -318,7 +316,6 @@ export default {
     },
     previewUrl: {
       handler() {
-        this.direction = this.defaultDirection || "horizontal";
         this.$nextTick(() => {
           this.handleDirectionChange();
         });
