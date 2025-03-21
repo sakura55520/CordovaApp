@@ -152,38 +152,31 @@ export default {
     handleChange(val) {
       let codes = val.split(",").filter((item) => item);
       if (isEmpty(codes)) return this.handleClear();
-      let code = codes[codes.length - 1];
-      let preCodes = codes.slice(0, codes.length - 1);
-      Api.findByCode({
-        code,
-      })
-        .then((res) => {
-          if (!res.data) {
-            this.$message.warning(`物料不存在`);
-            return;
-          }
-          if (res.data.materialTypeName !== this.type) {
-            this.$message.warning(`物料类型不是${this.type}`);
-            return;
-          }
-          if (res.data.status === 10) {
-            this.$message.warning(`该物料已使用`);
-            return;
-          }
-          if (preCodes.some((ele) => ele == res.data.code)) {
-            this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
-            return;
-          }
-          return res.data;
-        })
-        .then((data) => {
-          let currentCodes = codes;
-          if (data) this.emitHasDone(data.qty);
-          else currentCodes = preCodes;
-
-          this.codeText =
-            currentCodes.join(",") + (isEmpty(currentCodes) ? "" : ",");
+      let requestList = codes.map((code) => Api.findByCode({ code }));
+      Promise.all(requestList).then((list) => {
+        let message = "";
+        let result = [];
+        (list || []).forEach((item, index) => {
+          let data = item.data;
+          let code = codes[index];
+          if (!data) return (message += `[${code}]物料不存在\n`);
+          if (data.materialTypeName !== this.type)
+            return (message += `[${code}]物料类型不是${this.type}\n`);
+          if (data.status === 10) return (message += `[${code}]物料已使用\n`);
+          if (
+            (list || []).findIndex((ele) => (ele.data || {}).code == code) !=
+            index
+          )
+            return (message += `[${code}]物料的唯一码重复\n`);
+          result.push(data);
         });
+        if (message) this.$message.warning(message);
+        let qty = result.reduce((pre, cur) => pre + (cur.qty || 0), 0);
+        this.emitHasDone(qty);
+        let currentCodes = result.map((item) => item.code);
+        this.codeText =
+          currentCodes.join(",") + (isEmpty(currentCodes) ? "" : ",");
+      });
     },
     handleClear() {
       this.codeText = "";
