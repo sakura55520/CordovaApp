@@ -432,6 +432,7 @@ export default {
   position: absolute;
   top: 30px;
   right: 50px;
+  display: block;
 }
 
 .img-hidden {

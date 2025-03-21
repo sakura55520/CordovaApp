@@ -115,11 +115,28 @@ import {
 import { isEmpty } from "lodash-es";
 import { fetchStorage } from "@/utils/overStation";
 import { exitStation } from "@/api/overStationExecution/overStation.js";
+import { mapState } from "vuex";
 
 const defaultForm = {
   processingOrderCode: null,
   deviceCode: null,
   deviceTypeIds: null,
+};
+
+const storagePermMap = {
+  装料: "pad_charge_menu",
+  长晶: "pad_growth_menu",
+  单晶送付: "pad_sendInspect_menu",
+  切头尾取样: "pad_headAndTailSampling_menu",
+  晶锭检验: "pad_ingotDetection_menu",
+  分段指令: "pad_segmentedInstruction_menu",
+  割断: "pad_cutting_menu",
+  滚圆中转: "pad_roundTransfer_menu",
+  滚圆: "pad_round_menu",
+  加参: "pad_addParameter_menu",
+  入库检测: "pad_warehouseDetection_menu",
+  外观检测: "pad_visualInspection_menu",
+  划线: "pad_drawLine_menu",
 };
 
 export default {
@@ -138,6 +155,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      arrMenu: (state) => state.permission.arrMenu,
+    }),
     calcStationOperator() {
       const { skipStatus, wipStorageStatus } = this.storage;
       return calcStationOperator(skipStatus, wipStorageStatus);
@@ -222,7 +242,10 @@ export default {
         .then((res) => {
           if (!res.data || !res.data.length)
             return Message.warning("未查询到过站信息!");
-          const list = res.data;
+          const list = res.data.filter((item) => {
+            let code = storagePermMap[item.wipStorageName];
+            return this.arrMenu.includes(code);
+          });
           this.stationList = list;
           if (
             this.routerReplace &&
@@ -235,6 +258,10 @@ export default {
             if (!isEmpty(list)) {
               this.wipStorageName = list[0].wipStorageName;
               this.handleClickSite(list[0], 0);
+            } else {
+              this.$message.warning(
+                "未查询到过站信息或者当前用户没有权限访问该站点!"
+              );
             }
             this.visible = true;
           }
