@@ -112,28 +112,35 @@ export default {
             // alert(typeof resultCode)
             // alert(resultCode)
             if (resultCode === 1) {
-              Api.findByCode({
-                code: result,
-              }).then((res) => {
-                if (!res.data) {
-                  this.$message.warning(`物料不存在`);
-                  return;
-                }
-                if (res.data.materialTypeName !== this.type) {
-                  this.$message.warning(`物料类型不是${this.type}`);
-                  return;
-                }
-                if (res.data.status === 10) {
-                  this.$message.warning(`该物料已使用`);
-                  return;
-                }
-                if (this.codeText.indexOf(res.data.code) > -1) {
-                  this.$message.warning(`物料的唯一码[${res.data.code}]重复`);
-                  return;
-                }
-                if (!this.codeText) this.codeText = result;
-                else this.codeText += "," + result;
-                this.emitHasDone(res.data.qty);
+              let codes = this.codeText.split(",").filter((item) => item);
+              codes.push(result);
+              let requestList = codes.map((code) => Api.findByCode({ code }));
+
+              Promise.all(requestList).then((list) => {
+                let message = "";
+                let result = [];
+                (list || []).forEach((item, index) => {
+                  let data = item.data;
+                  let code = codes[index];
+                  if (!data) return (message += `[${code}]物料不存在\n`);
+                  if (data.materialTypeName !== this.type)
+                    return (message += `[${code}]物料类型不是${this.type}\n`);
+                  if (data.status === 10)
+                    return (message += `[${code}]物料已使用\n`);
+                  if (
+                    (list || []).findIndex(
+                      (ele) => (ele.data || {}).code == code
+                    ) != index
+                  )
+                    return (message += `[${code}]物料的唯一码重复\n`);
+                  result.push(data);
+                });
+                if (message) this.$message.warning(message);
+                let qty = result.reduce((pre, cur) => pre + (cur.qty || 0), 0);
+                this.emitHasDone(qty);
+                let currentCodes = result.map((item) => item.code);
+                this.codeText =
+                  currentCodes.join(",") + (isEmpty(currentCodes) ? "" : ",");
               });
             } else {
               this.$message.info("请重新扫码!");
