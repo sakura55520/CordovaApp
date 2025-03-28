@@ -905,7 +905,7 @@ export default {
         this.formData.unqualifiedReason = [];
       } else {
         this.formData.inStorageReason = "";
-        this.formData.unqualifiedReason = reason ? reason.split(",") : [];
+        this.formData.unqualifiedReason =  Array.isArray(reason) ? reason : JSON.parse(reason || '[]');
       }
 
       this.initLength();
@@ -1013,7 +1013,7 @@ export default {
       const { status, inStorageReason, unqualifiedReason } = this.formData;
       this.formData.reason = status
         ? inStorageReason
-        : unqualifiedReason.join(",");
+        : JSON.stringify(unqualifiedReason || []);
     },
     formatDegree(value) {
       value = Math.abs(value);

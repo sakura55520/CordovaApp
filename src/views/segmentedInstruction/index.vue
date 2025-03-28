@@ -2020,7 +2020,7 @@ export default {
               planWeight: this.$route.query.view
                 ? item.planWeight
                 : this.calcPlanWeight(length),
-              _reason: reason ? reason.split(",") : [],
+              _reason: Array.isArray(reason) ? reason : JSON.parse(reason || '[]')
             };
           });
         this.$set(
@@ -2789,7 +2789,7 @@ export default {
       this.$set(
         this.formData.segmentedInstructionDetailVos[index],
         "reason",
-        val.join(",")
+        JSON.stringify(val || [])
       );
     },
     getControlColor(key, val, type) {
