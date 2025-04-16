@@ -1246,7 +1246,7 @@
         >出站确认</el-button
       >
     </div>
-    <el-dialog :visible.sync="workOrderDialog" title="工单列表" width="80%">
+    <el-dialog :visible.sync="workOrderDialog" title="工单列表" width="100%">
       <el-table
         :data="workOrderList"
         :header-cell-style="{
@@ -1255,7 +1255,7 @@
         }"
         @row-click="rowClick"
       >
-        <el-table-column label="选择" width="80" fixed>
+        <el-table-column label="选择" width="55" fixed>
           <template slot-scope="scope">
             <el-radio v-model="selectedWorkOrder" :label="scope.row.workOrderNo"
               ><i />
@@ -1264,109 +1264,89 @@
         </el-table-column>
         <el-table-column
           label="工单编号"
-          min-width="120"
+          min-width="100"
           align="center"
           prop="workOrderNo"
-        />
-        <el-table-column
-          key="factoryNo"
-          prop="factoryNo"
-          label="工厂编号"
-          width="140"
-        />
-        <el-table-column
-          :formatter="formatErpType"
-          key="erpWorkOrderType"
-          prop="erpWorkOrderType"
-          label="工单类型"
-          width="120"
-        />
-        <el-table-column
-          key="workOrderTypeName"
-          prop="transMap.workOrderTypeName"
-          label="工单生产类型"
-          width="120"
-        />
-        <el-table-column
-          key="customerOrderNo"
-          prop="customerOrderNo"
-          label="订单编号"
-          width="120"
-        />
-        <el-table-column
-          key="customerNo"
-          prop="customerNo"
-          label="客户编号"
-          width="120"
-        />
-        <el-table-column
-          key="productName"
-          prop="productName"
-          label="产品名称"
-          width="200"
         />
         <el-table-column
           key="productNo"
           prop="productNo"
           label="产品编号"
-          width="120"
+          min-width="110"
         />
-        <el-table-column
-          key="productVersion"
-          prop="productVersion"
-          label="产品版本"
-          width="90"
-        />
-        <el-table-column key="qty" prop="qty" label="工单数量" width="90" />
+        <el-table-column key="qty" prop="qty" label="工单数量" width="85" />
         <el-table-column
           key="qualifiedWeight"
           prop="qualifiedWeight"
           label="分段合格数量"
           width="120"
         />
-        <el-table-column key="unit" prop="unit" label="工单单位" width="90" />
+        <el-table-column
+          key="rollingDiameter"
+          prop="rollingDiameter"
+          label="滚圆直径"
+          width="85"
+        />
+        <el-table-column
+          key="referenceSurfaceType"
+          prop="referenceSurfaceType"
+          label="参考面类型"
+          width="100"
+        />
+        <el-table-column
+          key="calculationDiameter"
+          prop="calculationDiameter"
+          label="计算直径"
+          width="85"
+        />
+        <el-table-column
+          key="resistanceUpperLimit"
+          prop="resistanceUpperLimit"
+          label="最大电阻率"
+          width="100"
+        />
+        <el-table-column
+          key="resistanceLowerLimit"
+          prop="resistanceLowerLimit"
+          label="最小电阻率"
+          width="100"
+        />
         <el-table-column
           key="planFinishDate"
           prop="planFinishDate"
           label="预计完工时间"
-          width="180"
-        />
-        <el-table-column
-          key="description"
-          prop="description"
-          label="工单说明"
-          min-width="200"
+          min-width="150"
         />
         <el-table-column
           key="gmtCreate"
           prop="gmtCreate"
           label="创建时间"
-          width="180"
+          min-width="150"
         />
         <el-table-column
           key="userCreate"
           prop="userCreate"
           label="创建人"
-          width="140"
+          width="80"
           show-overflow-tooltip
         />
         <el-table-column
           key="gmtUpdate"
           prop="gmtUpdate"
           label="修改时间"
-          width="180"
+          min-width="150"
         />
         <el-table-column
           key="userUpdate"
           prop="userUpdate"
           label="修改人"
-          width="140"
+          width="80"
         />
         <el-table-column
           key="status"
           prop="status"
           label="工单状态"
-          width="90"
+          width="85"
           fixed="right"
         >
           <template slot-scope="{ row }">
@@ -1381,25 +1361,11 @@
           </template>
         </el-table-column>
         <el-table-column
-          key="scheduleStatus"
-          prop="scheduleStatus"
-          label="排产状态"
-          width="90"
-          fixed="right"
-        >
-          <template slot-scope="{ row }">
-            <template v-if="!row.status">
-              <span v-if="row.scheduleStatus"
-                ><i class="icon-dot" style="background-color: #67c23a"></i
-                >可排产</span
-              >
-              <span v-else
-                ><i class="icon-dot" style="background-color: #909399"></i
-                >不可排产</span
-              >
-            </template>
-          </template>
-        </el-table-column>
+          key="segmentRequirements"
+          prop="segmentRequirements"
+          label="分段要求"
+          width="140"
+        />
       </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleCancel">取 消</el-button>
