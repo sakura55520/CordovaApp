@@ -1272,7 +1272,7 @@
           key="productNo"
           prop="productNo"
           label="产品编号"
-          min-width="110"
+          min-width="115"
         />
         <el-table-column key="qty" prop="qty" label="工单数量" width="85" />
         <el-table-column
@@ -1297,7 +1297,7 @@
           key="calculationDiameter"
           prop="calculationDiameter"
           label="计算直径"
-          width="85"
+          width="90"
         />
         <el-table-column
           key="resistanceUpperLimit"
