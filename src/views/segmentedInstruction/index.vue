@@ -1690,7 +1690,7 @@ export default {
     },
     rowClick(row) {
       this.selectedWorkOrder = row.workOrderNo;
-      this.selectRollingDiameter = row.rollingDiameter || row.growthDiameter;
+      this.selectRollingDiameter = row.calculationDiameter || row.growthDiameter;
     },
     async handleWorkOrderFocus(index) {
       if (this.workOrderDialog) return;
