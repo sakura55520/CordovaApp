@@ -294,6 +294,7 @@ export default {
       wipSwitches: [],
       dismantleFurnaceCheck: null,
       dismantleFurnaceFirstCheck: null,
+      evacuateFirstCheck: null,
     };
   },
   computed: {
@@ -319,6 +320,12 @@ export default {
       );
       dismantleFurnaceFirstCheckMatched &&
         (this.dismantleFurnaceFirstCheck = dismantleFurnaceFirstCheckMatched.value);
+
+      let evacuateFirstCheckMatched = this.wipSwitches.find(
+        (item) => item.name === "evacuateFirstCheck"
+      );
+      evacuateFirstCheckMatched &&
+        (this.evacuateFirstCheck = evacuateFirstCheckMatched.value);
     });
   },
   methods: {
@@ -462,6 +469,14 @@ export default {
       if (
         (this.dismantleFurnaceCheck === "打开" || this.dismantleFurnaceFirstCheck === '打开' && this.processOrderCode.endsWith('1')) &&
         this.stepName === "拆炉" &&
+        isEmpty(this.stepData)
+      ) {
+        this.$message.warning(this.stepName + "记录不能为空");
+        return false;
+      }
+      if (
+        (this.evacuateFirstCheck === '打开' && this.processOrderCode.endsWith('1')) &&
+        this.stepName === "抽真空" &&
         isEmpty(this.stepData)
       ) {
         this.$message.warning(this.stepName + "记录不能为空");
