@@ -651,7 +651,7 @@ export default {
       ).value;
 
       this.handleIngotWeightChange();
-      this.handleLengthChange();
+      if (!this.$route.query.view) this.handleLengthChange();
       this.fetchSwitchDict();
     },
     async handleCheck() {
