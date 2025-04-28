@@ -283,6 +283,47 @@
                 </div>
               </el-form-item>
             </div>
+
+            <div class="row">
+              <el-form-item
+                label="晶锭有效等径长度"
+                label-width="160px"
+                prop="length"
+                class="item"
+                :rules="[
+                  {
+                    required: true,
+                    message: '晶锭有效等径长度不能为空',
+                    trigger: 'change',
+                  },
+                ]"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.length"
+                    @input="handleLengthChange"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <el-form-item
+                label="晶锭理论重量"
+                prop="theoreticalWeight"
+                class="item"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    disabled
+                    v-model="formData.theoreticalWeight"
+                  >
+                    <template slot="append">kg</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+            </div>
           </div>
 
           <div class="form">
@@ -610,6 +651,7 @@ export default {
       ).value;
 
       this.handleIngotWeightChange();
+      this.handleLengthChange();
       this.fetchSwitchDict();
     },
     async handleCheck() {
@@ -717,6 +759,16 @@ export default {
           (totalPreIngotWeight || 0) -
           (totalShoulderWeight || 0)
         ).toFixed(3);
+    },
+    handleLengthChange() {
+      this.$set(
+        this.formData,
+        "theoreticalWeight",
+        (
+          ((this.formData.length || 0) / 1000) *
+          (this.formData.theoryQtyCoefficient || 0)
+        ).toFixed(3)
+      );
     },
   },
 };
