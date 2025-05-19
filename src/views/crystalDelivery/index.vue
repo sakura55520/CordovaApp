@@ -371,6 +371,8 @@
             </div>
             <br />
             <div class="row"><b>埚底料毛重</b>：称重，可能包含坩埚碎片</div>
+            <div class="row"><b>本次吊肩重量</b>：{{ formData.shoulderWeight }} kg</div>
+            <div v-if="!$route.query.view" class="row"><b>排产连尾重量</b>：{{ formData.batchQuantity }} kg</div>
           </div>
         </el-form>
       </div>
@@ -610,6 +612,8 @@ export default {
       bottomMaterialDifference: null,
       printVisible: false,
       printData: { data: null },
+      batchQuantityDifference: null,
+      batchQuantityCheck: null,
     };
   },
   computed: {
@@ -650,6 +654,12 @@ export default {
         (item) => item.name === "bottomMaterialDifference"
       ).value;
 
+      this.batchQuantityDifference = wipSwitches.find(
+        (item) => item.name === "batchQuantityDifference"
+      ).extendValue;
+      this.batchQuantityCheck = wipSwitches.find(
+        (item) => item.name === "batchQuantityDifference"
+      ).value;
       this.handleIngotWeightChange();
       if (!this.$route.query.view) this.handleLengthChange();
       this.fetchSwitchDict();
@@ -657,7 +667,7 @@ export default {
     async handleCheck() {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
-      let { totalBottomMaterialGrossWeight, bottomMaterialNetWeight } =
+      let { totalBottomMaterialGrossWeight, bottomMaterialNetWeight, ingotWeight, shoulderWeight, batchQuantity } =
         this.formData;
       if (
         this.formData.end &&
@@ -671,6 +681,30 @@ export default {
       }
       if (Number(totalBottomMaterialGrossWeight) < 0)
         return this.$message.warning(`埚底料净重不能小于0kg`);
+
+      if (
+        this.batchQuantityCheck == '打开' &&
+        !this.formData.end &&
+        Math.abs((ingotWeight || 0) + (shoulderWeight || 0) - (batchQuantity || 0)) >
+          Number(this.batchQuantityDifference)
+      ) {
+        this.$message.warning(
+          `晶锭称重(${ingotWeight}kg) + 吊肩重量(${shoulderWeight}kg) 与 排产连尾重量(${batchQuantity})的差值不能超过：${this.batchQuantityDifference}kg`
+        );
+        return;
+      }
+
+      if (
+        this.batchQuantityCheck == '打开' &&
+        this.formData.end &&
+        Math.abs((ingotWeight || 0) + (shoulderWeight || 0) + (totalBottomMaterialGrossWeight || 0) - (batchQuantity || 0)) >
+          Number(this.batchQuantityDifference)
+      ) {
+        this.$message.warning(
+          `晶锭称重(${ingotWeight}kg) + 吊肩重量(${shoulderWeight}kg) + 埚底料净重(${totalBottomMaterialGrossWeight}) 与 排产连尾重量(${batchQuantity})的差值不能超过：${this.batchQuantityDifference}kg`
+        );
+        return;
+      }
       await this.$confirm("确认提交当前操作数据?", "提示", {
         type: "warning",
       });
