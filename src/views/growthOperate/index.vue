@@ -192,6 +192,8 @@ export default {
           },
         ],
       },
+      wipSwitches: [],
+      evacuateFirstCheck: null,
     };
   },
   computed: {
@@ -281,6 +283,14 @@ export default {
   },
   methods: {
     async init() {
+      getSeleteData("wipSwitches", this.wipSwitches).then(() => {
+        let evacuateFirstCheckMatched = this.wipSwitches.find(
+          (item) => item.name === "evacuateFirstCheck"
+        );
+        evacuateFirstCheckMatched &&
+          (this.evacuateFirstCheck = evacuateFirstCheckMatched.value);
+      });
+
       // 长晶输入框是否可以输入
       const enabledList = [];
       await getSeleteData("isEnabledGrowthInput", enabledList);
@@ -752,6 +762,14 @@ export default {
       }
     },
     async validAll() {
+      if (
+        this.evacuateFirstCheck === "打开" &&
+        this.formData.processOrderCode.endsWith("1") &&
+        !this.calcStepNameList.some((item) => item == "抽真空")
+      ) {
+        this.$message.warning("抽真空记录不能为空");
+        return false;
+      }
       for (const ref of this.$refs.TabItem) {
         let valid = await ref.valid();
         if (!valid) return false;
