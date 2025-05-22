@@ -685,11 +685,11 @@ export default {
       if (
         this.batchQuantityCheck == '打开' &&
         !this.formData.end &&
-        Math.abs((ingotWeight || 0) + (shoulderWeight || 0) - (batchQuantity || 0)) >
+        Math.abs(Number(ingotWeight || 0) + Number(shoulderWeight || 0) - Number(batchQuantity || 0)) >
           Number(this.batchQuantityDifference)
       ) {
         this.$message.warning(
-          `晶锭称重(${ingotWeight}kg) + 吊肩重量(${shoulderWeight}kg) 与 排产连尾重量(${batchQuantity})的差值不能超过：${this.batchQuantityDifference}kg`
+          `晶锭称重(${ingotWeight}kg) + 吊肩重量(${shoulderWeight}kg) 与 排产连尾重量(${batchQuantity}kg)的差值不能超过：${this.batchQuantityDifference}kg`
         );
         return;
       }
@@ -697,11 +697,11 @@ export default {
       if (
         this.batchQuantityCheck == '打开' &&
         this.formData.end &&
-        Math.abs((ingotWeight || 0) + (shoulderWeight || 0) + (totalBottomMaterialGrossWeight || 0) - (batchQuantity || 0)) >
+        Math.abs(Number(ingotWeight || 0) + Number(shoulderWeight || 0) + Number(totalBottomMaterialGrossWeight || 0) - (batchQuantity || 0)) >
           Number(this.batchQuantityDifference)
       ) {
         this.$message.warning(
-          `晶锭称重(${ingotWeight}kg) + 吊肩重量(${shoulderWeight}kg) + 埚底料净重(${totalBottomMaterialGrossWeight}) 与 排产连尾重量(${batchQuantity})的差值不能超过：${this.batchQuantityDifference}kg`
+          `晶锭称重(${ingotWeight}kg) + 吊肩重量(${shoulderWeight}kg) + 埚底料净重(${totalBottomMaterialGrossWeight}) 与 排产连尾重量(${batchQuantity}kg)的差值不能超过：${this.batchQuantityDifference}kg`
         );
         return;
       }
