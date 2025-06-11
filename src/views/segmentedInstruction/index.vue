@@ -1484,31 +1484,37 @@ export default {
           key: "headResistance",
           name: "头部电阻率",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
         {
           key: "tailResistance",
           name: "尾部电阻率",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
         {
           key: "head79oi",
           name: "79oi头",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
         {
           key: "tail79oi",
           name: "79oi尾",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
         {
           key: "headCarbonRate",
           name: "头碳含量",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
         {
           key: "tailCarbonRate",
           name: "尾碳含量",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
         {
           key: "minorityCarrierLifetime",
@@ -1519,11 +1525,13 @@ export default {
           key: "headRrv",
           name: "RRV头",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
         {
           key: "tailRrv",
           name: "RRV尾",
           from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
         },
       ],
       controlMap: {
@@ -1690,7 +1698,8 @@ export default {
     },
     rowClick(row) {
       this.selectedWorkOrder = row.workOrderNo;
-      this.selectRollingDiameter = row.calculationDiameter || row.growthDiameter;
+      this.selectRollingDiameter =
+        row.calculationDiameter || row.growthDiameter;
     },
     async handleWorkOrderFocus(index) {
       if (this.workOrderDialog) return;
@@ -1986,7 +1995,9 @@ export default {
               planWeight: this.$route.query.view
                 ? item.planWeight
                 : this.calcPlanWeight(length),
-              _reason: Array.isArray(reason) ? reason : JSON.parse(reason || '[]')
+              _reason: Array.isArray(reason)
+                ? reason
+                : JSON.parse(reason || "[]"),
             };
           });
         this.$set(
@@ -2363,6 +2374,7 @@ export default {
       let outControlList = [];
       this.controlList.forEach((control) => {
         let list = get(this, control.from, []);
+        control.filter && (list = list.filter(control.filter));
         if (
           list.some(
             (item) =>
