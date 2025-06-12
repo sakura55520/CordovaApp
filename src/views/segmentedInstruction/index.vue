@@ -548,7 +548,12 @@
                     v-model="scope.row.headResistance"
                     v-direction="{ x: 8, y: scope.$index }"
                     v-trim
-                    @change="handleResistanceChange('head', scope.$index)"
+                    @change="
+                      () => {
+                        handleResistanceChange('head', scope.$index);
+                        handleCheckControl(scope.$index);
+                      }
+                    "
                   ></el-input>
                 </template>
               </el-table-column>
@@ -578,7 +583,12 @@
                     v-model="scope.row.tailResistance"
                     v-direction="{ x: 9, y: scope.$index }"
                     v-trim
-                    @change="handleResistanceChange('tail', scope.$index)"
+                    @change="
+                      () => {
+                        handleResistanceChange('tail', scope.$index);
+                        handleCheckControl(scope.$index);
+                      }
+                    "
                   ></el-input>
                 </template>
               </el-table-column>
@@ -620,7 +630,12 @@
                     v-model="scope.row.headResistanceEdge"
                     v-direction="{ x: 10, y: scope.$index }"
                     v-trim
-                    @change="handleResistanceChange('head', scope.$index)"
+                    @change="
+                      () => {
+                        handleResistanceChange('head', scope.$index);
+                        handleCheckControl(scope.$index);
+                      }
+                    "
                   ></el-input>
                 </template>
               </el-table-column>
@@ -650,7 +665,12 @@
                     v-model="scope.row.tailResistanceEdge"
                     v-direction="{ x: 11, y: scope.$index }"
                     v-trim
-                    @change="handleResistanceChange('tail', scope.$index)"
+                    @change="
+                      () => {
+                        handleResistanceChange('tail', scope.$index);
+                        handleCheckControl(scope.$index);
+                      }
+                    "
                   ></el-input>
                 </template>
               </el-table-column>
@@ -699,7 +719,10 @@
                         }"
                         v-model="scope.row.head79oi"
                         @change="
-                          (val) => handleOiChange('head', scope.$index, val)
+                          (val) => {
+                            handleOiChange('head', scope.$index, val);
+                            handleCheckControl(scope.$index);
+                          }
                         "
                         v-direction="{ x: 12, y: scope.$index }"
                         v-trim
@@ -753,7 +776,10 @@
                         }"
                         v-model="scope.row.tail79oi"
                         @change="
-                          (val) => handleOiChange('tail', scope.$index, val)
+                          (val) => {
+                            handleOiChange('tail', scope.$index, val);
+                            handleCheckControl(scope.$index);
+                          }
                         "
                         v-direction="{ x: 13, y: scope.$index }"
                         v-trim
@@ -812,7 +838,10 @@
                     }"
                     v-model="scope.row.headCarbonRate"
                     @change="
-                      (val) => handleCarbonRateChange('head', scope.$index, val)
+                      (val) => {
+                        handleCarbonRateChange('head', scope.$index, val);
+                        handleCheckControl(scope.$index);
+                      }
                     "
                     v-direction="{ x: 14, y: scope.$index }"
                     v-trim
@@ -863,8 +892,10 @@
                         }"
                         v-model="scope.row.tailCarbonRate"
                         @change="
-                          (val) =>
-                            handleCarbonRateChange('tail', scope.$index, val)
+                          (val) => {
+                            handleCarbonRateChange('tail', scope.$index, val);
+                            handleCheckControl(scope.$index);
+                          }
                         "
                         v-direction="{ x: 15, y: scope.$index }"
                         v-trim
@@ -899,6 +930,11 @@
                     v-model="scope.row.headRrv"
                     v-direction="{ x: 16, y: scope.$index }"
                     v-trim
+                    @change="
+                      () => {
+                        handleCheckControl(scope.$index);
+                      }
+                    "
                   ></el-input>
                 </template>
               </el-table-column>
@@ -928,6 +964,11 @@
                     v-model="scope.row.tailRrv"
                     v-direction="{ x: 17, y: scope.$index }"
                     v-trim
+                    @change="
+                      () => {
+                        handleCheckControl(scope.$index);
+                      }
+                    "
                   ></el-input>
                 </template>
               </el-table-column>
@@ -2036,6 +2077,10 @@ export default {
         "segmentedInstructionDetailVos",
         cloneDeep(this.formData.segmentedInstructionDetailVos)
       );
+
+      if (!this.$route.query.view) {
+        this.handleCheckControl(null);
+      }
     },
     async handleCodeClick() {
       let { length } = this.formData;
@@ -2389,11 +2434,22 @@ export default {
       });
 
       let message = "确认提交当前操作数据?";
-      if (!isEmpty(outControlList))
-        message =
-          "<div>以下数据超限：</div>" +
-          outControlList.join("、") +
-          "<div>请确认是否继续提交当前操作数据?</div>";
+      if (!isEmpty(outControlList)) {
+        message = "<div>以下数据超限：</div>" + outControlList.join("、");
+
+        let outControlMap = this.getControlSegment();
+        if (!isEmpty(outControlMap)) {
+          for (const key in outControlMap) {
+            let item = this.formData.segmentedInstructionDetailVos[key];
+            message += `<div>晶段【${item.segmentNo || ""}】${outControlMap[
+              key
+            ].join("、")}超限，但合格状态为合格</div>`;
+          }
+          message += "<br/>";
+        }
+
+        message += "<div>请确认是否继续提交当前操作数据?</div>";
+      }
 
       await this.$confirm(message, "提示", {
         type: "warning",
@@ -2796,7 +2852,63 @@ export default {
 
       return null;
     },
-    checkControl(key, val, type) {
+    handleCheckControl(segmentIndex) {
+      let outControlMap = this.getControlSegment();
+
+      if (segmentIndex || segmentIndex == "0") {
+        if (!isEmpty(outControlMap[segmentIndex]))
+          outControlMap = {
+            [segmentIndex]: outControlMap[segmentIndex],
+          };
+        else outControlMap = {};
+      }
+      if (isEmpty(outControlMap)) return;
+
+      let message = "";
+      let list = cloneDeep(this.formData.segmentedInstructionDetailVos);
+      for (const key in outControlMap) {
+        let item = list[key];
+        message += `<p>晶段【${item.segmentNo || ""}】${outControlMap[key].join(
+          "、"
+        )}超限，合格状态变更为不合格</p>`;
+        item.status = 0;
+      }
+
+      this.$set(this.formData, "segmentedInstructionDetailVos", list);
+      this.$message({
+        dangerouslyUseHTMLString: true,
+        message: message,
+        type: "warning",
+      });
+    },
+    getControlSegment() {
+      let outControlMap = {};
+      let currentControlList = this.controlList.filter((item) => item.filter);
+
+      (this.formData.segmentedInstructionDetailVos || []).forEach(
+        (item, index) => {
+          if (item.type != 0 || item.status == 0) return;
+          currentControlList.forEach((control) => {
+            if (
+              !this.checkControl(
+                control.name,
+                item[control.key],
+                item.orderCode,
+                true
+              )
+            ) {
+              if (!outControlMap[index]) outControlMap[index] = [];
+              outControlMap[index].push(control.name);
+            }
+          });
+        }
+      );
+
+      return outControlMap;
+    },
+    checkControl(key, val, type, skipEmpty) {
+      if (skipEmpty && !(val || val == "0")) return true;
+
       let map = this.controlMap[type || "default"] || {};
       let item = map[key] || {};
       let maxItem = item["上限"] || {};
