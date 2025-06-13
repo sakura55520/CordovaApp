@@ -1450,6 +1450,7 @@ import LeaderLine from "@/plugins/leader-line.min.js";
 import { getMateralModelExtras } from "@/api/factory/materialModel";
 import { getFontColorByBackgroundColor } from "@/utils/color";
 import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
+import { MessageBox } from "element-ui";
 
 const defaultTemp = {
   type: 0,
@@ -2509,6 +2510,32 @@ export default {
           ? this.formData.segmentedInstructionDetailVos[index].planWeight
           : null
       );
+
+      let outControlMap = this.getControlSegment();
+
+      if (!isEmpty(outControlMap[index]))
+        outControlMap = {
+          [index]: outControlMap[index],
+        };
+      else outControlMap = {};
+      if (isEmpty(outControlMap)) return;
+
+      let message = `晶段【${
+        this.formData.segmentedInstructionDetailVos[index].segmentNo || ""
+      }】${outControlMap[index].join("、")}超限，请确认是否修改为合格?`;
+      MessageBox.confirm(message, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {})
+        .catch((err) => {
+          this.$set(
+            this.formData.segmentedInstructionDetailVos[index],
+            "status",
+            0
+          );
+        });
     },
     calcResistivity(y, index) {
       let { number, length, headWeight, tailWeight, inventoryRating } =
