@@ -1550,7 +1550,7 @@ export default {
     calcOrg(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.oiC)
+      if (item.oiC && (item.oiE || item.oiE == '0'))
         data = ((Math.abs(item.oiC - item.oiE) / item.oiC) * 100).toFixed(3);
       this.$set(this.formData.details[index], "org", data);
     },
