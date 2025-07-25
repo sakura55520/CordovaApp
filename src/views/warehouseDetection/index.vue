@@ -1099,6 +1099,16 @@ export default {
       let message = "";
       if (!this.quantityPlanValid.valid)
         message += `<div>合格长度和计划长度差值大于【${this.quantityPlanValid.value}】mm</div>`;
+      if (
+        !this.formData.diameterLowerLimit &&
+        this.formData.diameterLowerLimit !== 0
+      )
+        message += `<div>下发工单的直径下限未配置</div>`;
+      if (
+        !this.formData.diameterUpperLimit &&
+        this.formData.diameterUpperLimit !== 0
+      )
+        message += `<div>下发工单的直径上限未配置</div>`;
       if (!this.diameterValid.minValid)
         message += `<div>最小直径不在【${
           this.formData.diameterLowerLimit || ""
