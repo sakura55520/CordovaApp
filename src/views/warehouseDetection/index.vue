@@ -119,7 +119,10 @@
               >
                 <div class="input">
                   <el-input
-                    class="value"
+                    :class="{
+                      'value': true,
+                      'mark-red': !quantityPlanValid.valid
+                    }"
                     v-model="formData.planLength"
                     :disabled="!enableMap.planLength"
                   >
@@ -169,7 +172,10 @@
               >
                 <div class="input">
                   <el-input
-                    class="value"
+                    :class="{
+                      'value': true,
+                      'mark-red': !quantityPlanValid.valid
+                    }"
                     v-model="formData.qualifiedLength"
                     :disabled="!enableMap.qualifiedLength"
                   >
@@ -856,6 +862,18 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
+    quantityPlanValid() {
+      let wipSwitch = this.wipSwitches.find(
+        (item) => item.name === "warehouseDetectionQuantityPlanDifference"
+      );
+      if (wipSwitch && wipSwitch.value === "打开") {
+        let { qualifiedLength, planLength } = this.formData;
+        let value = wipSwitch.extendValue;
+        if (Math.abs(Number(qualifiedLength || 0) - Number(planLength || 0)) > Number(value))
+          return { valid: false, value };
+      }
+      return { valid: true };
+    }
   },
   created() {
     this.initKeyup();
@@ -1046,8 +1064,13 @@ export default {
         if (Number(qualifiedLength) <= Number(value))
           return this.$message.warning(`合格长度必须大于${value}mm`);
       }
-      await this.$confirm("确认提交当前操作数据?", "提示", {
+      let message = ""
+      if(!this.quantityPlanValid.valid)
+        message += `<div>合格长度和计划长度差值大于【${this.quantityPlanValid.value}】mm</div>`;
+      message += "确认提交当前操作数据?"
+      await this.$confirm(message, "提示", {
         type: "warning",
+        dangerouslyUseHTMLString: true,
       });
       const {
         equipmentCode,
@@ -1239,5 +1262,11 @@ export default {
 .refresh {
   color: #409eff;
   cursor: pointer;
+}
+
+.mark-red {
+  /deep/ .el-input__inner {
+    color: red !important;
+  }
 }
 </style>
