@@ -1316,7 +1316,8 @@ export default {
 
 .mark-red {
   /deep/ .el-input__inner {
-    color: red !important;
+    background-color: red !important;
+    color: white !important;
   }
 }
 </style>
