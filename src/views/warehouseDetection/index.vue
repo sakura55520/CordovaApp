@@ -120,8 +120,8 @@
                 <div class="input">
                   <el-input
                     :class="{
-                      'value': true,
-                      'mark-red': !quantityPlanValid.valid
+                      value: true,
+                      'mark-red': !quantityPlanValid.valid,
                     }"
                     v-model="formData.planLength"
                     :disabled="!enableMap.planLength"
@@ -173,8 +173,8 @@
                 <div class="input">
                   <el-input
                     :class="{
-                      'value': true,
-                      'mark-red': !quantityPlanValid.valid
+                      value: true,
+                      'mark-red': !quantityPlanValid.valid,
                     }"
                     v-model="formData.qualifiedLength"
                     :disabled="!enableMap.qualifiedLength"
@@ -219,7 +219,10 @@
               >
                 <div class="input">
                   <el-input
-                    class="value"
+                    :class="{
+                      value: true,
+                      'mark-red': !diameterValid.minValid,
+                    }"
                     v-model="formData.circleDiameterHead"
                     :disabled="
                       !enableMap.circleDiameterHead &&
@@ -239,7 +242,10 @@
               >
                 <div class="input">
                   <el-input
-                    class="value"
+                    :class="{
+                      value: true,
+                      'mark-red': !diameterValid.maxValid,
+                    }"
                     v-model="formData.circleDiameterTail"
                     :disabled="
                       !enableMap.circleDiameterTail &&
@@ -869,11 +875,35 @@ export default {
       if (wipSwitch && wipSwitch.value === "打开") {
         let { qualifiedLength, planLength } = this.formData;
         let value = wipSwitch.extendValue;
-        if (Math.abs(Number(qualifiedLength || 0) - Number(planLength || 0)) > Number(value))
+        if (
+          Math.abs(Number(qualifiedLength || 0) - Number(planLength || 0)) >
+          Number(value)
+        )
           return { valid: false, value };
       }
       return { valid: true };
-    }
+    },
+    diameterValid() {
+      const {
+        circleDiameterHead,
+        circleDiameterTail,
+        diameterLowerLimit,
+        diameterUpperLimit,
+      } = this.formData;
+      let min = Number(circleDiameterHead || 0);
+      let max = Number(circleDiameterTail || 0);
+      let minValid = true;
+      let maxValid = true;
+      if (diameterLowerLimit || diameterLowerLimit == "0") {
+        if (min < Number(diameterLowerLimit)) minValid = false;
+        if (max < Number(diameterLowerLimit)) maxValid = false;
+      }
+      if (diameterUpperLimit || diameterUpperLimit == "0") {
+        if (min > Number(diameterUpperLimit)) minValid = false;
+        if (max > Number(diameterUpperLimit)) maxValid = false;
+      }
+      return { minValid, maxValid };
+    },
   },
   created() {
     this.initKeyup();
@@ -923,7 +953,9 @@ export default {
         this.formData.unqualifiedReason = [];
       } else {
         this.formData.inStorageReason = "";
-        this.formData.unqualifiedReason =  Array.isArray(reason) ? reason : JSON.parse(reason || '[]');
+        this.formData.unqualifiedReason = Array.isArray(reason)
+          ? reason
+          : JSON.parse(reason || "[]");
       }
 
       this.initLength();
@@ -1064,10 +1096,18 @@ export default {
         if (Number(qualifiedLength) <= Number(value))
           return this.$message.warning(`合格长度必须大于${value}mm`);
       }
-      let message = ""
-      if(!this.quantityPlanValid.valid)
+      let message = "";
+      if (!this.quantityPlanValid.valid)
         message += `<div>合格长度和计划长度差值大于【${this.quantityPlanValid.value}】mm</div>`;
-      message += "确认提交当前操作数据?"
+      if (!this.diameterValid.minValid)
+        message += `<div>最小直径不在【${
+          this.formData.diameterLowerLimit || ""
+        } ~ ${this.formData.diameterUpperLimit || ""}】mm范围内</div>`;
+      if (!this.diameterValid.maxValid)
+        message += `<div>最大直径不在【${
+          this.formData.diameterLowerLimit || ""
+        } ~ ${this.formData.diameterUpperLimit || ""}】mm范围内</div>`;
+      message += "确认提交当前操作数据?";
       await this.$confirm(message, "提示", {
         type: "warning",
         dangerouslyUseHTMLString: true,
