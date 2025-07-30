@@ -1129,6 +1129,8 @@ export default {
       segmentList: [],
       segmentTotalLength: 0,
       backCutSegmentList: [],
+      startIndex: 0,
+      endIndex: 0,
     };
   },
   computed: {
@@ -1211,6 +1213,8 @@ export default {
         processingOrderCode: this.formData.processOrderCode,
       }).then((res) => {
         const tree = res.data;
+        this.startIndex = tree.startIndex || 0;
+        this.endIndex = tree.endIndex || 0;
         this.segmentTotalLength = (tree.endIndex || 0) - (tree.startIndex || 0);
         let segmentList = [];
         let backCutSegmentList = [];
@@ -1302,9 +1306,9 @@ export default {
       this.backCuttingFormData = {
         type: "",
         sampleIdentification: "",
-        samplePosition: 0,
+        samplePosition: this.startIndex,
         cutDistanceStart: 0,
-        cutDistanceEnd: this.formData.lengthQty || 0,
+        cutDistanceEnd: this.segmentTotalLength,
         tall: 4,
         recycle: 1,
         number: null,
@@ -1655,9 +1659,9 @@ export default {
         this.backCuttingFormData.sampleIdentification = "H";
     },
     handleBackCutPositionChange(val) {
-      this.backCuttingFormData.cutDistanceStart = val;
+      this.backCuttingFormData.cutDistanceStart = val - this.startIndex;
       this.backCuttingFormData.cutDistanceEnd =
-        (this.formData.lengthQty || 0) - val;
+        this.endIndex - val;
     },
     handleKeyup(e, x, y) {
       if (e.keyCode === 39) {
