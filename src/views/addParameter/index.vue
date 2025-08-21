@@ -451,6 +451,29 @@
                 </div>
               </el-form-item>
             </div>
+            <div class="row">
+              <div class="item">
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item
+                      label="V槽深度"
+                      prop="vslotDepth"
+                      label-width="80px"
+                    >
+                      <div class="input">
+                        <el-input
+                          class="value"
+                          v-model="formData.vslotDepth"
+                          v-direction="{ x: 1, y: 6 }"
+                        >
+                          <template slot="append">mm</template>
+                        </el-input>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
           </div>
           <div class="form">
             <div class="form-title">参数说明</div>
@@ -534,6 +557,7 @@ export default {
         fourthReferenceSurfaceLength: null,
         fourthReferenceSurfaceWidthHead: null,
         fourthReferenceSurfaceWidthTail: null,
+        vslotDepth: null,
       },
       formRules: {
         userCreate: [
