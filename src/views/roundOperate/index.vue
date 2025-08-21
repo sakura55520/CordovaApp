@@ -293,6 +293,7 @@
                 <el-input
                   v-model="formData.deviation"
                   type="number"
+                  v-direction="{ x: 3, y: 3 }"
                   clearable
                 />
               </el-form-item>
@@ -306,7 +307,11 @@
                 </el-input>
               </el-form-item>
               <el-form-item label="未滚出长度" label-width="100px">
-                <el-input v-model="formData.unRolledLen" type="number">
+                <el-input
+                  v-model="formData.unRolledLen"
+                  v-direction="{ x: 4, y: 3 }"
+                  type="number"
+                >
                   <template slot="append">mm</template>
                 </el-input>
               </el-form-item>
@@ -330,6 +335,14 @@
               <el-form-item label="mm直径" prop="diametermm" label-width="90px">
                 <el-input v-model="formData.diametermm" disabled>
                   <template slot="append">mm</template>
+                </el-input>
+              </el-form-item>
+              <el-form-item label="粗糙度" prop="roughness" label-width="90px">
+                <el-input
+                  type="number"
+                  v-model="formData.roughness"
+                  v-direction="{ x: 4, y: 4 }"
+                >
                 </el-input>
               </el-form-item>
             </div>
@@ -561,6 +574,7 @@ const defaultForm = {
   deviation: null,
   crystalPhaseReduction: null,
   unRolledLen: null,
+  roughness: null,
 };
 
 export default {
@@ -628,6 +642,9 @@ export default {
         dMinute: [
           { required: true, message: "请输入D点晶向(分)", trigger: "change" },
         ],
+        roughness: [
+          { required: true, message: "请输入粗糙度", trigger: "change" },
+        ],
       },
       printVisible: false,
       printData: {},
@@ -678,7 +695,7 @@ export default {
       immediate: true,
       deep: true,
       handler(val) {
-        if(this.$route.query.view) return;
+        if (this.$route.query.view) return;
         this.formData.crystalPhaseReduction = val;
       },
     },
@@ -717,9 +734,9 @@ export default {
       this.initLength();
       this.calcDegreesMinute();
 
-      if(this.$route.query.view) return;
+      if (this.$route.query.view) return;
       const { deductionStatus, calculateDiameterb } = this.formData;
-      if(!deductionStatus) return this.$message.warning('偏离是否扣减未配置')
+      if (!deductionStatus) return this.$message.warning("偏离是否扣减未配置");
       if (deductionStatus == "是") {
         if (!calculateDiameterb)
           return this.$message.warning("计算直径(B工单)不存在");
