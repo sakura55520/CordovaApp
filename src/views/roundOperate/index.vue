@@ -343,6 +343,7 @@
                   v-model="formData.roughness"
                   v-direction="{ x: 4, y: 4 }"
                 >
+                  <template slot="append">μm</template>
                 </el-input>
               </el-form-item>
             </div>

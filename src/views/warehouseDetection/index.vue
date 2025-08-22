@@ -358,6 +358,24 @@
                   </el-input>
                 </div>
               </el-form-item>
+              <el-form-item
+                label="粗糙度"
+                prop="roughness"
+                class="item"
+                label-width="100px"
+              >
+                <div class="input">
+                  <el-input
+                    :class="{
+                      value: true,
+                      'mark-red': !roughnessValid.valid,
+                    }"
+                    v-model="formData.roughness"
+                  >
+                    <template slot="append">μm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
             </div>
             <div class="row">
               <el-form-item
@@ -857,6 +875,9 @@ export default {
         unqualifiedReason: [
           { required: true, message: "请选择", trigger: "blur" },
         ],
+        roughness: [
+          { required: true, message: "粗糙度不能为空", trigger: "change" },
+        ],
       },
       wipSwitches: [],
       wipStorageDisqualificationReasonList: [],
@@ -903,6 +924,22 @@ export default {
         if (max > Number(diameterUpperLimit)) maxValid = false;
       }
       return { minValid, maxValid };
+    },
+    roughnessValid() {
+      const {
+        roughness,
+        roughnessLowerLimit,
+        roughnessUpperLimit,
+      } = this.formData;
+      let value = Number(roughness || 0);
+      let valid = true;
+      if (roughnessLowerLimit || roughnessLowerLimit == "0") {
+        if (value < Number(roughnessLowerLimit) ) valid = false;
+      }
+      if (roughnessUpperLimit || roughnessUpperLimit == "0") {
+        if (value > Number(roughnessUpperLimit) ) valid = false;
+      }
+      return { valid };
     },
   },
   created() {
@@ -1117,6 +1154,10 @@ export default {
         message += `<div>最大直径不在【${
           this.formData.diameterLowerLimit || ""
         } ~ ${this.formData.diameterUpperLimit || ""}】mm范围内</div>`;
+      if (!this.roughnessValid.valid)
+        message += `<div>粗糙度不在【${
+          this.formData.roughnessLowerLimit || ""
+        } ~ ${this.formData.roughnessUpperLimit || ""}】μm范围内</div>`;
       message += "确认提交当前操作数据?";
       await this.$confirm(message, "提示", {
         type: "warning",
