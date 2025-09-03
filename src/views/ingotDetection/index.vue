@@ -18,6 +18,7 @@
             <span class="grid-item-value">{{ executionEquipment }}</span>
           </div>
         </div>
+        <i class="el-icon-refresh deleteBuffer" @click="deleteBuffer" />
       </div>
       <el-divider class="divider" />
       <h3>
@@ -1796,6 +1797,15 @@ export default {
       };
       this.handleInitData();
     },
+    async deleteBuffer() {
+      await this.$confirm(`请确认是否删除缓存?`, "删除缓存", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      await Api.deleteBuffer(this.buffParams);
+      this.init();
+    },
   },
 };
 </script>
@@ -2028,5 +2038,13 @@ export default {
       }
     }
   }
+}
+
+.deleteBuffer {
+  position: absolute;
+  top: 25px;
+  right: 20px;
+  color: #409eff;
+  cursor: pointer;
 }
 </style>
