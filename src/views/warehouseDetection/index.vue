@@ -315,7 +315,10 @@
               <el-form-item label="晶向偏差" class="item" label-width="90px">
                 <div class="input">
                   <el-input
-                    class="value"
+                    :class="{
+                      value: true,
+                      'mark-red': !crystalDeviationValid.valid,
+                    }"
                     v-model="formData.crystalDeviation"
                     :disabled="true"
                   >
@@ -941,6 +944,22 @@ export default {
       }
       return { valid };
     },
+    crystalDeviationValid() {
+      const {
+        crystalDeviation,
+        crystalOrientationOffsetLowerLimit,
+        crystalOrientationOffsetUpperLimit,
+      } = this.formData;
+      let value = Number(crystalDeviation || 0);
+      let valid = true;
+      if (crystalOrientationOffsetLowerLimit || crystalOrientationOffsetLowerLimit == "0") {
+        if (value < Number(crystalOrientationOffsetLowerLimit) ) valid = false;
+      }
+      if (crystalOrientationOffsetUpperLimit || crystalOrientationOffsetUpperLimit == "0") {
+        if (value > Number(crystalOrientationOffsetUpperLimit) ) valid = false;
+      }
+      return { valid };
+    }
   },
   created() {
     this.initKeyup();
@@ -1158,6 +1177,10 @@ export default {
         message += `<div>粗糙度不在【${
           this.formData.roughnessLowerLimit || ""
         } ~ ${this.formData.roughnessUpperLimit || ""}】μm范围内</div>`;
+      if (!this.crystalDeviationValid.valid)
+        message += `<div>晶向偏差不在【${
+          this.formData.crystalOrientationOffsetLowerLimit || ""
+        } ~ ${this.formData.crystalOrientationOffsetUpperLimit || ""}】°范围内</div>`;
       message += "确认提交当前操作数据?";
       await this.$confirm(message, "提示", {
         type: "warning",
