@@ -1199,7 +1199,7 @@ export default {
             item.crystalDensity || this.getCrystalDensity(item.samplePosition),
           sampleWeight,
           number,
-          flaw: item.flaw || '无'
+          flaw: item.flaw || "无",
         };
       });
 
@@ -1298,6 +1298,17 @@ export default {
             this.formData.details.splice(index, 1);
           }
         });
+
+        let originalDetails = JSON.parse(JSON.stringify(this.formData.details));
+        originalDetails.sort((a, b) => {
+          if (a.samplePosition != b.samplePosition)
+            return (
+              Number(a.samplePosition || 0) - Number(b.samplePosition || 0)
+            );
+          if (a.sampleIdentification == "H") return -1;
+          else return 1;
+        });
+        this.$set(this.formData, "details", originalDetails);
       });
     },
     async handleAddBackCuttings() {
@@ -1535,7 +1546,9 @@ export default {
       let item = this.formData.details[index];
       let data;
       if (item.resC)
-        data = Math.abs(((item.halfRes - item.resC) / item.resC) * 100).toFixed(3);
+        data = Math.abs(((item.halfRes - item.resC) / item.resC) * 100).toFixed(
+          3
+        );
       this.$set(this.formData.details[index], "halfRrg", data);
     },
     calcRrg(index) {
@@ -1555,7 +1568,7 @@ export default {
     calcOrg(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.oiC && (item.oiE || item.oiE == '0'))
+      if (item.oiC && (item.oiE || item.oiE == "0"))
         data = ((Math.abs(item.oiC - item.oiE) / item.oiC) * 100).toFixed(3);
       this.$set(this.formData.details[index], "org", data);
     },
@@ -1661,8 +1674,7 @@ export default {
     },
     handleBackCutPositionChange(val) {
       this.backCuttingFormData.cutDistanceStart = val - this.startIndex;
-      this.backCuttingFormData.cutDistanceEnd =
-        this.endIndex - val;
+      this.backCuttingFormData.cutDistanceEnd = this.endIndex - val;
     },
     handleKeyup(e, x, y) {
       if (e.keyCode === 39) {
