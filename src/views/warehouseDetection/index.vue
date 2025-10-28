@@ -53,6 +53,7 @@
                 v-model="formData.status"
                 clearable
                 style="width: 100%"
+                @change="handleLengthChange"
               >
                 <el-option label="合格" :value="1"></el-option>
                 <el-option label="不合格" :value="0"></el-option>
@@ -741,7 +742,16 @@
           <div class="form">
             <div class="form-title">参数说明</div>
             <div class="row">合格长度计算公式：<br /></div>
-            <div class="row">
+            <div class="row" v-if="formData.status == '0'">
+              合格长度（{{ formData.qualifiedLength }} mm） = 长度MIN（{{
+                formData.originLength
+              }}
+              mm） - 崩边长度（{{ formData.chippingLength }} mm） - 晶偏扣减（{{
+                formData.crystalPhaseReduction
+              }}
+              mm）<br />
+            </div>
+            <div class="row" v-else>
               合格长度（{{ formData.qualifiedLength }} mm） = 长度MIN（{{
                 formData.originLength
               }}
@@ -1048,13 +1058,20 @@ export default {
       this.formData.ellipticLength = ellipticLength || 0;
       this.formData.crystalPhaseReduction = crystalPhaseReduction || 0;
       this.formData.unRolledLen = unRolledLen || 0;
-      this.formData.qualifiedLength = (
-        this.formData.originLength -
-        this.formData.chippingLength -
-        this.formData.ellipticLength -
-        this.formData.crystalPhaseReduction -
-        this.formData.unRolledLen
-      ).toFixed(2);
+      if (this.formData.status == "0")
+        this.formData.qualifiedLength = (
+          this.formData.originLength -
+          this.formData.chippingLength -
+          this.formData.crystalPhaseReduction
+        ).toFixed(2);
+      else
+        this.formData.qualifiedLength = (
+          this.formData.originLength -
+          this.formData.chippingLength -
+          this.formData.ellipticLength -
+          this.formData.crystalPhaseReduction -
+          this.formData.unRolledLen
+        ).toFixed(2);
     },
     calcDegreesMinute() {
       const {
@@ -1216,13 +1233,20 @@ export default {
         crystalPhaseReduction,
         unRolledLen,
       } = this.formData;
-      this.formData.qualifiedLength = (
-        (originLength || 0) -
-        (chippingLength || 0) -
-        (ellipticLength || 0) -
-        (crystalPhaseReduction || 0) -
-        (unRolledLen || 0)
-      ).toFixed(2);
+      if (this.formData.status == '0')
+        this.formData.qualifiedLength = (
+          (originLength || 0) -
+          (chippingLength || 0) -
+          (crystalPhaseReduction || 0)
+        ).toFixed(2);
+      else
+        this.formData.qualifiedLength = (
+          (originLength || 0) -
+          (chippingLength || 0) -
+          (ellipticLength || 0) -
+          (crystalPhaseReduction || 0) -
+          (unRolledLen || 0)
+        ).toFixed(2);
     },
     handleNext(val) {
       if ((val + "").length >= 2) this.$getDirection().next();
