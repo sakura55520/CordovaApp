@@ -1781,12 +1781,12 @@ export default {
           maxItem = list.find((ele) => ele.keyVal === "C060") || {};
         }
         if (name === "OI_C83") {
-          minItem = list.find((ele) => ele.keyVal === "C050") || {};
-          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+          minItem = list.find((ele) => ele.keyVal === "C055") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C065") || {};
         }
         if (name === "OI_E83") {
-          minItem = list.find((ele) => ele.keyVal === "C050") || {};
-          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+          minItem = list.find((ele) => ele.keyVal === "C055") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C065") || {};
         }
         if (name === "CS") {
           let item = list.find((ele) => ele.keyVal === "C070") || {};
