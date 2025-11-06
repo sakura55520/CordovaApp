@@ -180,17 +180,31 @@
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="OI_C"
-                  min-width="60"
+                  label="79OI_C"
+                  min-width="80"
                   align="center"
                   prop="oiC"
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="OI_E"
-                  min-width="60"
+                  label="79OI_E"
+                  min-width="80"
                   align="center"
                   prop="oiE"
+                  show-overflow-tooltip
+                />
+                <el-table-column
+                  label="83OI_C"
+                  min-width="80"
+                  align="center"
+                  prop="oiC83"
+                  show-overflow-tooltip
+                />
+                <el-table-column
+                  label="83OI_E"
+                  min-width="80"
+                  align="center"
+                  prop="oiE83"
                   show-overflow-tooltip
                 />
                 <el-table-column
@@ -680,54 +694,33 @@
                 align="center"
                 prop="head79oi"
               >
-                <template slot="header">
-                  <div class="form-table-header">79oi头</div>
-                </template>
                 <template slot-scope="scope">
                   <div class="form-custom-verify">
-                    <el-form-item
-                      label=""
-                      label-width="0px"
-                      :prop="
-                        'segmentedInstructionDetailVos.' +
-                        scope.$index +
-                        '.head79oi'
-                      "
-                      :rules="[
-                        {
-                          required: true,
-                          message: ' ',
-                          trigger: 'change',
-                        },
-                      ]"
-                      class="form-input"
-                    >
-                      <el-input
-                        :style="{
-                          '--controlColor': getControlColor(
+                    <el-input
+                      :style="{
+                        '--controlColor': getControlColor(
+                          '79oi头',
+                          scope.row.head79oi,
+                          scope.row.orderCode
+                        ),
+                        '--textColor': getFontColorByBackgroundColor(
+                          getControlColor(
                             '79oi头',
                             scope.row.head79oi,
                             scope.row.orderCode
-                          ),
-                          '--textColor': getFontColorByBackgroundColor(
-                            getControlColor(
-                              '79oi头',
-                              scope.row.head79oi,
-                              scope.row.orderCode
-                            )
-                          ),
-                        }"
-                        v-model="scope.row.head79oi"
-                        @change="
-                          (val) => {
-                            handleOiChange('head', scope.$index, val);
-                            handleCheckControl(scope.$index);
-                          }
-                        "
-                        v-direction="{ x: 12, y: scope.$index }"
-                        v-trim
-                      ></el-input>
-                    </el-form-item>
+                          )
+                        ),
+                      }"
+                      v-model="scope.row.head79oi"
+                      @change="
+                        (val) => {
+                          handleOiChange('head', scope.$index, val);
+                          handleCheckControl(scope.$index);
+                        }
+                      "
+                      v-direction="{ x: 12, y: scope.$index }"
+                      v-trim
+                    ></el-input>
                   </div>
                 </template>
               </el-table-column>
@@ -737,54 +730,33 @@
                 align="center"
                 prop="tail79oi"
               >
-                <template slot="header">
-                  <div class="form-table-header">79oi尾</div>
-                </template>
                 <template slot-scope="scope">
                   <div class="form-custom-verify">
-                    <el-form-item
-                      label=""
-                      label-width="0px"
-                      :prop="
-                        'segmentedInstructionDetailVos.' +
-                        scope.$index +
-                        '.tail79oi'
-                      "
-                      :rules="[
-                        {
-                          required: true,
-                          message: ' ',
-                          trigger: 'change',
-                        },
-                      ]"
-                      class="form-input"
-                    >
-                      <el-input
-                        :style="{
-                          '--controlColor': getControlColor(
+                    <el-input
+                      :style="{
+                        '--controlColor': getControlColor(
+                          '79oi尾',
+                          scope.row.tail79oi,
+                          scope.row.orderCode
+                        ),
+                        '--textColor': getFontColorByBackgroundColor(
+                          getControlColor(
                             '79oi尾',
                             scope.row.tail79oi,
                             scope.row.orderCode
-                          ),
-                          '--textColor': getFontColorByBackgroundColor(
-                            getControlColor(
-                              '79oi尾',
-                              scope.row.tail79oi,
-                              scope.row.orderCode
-                            )
-                          ),
-                        }"
-                        v-model="scope.row.tail79oi"
-                        @change="
-                          (val) => {
-                            handleOiChange('tail', scope.$index, val);
-                            handleCheckControl(scope.$index);
-                          }
-                        "
-                        v-direction="{ x: 13, y: scope.$index }"
-                        v-trim
-                      ></el-input>
-                    </el-form-item>
+                          )
+                        ),
+                      }"
+                      v-model="scope.row.tail79oi"
+                      @change="
+                        (val) => {
+                          handleOiChange('tail', scope.$index, val);
+                          handleCheckControl(scope.$index);
+                        }
+                      "
+                      v-direction="{ x: 13, y: scope.$index }"
+                      v-trim
+                    ></el-input>
                   </div>
                 </template>
               </el-table-column>
@@ -795,9 +767,54 @@
                 prop="head83oi"
                 show-overflow-tooltip
               >
+                <template slot="header">
+                  <div class="form-table-header">83oi头</div>
+                </template>
                 <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.head83oi }}
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.head83oi'
+                      "
+                      :rules="[
+                        {
+                          required: true,
+                          message: ' ',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        :style="{
+                          '--controlColor': getControlColor(
+                            '83oi头',
+                            scope.row.head83oi,
+                            scope.row.orderCode
+                          ),
+                          '--textColor': getFontColorByBackgroundColor(
+                            getControlColor(
+                              '83oi头',
+                              scope.row.head83oi,
+                              scope.row.orderCode
+                            )
+                          ),
+                        }"
+                        v-model="scope.row.head83oi"
+                        @change="
+                          (val) => {
+                            handle83OiChange('head', scope.$index, val);
+                            handleCheckControl(scope.$index);
+                          }
+                        "
+                        v-direction="{ x: 14, y: scope.$index }"
+                        v-trim
+                      ></el-input>
+                    </el-form-item>
                   </div>
                 </template>
               </el-table-column>
@@ -808,9 +825,54 @@
                 prop="tail83oi"
                 show-overflow-tooltip
               >
+                <template slot="header">
+                  <div class="form-table-header">83oi尾</div>
+                </template>
                 <template slot-scope="scope">
-                  <div>
-                    {{ scope.row.tail83oi }}
+                  <div class="form-custom-verify">
+                    <el-form-item
+                      label=""
+                      label-width="0px"
+                      :prop="
+                        'segmentedInstructionDetailVos.' +
+                        scope.$index +
+                        '.tail83oi'
+                      "
+                      :rules="[
+                        {
+                          required: true,
+                          message: ' ',
+                          trigger: 'change',
+                        },
+                      ]"
+                      class="form-input"
+                    >
+                      <el-input
+                        :style="{
+                          '--controlColor': getControlColor(
+                            '83oi尾',
+                            scope.row.tail83oi,
+                            scope.row.orderCode
+                          ),
+                          '--textColor': getFontColorByBackgroundColor(
+                            getControlColor(
+                              '83oi尾',
+                              scope.row.tail83oi,
+                              scope.row.orderCode
+                            )
+                          ),
+                        }"
+                        v-model="scope.row.tail83oi"
+                        @change="
+                          (val) => {
+                            handle83OiChange('tail', scope.$index, val);
+                            handleCheckControl(scope.$index);
+                          }
+                        "
+                        v-direction="{ x: 15, y: scope.$index }"
+                        v-trim
+                      ></el-input>
+                    </el-form-item>
                   </div>
                 </template>
               </el-table-column>
@@ -843,7 +905,7 @@
                         handleCheckControl(scope.$index);
                       }
                     "
-                    v-direction="{ x: 14, y: scope.$index }"
+                    v-direction="{ x: 16, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -897,7 +959,7 @@
                             handleCheckControl(scope.$index);
                           }
                         "
-                        v-direction="{ x: 15, y: scope.$index }"
+                        v-direction="{ x: 17, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
@@ -928,7 +990,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headRrv"
-                    v-direction="{ x: 16, y: scope.$index }"
+                    v-direction="{ x: 18, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
@@ -962,7 +1024,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailRrv"
-                    v-direction="{ x: 17, y: scope.$index }"
+                    v-direction="{ x: 19, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
@@ -996,7 +1058,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.minorityCarrierLifetime"
-                    v-direction="{ x: 18, y: scope.$index }"
+                    v-direction="{ x: 20, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
@@ -1016,7 +1078,7 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.remarks"
-                    v-direction="{ x: 18, y: scope.$index }"
+                    v-direction="{ x: 21, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -1581,6 +1643,18 @@ export default {
           filter: (item) => item.type == 0,
         },
         {
+          key: "head83oi",
+          name: "83oi头",
+          from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
+        },
+        {
+          key: "tail83oi",
+          name: "83oi尾",
+          from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
+        },
+        {
           key: "headCarbonRate",
           name: "头碳含量",
           from: "formData.segmentedInstructionDetailVos",
@@ -1871,6 +1945,14 @@ export default {
         if (name === "79oi尾") {
           minItem = list.find((ele) => ele.keyVal === "C050") || {};
           maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+        }
+        if (name === "83oi头") {
+          minItem = list.find((ele) => ele.keyVal === "C055") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C065") || {};
+        }
+        if (name === "83oi尾") {
+          minItem = list.find((ele) => ele.keyVal === "C055") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C065") || {};
         }
         if (name === "头碳含量") {
           let item = list.find((ele) => ele.keyVal === "C070") || {};
@@ -2686,48 +2768,55 @@ export default {
       );
     },
     calcOi(position) {
-      const { head79oi, tail79oi } = this.headAndTailOi;
+      const { head79oi, tail79oi, head83oi, tail83oi } = this.headAndTailOi;
       const { length } = this.formData;
+      let data = [null, null];
       if (
         (!head79oi && head79oi !== 0) ||
         (!tail79oi && tail79oi !== 0) ||
         (!position && position !== 0)
       )
-        return [null, null];
+        data[0] = null;
+      if (
+        (!head83oi && head83oi !== 0) ||
+        (!tail83oi && tail83oi !== 0) ||
+        (!position && position !== 0)
+      )
+        data[1] = null;
 
-      let oi_79 = Number(
+      data[0] = Number(
         head79oi - ((head79oi - tail79oi) * position) / length
       ).toFixed(3);
-      let oi_83 = (oi_79 * 0.509).toFixed(2);
-      return [oi_79, oi_83];
+      data[1] = Number(
+        head83oi - ((head83oi - tail83oi) * position) / length
+      ).toFixed(3);
+      return data;
     },
     handleOiChange(type, index, val) {
       if (type === "head") {
-        let oi_83 = (val * 0.509).toFixed(2);
         if (index == 0) {
           this.headAndTailOi.head79oi = val;
-          this.headAndTailOi.head83oi = oi_83;
           this.refreshSegmentsOi();
-        } else {
-          this.$set(
-            this.formData.segmentedInstructionDetailVos[index],
-            "head83oi",
-            oi_83
-          );
         }
       }
       if (type === "tail") {
-        let oi_83 = (val * 0.509).toFixed(2);
         if (index === this.formData.segmentedInstructionDetailVos.length - 1) {
           this.headAndTailOi.tail79oi = val;
-          this.headAndTailOi.tail83oi = oi_83;
           this.refreshSegmentsOi();
-        } else {
-          this.$set(
-            this.formData.segmentedInstructionDetailVos[index],
-            "tail83oi",
-            oi_83
-          );
+        }
+      }
+    },
+    handle83OiChange(type, index, val) {
+      if (type === "head") {
+        if (index == 0) {
+          this.headAndTailOi.head83oi = val;
+          this.refreshSegments83Oi();
+        }
+      }
+      if (type === "tail") {
+        if (index === this.formData.segmentedInstructionDetailVos.length - 1) {
+          this.headAndTailOi.tail83oi = val;
+          this.refreshSegments83Oi();
         }
       }
     },
@@ -2738,24 +2827,47 @@ export default {
           let tailOi = this.calcOi(item.tailPosition);
 
           let head79oi = headOi[0];
-          let head83oi = headOi[1];
           let tail79oi = tailOi[0];
-          let tail83oi = tailOi[1];
 
           if (index == 0) {
             head79oi = this.headAndTailOi.head79oi;
-            head83oi = this.headAndTailOi.head83oi;
           }
           if (index == this.formData.segmentedInstructionDetailVos.length - 1) {
             tail79oi = this.headAndTailOi.tail79oi;
-            tail83oi = this.headAndTailOi.tail83oi;
           }
 
           return {
             ...item,
             head79oi,
-            head83oi,
             tail79oi,
+          };
+        });
+
+      this.$set(
+        this.formData,
+        "segmentedInstructionDetailVos",
+        cloneSegmentedInstructionDetailVos
+      );
+    },
+    refreshSegments83Oi() {
+      let cloneSegmentedInstructionDetailVos =
+        this.formData.segmentedInstructionDetailVos.map((item, index) => {
+          let headOi = this.calcOi(item.headPosition);
+          let tailOi = this.calcOi(item.tailPosition);
+
+          let head83oi = headOi[1];
+          let tail83oi = tailOi[1];
+
+          if (index == 0) {
+            head83oi = this.headAndTailOi.head83oi;
+          }
+          if (index == this.formData.segmentedInstructionDetailVos.length - 1) {
+            tail83oi = this.headAndTailOi.tail83oi;
+          }
+
+          return {
+            ...item,
+            head83oi,
             tail83oi,
           };
         });
@@ -2833,9 +2945,9 @@ export default {
       if (reverseHeadIndex === -1 || reverseTailIndex === -1) return;
 
       let head79oi = this.checkInfo[headIndex].oiC;
-      let head83oi = (head79oi * 0.509).toFixed(2);
+      let head83oi = this.checkInfo[headIndex].oiC83;
       let tail79oi = this.checkInfo[tailIndex].oiC;
-      let tail83oi = (tail79oi * 0.509).toFixed(2);
+      let tail83oi = this.checkInfo[headIndex].oiE83;
       this.headAndTailOi = { head79oi, head83oi, tail79oi, tail83oi };
 
       let headRrv = Math.abs(this.checkInfo[headIndex].rrg || 0).toFixed(2);

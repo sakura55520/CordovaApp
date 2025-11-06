@@ -348,7 +348,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item
-                label="OI_C"
+                label="79OI_C"
                 prop="oiC"
                 class="item"
                 label-width="90px"
@@ -376,7 +376,7 @@
                 </el-input>
               </el-form-item>
               <el-form-item
-                label="OI_E"
+                label="79OI_E"
                 prop="oiE"
                 class="item"
                 label-width="90px"
@@ -784,7 +784,7 @@
                 prop="headTailResistivityRatio"
                 show-overflow-tooltip
               />
-              <el-table-column label="OI_C" min-width="80" align="center">
+              <el-table-column label="79OI_C" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :class="{
@@ -808,7 +808,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="OI_E" min-width="80" align="center">
+              <el-table-column label="79OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :class="{
@@ -1229,6 +1229,16 @@ export default {
           name: "OI_E",
           from: "formData.wipCrystalCheckSampleDatas",
         },
+        {
+          key: "oiC83",
+          name: "OI_C83",
+          from: "formData.wipCrystalCheckSampleDatas",
+        },
+        {
+          key: "oiE83",
+          name: "OI_E83",
+          from: "formData.wipCrystalCheckSampleDatas",
+        },
       ],
       controlMap: {},
     };
@@ -1292,7 +1302,7 @@ export default {
         ...item,
         crystalDensity:
           item.crystalDensity || this.getCrystalDensity(item.samplePosition),
-        flaw: item.flaw || '无'
+        flaw: item.flaw || "无",
       }));
 
       this.$set(
@@ -1382,7 +1392,7 @@ export default {
         this.formData.chippingLength -
         this.formData.ellipticLength
       ).toFixed(2);
-      if(this.$route.query.view) return;
+      if (this.$route.query.view) return;
       this.calcPlanWeight();
     },
     async save() {
@@ -1470,7 +1480,9 @@ export default {
       let item = this.formData.wipCrystalCheckSampleDatas[index];
       let data;
       if (item.resC)
-        data = Math.abs(((item.halfRes - item.resC) / item.resC) * 100).toFixed(3);
+        data = Math.abs(((item.halfRes - item.resC) / item.resC) * 100).toFixed(
+          3
+        );
       this.$set(
         this.formData.wipCrystalCheckSampleDatas[index],
         "halfRrg",
