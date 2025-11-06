@@ -403,9 +403,9 @@
                 prop="headTailResistivityRatio"
                 show-overflow-tooltip
               />
-              <el-table-column label="OI_C" min-width="80" align="center">
+              <el-table-column label="79OI_C" min-width="80" align="center">
                 <template slot="header">
-                  <div class="form-table-header">OI_C</div>
+                  <div class="form-table-header">79OI_C</div>
                 </template>
                 <template slot-scope="scope">
                   <el-form-item
@@ -443,7 +443,7 @@
                   </el-form-item>
                 </template>
               </el-table-column>
-              <el-table-column label="OI_E" min-width="80" align="center">
+              <el-table-column label="79OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :style="{
@@ -1120,6 +1120,8 @@ export default {
         },
         { key: "oiC", name: "OI_C", from: "formData.details" },
         { key: "oiE", name: "OI_E", from: "formData.details" },
+        { key: "oiC83", name: "OI_C83", from: "formData.details" },
+        { key: "oiE83", name: "OI_E83", from: "formData.details" },
         { key: "resC", name: "RES_C", from: "formData.details" },
         { key: "resE", name: "RES_E", from: "formData.details" },
         { key: "halfRrg", name: "1/2RRG", from: "formData.details" },
@@ -1740,6 +1742,14 @@ export default {
           maxItem = list.find((ele) => ele.keyVal === "C060") || {};
         }
         if (name === "OI_E") {
+          minItem = list.find((ele) => ele.keyVal === "C050") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+        }
+        if (name === "OI_C83") {
+          minItem = list.find((ele) => ele.keyVal === "C050") || {};
+          maxItem = list.find((ele) => ele.keyVal === "C060") || {};
+        }
+        if (name === "OI_E83") {
           minItem = list.find((ele) => ele.keyVal === "C050") || {};
           maxItem = list.find((ele) => ele.keyVal === "C060") || {};
         }
