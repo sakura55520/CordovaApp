@@ -973,6 +973,40 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="少子寿命"
+                min-width="100"
+                align="center"
+                prop="minorityCarrierLifetime"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '少子寿命',
+                        Math.abs(scope.row.minorityCarrierLifetime || 0),
+                        scope.row.orderCode
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          '少子寿命',
+                          Math.abs(scope.row.minorityCarrierLifetime || 0),
+                          scope.row.orderCode
+                        )
+                      ),
+                    }"
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.minorityCarrierLifetime"
+                    v-direction="{ x: 18, y: scope.$index }"
+                    v-trim
+                    @change="
+                      () => {
+                        handleCheckControl(scope.$index);
+                      }
+                    "
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="说明"
                 min-width="180"
                 align="center"
@@ -1561,7 +1595,7 @@ export default {
         {
           key: "minorityCarrierLifetime",
           name: "少子寿命",
-          from: "checkInfo",
+          from: "formData.segmentedInstructionDetailVos",
         },
         {
           key: "headRrv",
