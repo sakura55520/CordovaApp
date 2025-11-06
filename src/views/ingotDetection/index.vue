@@ -594,6 +594,36 @@
                   </el-form-item>
                 </template>
               </el-table-column>
+              <el-table-column label="79OI_C" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor('OI_C', scope.row.oiC),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_C', scope.row.oiC)
+                      ),
+                    }"
+                    :id="'input-9-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
+                    v-model="scope.row.oiC"
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column label="79OI_E" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor('OI_E', scope.row.oiE),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_E', scope.row.oiE)
+                      ),
+                    }"
+                    :id="'input-10-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
+                    v-model="scope.row.oiE"
+                  ></el-input>
+                </template>
+              </el-table-column>
               <el-table-column label="OSF密度" min-width="120" align="center">
                 <template slot-scope="scope">
                   <el-select v-model="scope.row.osf" placeholder="">
@@ -608,8 +638,8 @@
               <el-table-column label="基磷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-9-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
+                    :id="'input-11-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
                     v-model="scope.row.phosphorus"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'phosphorus')
@@ -619,8 +649,8 @@
               <el-table-column label="基硼" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-10-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
+                    :id="'input-12-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
                     v-model="scope.row.boron"
                     @change="(val) => handleToFixed(val, scope.$index, 'boron')"
                   ></el-input> </template
@@ -628,8 +658,8 @@
               <el-table-column label="基砷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-11-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
+                    :id="'input-13-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 13, scope.$index)"
                     v-model="scope.row.arsenic"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'arsenic')
@@ -639,8 +669,8 @@
               <el-table-column label="基锑" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-12-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
+                    :id="'input-14-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 14, scope.$index)"
                     v-model="scope.row.antimony"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'antimony')
