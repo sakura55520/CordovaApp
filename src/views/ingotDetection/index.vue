@@ -403,7 +403,7 @@
                 prop="headTailResistivityRatio"
                 show-overflow-tooltip
               />
-              <el-table-column label="83OI_C" min-width="80" align="center">
+              <el-table-column label="83OI_C" min-width="90" align="center">
                 <template slot="header">
                   <div class="form-table-header">83OI_C</div>
                 </template>
@@ -443,7 +443,7 @@
                   </el-form-item>
                 </template>
               </el-table-column>
-              <el-table-column label="83OI_E" min-width="80" align="center">
+              <el-table-column label="83OI_E" min-width="90" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :style="{
@@ -1604,7 +1604,9 @@ export default {
       let item = this.formData.details[index];
       let data;
       if (item.oiC83 && (item.oiE83 || item.oiE83 == "0"))
-        data = ((Math.abs(item.oiC83 - item.oiE83) / item.oiC83) * 100).toFixed(3);
+        data = ((Math.abs(item.oiC83 - item.oiE83) / item.oiC83) * 100).toFixed(
+          3
+        );
       this.$set(this.formData.details[index], "org", data);
     },
     calcHeadTailResistivityRatio(row, index) {
