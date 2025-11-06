@@ -2050,7 +2050,7 @@ export default {
       }
 
       if (cloneSegmentedInstructionDetailVos.some((item) => !item.segmentNo))
-        this.handleCodeClick();
+        await this.handleCodeClick();
 
       const { photo } = this.formData;
       let photos = Array.isArray(photo) ? photo : JSON.parse(photo || "[]");
