@@ -403,15 +403,15 @@
                 prop="headTailResistivityRatio"
                 show-overflow-tooltip
               />
-              <el-table-column label="79OI_C" min-width="80" align="center">
+              <el-table-column label="83OI_C" min-width="80" align="center">
                 <template slot="header">
-                  <div class="form-table-header">79OI_C</div>
+                  <div class="form-table-header">83OI_C</div>
                 </template>
                 <template slot-scope="scope">
                   <el-form-item
                     label=""
                     label-width="0px"
-                    :prop="'details.' + scope.$index + '.oiC'"
+                    :prop="'details.' + scope.$index + '.oiC83'"
                     :rules="[
                       {
                         required:
@@ -428,33 +428,36 @@
                     <el-input
                       :style="{
                         '--controlColor': getControlColor(
-                          'OI_C',
-                          scope.row.oiC
+                          'OI_C83',
+                          scope.row.oiC83
                         ),
                         '--textColor': getFontColorByBackgroundColor(
-                          getControlColor('OI_C', scope.row.oiC)
+                          getControlColor('OI_C83', scope.row.oiC83)
                         ),
                       }"
                       :id="'input-5-' + scope.$index"
                       @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
-                      v-model="scope.row.oiC"
+                      v-model="scope.row.oiC83"
                       @input="calcOrg(scope.$index)"
                     ></el-input>
                   </el-form-item>
                 </template>
               </el-table-column>
-              <el-table-column label="79OI_E" min-width="80" align="center">
+              <el-table-column label="83OI_E" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :style="{
-                      '--controlColor': getControlColor('OI_E', scope.row.oiE),
+                      '--controlColor': getControlColor(
+                        'OI_E83',
+                        scope.row.oiE83
+                      ),
                       '--textColor': getFontColorByBackgroundColor(
-                        getControlColor('OI_E', scope.row.oiE)
+                        getControlColor('OI_E83', scope.row.oiE83)
                       ),
                     }"
                     :id="'input-6-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 6, scope.$index)"
-                    v-model="scope.row.oiE"
+                    v-model="scope.row.oiE83"
                     @input="calcOrg(scope.$index)"
                   ></el-input> </template
               ></el-table-column>
@@ -1600,8 +1603,8 @@ export default {
     calcOrg(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.oiC && (item.oiE || item.oiE == "0"))
-        data = ((Math.abs(item.oiC - item.oiE) / item.oiC) * 100).toFixed(3);
+      if (item.oiC83 && (item.oiE83 || item.oiE83 == "0"))
+        data = ((Math.abs(item.oiC83 - item.oiE83) / item.oiC83) * 100).toFixed(3);
       this.$set(this.formData.details[index], "org", data);
     },
     calcHeadTailResistivityRatio(row, index) {
