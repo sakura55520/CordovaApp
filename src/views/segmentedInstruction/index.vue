@@ -2029,6 +2029,10 @@ export default {
             item.tail
           );
 
+          const minorityCarrierLifetime = this.getMinorityCarrierLifetime(
+            item.tail
+          );
+
           return {
             segmentNo: item.sampleNumber,
             type: item.type,
@@ -2053,6 +2057,7 @@ export default {
             reason: "",
             headCarbonRate,
             tailCarbonRate,
+            minorityCarrierLifetime,
           };
         });
 
@@ -2184,6 +2189,9 @@ export default {
           tailPosition
         );
 
+        const minorityCarrierLifetime =
+          this.getMinorityCarrierLifetime(tailPosition);
+
         let item = {
           headPosition,
           tailPosition,
@@ -2206,6 +2214,7 @@ export default {
           headCarbonRate,
           tailCarbonRate,
           new: this.temp.type,
+          minorityCarrierLifetime,
         };
         this.formData.segmentedInstructionDetailVos.unshift(item);
       } else {
@@ -2241,6 +2250,7 @@ export default {
           headCarbonRate,
           tailCarbonRate: null,
           new: this.temp.type,
+          minorityCarrierLifetime: null,
         };
         this.formData.segmentedInstructionDetailVos.push(item);
       }
@@ -2259,6 +2269,9 @@ export default {
         headPosition,
         tailPosition
       );
+
+      const minorityCarrierLifetime =
+        this.getMinorityCarrierLifetime(tailPosition);
 
       let item = {
         headPosition,
@@ -2282,6 +2295,7 @@ export default {
         headCarbonRate,
         tailCarbonRate,
         new: this.temp.type,
+        minorityCarrierLifetime,
       };
       this.formData.segmentedInstructionDetailVos.splice(index, 0, item);
     },
@@ -2318,12 +2332,16 @@ export default {
             item.headPosition,
             item.tailPosition
           );
+          const minorityCarrierLifetime = this.getMinorityCarrierLifetime(
+            item.tailPosition
+          );
           item.headResistance = resistanceEdgeAndRrv.headResistance;
           item.tailResistance = resistanceEdgeAndRrv.tailResistance;
           item.headRrv = resistanceEdgeAndRrv.headRrv;
           item.tailRrv = resistanceEdgeAndRrv.tailRrv;
           item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
           item.tailResistanceEdge = resistanceEdgeAndRrv.tailResistanceEdge;
+          item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
           (item.tailPosition || item.tailPosition === 0) &&
@@ -2365,12 +2383,16 @@ export default {
             item.headPosition,
             item.tailPosition
           );
+          const minorityCarrierLifetime = this.getMinorityCarrierLifetime(
+            item.tailPosition
+          );
           item.headResistance = resistanceEdgeAndRrv.headResistance;
           item.tailResistance = resistanceEdgeAndRrv.tailResistance;
           item.headRrv = resistanceEdgeAndRrv.headRrv;
           item.tailRrv = resistanceEdgeAndRrv.tailRrv;
           item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
           item.tailResistanceEdge = resistanceEdgeAndRrv.tailResistanceEdge;
+          item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
           (item.tailPosition || item.tailPosition === 0) &&
@@ -2879,6 +2901,22 @@ export default {
         headRrv,
         tailRrv,
       };
+    },
+    getMinorityCarrierLifetime(tailPosition) {
+      let minorityCarrierLifetime = null;
+      if ((tailPosition || tailPosition == 0) && !isEmpty(this.checkInfo)) {
+        const tailCheckInfoList = this.checkInfo.filter(
+          (item) =>
+            Number(item.samplePosition) >= Number(tailPosition) &&
+            item.minorityCarrierLifetime
+        );
+
+        if (!isEmpty(tailCheckInfoList)) {
+          minorityCarrierLifetime =
+            tailCheckInfoList[0].minorityCarrierLifetime;
+        }
+      }
+      return minorityCarrierLifetime;
     },
     handleReasonChange(val, index) {
       this.$set(
