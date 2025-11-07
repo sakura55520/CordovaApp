@@ -2777,19 +2777,20 @@ export default {
         (!position && position !== 0)
       )
         data[0] = null;
+      else
+        data[0] = Number(
+          head79oi - ((head79oi - tail79oi) * position) / length
+        ).toFixed(3);
       if (
         (!head83oi && head83oi !== 0) ||
         (!tail83oi && tail83oi !== 0) ||
         (!position && position !== 0)
       )
         data[1] = null;
-
-      data[0] = Number(
-        head79oi - ((head79oi - tail79oi) * position) / length
-      ).toFixed(3);
-      data[1] = Number(
-        head83oi - ((head83oi - tail83oi) * position) / length
-      ).toFixed(3);
+      else
+        data[1] = Number(
+          head83oi - ((head83oi - tail83oi) * position) / length
+        ).toFixed(3);
       return data;
     },
     handleOiChange(type, index, val) {
