@@ -255,8 +255,32 @@
                   <template slot="append">%</template>
                 </el-input>
               </el-form-item>
-              <div class="item"></div>
-              <div class="item"></div>
+              <el-form-item
+                label="83OI_C"
+                prop="oiC83"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.oiC83"
+                  v-direction="{ x: 4, y: 3 }"
+                >
+                </el-input>
+              </el-form-item>
+              <el-form-item
+                label="83OI_E"
+                prop="oiE83"
+                class="item"
+                label-width="90px"
+              >
+                <el-input
+                  class="value"
+                  v-model="formData.oiE83"
+                  v-direction="{ x: 5, y: 3 }"
+                >
+                </el-input>
+              </el-form-item>
             </div>
             <div class="row">
               <el-form-item
@@ -802,7 +826,6 @@
                     v-model="scope.row.oiC"
                     @input="
                       () => {
-                        calcOrg(scope.$index);
                         updateData();
                       }
                     "
@@ -826,6 +849,59 @@
                     v-model="scope.row.oiE"
                     @input="
                       () => {
+                        updateData();
+                      }
+                    "
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="83OI_C" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
+                    :style="{
+                      '--controlColor': getControlColor(
+                        'OI_C83',
+                        scope.row.oiC83
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_C83', scope.row.oiC83)
+                      ),
+                    }"
+                    :id="'input-7-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
+                    v-model="scope.row.oiC83"
+                    @input="
+                      () => {
+                        calcOrg(scope.$index);
+                        updateData();
+                      }
+                    "
+                  ></el-input> </template
+              ></el-table-column>
+              <el-table-column label="83OI_E" min-width="80" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    :class="{
+                      disabled: checkDisabled(scope.row),
+                    }"
+                    :disabled="checkDisabled(scope.row)"
+                    :style="{
+                      '--controlColor': getControlColor(
+                        'OI_E83',
+                        scope.row.oiE83
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('OI_E83', scope.row.oiE83)
+                      ),
+                    }"
+                    :id="'input-8-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
+                    v-model="scope.row.oiE83"
+                    @input="
+                      () => {
                         calcOrg(scope.$index);
                         updateData();
                       }
@@ -845,8 +921,8 @@
                         getControlColor('CS', scope.row.cs)
                       ),
                     }"
-                    :id="'input-7-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 7, scope.$index)"
+                    :id="'input-9-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
                     v-model="scope.row.cs"
                     @change="updateData"
                   ></el-input> </template
@@ -883,8 +959,8 @@
                         )
                       ),
                     }"
-                    :id="'input-8-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 8, scope.$index)"
+                    :id="'input-10-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
                     v-model="scope.row.minorityCarrierLifetime"
                     @change="updateData"
                   ></el-input> </template
@@ -934,8 +1010,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-9-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 9, scope.$index)"
+                    :id="'input-11-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
                     v-model="scope.row.phosphorus"
                     @change="
                       (val) => {
@@ -952,8 +1028,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-10-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 10, scope.$index)"
+                    :id="'input-12-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
                     v-model="scope.row.boron"
                     @change="
                       (val) => {
@@ -970,8 +1046,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-11-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
+                    :id="'input-13-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 13, scope.$index)"
                     v-model="scope.row.arsenic"
                     @change="
                       (val) => {
@@ -988,8 +1064,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-12-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
+                    :id="'input-14-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 14, scope.$index)"
                     v-model="scope.row.antimony"
                     @change="
                       (val) => {
@@ -1113,6 +1189,8 @@ export default {
         halfOi: null,
         oiE: null,
         org: null,
+        oiC83: null,
+        oiE83: null,
         phosphorus: null,
         boron: null,
         arsenic: null,
@@ -1323,8 +1401,20 @@ export default {
       );
 
       if (headSample) {
-        const { resC, resE, rrg, flaw, osf, cs, oiC, oiE, halfOi, org } =
-          headSample;
+        const {
+          resC,
+          resE,
+          rrg,
+          flaw,
+          osf,
+          cs,
+          oiC,
+          oiE,
+          oiC83,
+          oiE83,
+          halfOi,
+          org,
+        } = headSample;
 
         let data = {
           ...this.formData,
@@ -1338,6 +1428,8 @@ export default {
           oiE,
           halfOi,
           org,
+          oiC83,
+          oiE83,
         };
         this.$set(this, "formData", data);
       }
@@ -1510,8 +1602,10 @@ export default {
     calcOrg(index) {
       let item = this.formData.wipCrystalCheckSampleDatas[index];
       let data;
-      if (item.oiC)
-        data = ((Math.abs(item.oiC - item.oiE) / item.oiC) * 100).toFixed(3);
+      if (item.oiC83)
+        data = ((Math.abs(item.oiC83 - item.oiE83) / item.oiC83) * 100).toFixed(
+          3
+        );
       this.$set(this.formData.wipCrystalCheckSampleDatas[index], "org", data);
     },
     calcHeadTailResistivityRatio(row, index) {
