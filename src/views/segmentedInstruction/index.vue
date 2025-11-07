@@ -2948,7 +2948,7 @@ export default {
       let head79oi = this.checkInfo[headIndex].oiC;
       let head83oi = this.checkInfo[headIndex].oiC83;
       let tail79oi = this.checkInfo[tailIndex].oiC;
-      let tail83oi = this.checkInfo[headIndex].oiE83;
+      let tail83oi = this.checkInfo[tailIndex].oiC83;
       this.headAndTailOi = { head79oi, head83oi, tail79oi, tail83oi };
 
       let headRrv = Math.abs(this.checkInfo[headIndex].rrg || 0).toFixed(2);
