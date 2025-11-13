@@ -255,6 +255,10 @@ export default {
           stepName: "补掺",
           canAddRecord: true,
         },
+        {
+          stepName: "其他",
+          canAddRecord: true,
+        },
       ];
     },
     calcAddRecordMap() {
