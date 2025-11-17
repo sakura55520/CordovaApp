@@ -229,6 +229,9 @@ export default {
           stepName: "放肩",
         },
         {
+          stepName: "转肩",
+        },
+        {
           stepName: "等径",
         },
         {
