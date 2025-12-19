@@ -493,7 +493,7 @@ export default {
           await ref.validate();
         }
       } catch (err) {
-        this.$message.warning(this.stepName + "存在未填写的数据");
+        this.$message.warning(`工步【${this.stepName}】存在未填写的数据，或数据校验未通过`);
         allValid = false;
       }
       return allValid;
