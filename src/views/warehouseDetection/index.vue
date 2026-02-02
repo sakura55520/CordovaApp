@@ -793,6 +793,16 @@ export default {
     SelectLinesideTree,
   },
   data() {
+    const validateLength = (rule, value, callback) => {
+      const max = this.formData.maxLength;
+      const min = this.formData.originLength;
+      if ((!max && max != "0") || (!min && min != "0")) callback();
+      if (Number(max) < Number(min)) {
+        callback(new Error("长度MIN必须小于长度MAX"));
+      } else {
+        callback();
+      }
+    };
     return {
       formData: {
         userCreate: null,
@@ -858,6 +868,7 @@ export default {
             message: "长度MIN不能为空",
             trigger: "change",
           },
+          { validator: validateLength, trigger: "change" },
         ],
         maxLength: [
           {
@@ -865,6 +876,7 @@ export default {
             message: "长度MAX不能为空",
             trigger: "change",
           },
+          { validator: validateLength, trigger: "change" },
         ],
         chippingLength: [
           { required: true, message: "崩边长度不能为空", trigger: "change" },

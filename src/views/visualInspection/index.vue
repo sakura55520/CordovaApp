@@ -1162,6 +1162,26 @@ export default {
     PhotoNew,
   },
   data() {
+    const validateLength = (rule, value, callback) => {
+      const max = this.formData.maxLength;
+      const min = this.formData.minLength;
+      if ((!max && max != "0") || (!min && min != "0")) callback();
+      if (Number(max) < Number(min)) {
+        callback(new Error("长度MIN必须小于长度MAX"));
+      } else {
+        callback();
+      }
+    };
+    const validateDiameter = (rule, value, callback) => {
+      const max = this.formData.maxDiameter;
+      const min = this.formData.minDiameter;
+      if ((!max && max != "0") || (!min && min != "0")) callback();
+      if (Number(max) < Number(min)) {
+        callback(new Error("直径MIN必须小于直径MAX"));
+      } else {
+        callback();
+      }
+    };
     return {
       getFontColorByBackgroundColor,
       formData: {
@@ -1220,6 +1240,7 @@ export default {
             message: "长度min不能为空",
             trigger: "change",
           },
+          { validator: validateLength, trigger: "change" },
         ],
         maxLength: [
           {
@@ -1227,6 +1248,7 @@ export default {
             message: "长度max不能为空",
             trigger: "change",
           },
+          { validator: validateLength, trigger: "change" },
         ],
         chippingLength: [
           { required: true, message: "崩边长度不能为空", trigger: "change" },
@@ -1239,9 +1261,11 @@ export default {
         ],
         minDiameter: [
           { required: true, message: "最小直径不能为空", trigger: "change" },
+          { validator: validateDiameter, trigger: "change" },
         ],
         maxDiameter: [
           { required: true, message: "最大直径不能为空", trigger: "change" },
+          { validator: validateDiameter, trigger: "change" },
         ],
         theoryQty: [
           { required: true, message: "理论重量不能为空", trigger: "change" },
