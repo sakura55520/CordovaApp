@@ -133,7 +133,7 @@
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="1/2RES"
+                  label="1/2 RES"
                   min-width="90"
                   align="center"
                   prop="halfRes"
@@ -2255,6 +2255,14 @@ export default {
             tailRrv: resistanceEdgeAndRrv.tailRrv,
             headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
             tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
+            headR2: resistanceEdgeAndRrv.headR2,
+            tailR2: resistanceEdgeAndRrv.tailR2,
+            headR2Rrv: resistanceEdgeAndRrv.headR2Rrv,
+            tailR2Rrv: resistanceEdgeAndRrv.tailR2Rrv,
+            head83oiEdge: resistanceEdgeAndRrv.head83oiEdge,
+            tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
+            headOrg: resistanceEdgeAndRrv.headOrg,
+            tailOrg: resistanceEdgeAndRrv.tailOrg,
             _reason: [],
             reason: "",
             headCarbonRate,
@@ -2413,6 +2421,14 @@ export default {
           tailRrv: resistanceEdgeAndRrv.tailRrv,
           headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
           tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
+          headR2: resistanceEdgeAndRrv.headR2,
+          tailR2: resistanceEdgeAndRrv.tailR2,
+          headR2Rrv: resistanceEdgeAndRrv.headR2Rrv,
+          tailR2Rrv: resistanceEdgeAndRrv.tailR2Rrv,
+          head83oiEdge: resistanceEdgeAndRrv.head83oiEdge,
+          tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
+          headOrg: resistanceEdgeAndRrv.headOrg,
+          tailOrg: resistanceEdgeAndRrv.tailOrg,
           headCarbonRate,
           tailCarbonRate,
           new: this.temp.type,
@@ -2449,6 +2465,14 @@ export default {
           tailRrv: resistanceEdgeAndRrv.tailRrv,
           headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
           tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
+          headR2: resistanceEdgeAndRrv.headR2,
+          tailR2: resistanceEdgeAndRrv.tailR2,
+          headR2Rrv: resistanceEdgeAndRrv.headR2Rrv,
+          tailR2Rrv: resistanceEdgeAndRrv.tailR2Rrv,
+          head83oiEdge: resistanceEdgeAndRrv.head83oiEdge,
+          tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
+          headOrg: resistanceEdgeAndRrv.headOrg,
+          tailOrg: resistanceEdgeAndRrv.tailOrg,
           headCarbonRate,
           tailCarbonRate: null,
           new: this.temp.type,
@@ -2494,6 +2518,14 @@ export default {
         tailRrv: resistanceEdgeAndRrv.tailRrv,
         headResistanceEdge: resistanceEdgeAndRrv.headResistanceEdge,
         tailResistanceEdge: resistanceEdgeAndRrv.tailResistanceEdge,
+        headR2: resistanceEdgeAndRrv.headR2,
+        tailR2: resistanceEdgeAndRrv.tailR2,
+        headR2Rrv: resistanceEdgeAndRrv.headR2Rrv,
+        tailR2Rrv: resistanceEdgeAndRrv.tailR2Rrv,
+        head83oiEdge: resistanceEdgeAndRrv.head83oiEdge,
+        tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
+        headOrg: resistanceEdgeAndRrv.headOrg,
+        tailOrg: resistanceEdgeAndRrv.tailOrg,
         headCarbonRate,
         tailCarbonRate,
         new: this.temp.type,
@@ -2543,6 +2575,14 @@ export default {
           item.tailRrv = resistanceEdgeAndRrv.tailRrv;
           item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
           item.tailResistanceEdge = resistanceEdgeAndRrv.tailResistanceEdge;
+          item.headR2 = resistanceEdgeAndRrv.headR2;
+          item.tailR2 = resistanceEdgeAndRrv.tailR2;
+          item.headR2Rrv = resistanceEdgeAndRrv.headR2Rrv;
+          item.tailR2Rrv = resistanceEdgeAndRrv.tailR2Rrv;
+          item.head83oiEdge = resistanceEdgeAndRrv.head83oiEdge;
+          item.tail83oiEdge = resistanceEdgeAndRrv.tail83oiEdge;
+          item.headOrg = resistanceEdgeAndRrv.headOrg;
+          item.tailOrg = resistanceEdgeAndRrv.tailOrg;
           item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
@@ -2594,6 +2634,14 @@ export default {
           item.tailRrv = resistanceEdgeAndRrv.tailRrv;
           item.headResistanceEdge = resistanceEdgeAndRrv.headResistanceEdge;
           item.tailResistanceEdge = resistanceEdgeAndRrv.tailResistanceEdge;
+          item.headR2 = resistanceEdgeAndRrv.headR2;
+          item.tailR2 = resistanceEdgeAndRrv.tailR2;
+          item.headR2Rrv = resistanceEdgeAndRrv.headR2Rrv;
+          item.tailR2Rrv = resistanceEdgeAndRrv.tailR2Rrv;
+          item.head83oiEdge = resistanceEdgeAndRrv.head83oiEdge;
+          item.tail83oiEdge = resistanceEdgeAndRrv.tail83oiEdge;
+          item.headOrg = resistanceEdgeAndRrv.headOrg;
+          item.tailOrg = resistanceEdgeAndRrv.tailOrg;
           item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
@@ -3086,6 +3134,14 @@ export default {
       let tailResistanceEdge = null;
       let headRrv = null;
       let tailRrv = null;
+      let headR2 = null;
+      let tailR2 = null;
+      let headR2Rrv = null;
+      let tailR2Rrv = null;
+      let head83oiEdge = null;
+      let tail83oiEdge = null;
+      let headOrg = null;
+      let tailOrg = null;
       if (
         (headPosition || headPosition == 0) &&
         (tailPosition || tailPosition == 0) &&
@@ -3125,6 +3181,28 @@ export default {
               ).toFixed(3)
             );
         }
+
+        const headCheckInfo = this.checkInfo.find(
+          (item) => item.samplePosition == headPosition
+        );
+
+        if (headCheckInfo) {
+          headR2 = headCheckInfo.halfRes;
+          headR2Rrv = headCheckInfo.halfRrg;
+          head83oiEdge = headCheckInfo.oiE83;
+          headOrg = headCheckInfo.org;
+        }
+
+        const tailCheckInfo = this.checkInfo.find(
+          (item) => item.samplePosition == tailPosition
+        );
+
+        if (tailCheckInfo) {
+          tailR2 = tailCheckInfo.halfRes;
+          tailR2Rrv = tailCheckInfo.halfRrg;
+          tail83oiEdge = tailCheckInfo.oiE83;
+          tailOrg = tailCheckInfo.org;
+        }
       }
       return {
         headResistance,
@@ -3133,6 +3211,14 @@ export default {
         tailResistanceEdge,
         headRrv,
         tailRrv,
+        headR2,
+        tailR2,
+        headR2Rrv,
+        tailR2Rrv,
+        head83oiEdge,
+        tail83oiEdge,
+        headOrg,
+        tailOrg,
       };
     },
     getMinorityCarrierLifetime(tailPosition) {
