@@ -689,6 +689,36 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="R/2头电阻"
+                min-width="120"
+                align="center"
+                prop="headR2"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.headR2"
+                    v-direction="{ x: 12, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="R/2尾电阻"
+                min-width="120"
+                align="center"
+                prop="tailR2"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tailR2"
+                    v-direction="{ x: 13, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="79oi头"
                 min-width="100"
                 align="center"
@@ -718,7 +748,7 @@
                           handleCheckControl(scope.$index);
                         }
                       "
-                      v-direction="{ x: 12, y: scope.$index }"
+                      v-direction="{ x: 14, y: scope.$index }"
                       v-trim
                     ></el-input>
                   </div>
@@ -754,7 +784,7 @@
                           handleCheckControl(scope.$index);
                         }
                       "
-                      v-direction="{ x: 13, y: scope.$index }"
+                      v-direction="{ x: 15, y: scope.$index }"
                       v-trim
                     ></el-input>
                   </div>
@@ -811,7 +841,7 @@
                             handleCheckControl(scope.$index);
                           }
                         "
-                        v-direction="{ x: 14, y: scope.$index }"
+                        v-direction="{ x: 16, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
@@ -869,11 +899,41 @@
                             handleCheckControl(scope.$index);
                           }
                         "
-                        v-direction="{ x: 15, y: scope.$index }"
+                        v-direction="{ x: 17, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
                   </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="83oi边缘头"
+                min-width="120"
+                align="center"
+                prop="head83oiEdge"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.head83oiEdge"
+                    v-direction="{ x: 18, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="83oi边缘尾"
+                min-width="120"
+                align="center"
+                prop="tail83oiEdge"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tail83oiEdge"
+                    v-direction="{ x: 19, y: scope.$index }"
+                    v-trim
+                  ></el-input>
                 </template>
               </el-table-column>
               <el-table-column
@@ -905,7 +965,7 @@
                         handleCheckControl(scope.$index);
                       }
                     "
-                    v-direction="{ x: 16, y: scope.$index }"
+                    v-direction="{ x: 20, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -959,7 +1019,7 @@
                             handleCheckControl(scope.$index);
                           }
                         "
-                        v-direction="{ x: 17, y: scope.$index }"
+                        v-direction="{ x: 21, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
@@ -990,7 +1050,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headRrv"
-                    v-direction="{ x: 18, y: scope.$index }"
+                    v-direction="{ x: 22, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
@@ -1024,13 +1084,73 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailRrv"
-                    v-direction="{ x: 19, y: scope.$index }"
+                    v-direction="{ x: 23, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
                         handleCheckControl(scope.$index);
                       }
                     "
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="R/2RRV头"
+                min-width="120"
+                align="center"
+                prop="headR2Rrv"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.headR2Rrv"
+                    v-direction="{ x: 24, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="R/2RRV尾"
+                min-width="120"
+                align="center"
+                prop="tailR2Rrv"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tailR2Rrv"
+                    v-direction="{ x: 25, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="ORG头"
+                min-width="120"
+                align="center"
+                prop="headOrg"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.headOrg"
+                    v-direction="{ x: 26, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="ORG尾"
+                min-width="120"
+                align="center"
+                prop="tailOrg"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tailOrg"
+                    v-direction="{ x: 27, y: scope.$index }"
+                    v-trim
                   ></el-input>
                 </template>
               </el-table-column>
@@ -1058,7 +1178,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.minorityCarrierLifetime"
-                    v-direction="{ x: 20, y: scope.$index }"
+                    v-direction="{ x: 28, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
@@ -1078,7 +1198,7 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.remarks"
-                    v-direction="{ x: 21, y: scope.$index }"
+                    v-direction="{ x: 29, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
