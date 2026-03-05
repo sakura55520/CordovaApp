@@ -698,6 +698,11 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headR2"
+                    @change="
+                      (val) => {
+                        handleR2Change('head', scope.$index);
+                      }
+                    "
                     v-direction="{ x: 12, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -713,6 +718,11 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailR2"
+                    @change="
+                      (val) => {
+                        handleR2Change('tail', scope.$index);
+                      }
+                    "
                     v-direction="{ x: 13, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -916,6 +926,11 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.head83oiEdge"
+                    @change="
+                      (val) => {
+                        handle83oiEdgeChange('head', scope.$index);
+                      }
+                    "
                     v-direction="{ x: 18, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -931,7 +946,42 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tail83oiEdge"
+                    @change="
+                      (val) => {
+                        handle83oiEdgeChange('tail', scope.$index);
+                      }
+                    "
                     v-direction="{ x: 19, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="ORG头"
+                min-width="120"
+                align="center"
+                prop="headOrg"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.headOrg"
+                    v-direction="{ x: 20, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="ORG尾"
+                min-width="120"
+                align="center"
+                prop="tailOrg"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tailOrg"
+                    v-direction="{ x: 21, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -965,7 +1015,7 @@
                         handleCheckControl(scope.$index);
                       }
                     "
-                    v-direction="{ x: 20, y: scope.$index }"
+                    v-direction="{ x: 22, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -1019,7 +1069,7 @@
                             handleCheckControl(scope.$index);
                           }
                         "
-                        v-direction="{ x: 21, y: scope.$index }"
+                        v-direction="{ x: 23, y: scope.$index }"
                         v-trim
                       ></el-input>
                     </el-form-item>
@@ -1050,7 +1100,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headRrv"
-                    v-direction="{ x: 22, y: scope.$index }"
+                    v-direction="{ x: 24, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
@@ -1084,7 +1134,7 @@
                     }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailRrv"
-                    v-direction="{ x: 23, y: scope.$index }"
+                    v-direction="{ x: 25, y: scope.$index }"
                     v-trim
                     @change="
                       () => {
@@ -1104,7 +1154,7 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headR2Rrv"
-                    v-direction="{ x: 24, y: scope.$index }"
+                    v-direction="{ x: 26, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -1119,36 +1169,6 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailR2Rrv"
-                    v-direction="{ x: 25, y: scope.$index }"
-                    v-trim
-                  ></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="ORG头"
-                min-width="120"
-                align="center"
-                prop="headOrg"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-if="scope.row.type === 0"
-                    v-model="scope.row.headOrg"
-                    v-direction="{ x: 26, y: scope.$index }"
-                    v-trim
-                  ></el-input>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="ORG尾"
-                min-width="120"
-                align="center"
-                prop="tailOrg"
-              >
-                <template slot-scope="scope">
-                  <el-input
-                    v-if="scope.row.type === 0"
-                    v-model="scope.row.tailOrg"
                     v-direction="{ x: 27, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -3408,6 +3428,66 @@ export default {
           this.formData.segmentedInstructionDetailVos[index],
           "tailRrv",
           tailRrv
+        );
+      }
+    },
+    handleR2Change(type, index) {
+      let { headResistance, tailResistance, headR2, tailR2 } =
+        this.formData.segmentedInstructionDetailVos[index];
+      if (type == "head") {
+        let headR2Rrv = null;
+        if (headResistance && headResistance != "0" && headR2 && headR2 != "0")
+          headR2Rrv = (
+            (Math.abs(headR2 - headResistance) / headResistance) *
+            100
+          ).toFixed(3);
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "headR2Rrv",
+          headR2Rrv
+        );
+      }
+      if (type == "tail") {
+        let tailR2Rrv = null;
+        if (tailResistance && tailResistance != "0" && tailR2 && tailR2 != "0")
+          tailR2Rrv = (
+            (Math.abs(tailR2 - tailResistance) / tailResistance) *
+            100
+          ).toFixed(3);
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "tailR2Rrv",
+          tailR2Rrv
+        );
+      }
+    },
+    handle83oiEdgeChange(type, index) {
+      let { head83oiEdge, tail83oiEdge, head83oi, tail83oi } =
+        this.formData.segmentedInstructionDetailVos[index];
+      if (type == "head") {
+        let headOrg = null;
+        if (head83oiEdge && head83oiEdge != "0" && head83oi && head83oi != "0")
+          headOrg = (
+            (Math.abs(head83oi - head83oiEdge) / head83oi) *
+            100
+          ).toFixed(3);
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "headOrg",
+          headOrg
+        );
+      }
+      if (type == "tail") {
+        let tailOrg = null;
+        if (tail83oiEdge && tail83oiEdge != "0" && tail83oi && tail83oi != "0")
+          tailOrg = (
+            (Math.abs(tail83oi - tail83oiEdge) / tail83oi) *
+            100
+          ).toFixed(3);
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[index],
+          "tailOrg",
+          tailOrg
         );
       }
     },
