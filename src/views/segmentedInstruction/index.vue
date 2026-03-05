@@ -3008,6 +3008,7 @@ export default {
           this.refreshSegments83Oi();
         }
       }
+      this.handle83oiEdgeChange(type, index);
     },
     refreshSegmentsOi() {
       let cloneSegmentedInstructionDetailVos =
@@ -3430,6 +3431,7 @@ export default {
           tailRrv
         );
       }
+      this.handleR2Change(type, index);
     },
     handleR2Change(type, index) {
       let { headResistance, tailResistance, headR2, tailR2 } =
