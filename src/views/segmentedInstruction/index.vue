@@ -1209,6 +1209,66 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="头缺陷"
+                min-width="120"
+                align="center"
+                prop="headFlaw"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.headFlaw"
+                    v-direction="{ x: 29, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="尾缺陷"
+                min-width="120"
+                align="center"
+                prop="tailFlaw"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tailFlaw"
+                    v-direction="{ x: 30, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="OISF密度头"
+                min-width="120"
+                align="center"
+                prop="headOisf"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.headOisf"
+                    v-direction="{ x: 31, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="OISF密度尾"
+                min-width="120"
+                align="center"
+                prop="tailOisf"
+              >
+                <template slot-scope="scope">
+                  <el-input
+                    v-if="scope.row.type === 0"
+                    v-model="scope.row.tailOisf"
+                    v-direction="{ x: 32, y: scope.$index }"
+                    v-trim
+                  ></el-input>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="说明"
                 min-width="180"
                 align="center"
@@ -1218,7 +1278,7 @@
                   <el-input
                     v-if="scope.row.type === 0"
                     v-model="scope.row.remarks"
-                    v-direction="{ x: 29, y: scope.$index }"
+                    v-direction="{ x: 33, y: scope.$index }"
                     v-trim
                   ></el-input>
                 </template>
@@ -2283,6 +2343,10 @@ export default {
             tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
             headOrg: resistanceEdgeAndRrv.headOrg,
             tailOrg: resistanceEdgeAndRrv.tailOrg,
+            headFlaw: resistanceEdgeAndRrv.headFlaw,
+            tailFlaw: resistanceEdgeAndRrv.tailFlaw,
+            headOisf: resistanceEdgeAndRrv.headOisf,
+            tailOisf: resistanceEdgeAndRrv.tailOisf,
             _reason: [],
             reason: "",
             headCarbonRate,
@@ -2449,6 +2513,10 @@ export default {
           tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
           headOrg: resistanceEdgeAndRrv.headOrg,
           tailOrg: resistanceEdgeAndRrv.tailOrg,
+          headFlaw: resistanceEdgeAndRrv.headFlaw,
+          tailFlaw: resistanceEdgeAndRrv.tailFlaw,
+          headOisf: resistanceEdgeAndRrv.headOisf,
+          tailOisf: resistanceEdgeAndRrv.tailOisf,
           headCarbonRate,
           tailCarbonRate,
           new: this.temp.type,
@@ -2493,6 +2561,10 @@ export default {
           tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
           headOrg: resistanceEdgeAndRrv.headOrg,
           tailOrg: resistanceEdgeAndRrv.tailOrg,
+          headFlaw: resistanceEdgeAndRrv.headFlaw,
+          tailFlaw: resistanceEdgeAndRrv.tailFlaw,
+          headOisf: resistanceEdgeAndRrv.headOisf,
+          tailOisf: resistanceEdgeAndRrv.tailOisf,
           headCarbonRate,
           tailCarbonRate: null,
           new: this.temp.type,
@@ -2546,6 +2618,10 @@ export default {
         tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
         headOrg: resistanceEdgeAndRrv.headOrg,
         tailOrg: resistanceEdgeAndRrv.tailOrg,
+        headFlaw: resistanceEdgeAndRrv.headFlaw,
+        tailFlaw: resistanceEdgeAndRrv.tailFlaw,
+        headOisf: resistanceEdgeAndRrv.headOisf,
+        tailOisf: resistanceEdgeAndRrv.tailOisf,
         headCarbonRate,
         tailCarbonRate,
         new: this.temp.type,
@@ -2603,6 +2679,10 @@ export default {
           item.tail83oiEdge = resistanceEdgeAndRrv.tail83oiEdge;
           item.headOrg = resistanceEdgeAndRrv.headOrg;
           item.tailOrg = resistanceEdgeAndRrv.tailOrg;
+          item.headFlaw = resistanceEdgeAndRrv.headFlaw;
+          item.tailFlaw = resistanceEdgeAndRrv.tailFlaw;
+          item.headOisf = resistanceEdgeAndRrv.headOisf;
+          item.tailOisf = resistanceEdgeAndRrv.tailOisf;
           item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
@@ -2662,6 +2742,10 @@ export default {
           item.tail83oiEdge = resistanceEdgeAndRrv.tail83oiEdge;
           item.headOrg = resistanceEdgeAndRrv.headOrg;
           item.tailOrg = resistanceEdgeAndRrv.tailOrg;
+          item.headFlaw = resistanceEdgeAndRrv.headFlaw;
+          item.tailFlaw = resistanceEdgeAndRrv.tailFlaw;
+          item.headOisf = resistanceEdgeAndRrv.headOisf;
+          item.tailOisf = resistanceEdgeAndRrv.tailOisf;
           item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
@@ -3163,6 +3247,10 @@ export default {
       let tail83oiEdge = null;
       let headOrg = null;
       let tailOrg = null;
+      let headFlaw = null;
+      let tailFlaw = null;
+      let headOisf = null;
+      let tailOisf = null;
       if (
         (headPosition || headPosition == 0) &&
         (tailPosition || tailPosition == 0) &&
@@ -3184,6 +3272,7 @@ export default {
                 100
               ).toFixed(3)
             );
+          headFlaw = headCheckInfoList[headCheckInfoList.length - 1].flaw;
         }
 
         const tailCheckInfoList = this.checkInfo.filter(
@@ -3201,6 +3290,7 @@ export default {
                 100
               ).toFixed(3)
             );
+          tailFlaw = tailCheckInfoList[0].flaw;
         }
 
         const headCheckInfo = this.checkInfo.find(
@@ -3212,6 +3302,7 @@ export default {
           headR2Rrv = headCheckInfo.halfRrg;
           head83oiEdge = headCheckInfo.oiE83;
           headOrg = headCheckInfo.org;
+          headOisf = headCheckInfo.osf;
         }
 
         const tailCheckInfo = this.checkInfo.find(
@@ -3223,6 +3314,7 @@ export default {
           tailR2Rrv = tailCheckInfo.halfRrg;
           tail83oiEdge = tailCheckInfo.oiE83;
           tailOrg = tailCheckInfo.org;
+          tailOsf = tailCheckInfo.osf;
         }
       }
       return {
@@ -3240,6 +3332,10 @@ export default {
         tail83oiEdge,
         headOrg,
         tailOrg,
+        headFlaw,
+        tailFlaw,
+        headOisf,
+        tailOisf,
       };
     },
     getMinorityCarrierLifetime(tailPosition) {
