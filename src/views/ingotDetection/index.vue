@@ -1580,7 +1580,11 @@ export default {
     calcHalfRrg(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.resC)
+      if (
+        item.resC &&
+        item.resC != "0" &&
+        (item.halfRes || item.halfRes == "0")
+      )
         data = Math.abs(((item.halfRes - item.resC) / item.resC) * 100).toFixed(
           3
         );
@@ -1589,21 +1593,21 @@ export default {
     calcRrg(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.resC)
+      if (item.resC && item.resC != "0" && (item.resE || item.resE == "0"))
         data = Math.abs(((item.resE - item.resC) / item.resC) * 100).toFixed(3);
       this.$set(this.formData.details[index], "rrg", data);
     },
     calcTargetDeviation(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.res)
+      if (item.res && item.res != "0" && (item.resC || item.resC == "0"))
         data = Math.abs(((item.resC - item.res) / item.res) * 100).toFixed(3);
       this.$set(this.formData.details[index], "targetDeviation", data);
     },
     calcOrg(index) {
       let item = this.formData.details[index];
       let data;
-      if (item.oiC83 && (item.oiE83 || item.oiE83 == "0"))
+      if (item.oiC83 && item.oiC83 != "0" && (item.oiE83 || item.oiE83 == "0"))
         data = ((Math.abs(item.oiC83 - item.oiE83) / item.oiC83) * 100).toFixed(
           3
         );
