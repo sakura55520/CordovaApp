@@ -76,6 +76,12 @@
                   prop="type"
                 />
                 <el-table-column
+                  label="样片厚度"
+                  width="85"
+                  align="center"
+                  prop="tall"
+                />
+                <el-table-column
                   label="产品类型"
                   width="85"
                   align="center"
@@ -3294,7 +3300,9 @@ export default {
         }
 
         const headCheckInfo = this.checkInfo.find(
-          (item) => item.samplePosition == headPosition
+          (item) =>
+            (item.samplePosition - item.tall || 0) <= headPosition &&
+            headPosition <= (item.samplePosition + item.tall || 0)
         );
 
         if (headCheckInfo) {
@@ -3306,7 +3314,9 @@ export default {
         }
 
         const tailCheckInfo = this.checkInfo.find(
-          (item) => item.samplePosition == tailPosition
+          (item) =>
+            (item.samplePosition - item.tall || 0) <= tailPosition &&
+            tailPosition <= (item.samplePosition + item.tall || 0)
         );
 
         if (tailCheckInfo) {
@@ -3314,7 +3324,7 @@ export default {
           tailR2Rrv = tailCheckInfo.halfRrg;
           tail83oiEdge = tailCheckInfo.oiE83;
           tailOrg = tailCheckInfo.org;
-          tailOsf = tailCheckInfo.osf;
+          tailOisf = tailCheckInfo.osf;
         }
       }
       return {
