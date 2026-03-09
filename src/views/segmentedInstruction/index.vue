@@ -1218,12 +1218,12 @@
                 label="头缺陷"
                 min-width="120"
                 align="center"
-                prop="headFlaw"
+                prop="headDefect"
               >
                 <template slot-scope="scope">
                   <el-input
                     v-if="scope.row.type === 0"
-                    v-model="scope.row.headFlaw"
+                    v-model="scope.row.headDefect"
                     v-direction="{ x: 29, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -1233,12 +1233,12 @@
                 label="尾缺陷"
                 min-width="120"
                 align="center"
-                prop="tailFlaw"
+                prop="tailDefect"
               >
                 <template slot-scope="scope">
                   <el-input
                     v-if="scope.row.type === 0"
-                    v-model="scope.row.tailFlaw"
+                    v-model="scope.row.tailDefect"
                     v-direction="{ x: 30, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -1248,12 +1248,12 @@
                 label="OISF密度头"
                 min-width="120"
                 align="center"
-                prop="headOisf"
+                prop="headOisfDensity"
               >
                 <template slot-scope="scope">
                   <el-input
                     v-if="scope.row.type === 0"
-                    v-model="scope.row.headOisf"
+                    v-model="scope.row.headOisfDensity"
                     v-direction="{ x: 31, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -1263,12 +1263,12 @@
                 label="OISF密度尾"
                 min-width="120"
                 align="center"
-                prop="tailOisf"
+                prop="tailOisfDensity"
               >
                 <template slot-scope="scope">
                   <el-input
                     v-if="scope.row.type === 0"
-                    v-model="scope.row.tailOisf"
+                    v-model="scope.row.tailOisfDensity"
                     v-direction="{ x: 32, y: scope.$index }"
                     v-trim
                   ></el-input>
@@ -2349,10 +2349,10 @@ export default {
             tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
             headOrg: resistanceEdgeAndRrv.headOrg,
             tailOrg: resistanceEdgeAndRrv.tailOrg,
-            headFlaw: resistanceEdgeAndRrv.headFlaw,
-            tailFlaw: resistanceEdgeAndRrv.tailFlaw,
-            headOisf: resistanceEdgeAndRrv.headOisf,
-            tailOisf: resistanceEdgeAndRrv.tailOisf,
+            headDefect: resistanceEdgeAndRrv.headDefect,
+            tailDefect: resistanceEdgeAndRrv.tailDefect,
+            headOisfDensity: resistanceEdgeAndRrv.headOisfDensity,
+            tailOisfDensity: resistanceEdgeAndRrv.tailOisfDensity,
             _reason: [],
             reason: "",
             headCarbonRate,
@@ -2519,10 +2519,10 @@ export default {
           tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
           headOrg: resistanceEdgeAndRrv.headOrg,
           tailOrg: resistanceEdgeAndRrv.tailOrg,
-          headFlaw: resistanceEdgeAndRrv.headFlaw,
-          tailFlaw: resistanceEdgeAndRrv.tailFlaw,
-          headOisf: resistanceEdgeAndRrv.headOisf,
-          tailOisf: resistanceEdgeAndRrv.tailOisf,
+          headDefect: resistanceEdgeAndRrv.headDefect,
+          tailDefect: resistanceEdgeAndRrv.tailDefect,
+          headOisfDensity: resistanceEdgeAndRrv.headOisfDensity,
+          tailOisfDensity: resistanceEdgeAndRrv.tailOisfDensity,
           headCarbonRate,
           tailCarbonRate,
           new: this.temp.type,
@@ -2567,10 +2567,10 @@ export default {
           tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
           headOrg: resistanceEdgeAndRrv.headOrg,
           tailOrg: resistanceEdgeAndRrv.tailOrg,
-          headFlaw: resistanceEdgeAndRrv.headFlaw,
-          tailFlaw: resistanceEdgeAndRrv.tailFlaw,
-          headOisf: resistanceEdgeAndRrv.headOisf,
-          tailOisf: resistanceEdgeAndRrv.tailOisf,
+          headDefect: resistanceEdgeAndRrv.headDefect,
+          tailDefect: resistanceEdgeAndRrv.tailDefect,
+          headOisfDensity: resistanceEdgeAndRrv.headOisfDensity,
+          tailOisfDensity: resistanceEdgeAndRrv.tailOisfDensity,
           headCarbonRate,
           tailCarbonRate: null,
           new: this.temp.type,
@@ -2624,10 +2624,10 @@ export default {
         tail83oiEdge: resistanceEdgeAndRrv.tail83oiEdge,
         headOrg: resistanceEdgeAndRrv.headOrg,
         tailOrg: resistanceEdgeAndRrv.tailOrg,
-        headFlaw: resistanceEdgeAndRrv.headFlaw,
-        tailFlaw: resistanceEdgeAndRrv.tailFlaw,
-        headOisf: resistanceEdgeAndRrv.headOisf,
-        tailOisf: resistanceEdgeAndRrv.tailOisf,
+        headDefect: resistanceEdgeAndRrv.headDefect,
+        tailDefect: resistanceEdgeAndRrv.tailDefect,
+        headOisfDensity: resistanceEdgeAndRrv.headOisfDensity,
+        tailOisfDensity: resistanceEdgeAndRrv.tailOisfDensity,
         headCarbonRate,
         tailCarbonRate,
         new: this.temp.type,
@@ -2685,10 +2685,10 @@ export default {
           item.tail83oiEdge = resistanceEdgeAndRrv.tail83oiEdge;
           item.headOrg = resistanceEdgeAndRrv.headOrg;
           item.tailOrg = resistanceEdgeAndRrv.tailOrg;
-          item.headFlaw = resistanceEdgeAndRrv.headFlaw;
-          item.tailFlaw = resistanceEdgeAndRrv.tailFlaw;
-          item.headOisf = resistanceEdgeAndRrv.headOisf;
-          item.tailOisf = resistanceEdgeAndRrv.tailOisf;
+          item.headDefect = resistanceEdgeAndRrv.headDefect;
+          item.tailDefect = resistanceEdgeAndRrv.tailDefect;
+          item.headOisfDensity = resistanceEdgeAndRrv.headOisfDensity;
+          item.tailOisfDensity = resistanceEdgeAndRrv.tailOisfDensity;
           item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
@@ -2748,10 +2748,10 @@ export default {
           item.tail83oiEdge = resistanceEdgeAndRrv.tail83oiEdge;
           item.headOrg = resistanceEdgeAndRrv.headOrg;
           item.tailOrg = resistanceEdgeAndRrv.tailOrg;
-          item.headFlaw = resistanceEdgeAndRrv.headFlaw;
-          item.tailFlaw = resistanceEdgeAndRrv.tailFlaw;
-          item.headOisf = resistanceEdgeAndRrv.headOisf;
-          item.tailOisf = resistanceEdgeAndRrv.tailOisf;
+          item.headDefect = resistanceEdgeAndRrv.headDefect;
+          item.tailDefect = resistanceEdgeAndRrv.tailDefect;
+          item.headOisfDensity = resistanceEdgeAndRrv.headOisfDensity;
+          item.tailOisfDensity = resistanceEdgeAndRrv.tailOisfDensity;
           item.minorityCarrierLifetime = minorityCarrierLifetime;
         }
         if (
@@ -3253,10 +3253,10 @@ export default {
       let tail83oiEdge = null;
       let headOrg = null;
       let tailOrg = null;
-      let headFlaw = null;
-      let tailFlaw = null;
-      let headOisf = null;
-      let tailOisf = null;
+      let headDefect = null;
+      let tailDefect = null;
+      let headOisfDensity = null;
+      let tailOisfDensity = null;
       if (
         (headPosition || headPosition == 0) &&
         (tailPosition || tailPosition == 0) &&
@@ -3278,7 +3278,7 @@ export default {
                 100
               ).toFixed(3)
             );
-          headFlaw = headCheckInfoList[headCheckInfoList.length - 1].flaw;
+          headDefect = headCheckInfoList[headCheckInfoList.length - 1].flaw;
         }
 
         const tailCheckInfoList = this.checkInfo.filter(
@@ -3296,7 +3296,7 @@ export default {
                 100
               ).toFixed(3)
             );
-          tailFlaw = tailCheckInfoList[0].flaw;
+          tailDefect = tailCheckInfoList[0].flaw;
         }
 
         const headCheckInfo = this.checkInfo.find(
@@ -3310,7 +3310,7 @@ export default {
           headR2Rrv = headCheckInfo.halfRrg;
           head83oiEdge = headCheckInfo.oiE83;
           headOrg = headCheckInfo.org;
-          headOisf = headCheckInfo.osf;
+          headOisfDensity = headCheckInfo.osf;
         }
 
         const tailCheckInfo = this.checkInfo.find(
@@ -3324,7 +3324,7 @@ export default {
           tailR2Rrv = tailCheckInfo.halfRrg;
           tail83oiEdge = tailCheckInfo.oiE83;
           tailOrg = tailCheckInfo.org;
-          tailOisf = tailCheckInfo.osf;
+          tailOisfDensity = tailCheckInfo.osf;
         }
       }
       return {
@@ -3342,10 +3342,10 @@ export default {
         tail83oiEdge,
         headOrg,
         tailOrg,
-        headFlaw,
-        tailFlaw,
-        headOisf,
-        tailOisf,
+        headDefect,
+        tailDefect,
+        headOisfDensity,
+        tailOisfDensity,
       };
     },
     getMinorityCarrierLifetime(tailPosition) {
