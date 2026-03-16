@@ -629,20 +629,27 @@
               </el-table-column>
               <el-table-column label="OSF密度" min-width="120" align="center">
                 <template slot-scope="scope">
-                  <el-select v-model="scope.row.osf" placeholder="">
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in osfDensityList"
-                      :key="item.value"
-                    ></el-option>
-                  </el-select> </template
+                  <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        '氧化层错',
+                        scope.row.osf
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor('氧化层错', scope.row.osf)
+                      ),
+                    }"
+                    :id="'input-11-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
+                    v-model="scope.row.osf"
+                    type="number"
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="基磷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-11-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
+                    :id="'input-12-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
                     v-model="scope.row.phosphorus"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'phosphorus')
@@ -652,8 +659,8 @@
               <el-table-column label="基硼" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-12-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
+                    :id="'input-13-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 13, scope.$index)"
                     v-model="scope.row.boron"
                     @change="(val) => handleToFixed(val, scope.$index, 'boron')"
                   ></el-input> </template
@@ -661,8 +668,8 @@
               <el-table-column label="基砷" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-13-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 13, scope.$index)"
+                    :id="'input-14-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 14, scope.$index)"
                     v-model="scope.row.arsenic"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'arsenic')
@@ -672,8 +679,8 @@
               <el-table-column label="基锑" min-width="80" align="center">
                 <template slot-scope="scope">
                   <el-input
-                    :id="'input-14-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 14, scope.$index)"
+                    :id="'input-15-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 15, scope.$index)"
                     v-model="scope.row.antimony"
                     @change="
                       (val) => handleToFixed(val, scope.$index, 'antimony')
@@ -1159,6 +1166,7 @@ export default {
         { key: "resE", name: "RES_E", from: "formData.details" },
         { key: "halfRrg", name: "1/2RRG", from: "formData.details" },
         { key: "org", name: "ORG", from: "formData.details" },
+        { key: "osf", name: "氧化层错", from: "formData.details" },
       ],
       controlMap: {},
       cloneDetails: [],
