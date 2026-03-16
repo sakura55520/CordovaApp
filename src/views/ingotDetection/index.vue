@@ -642,7 +642,6 @@
                     :id="'input-11-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
                     v-model="scope.row.osf"
-                    type="number"
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="基磷" min-width="80" align="center">
