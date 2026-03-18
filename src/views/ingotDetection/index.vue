@@ -1826,6 +1826,15 @@ export default {
             if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
           }
         }
+        if (name === "氧化层错") {
+          let item = list.find((ele) => ele.keyVal === "C100") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
 
         this.controlMap[name] = {
           上限: {
