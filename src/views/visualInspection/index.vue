@@ -341,18 +341,13 @@
                 class="item"
                 label-width="90px"
               >
-                <el-select
-                  style="width: 100%"
+                <el-input
+                  class="value"
                   v-model="formData.osf"
                   :disabled="!enableMap.osf"
+                  v-direction="{ x: 4, y: 4 }"
                 >
-                  <el-option
-                    :label="item.label"
-                    :value="item.value"
-                    v-for="item in osfDensityList"
-                    :key="item.value"
-                  ></el-option>
-                </el-select>
+                </el-input>
               </el-form-item>
               <div class="item"></div>
             </div>
@@ -986,22 +981,20 @@
               ></el-table-column>
               <el-table-column label="OSF密度" min-width="120" align="center">
                 <template slot-scope="scope">
-                  <el-select
+                  <el-input
                     :class="{
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
+                    :id="'input-11-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
                     v-model="scope.row.osf"
-                    placeholder=""
-                    @change="updateData"
-                  >
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in osfDensityList"
-                      :key="item.value"
-                    ></el-option>
-                  </el-select> </template
+                    @change="
+                      (val) => {
+                        updateData();
+                      }
+                    "
+                  ></el-input> </template
               ></el-table-column>
               <el-table-column label="基磷" min-width="80" align="center">
                 <template slot-scope="scope">
@@ -1010,8 +1003,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-11-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 11, scope.$index)"
+                    :id="'input-12-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
                     v-model="scope.row.phosphorus"
                     @change="
                       (val) => {
@@ -1028,8 +1021,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-12-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 12, scope.$index)"
+                    :id="'input-13-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 13, scope.$index)"
                     v-model="scope.row.boron"
                     @change="
                       (val) => {
@@ -1046,8 +1039,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-13-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 13, scope.$index)"
+                    :id="'input-14-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 14, scope.$index)"
                     v-model="scope.row.arsenic"
                     @change="
                       (val) => {
@@ -1064,8 +1057,8 @@
                       disabled: checkDisabled(scope.row),
                     }"
                     :disabled="checkDisabled(scope.row)"
-                    :id="'input-14-' + scope.$index"
-                    @keyup.native="(e) => handleKeyup(e, 14, scope.$index)"
+                    :id="'input-15-' + scope.$index"
+                    @keyup.native="(e) => handleKeyup(e, 15, scope.$index)"
                     v-model="scope.row.antimony"
                     @change="
                       (val) => {
