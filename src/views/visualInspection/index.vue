@@ -871,6 +871,7 @@
                     @input="
                       () => {
                         calcOrg(scope.$index);
+                        handle83OIChange('c', scope.$index);
                         updateData();
                       }
                     "
@@ -898,6 +899,7 @@
                     @input="
                       () => {
                         calcOrg(scope.$index);
+                        handle83OIChange('e', scope.$index);
                         updateData();
                       }
                     "
@@ -1628,6 +1630,19 @@ export default {
           3
         );
       this.$set(this.formData.wipCrystalCheckSampleDatas[index], "org", data);
+    },
+    handle83OIChange(type, index) {
+      const { oiC83, oiE83 } = this.formData.wipCrystalCheckSampleDatas[index];
+      if (type == "c") {
+        let oiC79;
+        if (oiC83 || oiC83 == "0") oiC79 = (Number(oiC83) / 0.508).toFixed(3);
+        this.$set(this.formData.wipCrystalCheckSampleDatas[index], "oiC", oiC79);
+      }
+      if (type == "e") {
+        let oiE79;
+        if (oiE83 || oiE83 == "0") oiE79 = (Number(oiE83) / 0.508).toFixed(3);
+        this.$set(this.formData.wipCrystalCheckSampleDatas[index], "oiE", oiE79);
+      }
     },
     calcHeadTailResistivityRatio(row, index) {
       let headTailResistivityRatio = null;

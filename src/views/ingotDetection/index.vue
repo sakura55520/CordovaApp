@@ -438,7 +438,12 @@
                       :id="'input-5-' + scope.$index"
                       @keyup.native="(e) => handleKeyup(e, 5, scope.$index)"
                       v-model="scope.row.oiC83"
-                      @input="calcOrg(scope.$index)"
+                      @input="
+                        () => {
+                          calcOrg(scope.$index);
+                          handle83OIChange('c', scope.$index);
+                        }
+                      "
                     ></el-input>
                   </el-form-item>
                 </template>
@@ -458,7 +463,12 @@
                     :id="'input-6-' + scope.$index"
                     @keyup.native="(e) => handleKeyup(e, 6, scope.$index)"
                     v-model="scope.row.oiE83"
-                    @input="calcOrg(scope.$index)"
+                    @input="
+                      () => {
+                        calcOrg(scope.$index);
+                        handle83OIChange('e', scope.$index);
+                      }
+                    "
                   ></el-input> </template
               ></el-table-column>
               <el-table-column label="CS" min-width="80" align="center">
@@ -1619,6 +1629,19 @@ export default {
           3
         );
       this.$set(this.formData.details[index], "org", data);
+    },
+    handle83OIChange(type, index) {
+      const { oiC83, oiE83 } = this.formData.details[index];
+      if (type == "c") {
+        let oiC79;
+        if (oiC83 || oiC83 == "0") oiC79 = (Number(oiC83) / 0.508).toFixed(3);
+        this.$set(this.formData.details[index], "oiC", oiC79);
+      }
+      if (type == "e") {
+        let oiE79;
+        if (oiE83 || oiE83 == "0") oiE79 = (Number(oiE83) / 0.508).toFixed(3);
+        this.$set(this.formData.details[index], "oiE", oiE79);
+      }
     },
     calcHeadTailResistivityRatio(row, index) {
       let headTailResistivityRatio = null;

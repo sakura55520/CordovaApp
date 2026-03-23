@@ -41,110 +41,111 @@
           </el-form-item>
         </div>
       </el-form>
-      <div
-        v-if="list.length !== 0"
-        class="card"
-        v-for="item in list"
-        :key="item.code"
-      >
-        <div class="header">{{ item.code }}</div>
-        <el-divider class="divider" />
-        <el-table
-          :data="[item]"
-          key="dataOrderCode"
-          :header-cell-style="{
-            background: 'rgba(242, 242, 242)',
-            color: '#606266',
-          }"
+      <div v-if="list.length !== 0">
+        <div
+          class="card"
+          v-for="item in list"
+          :key="item.code"
         >
-          <el-table-column label="轮编号" prop="extend1" min-width="90" />
-          <el-table-column label="生产设备" prop="extend2" min-width="100" />
-          <el-table-column
-            label="执行设备"
-            prop="equipmentCode"
-            min-width="100"
-          />
-          <el-table-column
-            label="产品料号"
-            prop="materialCode"
-            min-width="110"
-          />
-          <el-table-column
-            label="产品类型"
-            prop="data.productCategory"
-            min-width="100"
-          />
-          <el-table-column label="掺杂剂" prop="extend3" min-width="100" />
-          <el-table-column label="数量(kg)" prop="number" min-width="100" />
-          <el-table-column label="晶锭段位" min-width="100">
-            <template slot-scope="{ row }">
-              <div v-if="row.data.segmentNum && row.data.totalSegmentNum">
-                {{ row.data.segmentNum }}/{{ row.data.totalSegmentNum }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="是否为end" prop="data.isEnd" min-width="100">
-            <template slot-scope="{ row }">
-              <div v-if="row.data.isEnd">是</div>
-              <div v-else-if="row.data.isEnd === false">否</div>
-            </template>
-          </el-table-column>
-          <el-table-column label="加工状态" prop="status" width="100">
-            <template slot-scope="{ row }">
-              <!-- 加工状态（0：待加工；1：加工中；2：加工完成；3：入库完成）-->
-              <span v-if="row.status === 0"
-                ><i
-                  class="icon-dot"
-                  style="background-color: #909399"
-                />待加工</span
+          <div class="header">{{ item.code }}</div>
+          <el-divider class="divider" />
+          <el-table
+            :data="[item]"
+            key="dataOrderCode"
+            :header-cell-style="{
+              background: 'rgba(242, 242, 242)',
+              color: '#606266',
+            }"
+          >
+            <el-table-column label="轮编号" prop="extend1" min-width="90" />
+            <el-table-column label="生产设备" prop="extend2" min-width="100" />
+            <el-table-column
+              label="执行设备"
+              prop="equipmentCode"
+              min-width="100"
+            />
+            <el-table-column
+              label="产品料号"
+              prop="materialCode"
+              min-width="110"
+            />
+            <el-table-column
+              label="产品类型"
+              prop="data.productCategory"
+              min-width="100"
+            />
+            <el-table-column label="掺杂剂" prop="extend3" min-width="100" />
+            <el-table-column label="数量(kg)" prop="number" min-width="100" />
+            <el-table-column label="晶锭段位" min-width="100">
+              <template slot-scope="{ row }">
+                <div v-if="row.data.segmentNum && row.data.totalSegmentNum">
+                  {{ row.data.segmentNum }}/{{ row.data.totalSegmentNum }}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="是否为end" prop="data.isEnd" min-width="100">
+              <template slot-scope="{ row }">
+                <div v-if="row.data.isEnd">是</div>
+                <div v-else-if="row.data.isEnd === false">否</div>
+              </template>
+            </el-table-column>
+            <el-table-column label="加工状态" prop="status" width="100">
+              <template slot-scope="{ row }">
+                <!-- 加工状态（0：待加工；1：加工中；2：加工完成；3：入库完成）-->
+                <span v-if="row.status === 0"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #909399"
+                  />待加工</span
+                >
+                <span v-else-if="row.status === 1"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #409eff"
+                  />加工中</span
+                >
+                <span v-else-if="row.status === 2"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #67c23a"
+                  />加工完成</span
+                >
+                <span v-else-if="row.status === 3"
+                  ><i
+                    class="icon-dot"
+                    style="background-color: #67c23a"
+                  />入库完成</span
+                >
+              </template>
+            </el-table-column>
+            <el-table-column label="进站时间" prop="inTime" min-width="150" />
+            <el-table-column label="操作者" prop="processUserCreate" />
+          </el-table>
+          <div class="tool">
+            <div class="btn">
+              <el-button
+                type="warning"
+                plain
+                class="back-station"
+                @click="handleExitStationClick(item)"
+                >退站操作</el-button
               >
-              <span v-else-if="row.status === 1"
-                ><i
-                  class="icon-dot"
-                  style="background-color: #409eff"
-                />加工中</span
+              <el-button
+                v-if="item.wipStorageStatus === 0"
+                type="primary"
+                class="in-station"
+                @click="handleOverStationExecutionClick(item.code)"
               >
-              <span v-else-if="row.status === 2"
-                ><i
-                  class="icon-dot"
-                  style="background-color: #67c23a"
-                />加工完成</span
+                进站执行
+              </el-button>
+              <el-button
+                v-if="item.wipStorageStatus === 1"
+                type="primary"
+                class="out-station"
+                @click="handleOverStationExecutionClick(item.code)"
+                >出站执行</el-button
               >
-              <span v-else-if="row.status === 3"
-                ><i
-                  class="icon-dot"
-                  style="background-color: #67c23a"
-                />入库完成</span
-              >
-            </template>
-          </el-table-column>
-          <el-table-column label="进站时间" prop="inTime" min-width="150" />
-          <el-table-column label="操作者" prop="processUserCreate" />
-        </el-table>
-        <div class="tool">
-          <div class="btn">
-            <el-button
-              type="warning"
-              plain
-              class="back-station"
-              @click="handleExitStationClick(item)"
-              >退站操作</el-button
-            >
-            <el-button
-              v-if="item.wipStorageStatus === 0"
-              type="primary"
-              class="in-station"
-              @click="handleOverStationExecutionClick(item.code)"
-            >
-              进站执行
-            </el-button>
-            <el-button
-              v-if="item.wipStorageStatus === 1"
-              type="primary"
-              class="out-station"
-              @click="handleOverStationExecutionClick(item.code)"
-              >出站执行</el-button
-            >
+            </div>
           </div>
         </div>
       </div>
