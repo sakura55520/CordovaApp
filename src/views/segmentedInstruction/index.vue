@@ -276,29 +276,29 @@
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="基磷"
-                  min-width="70"
+                  label="基磷(1E+14)"
+                  min-width="110"
                   align="center"
                   prop="phosphorus"
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="基硼"
-                  min-width="70"
+                  label="基硼(1E+14)"
+                  min-width="110"
                   align="center"
                   prop="boron"
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="基砷"
-                  min-width="70"
+                  label="基砷(1E+14)"
+                  min-width="110"
                   align="center"
                   prop="arsenic"
                   show-overflow-tooltip
                 />
                 <el-table-column
-                  label="基锑"
-                  min-width="70"
+                  label="基锑(1E+14)"
+                  min-width="110"
                   align="center"
                   prop="antimony"
                   show-overflow-tooltip

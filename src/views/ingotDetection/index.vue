@@ -654,7 +654,7 @@
                     v-model="scope.row.osf"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基磷" min-width="80" align="center">
+              <el-table-column label="基磷(1E+14)" min-width="110" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-12-' + scope.$index"
@@ -665,7 +665,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基硼" min-width="80" align="center">
+              <el-table-column label="基硼(1E+14)" min-width="110" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-13-' + scope.$index"
@@ -674,7 +674,7 @@
                     @change="(val) => handleToFixed(val, scope.$index, 'boron')"
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基砷" min-width="80" align="center">
+              <el-table-column label="基砷(1E+14)" min-width="110" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-14-' + scope.$index"
@@ -685,7 +685,7 @@
                     "
                   ></el-input> </template
               ></el-table-column>
-              <el-table-column label="基锑" min-width="80" align="center">
+              <el-table-column label="基锑(1E+14)" min-width="110" align="center">
                 <template slot-scope="scope">
                   <el-input
                     :id="'input-15-' + scope.$index"
