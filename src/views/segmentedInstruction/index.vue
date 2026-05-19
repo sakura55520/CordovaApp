@@ -3048,6 +3048,9 @@ export default {
     calcOi(position) {
       const { head79oi, tail79oi, head83oi, tail83oi } = this.headAndTailOi;
       const { length } = this.formData;
+      let startPosition = 0;
+      if (this.wipCrystalCheckSampleRangeDtos[0] && this.wipCrystalCheckSampleRangeDtos[0].head)
+        startPosition = this.wipCrystalCheckSampleRangeDtos[0].head
       let data = [null, null];
       if (
         (!head79oi && head79oi !== 0) ||
@@ -3057,7 +3060,7 @@ export default {
         data[0] = null;
       else
         data[0] = Number(
-          head79oi - ((head79oi - tail79oi) * position) / length
+          head79oi - ((head79oi - tail79oi) * (position - startPosition)) / length
         ).toFixed(3);
       if (
         (!head83oi && head83oi !== 0) ||
@@ -3067,7 +3070,7 @@ export default {
         data[1] = null;
       else
         data[1] = Number(
-          head83oi - ((head83oi - tail83oi) * position) / length
+          head83oi - ((head83oi - tail83oi) * (position - startPosition)) / length
         ).toFixed(3);
       return data;
     },
@@ -3161,6 +3164,9 @@ export default {
     calcCarbonRate(position) {
       const { headCarbonRate, tailCarbonRate } = this.headAndTailCarbonRate;
       const { length } = this.formData;
+      let startPosition = 0;
+      if (this.wipCrystalCheckSampleRangeDtos[0] && this.wipCrystalCheckSampleRangeDtos[0].head)
+        startPosition = this.wipCrystalCheckSampleRangeDtos[0].head
       if (
         (!headCarbonRate && headCarbonRate !== 0) ||
         (!tailCarbonRate && tailCarbonRate !== 0) ||
@@ -3169,7 +3175,7 @@ export default {
         return null;
 
       return Number(
-        headCarbonRate - ((headCarbonRate - tailCarbonRate) * position) / length
+        headCarbonRate - ((headCarbonRate - tailCarbonRate) * (position - startPosition)) / length
       ).toFixed(3);
     },
     handleCarbonRateChange(type, index, val) {
