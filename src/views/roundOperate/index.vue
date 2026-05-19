@@ -346,6 +346,13 @@
                   <template slot="append">μm</template>
                 </el-input>
               </el-form-item>
+              <el-form-item label="滚圆工艺" prop="roundingProcess" label-width="90px">
+                <el-input
+                  v-model="formData.roundingProcess"
+                  v-direction="{ x: 4, y: 5 }"
+                >
+                </el-input>
+              </el-form-item>
             </div>
             <div class="row">
               <el-form-item
@@ -576,6 +583,7 @@ const defaultForm = {
   crystalPhaseReduction: null,
   unRolledLen: null,
   roughness: null,
+  roundingProcess: null,
 };
 
 export default {
@@ -645,6 +653,9 @@ export default {
         ],
         roughness: [
           { required: true, message: "请输入粗糙度", trigger: "change" },
+        ],
+        roundingProcess: [
+          { required: true, message: "请输入滚圆工艺", trigger: "change" },
         ],
       },
       printVisible: false,
