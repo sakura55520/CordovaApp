@@ -803,6 +803,16 @@ export default {
         callback();
       }
     };
+    const validateDiameter = (rule, value, callback) => {
+      const max = this.formData.circleDiameterTail;
+      const min = this.formData.circleDiameterHead;
+      if ((!max && max != "0") || (!min && min != "0")) callback();
+      if (Number(max) < Number(min)) {
+        callback(new Error("最小直径必须小于最大直径"));
+      } else {
+        callback();
+      }
+    };
     return {
       formData: {
         userCreate: null,
@@ -889,9 +899,11 @@ export default {
         ],
         circleDiameterHead: [
           { required: true, message: "最小直径不能为空", trigger: "change" },
+          { validator: validateDiameter, trigger: "change" },
         ],
         circleDiameterTail: [
           { required: true, message: "最大直径不能为空", trigger: "change" },
+          { validator: validateDiameter, trigger: "change" },
         ],
         status: [{ required: true, message: "请选择", trigger: "change" }],
         inStorageReason: [
