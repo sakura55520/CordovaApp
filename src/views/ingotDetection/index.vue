@@ -1077,7 +1077,7 @@ export default {
           { required: true, message: "晶向不能为空", trigger: "change" },
         ],
         targetResistivity: [
-          { required: true, message: "目标电阻率不能为空", trigger: "change" },
+          { required: false, message: "目标电阻率不能为空", trigger: "change" },
         ],
         samplePosition: [
           { required: true, message: "样片位置不能为空", trigger: "change" },
