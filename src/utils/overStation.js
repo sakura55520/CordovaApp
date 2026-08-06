@@ -149,7 +149,8 @@ function goOperationPage(storage, processingOrderCode) {
       ...storage,
       processingOrderCode,
       fromData: JSON.stringify(storage.fromData),
-      orderInfo: JSON.stringify(storage.orderInfo)
+      orderInfo: JSON.stringify(storage.orderInfo),
+      view: router.app._route.query.view,
     }
   })
   resetStationStore()
