@@ -877,6 +877,20 @@
               </div>
             </div>
           </div>
+          <div class="form">
+            <div class="form-title">留档文档记录</div>
+            <div class="growth-section">
+              <el-form-item label-width="0px" prop="_files">
+                <PhotoNew
+                  v-model="formData._files"
+                  :componentDisabled="false"
+                  :name="'CHECK_DEVICE'"
+                  default-direction="vertical"
+                  @input="handleFileChange"
+                />
+              </el-form-item>
+            </div>
+          </div>
         </el-form>
       </div>
     </div>
@@ -1045,6 +1059,7 @@ export default {
         wipCrystalGrowthOutErrors: [],
         details: [],
         backCuttings: [],
+        _files: [],
       },
       formRules: {
         inspector: [
@@ -1255,6 +1270,14 @@ export default {
         };
       });
 
+      const { photo } = this.formData;
+      let photos = Array.isArray(photo) ? photo : JSON.parse(photo || "[]");
+      this.formData._files = photos.map((fileItem) => ({
+        ...fileItem,
+        big_url: fileItem.fileUrl,
+        thumb_url: fileItem.fileUrl,
+      }));
+      
       this.fetchBackCuttingSampleRecord();
       await this.getMateralModelExtras();
       this.$set(this.formData, "details", cloneDeep(this.formData.details));
@@ -1878,6 +1901,15 @@ export default {
       let list = sampleNumber.split("-");
       let lastNumber = Number(list[list.length - 1]);
       return isNaN(lastNumber) ? 0 : lastNumber;
+    },
+    handleFileChange() {
+      const photo = (this.formData._files || []).map(
+        ({ big_url, thumb_url, ...item }) => ({
+          ...item,
+          fileUrl: big_url,
+        })
+      );
+      this.formData.photo = photo;
     },
     async refresh() {
       await this.$confirm(`请确认是否删除历史数据?`, "重新加载", {
