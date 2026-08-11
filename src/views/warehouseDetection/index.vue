@@ -867,7 +867,7 @@ export default {
           { required: true, message: "操作者不能为空", trigger: "change" },
         ],
         weighingQty: [
-          { required: true, message: "实际称重不能为空", trigger: "change" },
+          { required: true, message: "实际称重不能为空", trigger: "blur" },
         ],
         planLength: [
           { required: true, message: "计划长度不能为空", trigger: "change" },
@@ -876,33 +876,33 @@ export default {
           {
             required: true,
             message: "长度MIN不能为空",
-            trigger: "change",
+            trigger: "blur",
           },
-          { validator: validateLength, trigger: "change" },
+          { validator: validateLength, trigger: "blur" },
         ],
         maxLength: [
           {
             required: true,
             message: "长度MAX不能为空",
-            trigger: "change",
+            trigger: "blur",
           },
-          { validator: validateLength, trigger: "change" },
+          { validator: validateLength, trigger: "blur" },
         ],
         chippingLength: [
-          { required: true, message: "崩边长度不能为空", trigger: "change" },
+          { required: true, message: "崩边长度不能为空", trigger: "blur" },
         ],
         ellipticLength: [
-          { required: true, message: "椭圆长度不能为空", trigger: "change" },
+          { required: true, message: "椭圆长度不能为空", trigger: "blur" },
         ],
         qualifiedLength: [
           { required: true, message: "合格长度不能为空", trigger: "change" },
         ],
         circleDiameterHead: [
-          { required: true, message: "最小直径不能为空", trigger: "change" },
+          { required: true, message: "最小直径不能为空", trigger: "blur" },
           { validator: validateDiameter, trigger: "change" },
         ],
         circleDiameterTail: [
-          { required: true, message: "最大直径不能为空", trigger: "change" },
+          { required: true, message: "最大直径不能为空", trigger: "blur" },
           { validator: validateDiameter, trigger: "change" },
         ],
         status: [{ required: true, message: "请选择", trigger: "change" }],
@@ -1023,6 +1023,26 @@ export default {
           fromData = JSON.parse(this.$route.query.fromData);
           fromData.resHead = undefined;
           fromData.resTail = undefined;
+          fromData.originLength = undefined;
+          fromData.maxLength = undefined;
+          fromData.circleDiameterHead = undefined;
+          fromData.circleDiameterTail = undefined;
+          fromData.weighingQty = undefined;
+          fromData.chippingLength = undefined;
+          fromData.ellipticLength = undefined;
+          fromData.unRolledLen = undefined;
+          fromData.mainReferenceSurfaceWidthHead = undefined;
+          fromData.mainReferenceSurfaceWidthTail = undefined;
+          fromData.mainReferenceSurfaceLength = undefined;
+          fromData.auxiliaryReferenceSurfaceHead = undefined;
+          fromData.auxiliaryReferenceSurfaceTail = undefined;
+          fromData.auxiliaryReferenceSurfaceLength = undefined;
+          fromData.thirdReferenceSurfaceWidthHead = undefined;
+          fromData.thirdReferenceSurfaceWidthTail = undefined;
+          fromData.thirdReferenceSurfaceLength = undefined;
+          fromData.fourthReferenceSurfaceWidthHead = undefined;
+          fromData.fourthReferenceSurfaceWidthTail = undefined;
+          fromData.fourthReferenceSurfaceLength = undefined;
         } catch (e) {
           console.log(e);
         }
@@ -1048,7 +1068,7 @@ export default {
           : JSON.parse(reason || "[]");
       }
 
-      this.initLength();
+      // this.initLength();
       this.calcDegreesMinute();
     },
     initKeyup() {
@@ -1288,6 +1308,26 @@ export default {
       let fromData = res.data[0].fromData;
       fromData.resHead = undefined;
       fromData.resTail = undefined;
+      fromData.originLength = undefined;
+      fromData.maxLength = undefined;
+      fromData.circleDiameterHead = undefined;
+      fromData.circleDiameterTail = undefined;
+      fromData.weighingQty = undefined;
+      fromData.chippingLength = undefined;
+      fromData.ellipticLength = undefined;
+      fromData.unRolledLen = undefined;
+      fromData.mainReferenceSurfaceWidthHead = undefined;
+      fromData.mainReferenceSurfaceWidthTail = undefined;
+      fromData.mainReferenceSurfaceLength = undefined;
+      fromData.auxiliaryReferenceSurfaceHead = undefined;
+      fromData.auxiliaryReferenceSurfaceTail = undefined;
+      fromData.auxiliaryReferenceSurfaceLength = undefined;
+      fromData.thirdReferenceSurfaceWidthHead = undefined;
+      fromData.thirdReferenceSurfaceWidthTail = undefined;
+      fromData.thirdReferenceSurfaceLength = undefined;
+      fromData.fourthReferenceSurfaceWidthHead = undefined;
+      fromData.fourthReferenceSurfaceWidthTail = undefined;
+      fromData.fourthReferenceSurfaceLength = undefined;
       this.formData = {
         ...this.formData,
         ...fromData,

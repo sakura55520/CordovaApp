@@ -298,7 +298,11 @@ export default {
         search_LT_endTime: !isEmpty(endTimeRange) ? endTimeRange[1] : null,
         search_EQ_status,
       }).then((res) => {
-        this.list = res.data.rows;
+        this.list = (res.data.rows || []).map(item => {
+          if (!item.planProcessingOrderDto)
+            item.planProcessingOrderDto = { data: '{}' }
+          return item
+        });
         this.total = parseInt(res.data.total);
       });
     },
