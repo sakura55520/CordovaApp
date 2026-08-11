@@ -26,7 +26,7 @@
       <el-divider class="divider" />
       <h3>
         出站数据录入
-        <i class="el-icon-refresh refresh" @click="refresh" />
+        <i v-if="!$route.query.view" class="el-icon-refresh refresh" @click="refresh" />
       </h3>
       <div class="outStation-form">
         <el-form
@@ -1045,28 +1045,30 @@ export default {
       } else {
         try {
           fromData = JSON.parse(this.$route.query.fromData);
-          fromData.resHead = undefined;
-          fromData.resTail = undefined;
-          fromData.originLength = undefined;
-          fromData.maxLength = undefined;
-          fromData.circleDiameterHead = undefined;
-          fromData.circleDiameterTail = undefined;
-          fromData.weighingQty = undefined;
-          fromData.chippingLength = undefined;
-          fromData.ellipticLength = undefined;
-          fromData.unRolledLen = undefined;
-          fromData.mainReferenceSurfaceWidthHead = undefined;
-          fromData.mainReferenceSurfaceWidthTail = undefined;
-          fromData.mainReferenceSurfaceLength = undefined;
-          fromData.auxiliaryReferenceSurfaceHead = undefined;
-          fromData.auxiliaryReferenceSurfaceTail = undefined;
-          fromData.auxiliaryReferenceSurfaceLength = undefined;
-          fromData.thirdReferenceSurfaceWidthHead = undefined;
-          fromData.thirdReferenceSurfaceWidthTail = undefined;
-          fromData.thirdReferenceSurfaceLength = undefined;
-          fromData.fourthReferenceSurfaceWidthHead = undefined;
-          fromData.fourthReferenceSurfaceWidthTail = undefined;
-          fromData.fourthReferenceSurfaceLength = undefined;
+          if (!this.$route.query.view) {
+            fromData.resHead = undefined;
+            fromData.resTail = undefined;
+            fromData.originLength = undefined;
+            fromData.maxLength = undefined;
+            fromData.circleDiameterHead = undefined;
+            fromData.circleDiameterTail = undefined;
+            fromData.weighingQty = undefined;
+            fromData.chippingLength = undefined;
+            fromData.ellipticLength = undefined;
+            fromData.unRolledLen = undefined;
+            fromData.mainReferenceSurfaceWidthHead = undefined;
+            fromData.mainReferenceSurfaceWidthTail = undefined;
+            fromData.mainReferenceSurfaceLength = undefined;
+            fromData.auxiliaryReferenceSurfaceHead = undefined;
+            fromData.auxiliaryReferenceSurfaceTail = undefined;
+            fromData.auxiliaryReferenceSurfaceLength = undefined;
+            fromData.thirdReferenceSurfaceWidthHead = undefined;
+            fromData.thirdReferenceSurfaceWidthTail = undefined;
+            fromData.thirdReferenceSurfaceLength = undefined;
+            fromData.fourthReferenceSurfaceWidthHead = undefined;
+            fromData.fourthReferenceSurfaceWidthTail = undefined;
+            fromData.fourthReferenceSurfaceLength = undefined;
+          }
         } catch (e) {
           console.log(e);
         }
