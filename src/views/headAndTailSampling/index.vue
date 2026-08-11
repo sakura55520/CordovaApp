@@ -125,7 +125,20 @@
                 </el-input>
               </div>
             </el-form-item>
-            <div class="item"></div>
+            <el-form-item label="切头尾样片总重" prop="cuttingSampleTotalWeight" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.cuttingSampleTotalWeight">
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
+            </el-form-item>
+            <el-form-item label="位错块总重" prop="dislocationBlockTotalWeight" class="item">
+              <div class="input">
+                <el-input class="value" v-model="formData.dislocationBlockTotalWeight">
+                  <template slot="append">kg</template>
+                </el-input>
+              </div>
+            </el-form-item>
             <el-form-item
               label="头部回收料编码"
               prop="headReclaimedMaterialCode"
@@ -408,6 +421,8 @@ export default {
         tailWeight: null,
         sliceCount: null,
         lengthQty: null,
+        cuttingSampleTotalWeight: null,
+        dislocationBlockTotalWeight: null,
         _files: [],
         wipCuttingSampleInfos: [],
       },
@@ -445,6 +460,12 @@ export default {
         ],
         sampleWeight: [
           { required: true, message: "样片重量不能为空", trigger: "change" },
+        ],
+        cuttingSampleTotalWeight: [
+          { required: true, message: "切头尾样片总重不能为空", trigger: "change" },
+        ],
+        dislocationBlockTotalWeight: [
+          { required: true, message: "位错块总重不能为空", trigger: "change" },
         ],
       },
       sampleTypeList: [],
