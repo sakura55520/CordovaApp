@@ -357,6 +357,7 @@
                     class="value"
                     v-model="formData.unRolledLen"
                     @input="handleLengthChange"
+                    v-direction="{ x: 3, y: 4 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -375,11 +376,33 @@
                       'mark-red': !roughnessValid.valid,
                     }"
                     v-model="formData.roughness"
+                    v-direction="{ x: 4, y: 4 }"
                   >
                     <template slot="append">μm</template>
                   </el-input>
                 </div>
               </el-form-item>
+            </div>
+            <div class="row">
+              <el-form-item
+                label="V槽深度"
+                prop="vslotDepth"
+                class="item"
+                label-width="100px"
+              >
+                <div class="input">
+                  <el-input
+                    class="value"
+                    v-model="formData.vslotDepth"
+                    v-direction="{ x: 1, y: 5 }"
+                  >
+                    <template slot="append">mm</template>
+                  </el-input>
+                </div>
+              </el-form-item>
+              <div class="item"></div>
+              <div class="item"></div>
+              <div class="item"></div>
             </div>
             <div class="row">
               <el-form-item
@@ -393,7 +416,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthHead"
                     :disabled="!enableMap.mainReferenceSurfaceWidthHead"
-                    v-direction="{ x: 1, y: 4 }"
+                    v-direction="{ x: 1, y: 6 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -410,7 +433,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceWidthTail"
                     :disabled="!enableMap.mainReferenceSurfaceWidthTail"
-                    v-direction="{ x: 2, y: 4 }"
+                    v-direction="{ x: 2, y: 6 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -427,7 +450,7 @@
                     class="value"
                     v-model="formData.mainReferenceSurfaceLength"
                     :disabled="!enableMap.mainReferenceSurfaceLength"
-                    v-direction="{ x: 3, y: 4 }"
+                    v-direction="{ x: 3, y: 6 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -451,7 +474,7 @@
                       :disabled="
                         !enableMap.mainReferenceSurfaceCrystalOrientationDegrees
                       "
-                      v-direction="{ x: 4, y: 4 }"
+                      v-direction="{ x: 4, y: 6 }"
                       @input="handleNext"
                     >
                       <template slot="append">°</template>
@@ -468,7 +491,7 @@
                       :disabled="
                         !enableMap.mainReferenceSurfaceCrystalOrientationMinute
                       "
-                      v-direction="{ x: 5, y: 4 }"
+                      v-direction="{ x: 5, y: 6 }"
                       @input="handleNext"
                     >
                       <template slot="append">'</template>
@@ -489,7 +512,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceHead"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceHead"
-                    v-direction="{ x: 1, y: 5 }"
+                    v-direction="{ x: 1, y: 7 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -506,7 +529,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceTail"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceTail"
-                    v-direction="{ x: 2, y: 5 }"
+                    v-direction="{ x: 2, y: 7 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -523,7 +546,7 @@
                     class="value"
                     v-model="formData.auxiliaryReferenceSurfaceLength"
                     :disabled="!enableMap.auxiliaryReferenceSurfaceLength"
-                    v-direction="{ x: 3, y: 5 }"
+                    v-direction="{ x: 3, y: 7 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -540,7 +563,7 @@
                     <el-input
                       v-model="formData.mainAuxiliaryAngleDegrees"
                       :disabled="!enableMap.mainAuxiliaryAngleDegrees"
-                      v-direction="{ x: 4, y: 5 }"
+                      v-direction="{ x: 4, y: 7 }"
                       @input="handleNext"
                     >
                       <template slot="append">°</template>
@@ -550,7 +573,7 @@
                     <el-input
                       v-model="formData.mainAuxiliaryAngleMinute"
                       :disabled="!enableMap.mainAuxiliaryAngleMinute"
-                      v-direction="{ x: 5, y: 5 }"
+                      v-direction="{ x: 5, y: 7 }"
                       @input="handleNext"
                     >
                       <template slot="append">'</template>
@@ -571,7 +594,7 @@
                     class="value"
                     v-model="formData.thirdReferenceSurfaceWidthHead"
                     :disabled="!enableMap.thirdReferenceSurfaceWidthHead"
-                    v-direction="{ x: 1, y: 6 }"
+                    v-direction="{ x: 1, y: 8 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -588,7 +611,7 @@
                     class="value"
                     v-model="formData.thirdReferenceSurfaceWidthTail"
                     :disabled="!enableMap.thirdReferenceSurfaceWidthTail"
-                    v-direction="{ x: 2, y: 6 }"
+                    v-direction="{ x: 2, y: 8 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -605,7 +628,7 @@
                     class="value"
                     v-model="formData.thirdReferenceSurfaceLength"
                     :disabled="!enableMap.thirdReferenceSurfaceLength"
-                    v-direction="{ x: 3, y: 6 }"
+                    v-direction="{ x: 3, y: 8 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -622,7 +645,7 @@
                     <el-input
                       v-model="formData.thirdAngleDegrees"
                       :disabled="!enableMap.thirdAngleDegrees"
-                      v-direction="{ x: 4, y: 6 }"
+                      v-direction="{ x: 4, y: 8 }"
                       @input="handleNext"
                     >
                       <template slot="append">°</template>
@@ -632,7 +655,7 @@
                     <el-input
                       v-model="formData.thirdAngleMinute"
                       :disabled="!enableMap.thirdAngleMinute"
-                      v-direction="{ x: 5, y: 6 }"
+                      v-direction="{ x: 5, y: 8 }"
                       @input="handleNext"
                     >
                       <template slot="append">'</template>
@@ -653,7 +676,7 @@
                     class="value"
                     v-model="formData.fourthReferenceSurfaceWidthHead"
                     :disabled="!enableMap.fourthReferenceSurfaceWidthHead"
-                    v-direction="{ x: 1, y: 7 }"
+                    v-direction="{ x: 1, y: 9 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -670,7 +693,7 @@
                     class="value"
                     v-model="formData.fourthReferenceSurfaceWidthTail"
                     :disabled="!enableMap.fourthReferenceSurfaceWidthTail"
-                    v-direction="{ x: 2, y: 7 }"
+                    v-direction="{ x: 2, y: 9 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -687,7 +710,7 @@
                     class="value"
                     v-model="formData.fourthReferenceSurfaceLength"
                     :disabled="!enableMap.fourthReferenceSurfaceLength"
-                    v-direction="{ x: 3, y: 7 }"
+                    v-direction="{ x: 3, y: 9 }"
                   >
                     <template slot="append">mm</template>
                   </el-input>
@@ -704,7 +727,7 @@
                     <el-input
                       v-model="formData.fourthAngleDegrees"
                       :disabled="!enableMap.fourthAngleDegrees"
-                      v-direction="{ x: 4, y: 7 }"
+                      v-direction="{ x: 4, y: 9 }"
                       @input="handleNext"
                     >
                       <template slot="append">°</template>
@@ -714,7 +737,7 @@
                     <el-input
                       v-model="formData.fourthAngleMinute"
                       :disabled="!enableMap.fourthAngleMinute"
-                      v-direction="{ x: 5, y: 7 }"
+                      v-direction="{ x: 5, y: 9 }"
                       @input="handleNext"
                     >
                       <template slot="append">'</template>
@@ -831,6 +854,7 @@ export default {
         resTail: null,
         circleDiameterHead: null,
         circleDiameterTail: null,
+        vslotDepth: null,
         mainReferenceSurfaceCrystalOrientation: null,
         mainReferenceSurfaceCrystalOrientationDegrees: null,
         mainReferenceSurfaceCrystalOrientationMinute: null,
