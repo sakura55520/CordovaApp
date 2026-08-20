@@ -1045,7 +1045,7 @@ export default {
       } else {
         try {
           fromData = JSON.parse(this.$route.query.fromData);
-          if (!this.$route.query.view) {
+          if (this.$route.query && this.$route.query.lastWipStorageName != '外观检测' && !this.$route.query.view) {
             fromData.resHead = undefined;
             fromData.resTail = undefined;
             fromData.originLength = undefined;
@@ -1053,8 +1053,8 @@ export default {
             fromData.circleDiameterHead = undefined;
             fromData.circleDiameterTail = undefined;
             fromData.weighingQty = undefined;
-            fromData.chippingLength = undefined;
-            fromData.ellipticLength = undefined;
+            fromData.chippingLength = 0;
+            fromData.ellipticLength = 0;
             fromData.unRolledLen = undefined;
             fromData.mainReferenceSurfaceWidthHead = undefined;
             fromData.mainReferenceSurfaceWidthTail = undefined;
@@ -1094,7 +1094,9 @@ export default {
           : JSON.parse(reason || "[]");
       }
 
-      // this.initLength();
+      if (this.$route.query && this.$route.query.lastWipStorageName == '外观检测' && !this.$route.query.view) {
+        this.initLength();
+      }
       this.calcDegreesMinute();
     },
     initKeyup() {
@@ -1332,28 +1334,30 @@ export default {
       );
       if (isEmpty(res.data)) return this.$message.warning("未查询到过站信息!");
       let fromData = res.data[0].fromData;
-      fromData.resHead = undefined;
-      fromData.resTail = undefined;
-      fromData.originLength = undefined;
-      fromData.maxLength = undefined;
-      fromData.circleDiameterHead = undefined;
-      fromData.circleDiameterTail = undefined;
-      fromData.weighingQty = undefined;
-      fromData.chippingLength = undefined;
-      fromData.ellipticLength = undefined;
-      fromData.unRolledLen = undefined;
-      fromData.mainReferenceSurfaceWidthHead = undefined;
-      fromData.mainReferenceSurfaceWidthTail = undefined;
-      fromData.mainReferenceSurfaceLength = undefined;
-      fromData.auxiliaryReferenceSurfaceHead = undefined;
-      fromData.auxiliaryReferenceSurfaceTail = undefined;
-      fromData.auxiliaryReferenceSurfaceLength = undefined;
-      fromData.thirdReferenceSurfaceWidthHead = undefined;
-      fromData.thirdReferenceSurfaceWidthTail = undefined;
-      fromData.thirdReferenceSurfaceLength = undefined;
-      fromData.fourthReferenceSurfaceWidthHead = undefined;
-      fromData.fourthReferenceSurfaceWidthTail = undefined;
-      fromData.fourthReferenceSurfaceLength = undefined;
+      if (this.$route.query && this.$route.query.lastWipStorageName != '外观检测' && !this.$route.query.view) {
+        fromData.resHead = undefined;
+        fromData.resTail = undefined;
+        fromData.originLength = undefined;
+        fromData.maxLength = undefined;
+        fromData.circleDiameterHead = undefined;
+        fromData.circleDiameterTail = undefined;
+        fromData.weighingQty = undefined;
+        fromData.chippingLength = 0;
+        fromData.ellipticLength = 0;
+        fromData.unRolledLen = undefined;
+        fromData.mainReferenceSurfaceWidthHead = undefined;
+        fromData.mainReferenceSurfaceWidthTail = undefined;
+        fromData.mainReferenceSurfaceLength = undefined;
+        fromData.auxiliaryReferenceSurfaceHead = undefined;
+        fromData.auxiliaryReferenceSurfaceTail = undefined;
+        fromData.auxiliaryReferenceSurfaceLength = undefined;
+        fromData.thirdReferenceSurfaceWidthHead = undefined;
+        fromData.thirdReferenceSurfaceWidthTail = undefined;
+        fromData.thirdReferenceSurfaceLength = undefined;
+        fromData.fourthReferenceSurfaceWidthHead = undefined;
+        fromData.fourthReferenceSurfaceWidthTail = undefined;
+        fromData.fourthReferenceSurfaceLength = undefined;
+      }
       this.formData = {
         ...this.formData,
         ...fromData,
