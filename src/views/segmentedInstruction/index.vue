@@ -429,6 +429,7 @@
                       :label="item.processCode"
                       :value="item.processCode"
                       :key="item.processCode"
+                      :disabled="(scope.row.orderCode && item.processCode == '割') || (!scope.row.orderCode && item.processCode != '割')"
                       v-for="item in scope.row.processList"
                     ></el-option>
                   </el-select>
@@ -2095,6 +2096,16 @@ export default {
         "orderCode",
         this.selectedWorkOrder
       );
+      const processCode = this.formData.segmentedInstructionDetailVos[this.selectedSegmentWorkOrderIndex].processCode;
+      if ((this.selectedWorkOrder && processCode == '割') || (!this.selectedWorkOrder && processCode != '割')) {
+        this.$set(
+          this.formData.segmentedInstructionDetailVos[
+            this.selectedSegmentWorkOrderIndex
+          ],
+          "processCode",
+          null
+        );
+      }
       this.workOrderDialog = false;
 
       if (!this.selectedWorkOrder) return;
