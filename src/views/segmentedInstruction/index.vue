@@ -1346,21 +1346,39 @@
                 prop="_reason"
               >
                 <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row._reason"
-                    clearable
-                    v-if="scope.row.type === 0"
-                    multiple
-                    collapse-tags
-                    @change="(val) => handleReasonChange(val, scope.$index)"
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'segmentedInstructionDetailVos.' +
+                      scope.$index +
+                      '._reason'
+                    "
+                    :rules="[
+                      {
+                        required: scope.row.type === 0 && scope.row.status == 0,
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
                   >
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in wipStorageDisqualificationReasonList"
-                      :key="item.value"
-                    ></el-option>
-                  </el-select>
+                    <el-select
+                      v-model="scope.row._reason"
+                      clearable
+                      v-if="scope.row.type === 0"
+                      multiple
+                      collapse-tags
+                      @change="(val) => handleReasonChange(val, scope.$index)"
+                    >
+                      <el-option
+                        :label="item.label"
+                        :value="item.value"
+                        v-for="item in wipStorageDisqualificationReasonList"
+                        :key="item.value"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column
@@ -1370,18 +1388,36 @@
                 prop="reasonIn"
               >
                 <template slot-scope="scope">
-                  <el-select
-                    v-model="scope.row.reasonIn"
-                    clearable
-                    v-if="scope.row.type === 0"
+                  <el-form-item
+                    label=""
+                    label-width="0px"
+                    :prop="
+                      'segmentedInstructionDetailVos.' +
+                      scope.$index +
+                      '.reasonIn'
+                    "
+                    :rules="[
+                      {
+                        required: scope.row.type === 0 && scope.row.status == 1,
+                        message: ' ',
+                        trigger: 'change',
+                      },
+                    ]"
+                    class="form-input"
                   >
-                    <el-option
-                      :label="item.label"
-                      :value="item.value"
-                      v-for="item in wipStorageInStorageReasonList"
-                      :key="item.value"
-                    ></el-option>
-                  </el-select>
+                    <el-select
+                      v-model="scope.row.reasonIn"
+                      clearable
+                      v-if="scope.row.type === 0"
+                    >
+                      <el-option
+                        :label="item.label"
+                        :value="item.value"
+                        v-for="item in wipStorageInStorageReasonList"
+                        :key="item.value"
+                      ></el-option>
+                    </el-select>
+                  </el-form-item>
                 </template>
               </el-table-column>
               <el-table-column label="操作">
@@ -2800,7 +2836,28 @@ export default {
       try {
         valid = await this.$refs.formRef.validate();
       } catch (err) {
-        return this.$message.warning("分段信息或留档文档记录未填写完整");
+        let message = "<div>以下数据未填写完整：</div>";
+        const errorKeys = Object.keys(err || {});
+        const checkList = [
+          ['head83oi', '83oi头'],
+          ['tail83oi', '83oi尾'],
+          ['tailCarbonRate', '尾碳含量'],
+          ['status', '合格状态'],
+          ['_reason', '不合格原因'],
+          ['reasonIn', '入库原因'],
+          ['_files', '留档文档记录']
+        ];
+        const errors = [];
+        checkList.forEach(item => {
+          if (errorKeys.some(key => key.indexOf(item[0]) > -1)) {
+            errors.push(item[1]);
+          }
+        });
+        message += errors.join('、')
+        return this.$message.warning({
+          message,
+          dangerouslyUseHTMLString: true
+        });
       }
       if (!valid) return;
 
