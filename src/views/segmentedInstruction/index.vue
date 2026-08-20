@@ -971,6 +971,20 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        'ORG头',
+                        scope.row.headOrg,
+                        scope.row.orderCode
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          'ORG头',
+                          scope.row.headOrg,
+                          scope.row.orderCode
+                        )
+                      ),
+                    }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.headOrg"
                     v-direction="{ x: 20, y: scope.$index }"
@@ -986,6 +1000,20 @@
               >
                 <template slot-scope="scope">
                   <el-input
+                    :style="{
+                      '--controlColor': getControlColor(
+                        'ORG尾',
+                        scope.row.tailOrg,
+                        scope.row.orderCode
+                      ),
+                      '--textColor': getFontColorByBackgroundColor(
+                        getControlColor(
+                          'ORG尾',
+                          scope.row.tailOrg,
+                          scope.row.orderCode
+                        )
+                      ),
+                    }"
                     v-if="scope.row.type === 0"
                     v-model="scope.row.tailOrg"
                     v-direction="{ x: 21, y: scope.$index }"
@@ -1898,6 +1926,18 @@ export default {
           filter: (item) => item.type == 0,
         },
         {
+          key: "headOrg",
+          name: "ORG头",
+          from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
+        },
+        {
+          key: "tailOrg",
+          name: "ORG尾",
+          from: "formData.segmentedInstructionDetailVos",
+          filter: (item) => item.type == 0,
+        },
+        {
           key: "headCarbonRate",
           name: "头碳含量",
           from: "formData.segmentedInstructionDetailVos",
@@ -2206,6 +2246,24 @@ export default {
         if (name === "83oi尾") {
           minItem = list.find((ele) => ele.keyVal === "C055") || {};
           maxItem = list.find((ele) => ele.keyVal === "C065") || {};
+        }
+        if (name === "ORG头") {
+          let item = list.find((ele) => ele.keyVal === "C090") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
+        }
+        if (name === "ORG尾") {
+          let item = list.find((ele) => ele.keyVal === "C090") || {};
+          if (item.value) {
+            let symbol = item.value[0];
+            let value = item.value.substring(1);
+            if (symbol == "<" || symbol == "≤") maxItem = { ...item, value };
+            if (symbol == ">" || symbol == "≥") minItem = { ...item, value };
+          }
         }
         if (name === "头碳含量") {
           let item = list.find((ele) => ele.keyVal === "C070") || {};
