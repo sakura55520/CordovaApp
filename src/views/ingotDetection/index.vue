@@ -804,6 +804,13 @@
                 show-overflow-tooltip
               />
               <el-table-column
+                label="样片标识"
+                min-width="220"
+                align="center"
+                prop="backCutFlag"
+                show-overflow-tooltip
+              />
+              <el-table-column
                 label="返切次数"
                 min-width="85"
                 align="center"
@@ -993,6 +1000,22 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="返切测试项目" prop="backCutTestItems">
+          <el-select
+            v-model="backCuttingFormData.backCutTestItems"
+            placeholder=""
+            class="form-item-cover"
+            multiple
+            clearable
+          >
+            <el-option
+              :label="`${item.value}(${item.label})`"
+              :value="item.value"
+              v-for="item in backCutTestItemList"
+              :key="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button class="submit" @click="backCuttingDialogVisible = false"
@@ -1110,6 +1133,7 @@ export default {
       osfDensityList: [],
       sampleIdentificationList: [],
       backCuttingAndReuseList: [],
+      backCutTestItemList: [],
       backCuttingFormData: {
         type: undefined,
         sampleIdentification: undefined,
@@ -1118,6 +1142,7 @@ export default {
         cutDistanceEnd: undefined,
         tall: undefined,
         recycle: undefined,
+        backCutTestItems: [],
         number: undefined,
         userCreate: undefined,
         gmtCreate: undefined,
@@ -1158,6 +1183,13 @@ export default {
           {
             required: true,
             message: "是否返切再利用不能为空",
+            trigger: "change",
+          },
+        ],
+        backCutTestItems: [
+          {
+            required: true,
+            message: "返切测试项目不能为空",
             trigger: "change",
           },
         ],
@@ -1222,6 +1254,7 @@ export default {
       getSeleteData("osfDensity", this.osfDensityList);
       getSeleteData("sampleIdentification", this.sampleIdentificationList);
       getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
+      getSeleteData("backCutTestItemList", this.backCutTestItemList);
       try {
         this.cloneDetails = cloneDeep(
           JSON.parse(this.$route.query.fromData).details || []
@@ -1398,6 +1431,7 @@ export default {
         cutDistanceEnd: this.segmentTotalLength,
         tall: 4,
         recycle: 1,
+        backCutTestItems: [],
         number: null,
         userCreate: this.realName,
         gmtCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
