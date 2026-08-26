@@ -805,7 +805,7 @@
               />
               <el-table-column
                 label="样片标识"
-                min-width="220"
+                min-width="230"
                 align="center"
                 prop="backCutFlag"
                 show-overflow-tooltip
