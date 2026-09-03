@@ -1363,7 +1363,7 @@ export default {
     getChartLeft(startIndex) {
       let left = 0;
       if (this.segmentTotalLength > 0)
-        left = (startIndex * 100) / this.segmentTotalLength;
+        left = ((startIndex - this.startIndex) * 100) / this.segmentTotalLength;
       return left + "%";
     },
     async updateDetails() {
