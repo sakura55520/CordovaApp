@@ -1310,7 +1310,7 @@ export default {
         big_url: fileItem.fileUrl,
         thumb_url: fileItem.fileUrl,
       }));
-      
+
       this.fetchBackCuttingSampleRecord();
       await this.getMateralModelExtras();
       this.$set(this.formData, "details", cloneDeep(this.formData.details));
@@ -1430,7 +1430,7 @@ export default {
         cutDistanceStart: 0,
         cutDistanceEnd: this.segmentTotalLength,
         tall: 4,
-        recycle: 1,
+        recycle: Number((this.backCuttingAndReuseList.find((item) => item.extendValue === "是") || {}).value || 1),
         backCutTestItems: [],
         number: null,
         userCreate: this.realName,
