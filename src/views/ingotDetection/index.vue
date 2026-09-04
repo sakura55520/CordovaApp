@@ -1538,6 +1538,7 @@ export default {
       this.$message.success("返切指令更新成功");
       this.fetchBackCuttingSampleRecord();
       this.updateDetails();
+      this.getSegmentationTree();
       this.backCuttingDialogVisible = false;
     },
     async handleDeleteBackCuttings(row) {

@@ -785,9 +785,305 @@
               未滚出长度（{{ formData.unRolledLen }} mm）<br />
             </div>
           </div>
+          <div class="form">
+            <div class="form-title">返切指令</div>
+            <el-button
+              size="small"
+              type="primary"
+              class="add-btn"
+              @click="handleAddBackCuttings"
+              >+ 新增返切指令</el-button
+            >
+            <el-table
+              :data="formData.backCuttings"
+              class="table"
+              :header-cell-style="{
+                background: 'rgba(242, 242, 242)',
+                color: '#606266',
+              }"
+            >
+              <el-table-column
+                label="返切类型"
+                min-width="85"
+                align="center"
+                prop="type"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                label="返切标识"
+                min-width="85"
+                align="center"
+                prop="sampleIdentification"
+              />
+              <el-table-column
+                label="返切样片厚度"
+                min-width="120"
+                align="center"
+                prop="tall"
+              />
+              <el-table-column
+                label="返切位置"
+                min-width="85"
+                align="center"
+                prop="samplePosition"
+              />
+              <el-table-column
+                label="返切距头位置"
+                min-width="120"
+                align="center"
+                prop="cutDistanceStart"
+              />
+              <el-table-column
+                label="返切距尾位置"
+                min-width="120"
+                align="center"
+                prop="cutDistanceEnd"
+              />
+              <el-table-column
+                label="样片重量(kg)"
+                min-width="120"
+                align="center"
+                prop="sampleWeight"
+              />
+              <el-table-column
+                label="是否返切再利用"
+                min-width="140"
+                align="center"
+                prop="recycle"
+                :formatter="formRecycle"
+              />
+              <el-table-column
+                label="切割次数"
+                min-width="85"
+                align="center"
+                prop="sliceCount"
+              />
+              <el-table-column
+                label="返切条码"
+                min-width="230"
+                align="center"
+                prop="backCutNumber"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                label="样片编码"
+                min-width="180"
+                align="center"
+                prop="sampleNumber"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                label="样片标识"
+                min-width="230"
+                align="center"
+                prop="backCutFlag"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                label="返切次数"
+                min-width="85"
+                align="center"
+                prop="backCutCount"
+              />
+              <el-table-column
+                label="状态"
+                min-width="60"
+                align="center"
+                prop="status"
+              >
+                <template slot-scope="scope">
+                  {{ scope.row.status == 1 ? "待切" : "已切" }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="创建人"
+                min-width="100"
+                align="center"
+                prop="userCreate"
+                show-overflow-tooltip
+              />
+              <el-table-column
+                label="创建时间"
+                min-width="160"
+                align="center"
+                prop="gmtCreate"
+              />
+              <el-table-column label="操作" align="center" min-width="150" fixed="right">
+                <template slot-scope="scope">
+                  <el-button
+                    class="table-btn"
+                    type="text"
+                    @click="handleUpdateBackCuttings(scope.row, scope.$index)"
+                  >
+                    编辑
+                  </el-button>
+                  <el-button
+                    class="table-btn"
+                    type="text"
+                    style="color: red"
+                    @click="handleDeleteBackCuttings(scope.row)"
+                  >
+                    删除
+                  </el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="form">
+            <div class="form-title">分段示意图</div>
+            <div class="form-content" v-for="(item, i) in segmentList" :key="i">
+              <div>{{ i == 0 ? "初始" : `第${i}次返切` }}</div>
+              <div class="chart">
+                <div
+                  class="chart-item"
+                  v-for="(ele, j) in item"
+                  :key="j"
+                  :style="{
+                    width: getChartWidth(ele.startIndex, ele.endIndex),
+                    left: getChartLeft(ele.startIndex),
+                    background: ele.type == 2 ? '' : '#ccc',
+                  }"
+                >
+                  <div class="bar">
+                    <div class="text">
+                      {{ ele.number }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </el-form>
       </div>
     </div>
+    <el-dialog
+      :title="`${backCuttingFormType}返切样片`"
+      :visible.sync="backCuttingDialogVisible"
+    >
+      <el-form
+        :model="backCuttingFormData"
+        label-position="left"
+        label-width="150px"
+        :rules="backCuttingFormRules"
+        ref="backCuttingFormRef"
+      >
+        <el-form-item label="返切晶段" prop="number">
+          <el-select
+            v-model="backCuttingFormData.number"
+            placeholder=""
+            class="form-item-cover"
+          >
+            <el-option
+              :label="item.number"
+              :value="item.number"
+              v-for="(item, index) in backCutSegmentList"
+              :key="index"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="返切类型" prop="type">
+          <el-select
+            v-model="backCuttingFormData.type"
+            placeholder=""
+            class="form-item-cover"
+            :disabled="backCuttingFormType === '编辑'"
+            @change="handleBackCutTypeChange"
+          >
+            <el-option
+              v-for="item in backCutTypeList"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="返切标识" prop="sampleIdentification">
+          <el-select
+            v-model="backCuttingFormData.sampleIdentification"
+            placeholder=""
+            class="form-item-cover"
+            :disabled="backCuttingFormType === '编辑'"
+          >
+            <div v-for="item in sampleIdentificationList" :key="item.value">
+              <el-option
+                :label="item.label"
+                :value="item.value"
+                :disabled="
+                  (backCuttingFormData.type === '中间片' &&
+                    item.value !== 'M') ||
+                  (backCuttingFormData.type !== '中间片' && item.value === 'M')
+                "
+              ></el-option>
+            </div>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="返切样片厚度" prop="tall">
+          <el-input
+            v-model="backCuttingFormData.tall"
+            :disabled="backCuttingFormType === '编辑' && originalTall === 0"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="返切位置" prop="samplePosition">
+          <el-input
+            v-model="backCuttingFormData.samplePosition"
+            @input="handleBackCutPositionChange"
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="返切距头位置" prop="cutDistanceStart">
+          <el-input
+            v-model="backCuttingFormData.cutDistanceStart"
+            disabled
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="返切距尾位置" prop="cutDistanceEnd">
+          <el-input
+            v-model="backCuttingFormData.cutDistanceEnd"
+            disabled
+          ></el-input>
+        </el-form-item>
+        <el-form-item label="是否返切再利用" prop="recycle">
+          <el-select
+            v-model="backCuttingFormData.recycle"
+            placeholder=""
+            class="form-item-cover"
+          >
+            <el-option
+              :label="item.label"
+              :value="Number(item.value)"
+              v-for="item in backCuttingAndReuseList"
+              :key="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="返切测试项目" prop="backCutTestItems">
+          <el-select
+            v-model="backCuttingFormData.backCutTestItems"
+            placeholder=""
+            class="form-item-cover"
+            multiple
+            clearable
+          >
+            <el-option
+              :label="`${item.value}(${item.label})`"
+              :value="item.value"
+              v-for="item in backCutTestItemList"
+              :key="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button class="submit" @click="backCuttingDialogVisible = false"
+          >取 消</el-button
+        >
+        <el-button
+          class="submit"
+          type="primary"
+          @click="handleBackCuttingFormConfirm"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
     <div class="page-handle-box" v-if="!$route.query.view">
       <el-button plain class="cancel" @click="back(null, 'confirm')"
         >取消</el-button
@@ -808,7 +1104,9 @@ import SelectLinesideTree from "@/components/SelectLinesideTree";
 import overStation from "@/mixins/overStation";
 import { getSeleteData } from "@/utils/select";
 import { getCurrentWipStorageClearData } from "@/api/overStation/overStation.js";
-import { isEmpty } from "lodash-es";
+import { isEmpty, cloneDeep } from "lodash-es";
+import moment from "moment";
+import { mapState } from "vuex";
 
 export default {
   mixins: [overStation],
@@ -885,6 +1183,7 @@ export default {
         inStorageReason: "",
         unqualifiedReason: [],
         reason: null,
+        backCuttings: [],
       },
       formRules: {
         userCreate: [
@@ -943,6 +1242,86 @@ export default {
       wipSwitches: [],
       wipStorageDisqualificationReasonList: [],
       wipStorageInStorageReasonList: [],
+      backCutTypeList: [],
+      sampleIdentificationList: [],
+      backCuttingAndReuseList: [],
+      backCutTestItemList: [],
+      backCuttingFormData: {
+        type: undefined,
+        sampleIdentification: undefined,
+        samplePosition: undefined,
+        cutDistanceStart: undefined,
+        cutDistanceEnd: undefined,
+        tall: undefined,
+        recycle: undefined,
+        backCutTestItems: [],
+        number: undefined,
+        userCreate: undefined,
+        gmtCreate: undefined,
+        processId: undefined,
+      },
+      backCuttingFormRules: {
+        type: [
+          { required: true, message: "返切类型不能为空", trigger: "change" },
+        ],
+        sampleIdentification: [
+          { required: true, message: "返切标识不能为空", trigger: "change" },
+        ],
+        samplePosition: [
+          { required: true, message: "返切位置不能为空", trigger: "change" },
+        ],
+        cutDistanceStart: [
+          {
+            required: true,
+            message: "返切距头位置不能为空",
+            trigger: "change",
+          },
+        ],
+        cutDistanceEnd: [
+          {
+            required: true,
+            message: "返切距尾位置不能为空",
+            trigger: "change",
+          },
+        ],
+        tall: [
+          {
+            required: true,
+            message: "返切样片厚度不能为空",
+            trigger: "change",
+          },
+        ],
+        recycle: [
+          {
+            required: true,
+            message: "是否返切再利用不能为空",
+            trigger: "change",
+          },
+        ],
+        backCutTestItems: [
+          {
+            required: true,
+            message: "返切测试项目不能为空",
+            trigger: "change",
+          },
+        ],
+        number: [
+          {
+            required: true,
+            message: "返切晶段不能为空",
+            trigger: "change",
+          },
+        ],
+      },
+      backCuttingDialogVisible: false,
+      backCuttingFormType: undefined,
+      selectIndex: undefined,
+      originalTall: undefined,
+      segmentList: [],
+      segmentTotalLength: 0,
+      backCutSegmentList: [],
+      startIndex: 0,
+      endIndex: 0,
     };
   },
   computed: {
@@ -950,6 +1329,9 @@ export default {
       const { processUuid, processingOrderCode } = this.$route.query;
       return { processUuid, processingOrderCode };
     },
+    ...mapState({
+      realName: (state) => state.user.realName,
+    }),
     quantityPlanValid() {
       let wipSwitch = this.wipSwitches.find(
         (item) => item.name === "warehouseDetectionQuantityPlanDifference"
@@ -1037,6 +1419,10 @@ export default {
         "wipStorageInStorageReason",
         this.wipStorageInStorageReasonList
       );
+      getSeleteData("backCutType", this.backCutTypeList);
+      getSeleteData("sampleIdentification", this.sampleIdentificationList);
+      getSeleteData("backCuttingAndReuse", this.backCuttingAndReuseList);
+      getSeleteData("backCutTestItemList", this.backCutTestItemList);
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
@@ -1098,6 +1484,9 @@ export default {
         this.initLength();
       }
       this.calcDegreesMinute();
+
+      this.fetchBackCuttingSampleRecord();
+      this.getSegmentationTree();
     },
     initKeyup() {
       let direction = this.$getDirection();
@@ -1232,6 +1621,12 @@ export default {
       const valid = await this.$refs.formRef.validate();
       if (!valid) return;
 
+      let backCuttings = this.formData.backCuttings;
+      if (backCuttings && backCuttings.some((item) => item.status == 1)) {
+        this.$message.warning("存在返切指令状态为待切，请先执行返切操作");
+        return;
+      }
+
       let wipSwitch = this.wipSwitches.find(
         (item) => item.name === "validateLengthSwitchWarehouse"
       );
@@ -1364,6 +1759,205 @@ export default {
       };
       this.handleInitData();
     },
+    getSegmentationTree() {
+      Api.getSegmentations({
+        processingOrderCode: this.formData.processOrderCode,
+      }).then((res) => {
+        const tree = res.data;
+        this.startIndex = tree.startIndex || 0;
+        this.endIndex = tree.endIndex || 0;
+        this.segmentTotalLength = (tree.endIndex || 0) - (tree.startIndex || 0);
+        let segmentList = [];
+        let backCutSegmentList = [];
+        this.handleSegmentationTree(tree, segmentList, backCutSegmentList);
+        this.segmentList = segmentList;
+        this.backCutSegmentList = backCutSegmentList;
+      });
+    },
+    handleSegmentationTree(treeNode, segmentList, backCutSegmentList) {
+      if (!treeNode) return;
+      let { backCutCount, number, startIndex, endIndex, children, type } =
+        treeNode;
+
+      if (type == 2 && backCutCount != -1)
+        backCutSegmentList.push({ number, startIndex, endIndex });
+
+      if (!segmentList[backCutCount]) segmentList[backCutCount] = [];
+      segmentList[backCutCount].push({
+        number,
+        startIndex,
+        endIndex,
+        type,
+      });
+
+      if (!isEmpty(children)) {
+        children.forEach((item) => {
+          this.handleSegmentationTree(item, segmentList, backCutSegmentList);
+        });
+      }
+    },
+    getChartWidth(startIndex, endIndex) {
+      let width = 0;
+      if (this.segmentTotalLength > 0)
+        width = ((endIndex - startIndex) * 100) / this.segmentTotalLength;
+      return width + "%";
+    },
+    getChartLeft(startIndex) {
+      let left = 0;
+      if (this.segmentTotalLength > 0)
+        left = ((startIndex - this.startIndex) * 100) / this.segmentTotalLength;
+      return left + "%";
+    },
+    async handleAddBackCuttings() {
+      setTimeout(() => {
+        this.$refs.backCuttingFormRef.clearValidate();
+      });
+      this.backCuttingFormData = {
+        type: "",
+        sampleIdentification: "",
+        samplePosition: this.startIndex,
+        cutDistanceStart: 0,
+        cutDistanceEnd: this.segmentTotalLength,
+        tall: 4,
+        recycle: Number((this.backCuttingAndReuseList.find((item) => item.extendValue === "是") || {}).value || 1),
+        backCutTestItems: [],
+        number: null,
+        userCreate: this.realName,
+        gmtCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
+        processId: this.formData.processId,
+      };
+      this.backCuttingFormType = "新增";
+      this.backCuttingDialogVisible = true;
+    },
+    async addBackCuttings() {
+      const valid = await this.$refs.backCuttingFormRef.validate();
+      if (!valid) return;
+
+      const backCutSegment = this.backCutSegmentList.find(
+        (item) => item.number == this.backCuttingFormData.number
+      );
+      if (
+        this.backCuttingFormData.samplePosition < backCutSegment.startIndex ||
+        this.backCuttingFormData.samplePosition > backCutSegment.endIndex
+      )
+        return this.$message.warning(
+          `返切位置范围为:${backCutSegment.startIndex}~${backCutSegment.endIndex}`
+        );
+
+      if (
+        this.formData.backCuttings.some(
+          (item) =>
+            item.samplePosition == this.backCuttingFormData.samplePosition &&
+            item.sampleNumber !== this.backCuttingFormData.sampleNumber
+        )
+      ) {
+        this.$message.warning("返切位置不能重复");
+        return;
+      }
+
+      this.backCuttingFormData.processOrderCode =
+        this.formData.processOrderCode;
+
+      let list = this.formData.backCuttings
+        .filter(
+          (item) =>
+            item.type === this.backCuttingFormData.type &&
+            item.sampleIdentification ===
+              this.backCuttingFormData.sampleIdentification &&
+            item.sampleNumber
+        )
+        .map((item) => Number(item.sampleNumber.split("-")[3]));
+
+      let max = isEmpty(list) ? 0 : Math.max(...list);
+
+      let sampleType = this.backCutTypeList.find(
+        (ele) => ele.value == this.backCuttingFormData.type
+      ).extendValue;
+
+      let index = max + 1;
+      let res = await Api.getSampleCode({
+        sampleType,
+        crystalNo: this.formData.processOrderCode,
+        sampleIdentification: this.backCuttingFormData.sampleIdentification,
+        index,
+      });
+
+      this.backCuttingFormData.sampleNumber = res.data;
+      await Api.createBackCuttingSampleRecord(this.backCuttingFormData);
+      this.$message.success("返切指令创建成功");
+      this.fetchBackCuttingSampleRecord();
+      this.backCuttingDialogVisible = false;
+
+      this.getSegmentationTree();
+    },
+    async handleUpdateBackCuttings(row, index) {
+      this.backCuttingFormData = cloneDeep(row);
+      this.originalTall = row.tall;
+      this.backCuttingFormType = "编辑";
+      this.backCuttingDialogVisible = true;
+      this.selectIndex = index;
+    },
+    async updateBackCuttings() {
+      if (
+        this.formData.backCuttings.some(
+          (item) =>
+            item.samplePosition == this.backCuttingFormData.samplePosition &&
+            item.sampleNumber !== this.backCuttingFormData.sampleNumber
+        )
+      ) {
+        this.$message.warning("返切位置不能重复");
+        return;
+      }
+
+      if (this.backCuttingFormData.tall == 0)
+        this.backCuttingFormData.sampleNumber = "";
+
+      this.backCuttingFormData.processOrderCode =
+        this.formData.processOrderCode;
+
+      await Api.updateBackCuttingSampleRecord(this.backCuttingFormData);
+      this.$message.success("返切指令更新成功");
+      this.fetchBackCuttingSampleRecord();
+      this.getSegmentationTree();
+      this.backCuttingDialogVisible = false;
+    },
+    async handleDeleteBackCuttings(row) {
+      await this.$confirm(`请确认是否删除`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      });
+      await Api.deleteBackCuttingSampleRecord({ id: row.id });
+      this.$message.success("返切指令删除成功");
+      this.fetchBackCuttingSampleRecord();
+
+      this.getSegmentationTree();
+    },
+    handleBackCuttingFormConfirm() {
+      if (this.backCuttingFormType === "新增") this.addBackCuttings();
+      else this.updateBackCuttings();
+    },
+    async fetchBackCuttingSampleRecord() {
+      let res = await Api.getBackCuttingSampleRecord({
+        search_EQ_processOrderCode: this.formData.processOrderCode,
+      });
+      this.$set(this.formData, "backCuttings", res.data.rows);
+    },
+    formRecycle(row, column, recycle) {
+      const matched = this.backCuttingAndReuseList.find(
+        (item) => item.value == recycle
+      );
+      return matched ? matched.label : "";
+    },
+    handleBackCutTypeChange(val) {
+      if (val === "中间片") this.backCuttingFormData.sampleIdentification = "M";
+      else if (this.backCuttingFormData.sampleIdentification === "M")
+        this.backCuttingFormData.sampleIdentification = "H";
+    },
+    handleBackCutPositionChange(val) {
+      this.backCuttingFormData.cutDistanceStart = val - this.startIndex;
+      this.backCuttingFormData.cutDistanceEnd = this.endIndex - val;
+    },
   },
 };
 </script>
@@ -1465,6 +2059,11 @@ export default {
     left: 20px;
     background: white;
   }
+  .add-btn {
+    position: absolute;
+    left: 12px;
+    font-size: 14px;
+  }
 }
 .unit {
   width: 60px;
@@ -1500,6 +2099,63 @@ export default {
   /deep/ .el-input__inner {
     background-color: red !important;
     color: white !important;
+  }
+}
+
+.table {
+  margin-top: 50px;
+}
+
+.table-btn {
+  font-size: 12px;
+  padding: 0px;
+}
+
+.form-content {
+  width: 100%;
+  padding: 0 10px;
+  margin-top: 20px;
+  .chart {
+    display: flex;
+    width: 100%;
+    position: relative;
+    height: 60px;
+    .chart-item {
+      position: absolute;
+      .bar {
+        margin: 0 auto;
+        width: calc(100% - 10px);
+        height: 60px;
+        border: 1px solid #000;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .text {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          width: 10px;
+          height: 60px;
+          border: 1px solid #000;
+          background-color: white;
+          border-radius: 50%;
+        }
+        &::before {
+          z-index: 1;
+          left: -5px;
+        }
+        &::after {
+          z-index: 3;
+          right: -5px;
+        }
+      }
+    }
   }
 }
 </style>
