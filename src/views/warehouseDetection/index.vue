@@ -867,14 +867,14 @@
               />
               <el-table-column
                 label="样片编码"
-                min-width="180"
+                min-width="210"
                 align="center"
                 prop="sampleNumber"
                 show-overflow-tooltip
               />
               <el-table-column
                 label="样片标识"
-                min-width="230"
+                min-width="270"
                 align="center"
                 prop="backCutFlag"
                 show-overflow-tooltip
@@ -1618,8 +1618,13 @@ export default {
     async confirm() {
       this.calcAngle();
       this.getReason();
-      const valid = await this.$refs.formRef.validate();
-      if (!valid) return;
+      try {
+        const valid = await this.$refs.formRef.validate();
+        if (!valid) return;
+      } catch (err) {
+        this.$message.warning("必填项未填写完整");
+        return;
+      }
 
       let backCuttings = this.formData.backCuttings;
       if (backCuttings && backCuttings.some((item) => item.status == 1)) {
