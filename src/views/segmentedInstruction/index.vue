@@ -1348,6 +1348,7 @@
                       >
                         <el-option label="合格" :value="1"></el-option>
                         <el-option label="不合格" :value="0"></el-option>
+                        <el-option label="0成本" :value="2"></el-option>
                       </el-select>
                     </el-form-item>
                   </div>
@@ -1396,6 +1397,7 @@
                       clearable
                       v-if="scope.row.type === 0"
                       multiple
+                      filterable
                       collapse-tags
                       @change="(val) => handleReasonChange(val, scope.$index)"
                     >
@@ -1426,7 +1428,7 @@
                     "
                     :rules="[
                       {
-                        required: scope.row.type === 0 && scope.row.status == 1,
+                        required: scope.row.type === 0 && (scope.row.status == 1 || scope.row.status == 2),
                         message: ' ',
                         trigger: 'change',
                       },
@@ -1436,6 +1438,7 @@
                     <el-select
                       v-model="scope.row.reasonIn"
                       clearable
+                      filterable
                       v-if="scope.row.type === 0"
                     >
                       <el-option
@@ -1612,7 +1615,7 @@
                 <div class="item" v-if="item.type === 0">
                   <div class="label">合格状态：</div>
                   <div class="value">
-                    {{ item.status === 1 ? "合格" : "不合格" }}
+                    {{ item.status == 1 ? "合格" : item.status == 2 ? "0成本" : "不合格" }}
                   </div>
                 </div>
                 <div class="item" v-if="item.type === 0">
@@ -2803,7 +2806,7 @@ export default {
           item.length = item.tailPosition - item.headPosition;
         } else item.length = 0;
         item.planWeight = this.calcPlanWeight(item.length);
-        if (item.status == 1) {
+        if (item.status == 1 || item.status == 2) {
           item.qualifiedLength = item.length;
           item.qualifiedWeight = item.planWeight;
         }
@@ -2866,7 +2869,7 @@ export default {
           item.length = item.tailPosition - item.headPosition;
         else item.length = 0;
         item.planWeight = this.calcPlanWeight(item.length);
-        if (item.status == 1) {
+        if (item.status == 1 || item.status == 2) {
           item.qualifiedLength = item.length;
           item.qualifiedWeight = item.planWeight;
         }
@@ -3064,7 +3067,7 @@ export default {
 
       let message = `晶段【${
         this.formData.segmentedInstructionDetailVos[index].segmentNo || ""
-      }】${outControlMap[index].join("、")}超限，请确认是否修改为合格?`;
+      }】${outControlMap[index].join("、")}超限，请确认是否修改为${val == 1 ? '合格' : val == 2 ? '0成本' : '不合格'}?`;
       MessageBox.confirm(message, "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
