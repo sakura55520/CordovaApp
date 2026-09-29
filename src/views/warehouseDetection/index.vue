@@ -57,6 +57,7 @@
               >
                 <el-option label="合格" :value="1"></el-option>
                 <el-option label="不合格" :value="0"></el-option>
+                <el-option label="0成本" :value="2"></el-option>
               </el-select>
             </el-form-item>
             <template v-if="formData.status">
