@@ -2526,6 +2526,10 @@ export default {
         cloneDeep(this.formData.segmentedInstructionDetailVos)
       );
 
+      if (this.formData.averagePullingSpeedWarning) {
+        this.$message.warning(this.formData.averagePullingSpeedWarning);
+      }
+
       if (!this.$route.query.view) {
         this.handleCheckControl(null);
       }
