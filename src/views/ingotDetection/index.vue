@@ -817,6 +817,12 @@
                 prop="backCutCount"
               />
               <el-table-column
+                label="检验样片数量"
+                min-width="120"
+                align="center"
+                prop="inspectionSampleCount"
+              />
+              <el-table-column
                 label="状态"
                 min-width="60"
                 align="center"
@@ -1016,6 +1022,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="检验样片数量" prop="inspectionSampleCount">
+          <el-input
+            v-model="backCuttingFormData.inspectionSampleCount"
+          ></el-input>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button class="submit" @click="backCuttingDialogVisible = false"
@@ -1143,6 +1154,7 @@ export default {
         tall: undefined,
         recycle: undefined,
         backCutTestItems: [],
+        inspectionSampleCount: undefined,
         number: undefined,
         userCreate: undefined,
         gmtCreate: undefined,
@@ -1191,6 +1203,13 @@ export default {
             required: true,
             message: "返切测试项目不能为空",
             trigger: "change",
+          },
+        ],
+        inspectionSampleCount: [
+          {
+            required: true,
+            message: "检验样片数量不能为空",
+            trigger: "blur",
           },
         ],
         number: [
@@ -1432,6 +1451,7 @@ export default {
         tall: 4,
         recycle: Number((this.backCuttingAndReuseList.find((item) => item.extendValue === "是") || {}).value || 1),
         backCutTestItems: [],
+        inspectionSampleCount: undefined,
         number: null,
         userCreate: this.realName,
         gmtCreate: moment().format("YYYY-MM-DD HH:mm:ss"),
