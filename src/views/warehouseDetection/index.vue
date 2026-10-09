@@ -53,7 +53,7 @@
                 v-model="formData.status"
                 clearable
                 style="width: 100%"
-                @change="handleLengthChange"
+                @change="handleStatusChange"
               >
                 <el-option label="合格" :value="1"></el-option>
                 <el-option label="不合格" :value="0"></el-option>
@@ -1697,6 +1697,14 @@ export default {
     },
     handleWhouseSelect({ id, name }) {
       this.formData.lineWarehouseLocation = name;
+    },
+    handleStatusChange() {
+      this.formData.inStorageReason = "";
+      this.$nextTick(() => {
+        if (this.$refs.formRef)
+          this.$refs.formRef.clearValidate(["inStorageReason"]);
+      });
+      this.handleLengthChange();
     },
     handleLengthChange() {
       let {
