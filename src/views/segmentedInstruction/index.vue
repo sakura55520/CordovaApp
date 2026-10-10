@@ -516,9 +516,14 @@
                 label="晶段平均拉速(mm/min)"
                 min-width="190"
                 align="center"
-                prop="averagePullingSpeed"
                 show-overflow-tooltip
-              />
+              >
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type === 0">{{
+                    scope.row.averagePullingSpeed
+                  }}</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="计算位置"
                 min-width="100"
@@ -1580,7 +1585,7 @@
                   <div class="label">计划重量：</div>
                   <div class="value">{{ item.planWeight }}</div>
                 </div>
-                <div class="item" v-if="$route.query.view">
+                <div class="item" v-if="$route.query.view && item.type === 0">
                   <div class="label">晶段平均拉速(mm/min)：</div>
                   <div class="value">{{ item.averagePullingSpeed }}</div>
                 </div>
