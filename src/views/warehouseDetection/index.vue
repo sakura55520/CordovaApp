@@ -841,7 +841,7 @@
                 prop="cutDistanceEnd"
               />
               <el-table-column
-                label="样片重量(kg)"
+                label="位错块+样片重量(kg)"
                 min-width="120"
                 align="center"
                 prop="sampleWeight"
@@ -854,7 +854,7 @@
                 :formatter="formRecycle"
               />
               <el-table-column
-                label="切割次数"
+                label="样片数量"
                 min-width="85"
                 align="center"
                 prop="sliceCount"
