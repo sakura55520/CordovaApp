@@ -772,7 +772,7 @@
               />
               <el-table-column
                 label="位错块+样片重量(kg)"
-                min-width="120"
+                min-width="175"
                 align="center"
                 prop="sampleWeight"
               />
