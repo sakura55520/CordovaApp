@@ -714,6 +714,12 @@
                     value-format="yyyy-MM-dd HH:mm:ss"
                   /> </template
               ></el-table-column>
+              <el-table-column label="备注" min-width="240" align="center">
+                <template slot-scope="scope">
+                  <el-input
+                    v-model="scope.row.remark"
+                  /> </template
+              ></el-table-column>
             </el-table>
           </div>
           <div class="form">
