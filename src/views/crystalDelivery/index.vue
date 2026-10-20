@@ -499,6 +499,154 @@
         <el-button type="primary" @click="confirm">提 交</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      width="90vw"
+      :visible.sync="performanceDialogVisible"
+      title="人员绩效信息"
+    >
+      <el-form
+        ref="performanceFormRef"
+        :model="performanceForm"
+        :rules="performanceFormRules"
+        label-position="left"
+        label-width="120px"
+      >
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="拆炉人员1" prop="dismantleUser1">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.dismantleUser1" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="拆炉人员2" prop="dismantleUser2">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.dismantleUser2" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="加料人员1" prop="feedingUser1">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.feedingUser1" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="加料人员2" prop="feedingUser2">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.feedingUser2" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="掺杂人员" prop="dopantUser">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.dopantUser" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="引晶人员" prop="seedingUser">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.seedingUser" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="放肩人员" prop="shoulderingUser">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.shoulderingUser" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="转肩人员" prop="turnShoulderUser">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.turnShoulderUser" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="等径人员" prop="equalDiameterUser">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="收尾人员1" prop="tailUser1">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.tailUser1" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="收尾人员2" prop="tailUser2">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.tailUser2" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="总断苞时间" prop="totalBrokenBudTime">
+              <el-input v-model="performanceForm.totalBrokenBudTime">
+                <template slot="append">min</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="等径人员1" prop="equalDiameterUser1">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser1" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="等径长度1" prop="equalDiameterLength1">
+              <el-input v-model="performanceForm.equalDiameterLength1">
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="等径人员2" prop="equalDiameterUser2">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser2" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="等径长度2" prop="equalDiameterLength2">
+              <el-input v-model="performanceForm.equalDiameterLength2">
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="等径人员3" prop="equalDiameterUser3">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser3" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="等径长度3" prop="equalDiameterLength3">
+              <el-input v-model="performanceForm.equalDiameterLength3">
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="等径人员4" prop="equalDiameterUser4">
+              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser4" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="等径长度4" prop="equalDiameterLength4">
+              <el-input v-model="performanceForm.equalDiameterLength4">
+                <template slot="append">mm</template>
+              </el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="performanceDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handlePerformanceConfirm"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
     <CrystalDeliveryPrintDialog
       :visible.sync="printVisible"
       :print-data="printData"
@@ -514,11 +662,13 @@ import overStation from "@/mixins/overStation";
 import { mapState } from "vuex";
 import { getSeleteData } from "@/utils/select";
 import CrystalDeliveryPrintDialog from "@/components/CrystalDeliveryPrintDialog/index.vue";
+import SelectUserinfo from "@/components/select_userinfo";
 
 export default {
   mixins: [overStation],
   components: {
     CrystalDeliveryPrintDialog,
+    SelectUserinfo,
   },
   data() {
     return {
@@ -614,6 +764,114 @@ export default {
       printData: { data: null },
       batchQuantityDifference: null,
       batchQuantityCheck: null,
+      performanceCheck: null,
+      performanceDialogVisible: false,
+      performanceForm: {
+        dismantleUser1: null,
+        dismantleUser2: null,
+        feedingUser1: null,
+        feedingUser2: null,
+        dopantUser: null,
+        seedingUser: null,
+        shoulderingUser: null,
+        turnShoulderUser: null,
+        equalDiameterUser: null,
+        tailUser1: null,
+        tailUser2: null,
+        totalBrokenBudTime: null,
+        equalDiameterUser1: null,
+        equalDiameterLength1: null,
+        equalDiameterUser2: null,
+        equalDiameterLength2: null,
+        equalDiameterUser3: null,
+        equalDiameterLength3: null,
+        equalDiameterUser4: null,
+        equalDiameterLength4: null,
+      },
+      performanceFieldKeys: [
+        "dismantleUser1",
+        "dismantleUser2",
+        "feedingUser1",
+        "feedingUser2",
+        "dopantUser",
+        "seedingUser",
+        "shoulderingUser",
+        "turnShoulderUser",
+        "equalDiameterUser",
+        "tailUser1",
+        "tailUser2",
+        "totalBrokenBudTime",
+        "equalDiameterUser1",
+        "equalDiameterLength1",
+        "equalDiameterUser2",
+        "equalDiameterLength2",
+        "equalDiameterUser3",
+        "equalDiameterLength3",
+        "equalDiameterUser4",
+        "equalDiameterLength4",
+      ],
+      performanceFormRules: {
+        dismantleUser1: [
+          { required: true, message: "拆炉人员1不能为空", trigger: "blur" },
+        ],
+        dismantleUser2: [
+          { required: true, message: "拆炉人员2不能为空", trigger: "blur" },
+        ],
+        feedingUser1: [
+          { required: true, message: "加料人员1不能为空", trigger: "blur" },
+        ],
+        feedingUser2: [
+          { required: true, message: "加料人员2不能为空", trigger: "blur" },
+        ],
+        dopantUser: [
+          { required: true, message: "掺杂人员不能为空", trigger: "blur" },
+        ],
+        seedingUser: [
+          { required: true, message: "引晶人员不能为空", trigger: "blur" },
+        ],
+        shoulderingUser: [
+          { required: true, message: "放肩人员不能为空", trigger: "blur" },
+        ],
+        turnShoulderUser: [
+          { required: true, message: "转肩人员不能为空", trigger: "blur" },
+        ],
+        equalDiameterUser: [
+          { required: true, message: "等径人员不能为空", trigger: "blur" },
+        ],
+        tailUser1: [
+          { required: true, message: "收尾人员1不能为空", trigger: "blur" },
+        ],
+        tailUser2: [
+          { required: true, message: "收尾人员2不能为空", trigger: "blur" },
+        ],
+        totalBrokenBudTime: [
+          { required: true, message: "总断苞时间不能为空", trigger: "blur" },
+        ],
+        equalDiameterUser1: [
+          { required: true, message: "等径人员1不能为空", trigger: "blur" },
+        ],
+        equalDiameterLength1: [
+          { required: true, message: "等径长度1不能为空", trigger: "blur" },
+        ],
+        equalDiameterUser2: [
+          { required: true, message: "等径人员2不能为空", trigger: "blur" },
+        ],
+        equalDiameterLength2: [
+          { required: true, message: "等径长度2不能为空", trigger: "blur" },
+        ],
+        equalDiameterUser3: [
+          { required: true, message: "等径人员3不能为空", trigger: "blur" },
+        ],
+        equalDiameterLength3: [
+          { required: true, message: "等径长度3不能为空", trigger: "blur" },
+        ],
+        equalDiameterUser4: [
+          { required: true, message: "等径人员4不能为空", trigger: "blur" },
+        ],
+        equalDiameterLength4: [
+          { required: true, message: "等径长度4不能为空", trigger: "blur" },
+        ],
+      },
     };
   },
   computed: {
@@ -660,6 +918,12 @@ export default {
       this.batchQuantityCheck = wipSwitches.find(
         (item) => item.name === "batchQuantityDifference"
       ).value;
+      const performanceCheckSwitch = wipSwitches.find(
+        (item) => item.name === "crystalDeliveryperFormanceCheck"
+      );
+      this.performanceCheck = performanceCheckSwitch
+        ? performanceCheckSwitch.value
+        : null;
       this.handleIngotWeightChange();
       if (!this.$route.query.view) this.handleLengthChange();
       this.fetchSwitchDict();
@@ -705,9 +969,60 @@ export default {
         );
         return;
       }
-      await this.$confirm("确认提交当前操作数据?", "提示", {
-        type: "warning",
+
+      if (this.performanceCheck === "打开") {
+        const pf = {};
+        this.performanceFieldKeys.forEach((k) => {
+          pf[k] = this.formData[k] != null ? this.formData[k] : null;
+        });
+        this.performanceForm = pf;
+        // 等径人员1-4 / 等径长度1-4 仅在初始化有值时必填
+        const condKeys = [
+          "equalDiameterUser1",
+          "equalDiameterLength1",
+          "equalDiameterUser2",
+          "equalDiameterLength2",
+          "equalDiameterUser3",
+          "equalDiameterLength3",
+          "equalDiameterUser4",
+          "equalDiameterLength4",
+        ];
+        const condMessages = {
+          equalDiameterUser1: "等径人员1不能为空",
+          equalDiameterLength1: "等径长度1不能为空",
+          equalDiameterUser2: "等径人员2不能为空",
+          equalDiameterLength2: "等径长度2不能为空",
+          equalDiameterUser3: "等径人员3不能为空",
+          equalDiameterLength3: "等径长度3不能为空",
+          equalDiameterUser4: "等径人员4不能为空",
+          equalDiameterLength4: "等径长度4不能为空",
+        };
+        condKeys.forEach((k) => {
+          const hasVal = pf[k] != null && String(pf[k]).trim() !== "";
+          this.performanceFormRules[k] = hasVal
+            ? [{ required: true, message: condMessages[k], trigger: "blur" }]
+            : [];
+        });
+        this.performanceDialogVisible = true;
+      } else {
+        this.proceedSubmit();
+      }
+    },
+    async handlePerformanceConfirm() {
+      const valid = await this.$refs.performanceFormRef.validate();
+      if (!valid) return;
+      this.performanceFieldKeys.forEach((k) => {
+        this.$set(this.formData, k, this.performanceForm[k]);
       });
+      this.performanceDialogVisible = false;
+      this.proceedSubmit(true);
+    },
+    async proceedSubmit(skipConfirm) {
+      if (!skipConfirm) {
+        await this.$confirm("确认提交当前操作数据?", "提示", {
+          type: "warning",
+        });
+      }
 
       if (this.formData.end) {
         this.dialogCheckVisible = true;
