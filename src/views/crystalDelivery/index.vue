@@ -812,64 +812,64 @@ export default {
       ],
       performanceFormRules: {
         dismantleUser1: [
-          { required: true, message: "拆炉人员1不能为空", trigger: "blur" },
+          { required: true, message: "拆炉人员1不能为空", trigger: "change" },
         ],
         dismantleUser2: [
-          { required: true, message: "拆炉人员2不能为空", trigger: "blur" },
+          { required: true, message: "拆炉人员2不能为空", trigger: "change" },
         ],
         feedingUser1: [
-          { required: true, message: "加料人员1不能为空", trigger: "blur" },
+          { required: true, message: "加料人员1不能为空", trigger: "change" },
         ],
         feedingUser2: [
-          { required: true, message: "加料人员2不能为空", trigger: "blur" },
+          { required: true, message: "加料人员2不能为空", trigger: "change" },
         ],
         dopantUser: [
-          { required: true, message: "掺杂人员不能为空", trigger: "blur" },
+          { required: true, message: "掺杂人员不能为空", trigger: "change" },
         ],
         seedingUser: [
-          { required: true, message: "引晶人员不能为空", trigger: "blur" },
+          { required: true, message: "引晶人员不能为空", trigger: "change" },
         ],
         shoulderingUser: [
-          { required: true, message: "放肩人员不能为空", trigger: "blur" },
+          { required: true, message: "放肩人员不能为空", trigger: "change" },
         ],
         turnShoulderUser: [
-          { required: true, message: "转肩人员不能为空", trigger: "blur" },
+          { required: true, message: "转肩人员不能为空", trigger: "change" },
         ],
         equalDiameterUser: [
-          { required: true, message: "等径人员不能为空", trigger: "blur" },
+          { required: true, message: "等径人员不能为空", trigger: "change" },
         ],
         tailUser1: [
-          { required: true, message: "收尾人员1不能为空", trigger: "blur" },
+          { required: true, message: "收尾人员1不能为空", trigger: "change" },
         ],
         tailUser2: [
-          { required: true, message: "收尾人员2不能为空", trigger: "blur" },
+          { required: true, message: "收尾人员2不能为空", trigger: "change" },
         ],
         totalBrokenBudTime: [
-          { required: true, message: "总断苞时间不能为空", trigger: "blur" },
+          { required: true, message: "总断苞时间不能为空", trigger: "change" },
         ],
         equalDiameterUser1: [
-          { required: true, message: "等径人员1不能为空", trigger: "blur" },
+          { required: true, message: "等径人员1不能为空", trigger: "change" },
         ],
         equalDiameterLength1: [
-          { required: true, message: "等径长度1不能为空", trigger: "blur" },
+          { required: true, message: "等径长度1不能为空", trigger: "change" },
         ],
         equalDiameterUser2: [
-          { required: true, message: "等径人员2不能为空", trigger: "blur" },
+          { required: true, message: "等径人员2不能为空", trigger: "change" },
         ],
         equalDiameterLength2: [
-          { required: true, message: "等径长度2不能为空", trigger: "blur" },
+          { required: true, message: "等径长度2不能为空", trigger: "change" },
         ],
         equalDiameterUser3: [
-          { required: true, message: "等径人员3不能为空", trigger: "blur" },
+          { required: true, message: "等径人员3不能为空", trigger: "change" },
         ],
         equalDiameterLength3: [
-          { required: true, message: "等径长度3不能为空", trigger: "blur" },
+          { required: true, message: "等径长度3不能为空", trigger: "change" },
         ],
         equalDiameterUser4: [
-          { required: true, message: "等径人员4不能为空", trigger: "blur" },
+          { required: true, message: "等径人员4不能为空", trigger: "change" },
         ],
         equalDiameterLength4: [
-          { required: true, message: "等径长度4不能为空", trigger: "blur" },
+          { required: true, message: "等径长度4不能为空", trigger: "change" },
         ],
       },
     };
@@ -1000,7 +1000,7 @@ export default {
         condKeys.forEach((k) => {
           const hasVal = pf[k] != null && String(pf[k]).trim() !== "";
           this.performanceFormRules[k] = hasVal
-            ? [{ required: true, message: condMessages[k], trigger: "blur" }]
+            ? [{ required: true, message: condMessages[k], trigger: "change" }]
             : [];
         });
         this.performanceDialogVisible = true;
