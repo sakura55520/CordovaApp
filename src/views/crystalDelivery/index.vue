@@ -765,6 +765,7 @@ export default {
       batchQuantityDifference: null,
       batchQuantityCheck: null,
       performanceCheck: null,
+      performanceCheckExtend: null,
       performanceDialogVisible: false,
       performanceForm: {
         dismantleUser1: null,
@@ -924,6 +925,9 @@ export default {
       this.performanceCheck = performanceCheckSwitch
         ? performanceCheckSwitch.value
         : null;
+      this.performanceCheckExtend = performanceCheckSwitch
+        ? performanceCheckSwitch.extendValue
+        : null;
       this.handleIngotWeightChange();
       if (!this.$route.query.view) this.handleLengthChange();
       this.fetchSwitchDict();
@@ -976,7 +980,21 @@ export default {
           pf[k] = this.formData[k] != null ? this.formData[k] : null;
         });
         this.performanceForm = pf;
-        // 等径人员1-4 / 等径长度1-4 仅在初始化有值时必填
+        // 根据开关 extendValue：为“必填”时保持必填逻辑，否则关闭全部必填
+        // 等径人员1-4 / 等径长度1-4、收尾人员1/2 仅在初始化有值时必填
+        const requiredOn = this.performanceCheckExtend === "必填";
+        const alwaysRequiredKeys = [
+          "dismantleUser1",
+          "dismantleUser2",
+          "feedingUser1",
+          "feedingUser2",
+          "dopantUser",
+          "seedingUser",
+          "shoulderingUser",
+          "turnShoulderUser",
+          "equalDiameterUser",
+          "totalBrokenBudTime",
+        ];
         const condKeys = [
           "equalDiameterUser1",
           "equalDiameterLength1",
@@ -986,8 +1004,22 @@ export default {
           "equalDiameterLength3",
           "equalDiameterUser4",
           "equalDiameterLength4",
+          "tailUser1",
+          "tailUser2",
         ];
-        const condMessages = {
+        const messages = {
+          dismantleUser1: "拆炉人员1不能为空",
+          dismantleUser2: "拆炉人员2不能为空",
+          feedingUser1: "加料人员1不能为空",
+          feedingUser2: "加料人员2不能为空",
+          dopantUser: "掺杂人员不能为空",
+          seedingUser: "引晶人员不能为空",
+          shoulderingUser: "放肩人员不能为空",
+          turnShoulderUser: "转肩人员不能为空",
+          equalDiameterUser: "等径人员不能为空",
+          tailUser1: "收尾人员1不能为空",
+          tailUser2: "收尾人员2不能为空",
+          totalBrokenBudTime: "总断苞时间不能为空",
           equalDiameterUser1: "等径人员1不能为空",
           equalDiameterLength1: "等径长度1不能为空",
           equalDiameterUser2: "等径人员2不能为空",
@@ -997,10 +1029,17 @@ export default {
           equalDiameterUser4: "等径人员4不能为空",
           equalDiameterLength4: "等径长度4不能为空",
         };
-        condKeys.forEach((k) => {
-          const hasVal = pf[k] != null && String(pf[k]).trim() !== "";
-          this.performanceFormRules[k] = hasVal
-            ? [{ required: true, message: condMessages[k], trigger: "change" }]
+        this.performanceFieldKeys.forEach((k) => {
+          let required = false;
+          if (requiredOn) {
+            if (alwaysRequiredKeys.indexOf(k) > -1) {
+              required = true;
+            } else if (condKeys.indexOf(k) > -1) {
+              required = pf[k] != null && String(pf[k]).trim() !== "";
+            }
+          }
+          this.performanceFormRules[k] = required
+            ? [{ required: true, message: messages[k], trigger: "change" }]
             : [];
         });
         this.performanceDialogVisible = true;
