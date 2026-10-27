@@ -500,9 +500,9 @@
       </span>
     </el-dialog>
     <el-dialog
-      width="90vw"
+      width="800px"
       :visible.sync="performanceDialogVisible"
-      title="人员绩效信息"
+      title="长晶人员信息"
     >
       <el-form
         ref="performanceFormRef"
@@ -511,144 +511,177 @@
         label-position="left"
         label-width="120px"
       >
-        <el-row :gutter="10">
-          <el-col :span="8">
-            <el-form-item label="送付人员" prop="deliveryUser">
-              <el-input
-                v-model="performanceForm.deliveryUser"
-                disabled
+        <div class="performance-columns">
+          <div class="performance-col">
+            <el-form-item label="拆炉人员1" prop="dismantleUser1">
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.dismantleUser1"
+                @next="focusNextInput"
               />
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
-            <el-form-item label="拆炉人员1" prop="dismantleUser1">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.dismantleUser1" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="拆炉人员2" prop="dismantleUser2">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.dismantleUser2" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.dismantleUser2"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="加料人员1" prop="feedingUser1">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.feedingUser1" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.feedingUser1"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="加料人员2" prop="feedingUser2">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.feedingUser2" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.feedingUser2"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="掺杂人员" prop="dopantUser">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.dopantUser" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.dopantUser"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="引晶人员" prop="seedingUser">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.seedingUser" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.seedingUser"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="放肩人员" prop="shoulderingUser">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.shoulderingUser" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.shoulderingUser"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="转肩人员" prop="turnShoulderUser">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.turnShoulderUser" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.turnShoulderUser"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="等径人员" prop="equalDiameterUser">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.equalDiameterUser"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="收尾人员1" prop="tailUser1">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.tailUser1" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.tailUser1"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
+          </div>
+          <div class="performance-col">
             <el-form-item label="收尾人员2" prop="tailUser2">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.tailUser2" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.tailUser2"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="总断苞时间" prop="totalBrokenBudTime">
-              <el-input v-model="performanceForm.totalBrokenBudTime">
+              <el-input
+                style="width: 200px"
+                v-model="performanceForm.totalBrokenBudTime"
+                @keyup.enter.native="focusNextInput"
+              >
                 <template slot="append">min</template>
               </el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="等径人员1" prop="equalDiameterUser1">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser1" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.equalDiameterUser1"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="等径长度1" prop="equalDiameterLength1">
-              <el-input v-model="performanceForm.equalDiameterLength1">
+              <el-input
+                style="width: 200px"
+                v-model="performanceForm.equalDiameterLength1"
+                @keyup.enter.native="focusNextInput"
+              >
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="等径人员2" prop="equalDiameterUser2">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser2" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.equalDiameterUser2"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="等径长度2" prop="equalDiameterLength2">
-              <el-input v-model="performanceForm.equalDiameterLength2">
+              <el-input
+                style="width: 200px"
+                v-model="performanceForm.equalDiameterLength2"
+                @keyup.enter.native="focusNextInput"
+              >
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="等径人员3" prop="equalDiameterUser3">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser3" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.equalDiameterUser3"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="等径长度3" prop="equalDiameterLength3">
-              <el-input v-model="performanceForm.equalDiameterLength3">
+              <el-input
+                style="width: 200px"
+                v-model="performanceForm.equalDiameterLength3"
+                @keyup.enter.native="focusNextInput"
+              >
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
             <el-form-item label="等径人员4" prop="equalDiameterUser4">
-              <SelectUserinfo style="width: 100%" v-model="performanceForm.equalDiameterUser4" />
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.equalDiameterUser4"
+                @next="focusNextInput"
+              />
             </el-form-item>
-          </el-col>
-          <el-col :span="8">
             <el-form-item label="等径长度4" prop="equalDiameterLength4">
-              <el-input v-model="performanceForm.equalDiameterLength4">
+              <el-input
+                style="width: 200px"
+                v-model="performanceForm.equalDiameterLength4"
+                @keyup.enter.native="focusNextInput"
+              >
                 <template slot="append">mm</template>
               </el-input>
             </el-form-item>
-          </el-col>
-        </el-row>
+          </div>
+        </div>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="performanceDialogVisible = false">取 消</el-button>
@@ -1069,6 +1102,18 @@ export default {
       this.performanceDialogVisible = false;
       this.proceedSubmit(true);
     },
+    focusNextInput(evt) {
+      const formEl = this.$refs.performanceFormRef;
+      if (!formEl || !formEl.$el) return;
+      const target = evt && (evt.target || evt.srcElement);
+      const inputEls = Array.prototype.slice
+        .call(formEl.$el.querySelectorAll("input"))
+        .filter((el) => !el.disabled);
+      const idx = inputEls.indexOf(target);
+      if (idx > -1 && idx < inputEls.length - 1) {
+        inputEls[idx + 1].focus();
+      }
+    },
     async proceedSubmit(skipConfirm) {
       if (!skipConfirm) {
         await this.$confirm("确认提交当前操作数据?", "提示", {
@@ -1211,6 +1256,19 @@ export default {
 
 .divider {
   margin: 8px 0px;
+}
+
+.performance-columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 32px;
+}
+
+.performance-col {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
 }
 
 .btn {

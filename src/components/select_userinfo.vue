@@ -1,5 +1,6 @@
 <template>
   <el-autocomplete
+    ref="autocomplete"
     v-model="userName"
     :fetch-suggestions="fetchSuggestions"
     placeholder="请输入工号"
@@ -20,7 +21,15 @@
 import * as select from "@/utils/select.js";
 export default {
   name: "select_userinfo",
-  props: ["value", "userId", "disabled"],
+  props: {
+    value: {},
+    userId: {},
+    disabled: {},
+    enterSelectFirst: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       userName: "",
@@ -62,7 +71,20 @@ export default {
     handleFocus($event) {
       this.$emit("focus", $event);
     },
-    handleEnter() {
+    handleEnter(e) {
+      if (this.enterSelectFirst) {
+        const first = this.options_UserData[0];
+        if (first) {
+          this.$emit("input", first.value);
+          this.$emit("update:userId", first.id);
+          this.$emit("handleSelect", first);
+        }
+        if (this.$refs.autocomplete && this.$refs.autocomplete.close) {
+          this.$refs.autocomplete.close();
+        }
+        this.$emit("next", e);
+        return;
+      }
       if (
         this.options_UserData.length > 0 &&
         this.options_UserData[0].workNo === this.userName
