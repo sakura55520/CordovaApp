@@ -513,6 +513,16 @@
       >
         <el-row :gutter="10">
           <el-col :span="8">
+            <el-form-item label="送付人员" prop="deliveryUser">
+              <el-input
+                v-model="performanceForm.deliveryUser"
+                disabled
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
             <el-form-item label="拆炉人员1" prop="dismantleUser1">
               <SelectUserinfo style="width: 100%" v-model="performanceForm.dismantleUser1" />
             </el-form-item>
@@ -768,6 +778,7 @@ export default {
       performanceCheckExtend: null,
       performanceDialogVisible: false,
       performanceForm: {
+        deliveryUser: null,
         dismantleUser1: null,
         dismantleUser2: null,
         feedingUser1: null,
@@ -790,6 +801,7 @@ export default {
         equalDiameterLength4: null,
       },
       performanceFieldKeys: [
+        "deliveryUser",
         "dismantleUser1",
         "dismantleUser2",
         "feedingUser1",
@@ -979,6 +991,7 @@ export default {
         this.performanceFieldKeys.forEach((k) => {
           pf[k] = this.formData[k] != null ? this.formData[k] : null;
         });
+        pf.deliveryUser = this.formData.userCreate;
         this.performanceForm = pf;
         // 根据开关 extendValue：为“必填”时保持必填逻辑，否则关闭全部必填
         // 等径人员1-4 / 等径长度1-4、收尾人员1/2 仅在初始化有值时必填
