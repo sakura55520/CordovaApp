@@ -513,19 +513,59 @@
       >
         <div class="performance-columns">
           <div class="performance-col">
-            <el-form-item label="拆炉人员1" prop="dismantleUser1">
+            <el-form-item label="拆炉类型1" prop="dismantleType1">
+              <el-select
+                style="width: 200px"
+                v-model="performanceForm.dismantleType1"
+                placeholder="请选择"
+                @keyup.enter.native="focusNextInput"
+              >
+                <el-option label="正常拆炉" value="正常拆炉"></el-option>
+                <el-option label="大清拆炉" value="大清拆炉"></el-option>
+                <el-option label="烧高温拆炉" value="烧高温拆炉"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="拆炉1人员1" prop="dismantle1User1">
               <SelectUserinfo
                 style="width: 200px"
                 enter-select-first
-                v-model="performanceForm.dismantleUser1"
+                v-model="performanceForm.dismantle1User1"
                 @next="focusNextInput"
               />
             </el-form-item>
-            <el-form-item label="拆炉人员2" prop="dismantleUser2">
+            <el-form-item label="拆炉1人员2" prop="dismantle1User2">
               <SelectUserinfo
                 style="width: 200px"
                 enter-select-first
-                v-model="performanceForm.dismantleUser2"
+                v-model="performanceForm.dismantle1User2"
+                @next="focusNextInput"
+              />
+            </el-form-item>
+            <el-form-item label="拆炉类型2" prop="dismantleType2">
+              <el-select
+                style="width: 200px"
+                v-model="performanceForm.dismantleType2"
+                placeholder="请选择"
+                @keyup.enter.native="focusNextInput"
+              >
+                <el-option label="正常拆炉" value="正常拆炉"></el-option>
+                <el-option label="大清拆炉" value="大清拆炉"></el-option>
+                <el-option label="烧高温拆炉" value="烧高温拆炉"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="拆炉2人员1" prop="dismantle2User1">
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.dismantle2User1"
+                @next="focusNextInput"
+              />
+            </el-form-item>
+            <el-form-item label="拆炉2人员2" prop="dismantle2User2">
+              <SelectUserinfo
+                style="width: 200px"
+                enter-select-first
+                v-model="performanceForm.dismantle2User2"
                 @next="focusNextInput"
               />
             </el-form-item>
@@ -577,6 +617,8 @@
                 @next="focusNextInput"
               />
             </el-form-item>
+          </div>
+          <div class="performance-col">
             <el-form-item label="等径人员" prop="equalDiameterUser">
               <SelectUserinfo
                 style="width: 200px"
@@ -593,8 +635,6 @@
                 @next="focusNextInput"
               />
             </el-form-item>
-          </div>
-          <div class="performance-col">
             <el-form-item label="收尾人员2" prop="tailUser2">
               <SelectUserinfo
                 style="width: 200px"
@@ -605,11 +645,12 @@
             </el-form-item>
             <el-form-item label="总断苞时间" prop="totalBrokenBudTime">
               <el-input
+                type="number"
                 style="width: 200px"
                 v-model="performanceForm.totalBrokenBudTime"
                 @keyup.enter.native="focusNextInput"
               >
-                <template slot="append">min</template>
+                <template slot="append">h</template>
               </el-input>
             </el-form-item>
             <el-form-item label="等径人员1" prop="equalDiameterUser1">
@@ -812,8 +853,12 @@ export default {
       performanceDialogVisible: false,
       performanceForm: {
         deliveryUser: null,
-        dismantleUser1: null,
-        dismantleUser2: null,
+        dismantleType1: null,
+        dismantle1User1: null,
+        dismantle1User2: null,
+        dismantleType2: null,
+        dismantle2User1: null,
+        dismantle2User2: null,
         feedingUser1: null,
         feedingUser2: null,
         dopantUser: null,
@@ -835,8 +880,6 @@ export default {
       },
       performanceFieldKeys: [
         "deliveryUser",
-        "dismantleUser1",
-        "dismantleUser2",
         "feedingUser1",
         "feedingUser2",
         "dopantUser",
@@ -856,13 +899,16 @@ export default {
         "equalDiameterUser4",
         "equalDiameterLength4",
       ],
+      // 拆炉记录字段（存储于 formData.dismantleRecords，页面最多展示两组）
+      dismantleFieldKeys: [
+        "dismantleType1",
+        "dismantle1User1",
+        "dismantle1User2",
+        "dismantleType2",
+        "dismantle2User1",
+        "dismantle2User2",
+      ],
       performanceFormRules: {
-        dismantleUser1: [
-          { required: true, message: "拆炉人员1不能为空", trigger: "change" },
-        ],
-        dismantleUser2: [
-          { required: true, message: "拆炉人员2不能为空", trigger: "change" },
-        ],
         feedingUser1: [
           { required: true, message: "加料人员1不能为空", trigger: "change" },
         ],
@@ -937,6 +983,7 @@ export default {
       let fromData = {};
       // 查询保存的数据
       const res = await Api.fetchBuffer(this.buffParams);
+      const queryFromData = JSON.parse(this.$route.query.fromData);
       if (res.data) {
         fromData = res.data;
       } else {
@@ -949,6 +996,7 @@ export default {
       this.formData = {
         ...this.formData,
         ...fromData,
+        dismantleRecords: fromData.dismantleRecords || queryFromData.dismantleRecords || [],
         userCreate: fromData.userCreate || this.realName,
       };
 
@@ -1025,13 +1073,20 @@ export default {
           pf[k] = this.formData[k] != null ? this.formData[k] : null;
         });
         pf.deliveryUser = this.formData.userCreate;
-        this.performanceForm = pf;
-        // 根据开关 extendValue：为“必填”时保持必填逻辑，否则关闭全部必填
-        // 等径人员1-4 / 等径长度1-4、收尾人员1/2 仅在初始化有值时必填
+        // 拆炉记录最多两条，每组依次为 类型、人员1、人员2
+        let records = this.formData.dismantleRecords || [];
+        const recordKeys = ["dismantleType", "dismantleUser1Name", "dismantleUser2Name"];
+        this.dismantleFieldKeys.forEach((k, i) => {
+          const record = records[Math.floor(i / 3)] || {};
+          const value = record[recordKeys[i % 3]];
+          pf[k] = value != null ? value : null;
+        });
+
+        // 是否必填：开关 extendValue 为“必填”时生效
+        // 等径人员1-4 / 等径长度1-4、收尾人员1/2 仅在初始有值时必填
+        // 拆炉记录长度为1时第一组必填，长度为2时两组必填
         const requiredOn = this.performanceCheckExtend === "必填";
         const alwaysRequiredKeys = [
-          "dismantleUser1",
-          "dismantleUser2",
           "feedingUser1",
           "feedingUser2",
           "dopantUser",
@@ -1054,8 +1109,12 @@ export default {
           "tailUser2",
         ];
         const messages = {
-          dismantleUser1: "拆炉人员1不能为空",
-          dismantleUser2: "拆炉人员2不能为空",
+          dismantleType1: "拆炉类型1不能为空",
+          dismantle1User1: "拆炉1人员1不能为空",
+          dismantle1User2: "拆炉1人员2不能为空",
+          dismantleType2: "拆炉类型2不能为空",
+          dismantle2User1: "拆炉2人员1不能为空",
+          dismantle2User2: "拆炉2人员2不能为空",
           feedingUser1: "加料人员1不能为空",
           feedingUser2: "加料人员2不能为空",
           dopantUser: "掺杂人员不能为空",
@@ -1084,10 +1143,43 @@ export default {
               required = pf[k] != null && String(pf[k]).trim() !== "";
             }
           }
-          this.performanceFormRules[k] = required
-            ? [{ required: true, message: messages[k], trigger: "change" }]
-            : [];
+          this.$set(
+            this.performanceFormRules,
+            k,
+            required
+              ? [{ required: true, message: messages[k], trigger: "change" }]
+              : []
+          );
         });
+        const dismantleRequiredKeys =
+          records.length >= 2
+            ? this.dismantleFieldKeys
+            : records.length === 1
+            ? ["dismantleType1", "dismantle1User1", "dismantle1User2"]
+            : [];
+        this.dismantleFieldKeys.forEach((k) => {
+          const required = requiredOn && dismantleRequiredKeys.indexOf(k) > -1;
+          this.$set(
+            this.performanceFormRules,
+            k,
+            required
+              ? [{ required: true, message: messages[k], trigger: "change" }]
+              : []
+          );
+        });
+
+        // 人员为EAP系统时置空
+        this.performanceFieldKeys.concat(this.dismantleFieldKeys).forEach((k) => {
+          if (typeof pf[k] === "string" && pf[k].trim() === "EAP系统") {
+            pf[k] = null;
+          }
+        });
+        // 等径长度1-4 必定置空（与EAP无关）
+        [1, 2, 3, 4].forEach((i) => {
+          pf["equalDiameterLength" + i] = null;
+        });
+
+        this.performanceForm = pf;
         this.performanceDialogVisible = true;
       } else {
         this.proceedSubmit();
@@ -1099,6 +1191,25 @@ export default {
       this.performanceFieldKeys.forEach((k) => {
         this.$set(this.formData, k, this.performanceForm[k]);
       });
+      // 回写拆炉记录（最多两条，保留原有任务信息）
+      const origin = this.formData.dismantleRecords || [];
+      const dismantleRecords = [];
+      [0, 1].forEach((i) => {
+        const record = origin[i];
+        const values = this.dismantleFieldKeys
+          .slice(i * 3, i * 3 + 3)
+          .map((k) => this.performanceForm[k] || null);
+        if (!record && !values.some((v) => v !== null)) return;
+        dismantleRecords.push({
+          sourceTaskId: record ? record.sourceTaskId : null,
+          seqNo: record ? record.seqNo : i + 1,
+          dismantleTime: record ? record.dismantleTime : null,
+          dismantleType: values[0],
+          dismantleUser1Name: values[1],
+          dismantleUser2Name: values[2],
+        });
+      });
+      this.$set(this.formData, "dismantleRecords", dismantleRecords);
       this.performanceDialogVisible = false;
       this.proceedSubmit(true);
     },
@@ -1148,10 +1259,25 @@ export default {
         processingOrderCode,
         wipStorageStatus,
       } = this.$route.query;
+      // 等径长度1-4：提交时改为“当前等径长度 - 上一个等径长度”
+      const submitData = { ...this.formData };
+      let prevLength = 0;
+      [1, 2, 3, 4].forEach((i) => {
+        const key = "equalDiameterLength" + i;
+        const raw = submitData[key];
+        if (raw === null || raw === undefined || String(raw).trim() === "") {
+          submitData[key] = null;
+          return;
+        }
+        const current = Number(raw);
+        if (isNaN(current)) return;
+        submitData[key] = Number((current - prevLength).toFixed(3));
+        prevLength = current;
+      });
       const res = await Api.inOrOutStation({
         equipmentCode,
         param: {
-          FormData: JSON.stringify(this.formData),
+          FormData: JSON.stringify(submitData),
         },
         processUuid,
         processingOrderCode,
