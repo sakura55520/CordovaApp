@@ -519,6 +519,7 @@
                 v-model="performanceForm.dismantleType1"
                 placeholder="请选择"
                 @keyup.enter.native="focusNextInput"
+                clearable
               >
                 <el-option label="正常拆炉" value="正常拆炉"></el-option>
                 <el-option label="大清拆炉" value="大清拆炉"></el-option>
@@ -547,6 +548,7 @@
                 v-model="performanceForm.dismantleType2"
                 placeholder="请选择"
                 @keyup.enter.native="focusNextInput"
+                clearable
               >
                 <el-option label="正常拆炉" value="正常拆炉"></el-option>
                 <el-option label="大清拆炉" value="大清拆炉"></el-option>
