@@ -1204,7 +1204,8 @@ export default {
         if (!record && !values.some((v) => v !== null)) return;
         dismantleRecords.push({
           sourceTaskId: record ? record.sourceTaskId : null,
-          seqNo: record ? record.seqNo : i + 1,
+          dismantleDetailId: record ? record.dismantleDetailId : null,
+          seqNo: record ? record.seqNo : null,
           dismantleTime: record ? record.dismantleTime : null,
           dismantleType: values[0],
           dismantleUser1Name: values[1],
